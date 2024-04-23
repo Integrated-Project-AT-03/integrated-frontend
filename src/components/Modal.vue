@@ -3,7 +3,7 @@
 </script>
  
 <template>
-    <div class="w-full h-screen flex justify-center items-center">
+    <div class="w-full h-screen absolute flex justify-center items-center top-0 backdrop-filter backdrop-blur-xl">
         <div class="w-[65rem] h-[47rem] bg-neutral rounded-2xl">
             <div class="itbkk-title text-xl mt-5 ml-6 font-bold">
                 Design Backend API for PBI 1,2
@@ -12,12 +12,12 @@
             <div class="flex justify-around m-4">
                 <div class="flex-col">
                     <div>Description</div>
-                    <textarea class="itbkk-description w-[35rem] h-[32rem] rounded-2xl border p-3" ></textarea>
+                    <textarea class="itbkk-description w-[35rem] h-[32rem] rounded-2xl border p-3 text-neutral" ></textarea>
                 </div>
                 <div class="flex flex-col gap-10">
                     <div class="flex-col">
                         <div>Assignees</div>
-                        <textarea class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl border p-3"></textarea>
+                        <textarea class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl border p-3 text-neutral"></textarea>
                     </div>
                     <div class="flex-col">
                         <div>Status</div>
