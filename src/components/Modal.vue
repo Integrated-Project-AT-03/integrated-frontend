@@ -1,5 +1,5 @@
 <script setup>
-
+import Caret from '../components/Caretdown.vue'
 </script>
  
 <template>
@@ -10,19 +10,19 @@
             </div>
             <div class="divider"></div>
             <div class="flex justify-around m-4">
-                <div class="flex-col">
+                <div class="flex flex-col gap-2">
                     <div>Description</div>
-                    <textarea class="itbkk-description w-[35rem] h-[32rem] rounded-2xl border p-3 text-neutral" ></textarea>
+                    <textarea class="itbkk-description w-[35rem] h-[32rem] rounded-2xl border p-4 text-base-100 bg-secondary border-base-100" ></textarea>
                 </div>
                 <div class="flex flex-col gap-10">
-                    <div class="flex-col">
+                    <div class="flex flex-col gap-2">
                         <div>Assignees</div>
-                        <textarea class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl border p-3 text-neutral"></textarea>
+                        <textarea class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl border p-4 text-base-100 bg-secondary border-base-100"></textarea>
                     </div>
-                    <div class="flex-col">
+                    <div class="flex flex-col gap-2">
                         <div>Status</div>
                         <div class="itbkk-status dropdown dropdown-bottom">
-                            <div tabindex="0" role="button" class="btn m-1">Choose status</div>
+                            <div tabindex="0" role="button" class="btn m-1">Choose status <Caret /></div>
                             <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
                                 <li><a>No status</a></li>
                                 <li><a>Doing</a></li>
@@ -48,7 +48,7 @@
             </div>
             <div class="divider"></div>
             <div class="flex justify-end m-4 gap-3">
-                <button class="btn btn-success w-16">Ok</button>
+                <button class="btn btn-success w-16 hover:bg-base-100 hover:border-base-100">Ok</button>
                 <button class="btn">Close</button>
             </div>
         </div>
