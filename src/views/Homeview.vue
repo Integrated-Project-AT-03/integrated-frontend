@@ -1,14 +1,16 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
-const uri = import.meta.env.VITE_SERVER_URI;
+import Modal from "@/components/Modal.vue";
 const datas = ref(TaskManagement);
 const dataModal = ref({})
+const modal = ref(false)
 onMounted(async function () {
   await datas.value.fetchTasks();
 });
 async function showModal(id){
-    await dataModal.value.fetchTaskById(id);
+   dataModal.value = await datas.value.fetchTaskById(id);
+   modal.value = true
 }
 </script>
 
@@ -48,6 +50,7 @@ async function showModal(id){
       </thead>
       <tbody class="itbkk-item bg-slate-100 divide-y divide-gray-200">
         <tr @click="showModal(data.idTask)" v-for="(data, index) in datas.getTasks()" :key="index">
+            <Modal v-show="modal"/>
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ data.idTask }}</div>
           </td>

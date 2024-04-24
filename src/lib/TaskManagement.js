@@ -18,7 +18,7 @@ class TaskMannagement {
   }
 
   async fetchTaskById(id){
-    const taskById = await getItemById(`${uri}/v1/tasks/${id}`)
+    const taskById = await getItemById(`${uri}/v1/tasks`,id)
     return taskById
   }
   getTasks() {
