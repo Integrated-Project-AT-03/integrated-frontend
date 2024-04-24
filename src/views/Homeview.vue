@@ -1,5 +1,12 @@
 <script setup>
+import { onMounted , ref} from 'vue';
+import { getItems, getItemById, deleteItemById, addItem, editItem } from './../assets/fetch.js'
+const uri = import.meta.env.VITE_SERVER_URI
+const datas = ref([])
 
+onMounted(async function(){
+    datas.value = await getItems(`${uri}/task`)
+})
 </script>
  
 <template>
@@ -25,19 +32,19 @@
                 </tr>
             </thead>
             <tbody class="itbkk-item bg-slate-100 divide-y divide-gray-200">
-                <tr>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">1</div>
-                </td>
-                <td class="itbkk-title px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">Design</div>
-                </td>
-                <td class="itbkk-assignees px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">Goko</div>
-                </td>
-                <td class="itbkk-status px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">No status</div>
-                </td>
+                <tr v-for="(data,index) in datas" :key="index">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">{{ data.idTask }}</div>
+                    </td>
+                    <td class="itbkk-title px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">{{ data.title }}</div>
+                    </td>
+                    <td class="itbkk-assignees px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">{{ data.assignees }}</div>
+                    </td>
+                    <td class="itbkk-status px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">{{ data.status }}</div>
+                    </td>
                 </tr>
             </tbody>
         </table>
