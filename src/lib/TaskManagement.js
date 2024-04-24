@@ -16,6 +16,11 @@ class TaskMannagement {
   async fetchTasks() {
     this.tasks = await getItems(`${uri}/v1/tasks`);
   }
+
+  async fetchTaskById(id){
+    const taskById = await getItemById(`${uri}/v1/tasks/${id}`)
+    return taskById
+  }
   getTasks() {
     return this.tasks;
   }

@@ -3,9 +3,13 @@ import { onMounted, ref } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
 const uri = import.meta.env.VITE_SERVER_URI;
 const datas = ref(TaskManagement);
+const dataModal = ref({})
 onMounted(async function () {
   await datas.value.fetchTasks();
 });
+async function showModal(id){
+    await dataModal.value.fetchTaskById(id);
+}
 </script>
 
 <template>
@@ -43,7 +47,7 @@ onMounted(async function () {
         </tr>
       </thead>
       <tbody class="itbkk-item bg-slate-100 divide-y divide-gray-200">
-        <tr v-for="(data, index) in datas.getTasks()" :key="index">
+        <tr @click="showModal(data.idTask)" v-for="(data, index) in datas.getTasks()" :key="index">
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ data.idTask }}</div>
           </td>
