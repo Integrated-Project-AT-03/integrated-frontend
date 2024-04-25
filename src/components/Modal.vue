@@ -9,7 +9,7 @@ const formattDate = (date) => {
   const newDate = new Date(date);
   return `${newDate.getFullYear()}-${
     newDate.getMonth() + 1
-  }-${newDate.getDate()} ${newDate.getHours()}:${newDate.getMinutes()}:${newDate.getSeconds()}`;
+  }-${newDate.getDate()} ${newDate.toTimeString().split(" ")[0]}`;
 };
 </script>
 
@@ -26,8 +26,17 @@ const formattDate = (date) => {
       <div class="flex flex-col gap-2 text-slate-200">
         <div>Description</div>
         <textarea
-          class="itbkk-description w-[35rem] h-[32rem] rounded-2xl border p-4 text-slate-200 bg-secondary border-base-100"
-          >{{ dataModal?.description }}</textarea
+          class="itbkk-description w-[35rem] h-[32rem] rounded-2xl border p-4 bg-secondary border-base-100"
+          :class="
+            dataModal?.description !== ''
+              ? ' text-slate-200'
+              : 'text-gray-400 italic'
+          "
+          >{{
+            dataModal?.description !== ""
+              ? dataModal.description
+              : "No description"
+          }}</textarea
         >
       </div>
       <div class="flex flex-col gap-10">

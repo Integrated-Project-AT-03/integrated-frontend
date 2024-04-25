@@ -3,13 +3,7 @@ import { onMounted, ref } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
 import Modal from "@/components/Modal.vue";
 const datas = ref(TaskManagement);
-import {
-  getItems,
-  getItemById,
-  deleteItemById,
-  addItem,
-  editItem,
-} from "./../assets/fetch.js";
+import { getItems, getItemById } from "./../assets/fetch.js";
 const uri = import.meta.env.VITE_SERVER_URI;
 
 const dataModal = ref({});
@@ -74,7 +68,21 @@ async function loadTask(id) {
             <div class="text-sm text-gray-900">{{ data.assignees }}</div>
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">{{ data.status }}</div>
+            <div
+              :class="
+                data.status === 'no status'
+                  ? 'text-sm text-red-400'
+                  : data.status === 'to do'
+                  ? 'text-sm text-yellow-500'
+                  : data.status === 'doing'
+                  ? 'text-sm text-blue-500'
+                  : data.status === 'done'
+                  ? 'text-sm text-success'
+                  : 'text-gray-300'
+              "
+            >
+              {{ data.status }}
+            </div>
           </td>
         </tr>
       </tbody>
