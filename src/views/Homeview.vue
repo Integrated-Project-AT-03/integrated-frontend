@@ -10,16 +10,16 @@ import {
   addItem,
   editItem,
 } from "./../assets/fetch.js";
-
 const uri = import.meta.env.VITE_SERVER_URI;
 
-const dataModal = ref({})
+const dataModal = ref({});
 onMounted(async function () {
-  await datas.value.fetchTasks();
+  const data = await getItems(`${uri}/v1/tasks`);
+  datas.value.setTasks(data);
 });
-async function loadTask(id){
-    dataModal.value = await getItemById(`${uri}/v1/tasks`,id)
-    console.log(dataModal.value);
+async function loadTask(id) {
+  const showTask = await getItemById(`${uri}/v1/tasks`, id);
+  dataModal.value = showTask;
 }
 </script>
 
@@ -58,8 +58,12 @@ async function loadTask(id){
         </tr>
       </thead>
       <tbody class="itbkk-item bg-slate-100 divide-y divide-gray-200">
-        <tr onclick="my_modal_1.showModal()" v-for="(data, index) in datas.getTasks()" :key="index" @click="loadTask(data.idTask)">
-           
+        <tr
+          onclick="my_modal_1.showModal()"
+          v-for="(data, index) in datas.getTasks()"
+          :key="index"
+          @click="loadTask(data.idTask)"
+        >
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ data.idTask }}</div>
           </td>
@@ -70,18 +74,13 @@ async function loadTask(id){
             <div class="text-sm text-gray-900">{{ data.assignees }}</div>
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
-            <div :class="data.status === 'no_status' ? 'text-sm text-red-400' : 
-            data.status === 'to_do' ? 'text-sm text-yellow-500' : 
-            data.status === 'doing' ? 'text-sm text-blue-500' : 
-            data.status === 'done' ? 'text-sm text-success' : 'text-gray-300'">
-                {{ data.status }}
-            </div>
+            <div class="text-sm text-gray-900">{{ data.status }}</div>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-  <Modal :dataModal="dataModal"/>
+  <Modal :dataModal="dataModal" />
 </template>
 
 <style scoped></style>
