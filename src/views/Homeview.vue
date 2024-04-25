@@ -51,8 +51,9 @@ async function loadTask(id) {
           </th>
         </tr>
       </thead>
-      <tbody class="itbkk-item bg-slate-100 divide-y divide-gray-200">
+      <tbody class="itbkk-item bg-slate-100 divide-y divide-gray-300">
         <tr
+          class="hover:bg-slate-200"
           onclick="my_modal_1.showModal()"
           v-for="(data, index) in datas.getTasks()"
           :key="index"
