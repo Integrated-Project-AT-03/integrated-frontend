@@ -5,9 +5,13 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
+      path: '/task',
+      name: 'Task',
       component: () => import('../views/Homeview.vue')
+    },
+    {
+      path: '',
+      redirect: '/task'
     }
   ]
 })

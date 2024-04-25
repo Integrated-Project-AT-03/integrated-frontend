@@ -3,14 +3,23 @@ import { onMounted, ref } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
 import Modal from "@/components/Modal.vue";
 const datas = ref(TaskManagement);
+import {
+  getItems,
+  getItemById,
+  deleteItemById,
+  addItem,
+  editItem,
+} from "./../assets/fetch.js";
+
+const uri = import.meta.env.VITE_SERVER_URI;
+
 const dataModal = ref({})
-const modal = ref(false)
 onMounted(async function () {
   await datas.value.fetchTasks();
 });
-async function showModal(id){
-   dataModal.value = await datas.value.fetchTaskById(id);
-   modal.value = true
+async function loadTask(id){
+    dataModal.value = await getItemById(`${uri}/v1/tasks`,id)
+    console.log(dataModal.value);
 }
 </script>
 
@@ -49,8 +58,8 @@ async function showModal(id){
         </tr>
       </thead>
       <tbody class="itbkk-item bg-slate-100 divide-y divide-gray-200">
-        <tr @click="showModal(data.idTask)" v-for="(data, index) in datas.getTasks()" :key="index">
-            <Modal v-show="modal"/>
+        <tr onclick="my_modal_1.showModal()" v-for="(data, index) in datas.getTasks()" :key="index" @click="loadTask(data.idTask)">
+           
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ data.idTask }}</div>
           </td>
@@ -67,6 +76,7 @@ async function showModal(id){
       </tbody>
     </table>
   </div>
+  <Modal :dataModal="dataModal"/>
 </template>
 
 <style scoped></style>
