@@ -57,9 +57,8 @@ async function loadTask(id){
           </th>
         </tr>
       </thead>
-      <tbody class="itbkk-item bg-slate-100 divide-y divide-gray-200">
-        <tr onclick="my_modal_1.showModal()" v-for="(data, index) in datas.getTasks()" :key="index" @click="loadTask(data.idTask)">
-           
+      <tbody class="itbkk-item bg-slate-100 divide-y divide-gray-300">
+        <tr class="hover:bg-slate-200" onclick="my_modal_1.showModal()" v-for="(data, index) in datas.getTasks()" :key="index" @click="loadTask(data.idTask)">         
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ data.idTask }}</div>
           </td>
