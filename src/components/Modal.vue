@@ -90,7 +90,9 @@ const formattDate = (date) => new Date(date).toLocaleString("en-GB", localZone);
         Ok
       </button>
       <form method="dialog itbkk-button">
-        <button class="btn">Close</button>
+        <button @click="$router.push({ path: `/task` })" class="btn">
+          Close
+        </button>
       </form>
     </div>
   </dialog>

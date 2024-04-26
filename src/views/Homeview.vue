@@ -1,11 +1,13 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
 import Modal from "@/components/Modal.vue";
+import { useRoute, useRouter } from "vue-router";
 const datas = ref(TaskManagement);
 import { getItems, getItemById } from "./../assets/fetch.js";
 const uri = import.meta.env.VITE_SERVER_URI;
-
+const route = useRoute();
+const router = useRouter();
 const dataModal = ref({});
 onMounted(async function () {
   const data = await getItems(`${uri}/v1/tasks`);
@@ -13,8 +15,16 @@ onMounted(async function () {
 });
 async function loadTask(id) {
   const showTask = await getItemById(`${uri}/v1/tasks`, id);
+  if (showTask.status === 404) return router.push({ name: "Task" });
   dataModal.value = showTask;
+  document.getElementById("my_modal_1").showModal();
 }
+watch(
+  () => route.params.id,
+  () => {
+    if (route.params.id) loadTask(route.params.id);
+  }
+);
 </script>
 
 <template>
@@ -59,10 +69,11 @@ async function loadTask(id) {
         </tr>
         <tr
           class="itbkk-item hover:bg-slate-200"
-          onclick="my_modal_1.showModal()"
           v-for="(data, index) in datas.getTasks()"
           :key="index"
-          @click="loadTask(data.idTask)"
+          @click="
+            $router.push({ name: 'TaskDetail', params: { id: data.idTask } })
+          "
         >
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ data.idTask }}</div>
@@ -70,9 +81,9 @@ async function loadTask(id) {
           <td class="itbkk-title px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ data.title }}</div>
           </td>
-          <td class="itbkk-assignees px-6 py-4 whitespace-nowrap">
+          <td class="px-6 py-4 whitespace-nowrap">
             <div
-              class="text-sm text-gray-900"
+              class="text-sm text-gray-900 itbkk-assignees italic"
               :class="dataModal?.assignees !== '' && 'italic'"
             >
               {{ data?.assignees !== "" ? data.assignees : "Unassigned" }}
