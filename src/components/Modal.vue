@@ -1,16 +1,11 @@
 <script setup>
-import Caret from "../components/Caretdown.vue";
 defineProps({
   dataModal: {
     type: Object,
   },
 });
-const formattDate = (date) => {
-  const newDate = new Date(date);
-  return `${newDate.getFullYear()}-${
-    newDate.getMonth() + 1
-  }-${newDate.getDate()} ${newDate.toTimeString().split(" ")[0]}`;
-};
+const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const formattDate = (date) => new Date(date).toLocaleString("en-GB", localZone);
 </script>
 
 <template>
@@ -35,7 +30,7 @@ const formattDate = (date) => {
           >{{
             dataModal?.description !== ""
               ? dataModal.description
-              : "No description provided"
+              : "No Description Provided"
           }}</textarea
         >
       </div>
@@ -43,8 +38,15 @@ const formattDate = (date) => {
         <div class="flex flex-col gap-2 text-slate-200">
           <div>Assignees</div>
           <textarea
-            class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl border p-4 text-slate-200 bg-secondary border-base-100"
-            >{{ dataModal?.assignees }}</textarea
+            class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl border p-4 bg-secondary border-base-100"
+            :class="
+              dataModal?.assignees !== ''
+                ? ' text-slate-200'
+                : 'text-gray-400 italic'
+            "
+            >{{
+              dataModal?.assignees !== "" ? dataModal.assignees : "Unassigned"
+            }}</textarea
           >
         </div>
         <div class="flex flex-col gap-2 text-slate-200">
@@ -62,7 +64,7 @@ const formattDate = (date) => {
           <div class="flex gap-2">
             TimeZone:
             <div class="itbkk-timezone">
-              {{ Intl.DateTimeFormat().resolvedOptions().timeZone }}
+              {{ localZone }}
             </div>
           </div>
           <div class="flex gap-2">
@@ -87,7 +89,7 @@ const formattDate = (date) => {
       >
         Ok
       </button>
-      <form method="dialog">
+      <form method="dialog itbkk-button">
         <button class="btn">Close</button>
       </form>
     </div>

@@ -51,14 +51,14 @@ async function loadTask(id) {
           </th>
         </tr>
       </thead>
-      <tbody class="itbkk-item bg-slate-100 divide-y divide-gray-300">
+      <tbody class="bg-slate-100 divide-y divide-gray-300">
         <tr v-show="datas.getTasks().length === 0">
           <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-900">
             No task
           </td>
         </tr>
         <tr
-          class="hover:bg-slate-200"
+          class="itbkk-item hover:bg-slate-200"
           onclick="my_modal_1.showModal()"
           v-for="(data, index) in datas.getTasks()"
           :key="index"
@@ -71,18 +71,23 @@ async function loadTask(id) {
             <div class="text-sm text-gray-900">{{ data.title }}</div>
           </td>
           <td class="itbkk-assignees px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">{{ data.assignees }}</div>
+            <div
+              class="text-sm text-gray-900"
+              :class="dataModal?.assignees !== '' && 'italic'"
+            >
+              {{ data?.assignees !== "" ? data.assignees : "Unassigned" }}
+            </div>
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
             <div
               :class="
-                data.status === 'no status'
+                data.status === 'No Status'
                   ? 'text-sm text-red-400'
-                  : data.status === 'to do'
+                  : data.status === 'To Do'
                   ? 'text-sm text-yellow-500'
-                  : data.status === 'doing'
+                  : data.status === 'Doing'
                   ? 'text-sm text-blue-500'
-                  : data.status === 'done'
+                  : data.status === 'Done'
                   ? 'text-sm text-success'
                   : 'text-gray-300'
               "
