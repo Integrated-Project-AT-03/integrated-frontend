@@ -35,7 +35,7 @@ const formattDate = (date) => {
           >{{
             dataModal?.description !== ""
               ? dataModal.description
-              : "No description"
+              : "No description provided"
           }}</textarea
         >
       </div>

@@ -52,6 +52,11 @@ async function loadTask(id) {
         </tr>
       </thead>
       <tbody class="itbkk-item bg-slate-100 divide-y divide-gray-300">
+        <tr v-show="datas.getTasks().length === 0">
+          <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-900">
+            No task
+          </td>
+        </tr>
         <tr
           class="hover:bg-slate-200"
           onclick="my_modal_1.showModal()"
