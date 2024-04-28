@@ -16,6 +16,10 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: '/',
+      redirect: '/task'
+    }
   ],
 });
 
