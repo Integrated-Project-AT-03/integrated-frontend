@@ -83,8 +83,8 @@ watch(
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
             <div
-              class="text-sm text-gray-900 itbkk-assignees italic"
-              :class="dataModal?.assignees !== '' && 'italic'"
+              class="text-sm text-gray-900 itbkk-assignees"
+              :class="data?.assignees === '' && 'italic'"
             >
               {{ data?.assignees !== "" ? data.assignees : "Unassigned" }}
             </div>

@@ -5,7 +5,8 @@ defineProps({
   },
 });
 const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-const formattDate = (date) => new Date(date).toLocaleString("en-GB", localZone);
+const formattDate = (date) =>
+  new Date(date).toLocaleString("en-GB", localZone).replace(",", "");
 </script>
 
 <template>
