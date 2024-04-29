@@ -3,6 +3,8 @@ import { onMounted, ref, watch } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
 import Modal from "@/components/Modal.vue";
 import { useRoute, useRouter } from "vue-router";
+import Addtaskmodal from "../components/Addtaskmodal.vue"
+
 const datas = ref(TaskManagement);
 import { getItems, getItemById } from "./../assets/fetch.js";
 const uri = import.meta.env.VITE_SERVER_URI;
@@ -28,9 +30,12 @@ watch(
 </script>
 
 <template>
-  <div class="container mx-auto">
+  <div class="container mx-auto flex flex-col gap-4">
     <div class="w-full flex justify-center m-7">
       <div class="text-4xl">IT-Bangmod Kradan Kanban</div>
+    </div>
+    <div class="flex justify-end">
+      <button onclick="taskmodal.showModal()" class="btn btn-primary text-gray-900">Add</button>
     </div>
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-200">
@@ -91,15 +96,16 @@ watch(
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
             <div
+              class="flex justify-center w-20 p-2 rounded-xl text-slate-200"
               :class="
                 data.status === 'No Status'
-                  ? 'text-sm text-red-400'
+                  ? 'text-sm bg-red-400'
                   : data.status === 'To Do'
-                  ? 'text-sm text-yellow-500'
+                  ? 'text-sm bg-yellow-500'
                   : data.status === 'Doing'
-                  ? 'text-sm text-blue-500'
+                  ? 'text-sm bg-blue-500'
                   : data.status === 'Done'
-                  ? 'text-sm text-success'
+                  ? 'text-sm bg-success'
                   : 'text-gray-300'
               "
             >
@@ -111,6 +117,7 @@ watch(
     </table>
   </div>
   <Modal :dataModal="dataModal" />
+  <Addtaskmodal />
 </template>
 
 <style scoped></style>
