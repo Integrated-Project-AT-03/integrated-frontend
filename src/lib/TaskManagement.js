@@ -8,6 +8,7 @@ class TaskMannagement {
       return {
         ...task,
         status: task.status
+          .toLowerCase()
           .replace("_", " ")
           .split(" ")
           .map(
@@ -18,6 +19,10 @@ class TaskMannagement {
     });
     this.tasks = format;
   }
+  addTask(task) {
+    this.tasks.push(task);
+  }
+
   getTasks() {
     return this.tasks;
   }
