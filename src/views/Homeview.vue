@@ -3,7 +3,6 @@ import { onMounted, ref, watch } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
 import TaskModal from "../components/TaskModal.vue";
 import { useRoute, useRouter } from "vue-router";
-import AddTaskModal from "../components/AddTaskModal.vue"
 
 const datas = ref(TaskManagement);
 import { getItems, getItemById } from "./../assets/fetch.js";
@@ -37,7 +36,7 @@ watch(
         <div class="text-4xl">IT-Bangmod Kradan Kanban</div>
       </span>
     </div>
-    <div class="flex justify-end">
+    <div class="itbkk-button-add flex justify-end">
       <button onclick="taskmodal.showModal()" class="btn btn-secondary text-slate-300">Add your task</button>
     </div>
     <table class="min-w-full divide-y divide-gray-200">
@@ -119,8 +118,8 @@ watch(
       </tbody>
     </table>
   </div>
-  <TaskModal :dataModal="dataModal" />
-  <AddTaskModal />
+  <TaskModal :dataModal="dataModal" modalId="my_modal_1" :isEditing="true" />
+  <TaskModal :dataModal="dataModal" modalId="taskmodal" :isEditing="false" />
 </template>
 
 <style scoped></style>
