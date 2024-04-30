@@ -1,9 +1,9 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
-import Modal from "@/components/Modal.vue";
+import TaskModal from "../components/TaskModal.vue";
 import { useRoute, useRouter } from "vue-router";
-import Addtaskmodal from "../components/Addtaskmodal.vue"
+import AddTaskModal from "../components/AddTaskModal.vue"
 
 const datas = ref(TaskManagement);
 import { getItems, getItemById } from "./../assets/fetch.js";
@@ -14,6 +14,7 @@ const dataModal = ref({});
 onMounted(async function () {
   const data = await getItems(`${uri}/v1/tasks`);
   datas.value.setTasks(data);
+
 });
 async function loadTask(id) {
   const showTask = await getItemById(`${uri}/v1/tasks`, id);
@@ -116,8 +117,8 @@ watch(
       </tbody>
     </table>
   </div>
-  <Modal :dataModal="dataModal" />
-  <Addtaskmodal />
+  <TaskModal :dataModal="dataModal" />
+  <AddTaskModal />
 </template>
 
 <style scoped></style>
