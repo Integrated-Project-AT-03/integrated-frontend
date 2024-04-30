@@ -31,12 +31,14 @@ watch(
 </script>
 
 <template>
-  <div class="container mx-auto flex flex-col gap-4">
-    <div class="w-full flex justify-center m-7">
-      <div class="text-4xl">IT-Bangmod Kradan Kanban</div>
+  <div class="container mx-auto flex flex-col gap-3">
+    <div class="text-5xl font-extrabold ... w-full flex justify-center m-7">
+      <span class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
+        <div class="text-4xl">IT-Bangmod Kradan Kanban</div>
+      </span>
     </div>
     <div class="flex justify-end">
-      <button onclick="taskmodal.showModal()" class="btn btn-primary text-gray-900">Add</button>
+      <button onclick="taskmodal.showModal()" class="btn btn-secondary text-slate-300">Add your task</button>
     </div>
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-200">
