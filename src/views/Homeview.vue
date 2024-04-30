@@ -71,9 +71,7 @@ watch(
           class="itbkk-item hover:bg-slate-200"
           v-for="(data, index) in datas.getTasks()"
           :key="index"
-          @click="
-            $router.push({ name: 'TaskDetail', params: { id: data.idTask } })
-          "
+          @click="$router.push({ name: 'TaskDetail', params: { id: data.id } })"
         >
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ data.idTask }}</div>
