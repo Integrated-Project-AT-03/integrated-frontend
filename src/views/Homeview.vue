@@ -19,7 +19,7 @@ async function loadTask(id) {
   const showTask = await getItemById(`${uri}/v1/tasks`, id);
   if (showTask.status === 404) return router.push({ name: "Task" });
   dataModal.value = showTask;
-  document.getElementById("my_modal_1").showModal();
+  document.getElementById("showDetail").showModal();
 }
 watch(
   () => route.params.id,
@@ -118,8 +118,7 @@ watch(
       </tbody>
     </table>
   </div>
-  <TaskModal :dataModal="dataModal" modalId="my_modal_1" :isEditing="true" />
-  <TaskModal :dataModal="dataModal" modalId="taskmodal" :isEditing="false" />
-</template>
+  <TaskModal :dataModal="dataModal" />
+</template>  
 
 <style scoped></style>

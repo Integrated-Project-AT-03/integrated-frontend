@@ -1,15 +1,12 @@
 <script setup>
+import { ref } from 'vue';
+
 defineProps({
   dataModal: {
     type: Object,
-  },
-  modalId:{
-    type: String
-  },
-  isEditing:{
-    type: Boolean
   }
 });
+const formModal = ref()
 const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const formattDate = (date) =>
   new Date(date).toLocaleString("en-GB", localZone).replace(",", "");
@@ -17,11 +14,11 @@ const formattDate = (date) =>
 
 <template>
   <dialog
-    :id="modalId"
+    id="showDetail"
     class="w-[65rem] m-auto h-[47rem] bg-neutral rounded-2xl"
   >
     <div class="itbkk-title text-xl text-slate-200 mt-5 ml-6 font-bold">
-      <input class="bg-neutral hover:border-neutral" type="text" :value="isEditing ? dataModal?.title : 'New Task'" />
+      <input class="bg-neutral hover:border-neutral" type="text" :value=" dataModal?.title" />
     </div>
     <div class="divider"></div>
     <div class="flex justify-around m-4">
@@ -67,7 +64,7 @@ const formattDate = (date) =>
             <option :selected="dataModal?.status === 'to_do'">To do</option>
           </select>
         </div>
-        <div v-show="isEditing" class="flex flex-col h-3/4 gap-3 text-slate-200">
+        <div class="flex flex-col h-3/4 gap-3 text-slate-200">
           <div class="flex gap-2">
             TimeZone:
             <div class="itbkk-timezone">
