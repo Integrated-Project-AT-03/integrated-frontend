@@ -1,8 +1,9 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
-import Modal from "@/components/Modal.vue";
+import TaskModal from "../components/TaskModal.vue";
 import { useRoute, useRouter } from "vue-router";
+
 const datas = ref(TaskManagement);
 import { getItems, getItemById } from "./../assets/fetch.js";
 const uri = import.meta.env.VITE_SERVER_URI;
@@ -12,12 +13,13 @@ const dataModal = ref({});
 onMounted(async function () {
   const data = await getItems(`${uri}/v1/tasks`);
   datas.value.setTasks(data);
+
 });
 async function loadTask(id) {
   const showTask = await getItemById(`${uri}/v1/tasks`, id);
   if (showTask.status === 404) return router.push({ name: "Task" });
   dataModal.value = showTask;
-  document.getElementById("my_modal_1").showModal();
+  document.getElementById("showDetail").showModal();
 }
 watch(
   () => route.params.id,
@@ -28,9 +30,14 @@ watch(
 </script>
 
 <template>
-  <div class="container mx-auto">
-    <div class="w-full flex justify-center m-7">
-      <div class="text-4xl">IT-Bangmod Kradan Kanban</div>
+  <div class="container mx-auto flex flex-col gap-3">
+    <div class="text-5xl font-extrabold ... w-full flex justify-center m-7">
+      <span class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
+        <div class="text-4xl">IT-Bangmod Kradan Kanban</div>
+      </span>
+    </div>
+    <div class="itbkk-button-add flex justify-end">
+      <button onclick="taskmodal.showModal()" class="btn btn-secondary text-slate-300">Add your task</button>
     </div>
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-200">
@@ -89,15 +96,16 @@ watch(
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
             <div
+              class="flex justify-center w-20 p-2 rounded-xl text-slate-200"
               :class="
                 data.status === 'No Status'
-                  ? 'text-sm text-red-400'
+                  ? 'text-sm bg-red-400'
                   : data.status === 'To Do'
-                  ? 'text-sm text-yellow-500'
+                  ? 'text-sm bg-yellow-500'
                   : data.status === 'Doing'
-                  ? 'text-sm text-blue-500'
+                  ? 'text-sm bg-blue-500'
                   : data.status === 'Done'
-                  ? 'text-sm text-success'
+                  ? 'text-sm bg-success'
                   : 'text-gray-300'
               "
             >
@@ -108,7 +116,7 @@ watch(
       </tbody>
     </table>
   </div>
-  <Modal :dataModal="dataModal" />
-</template>
+  <TaskModal :dataModal="dataModal" />
+</template>  
 
 <style scoped></style>
