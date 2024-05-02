@@ -1,31 +1,30 @@
 class TaskMannagement {
   constructor() {
-    this.tasks = [];
+    this.tasks = []
   }
 
   async setTasks(tasks = []) {
-    const format = tasks.map((task) => {
-      return {
-        ...task,
-        status: task.status
-          .toLowerCase()
-          .replace("_", " ")
-          .split(" ")
-          .map(
-            (word = "") => word[0].toUpperCase() + word.slice(1, word.length)
-          )
-          .join(" "),
-      };
-    });
-    this.tasks = format;
+    const format = tasks.map((task) => this.format(task))
+    this.tasks = format
   }
   addTask(task) {
-    this.tasks.push(task);
+    this.tasks.push(this.format(task))
   }
 
   getTasks() {
-    return this.tasks;
+    return this.tasks
+  }
+  format(task) {
+    return {
+      ...task,
+      status: task.status
+        .toLowerCase()
+        .replace("_", " ")
+        .split(" ")
+        .map((word = "") => word[0].toUpperCase() + word.slice(1, word.length))
+        .join(" ")
+    }
   }
 }
 
-export default new TaskMannagement();
+export default new TaskMannagement()
