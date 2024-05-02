@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
 import Loading from "./../components/Loading.vue";
 import { useRoute } from "vue-router";

@@ -28,10 +28,10 @@ async function addNewTask(newItem) {
       <div class="flex flex-col gap-3">
         <div class="ml-12">Title</div>
         <div class="flex justify-center">
-          <textarea
+          <input
             v-model="newData.title"
             class="itbkk-title w-[60rem] h-11 rounded-2xl p-2 bg-secondary border-base-100"
-          ></textarea>
+          />
         </div>
         <div class="flex justify-around">
           <div class="flex flex-col gap-3">

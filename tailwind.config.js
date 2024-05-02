@@ -2,7 +2,11 @@
 export default {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
-    extend: {}
+    extend: {
+      colors: {
+        edit: "#A020F0",
+      },
+    },
   },
   daisyui: {
     themes: [
@@ -16,10 +20,10 @@ export default {
           info: "#60a5fa",
           success: "#16a34a",
           warning: "#facc15",
-          error: "#ef4444"
-        }
-      }
-    ]
+          error: "#ef4444",
+        },
+      },
+    ],
   },
-  plugins: [require("daisyui")]
-}
+  plugins: [require("daisyui")],
+};

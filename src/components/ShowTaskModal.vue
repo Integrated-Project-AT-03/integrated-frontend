@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getItemById, editItem } from "./../assets/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
@@ -12,16 +12,25 @@ const dataTask = ref({
   assignees: "",
   status: "NO_STATUS",
 });
+const isEditMode = ref();
+watch(
+  () => route.params.mode,
+  () => (isEditMode.value = route.params?.mode === "edit"),
+  { immediate: true }
+);
+
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const isLoading = ref(true);
-onMounted(async () => {
+const loadTask = async () => {
+  isLoading.value = true;
   const response = await getItemById(`${uri}/v1/tasks`, route.params.id);
   isLoading.value = false;
   if (response.status === 404) return router.push({ name: "Task" });
   dataTask.value = response;
-});
+};
+onMounted(async () => await loadTask());
 
 const editTask = async () => {
   isLoading.value = true;
@@ -43,21 +52,45 @@ const formattDate = (date) =>
 <template>
   <div class="w-screen h-screen absolute flex justify-center items-center z-10">
     <div
-      class="relative overflow-hidden m-auto w-[65rem] h-[47rem] bg-neutral rounded-2xl"
+      class="relative overflow-hidden m-auto w-[65rem] h-[49rem] bg-neutral rounded-2xl"
     >
       <Loading :is-loading="isLoading" />
-      <div class="itbkk-title text-xl text-slate-200 mt-5 ml-6 font-bold">
+      <div
+        class="text-xl pr-5 flex gap-5 justify-between text-slate-200 mt-5 ml-6 font-bold"
+      >
         <input
-          class="bg-neutral hover:border-neutral"
+          :disabled="!isEditMode"
+          class="itbkk-title"
+          :class="
+            isEditMode
+              ? 'w-[60rem] h-11 rounded-2xl p-2 bg-secondary border-base-100'
+              : ' bg-neutral hover:border-neutral'
+          "
           type="text"
           v-model="dataTask.title"
         />
+        <button
+          @click="
+            [
+              $router.push({
+                name: `${!isEditMode ? 'TaskEdit' : 'TaskDetail'}`,
+                params: { mode: 'edit' },
+              }),
+              isEditMode && loadTask(),
+            ]
+          "
+          class="btn w-30 hover:bg-base-100 border-0 hover:border-base-100"
+          :class="!isEditMode ? 'bg-edit' : 'btn-error text-white'"
+        >
+          {{ route.params.mode !== "edit" ? "Edit mode" : "Reset" }}
+        </button>
       </div>
       <div class="divider"></div>
       <div class="flex justify-around m-4">
         <div class="flex flex-col gap-2 text-slate-200">
           <div>Description</div>
           <textarea
+            :disabled="!isEditMode"
             v-model="dataTask.description"
             :placeholder="dataTask.description ?? 'No Description Provided'"
             class="itbkk-description w-[35rem] h-[32rem] rounded-2xl border p-4 bg-secondary placeholder:text-gray-400 placeholder:italic border-base-100"
@@ -67,6 +100,7 @@ const formattDate = (date) =>
           <div class="flex flex-col gap-2 text-slate-200">
             <div>Assignees</div>
             <textarea
+              :disabled="!isEditMode"
               :placeholder="dataTask.assignees ?? 'Unassigned'"
               v-model="dataTask.assignees"
               class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl placeholder:text-gray-400 placeholder:italic border p-4 bg-secondary border-base-100"
@@ -75,6 +109,7 @@ const formattDate = (date) =>
           <div class="flex flex-col gap-2 text-slate-200">
             <div>Status</div>
             <select
+              :disabled="!isEditMode"
               v-model="dataTask.status"
               class="itbkk-status select w-full max-w-xs bg-base-100"
             >
@@ -84,37 +119,46 @@ const formattDate = (date) =>
               <option value="TO_DO">To do</option>
             </select>
           </div>
-          <div class="flex flex-col h-3/4 gap-3 text-slate-200">
-            <div class="flex gap-2">
-              TimeZone:
-              <div class="itbkk-timezone">
-                {{ localZone }}
+          <div
+            class="flex flex-col justify-between h-3/4 gap-3 pb-3 text-slate-200"
+          >
+            <div>
+              <div class="flex gap-2">
+                TimeZone:
+                <div class="itbkk-timezone">
+                  {{ localZone }}
+                </div>
+              </div>
+              <div class="flex gap-2">
+                Created On:
+                <div class="itbkk-created-on">
+                  {{ formattDate(dataTask.createdOn) }}
+                </div>
+              </div>
+              <div class="flex gap-2">
+                Updated On:
+                <div class="itbkk-updated-on">
+                  {{ formattDate(dataTask.updatedOn) }}
+                </div>
               </div>
             </div>
-            <div class="flex gap-2">
-              Created On:
-              <div class="itbkk-created-on">
-                {{ formattDate(dataTask.createdOn) }}
-              </div>
-            </div>
-            <div class="flex gap-2">
-              Updated On:
-              <div class="itbkk-updated-on">
-                {{ formattDate(dataTask.updatedOn) }}
-              </div>
-            </div>
+            <button
+              class="btn btn-error w-full text-white hover:bg-base-100 hover:border-base-100"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </div>
       <div class="divider"></div>
       <div class="flex justify-end m-4 gap-3">
         <button
+          v-show="isEditMode"
           @click="editTask()"
           class="btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
         >
-          SAVE
+          Save
         </button>
-
         <button @click="$router.push({ path: `/task` })" class="btn">
           Close
         </button>
