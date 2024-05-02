@@ -1,43 +1,36 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
-import TaskModal from "../components/TaskModal.vue";
-import { useRoute, useRouter } from "vue-router";
-
+import { useRoute } from "vue-router";
+import { getItems } from "./../assets/fetch.js";
 const datas = ref(TaskManagement);
-import { getItems, getItemById } from "./../assets/fetch.js";
 const uri = import.meta.env.VITE_SERVER_URI;
 const route = useRoute();
-const router = useRouter();
-const dataModal = ref({});
 onMounted(async function () {
   const data = await getItems(`${uri}/v1/tasks`);
   datas.value.setTasks(data);
-
 });
-async function loadTask(id) {
-  const showTask = await getItemById(`${uri}/v1/tasks`, id);
-  if (showTask.status === 404) return router.push({ name: "Task" });
-  dataModal.value = showTask;
-  document.getElementById("showDetail").showModal();
-}
-watch(
-  () => route.params.id,
-  () => {
-    if (route.params.id) loadTask(route.params.id);
-  }
-);
 </script>
 
 <template>
-  <div class="container mx-auto flex flex-col gap-3">
+  <div
+    class="container mx-auto flex flex-col gap-3"
+    :class="route.params.id && 'blur-sm'"
+  >
     <div class="text-5xl font-extrabold ... w-full flex justify-center m-7">
-      <span class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
+      <span
+        class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500"
+      >
         <div class="text-4xl">IT-Bangmod Kradan Kanban</div>
       </span>
     </div>
     <div class="itbkk-button-add flex justify-end">
-      <button onclick="taskmodal.showModal()" class="btn btn-secondary text-slate-300">Add your task</button>
+      <button
+        onclick="taskmodal.showModal()"
+        class="btn btn-secondary text-slate-300"
+      >
+        Add your task
+      </button>
     </div>
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-200">
@@ -81,7 +74,7 @@ watch(
           @click="$router.push({ name: 'TaskDetail', params: { id: data.id } })"
         >
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">{{ data.idTask }}</div>
+            <div class="text-sm text-gray-900">{{ data.id }}</div>
           </td>
           <td class="itbkk-title px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ data.title }}</div>
@@ -116,7 +109,6 @@ watch(
       </tbody>
     </table>
   </div>
-  <TaskModal :dataModal="dataModal" />
-</template>  
+</template>
 
 <style scoped></style>
