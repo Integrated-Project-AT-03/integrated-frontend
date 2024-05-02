@@ -1,11 +1,11 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getItemById } from "./../assets/fetch.js";
+import { getItemById, editItem } from "./../assets/fetch.js";
 import Loading from "./Loading.vue";
 const route = useRoute();
 const router = useRouter();
-const dataModal = ref({});
+const dataModal = ref({ title: null, description: null, status: "NO_STATUS" });
 const uri = import.meta.env.VITE_SERVER_URI;
 const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const isLoading = ref(true);
@@ -30,7 +30,7 @@ const formattDate = (date) =>
         <input
           class="bg-neutral hover:border-neutral"
           type="text"
-          :value="dataModal?.title"
+          v-model="dataModal.title"
         />
       </div>
       <div class="divider"></div>
@@ -38,43 +38,27 @@ const formattDate = (date) =>
         <div class="flex flex-col gap-2 text-slate-200">
           <div>Description</div>
           <textarea
-            class="itbkk-description w-[35rem] h-[32rem] rounded-2xl border p-4 bg-secondary border-base-100"
-            :class="
-              dataModal?.description !== ''
-                ? ' text-slate-200'
-                : 'text-gray-400 italic'
-            "
-            >{{
-              dataModal?.description !== ""
-                ? dataModal.description
-                : "No Description Provided"
-            }}</textarea
-          >
+            v-model="dataModal.description"
+            :placeholder="dataModal.description ?? 'No Description Provided'"
+            class="itbkk-description w-[35rem] h-[32rem] rounded-2xl border p-4 bg-secondary placeholder:text-gray-400 placeholder:italic border-base-100"
+          ></textarea>
         </div>
         <div class="flex flex-col gap-10">
           <div class="flex flex-col gap-2 text-slate-200">
             <div>Assignees</div>
             <textarea
-              class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl border p-4 bg-secondary border-base-100"
-              :class="
-                dataModal?.assignees !== ''
-                  ? ' text-slate-200'
-                  : 'text-gray-400 italic'
-              "
-              >{{
-                dataModal?.assignees !== null
-                  ? dataModal.assignees
-                  : "Unassigned"
-              }}</textarea
-            >
+              :placeholder="dataModal.assignees ?? 'Unassigned'"
+              v-model="dataModal.assignees"
+              class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl placeholder:text-gray-400 placeholder:italic border p-4 bg-secondary border-base-100"
+            ></textarea>
           </div>
           <div class="flex flex-col gap-2 text-slate-200">
             <div>Status</div>
             <select class="itbkk-status select w-full max-w-xs bg-base-100">
               <option selected>No status</option>
-              <option :selected="dataModal?.status === 'doing'">Doing</option>
-              <option :selected="dataModal?.status === 'done'">Done</option>
-              <option :selected="dataModal?.status === 'to_do'">To do</option>
+              <option :selected="dataModal.status === 'doing'">Doing</option>
+              <option :selected="dataModal.status === 'done'">Done</option>
+              <option :selected="dataModal.status === 'to_do'">To do</option>
             </select>
           </div>
           <div class="flex flex-col h-3/4 gap-3 text-slate-200">
@@ -87,13 +71,13 @@ const formattDate = (date) =>
             <div class="flex gap-2">
               Created On:
               <div class="itbkk-created-on">
-                {{ formattDate(dataModal?.createdOn) }}
+                {{ formattDate(dataModal.createdOn) }}
               </div>
             </div>
             <div class="flex gap-2">
               Updated On:
               <div class="itbkk-updated-on">
-                {{ formattDate(dataModal?.updatedOn) }}
+                {{ formattDate(dataModal.updatedOn) }}
               </div>
             </div>
           </div>
