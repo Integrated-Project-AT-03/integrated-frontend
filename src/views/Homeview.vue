@@ -15,18 +15,18 @@ onMounted(async function () {
 <template>
   <div
     class="container mx-auto flex flex-col gap-3"
-    :class="route.params.id && 'blur-sm'"
+    :class="route.fullPath.split('/').length > 2 && 'blur-sm'"
   >
+  {{  }}
     <div class="text-5xl font-extrabold ... w-full flex justify-center m-7">
       <span
         class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500"
       >
-        <div class="text-4xl">IT-Bangmod Kradan Kanban</div>
+        <div class="text-5xl">IT-Bangmod Kradan Kanban</div>
       </span>
     </div>
     <div class="itbkk-button-add flex justify-end">
-      <button
-        onclick="taskmodal.showModal()"
+      <button @click="$router.push({name: 'AddTask'})"
         class="btn btn-secondary text-slate-300"
       >
         Add your task
@@ -82,9 +82,9 @@ onMounted(async function () {
           <td class="px-6 py-4 whitespace-nowrap">
             <div
               class="text-sm text-gray-900 itbkk-assignees"
-              :class="data?.assignees === '' && 'italic'"
+              :class="data?.assignees ?? 'italic'"
             >
-              {{ data?.assignees !== "" ? data.assignees : "Unassigned" }}
+              {{ data?.assignees ?? "Unassigned" }}
             </div>
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
@@ -111,4 +111,6 @@ onMounted(async function () {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+</style>
