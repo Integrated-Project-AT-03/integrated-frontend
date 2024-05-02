@@ -74,12 +74,12 @@ const formattDate = (date) =>
             [
               $router.push({
                 name: `${!isEditMode ? 'TaskEdit' : 'TaskDetail'}`,
-                params: { mode: 'edit' },
+                [`${!isEditMode ? 'params' : '_'}`]: { mode: 'edit' },
               }),
               isEditMode && loadTask(),
             ]
           "
-          class="btn w-30 hover:bg-base-100 border-0 hover:border-base-100"
+          class="btn itbkk-button-edit w-30 hover:bg-base-100 border-0 hover:border-base-100"
           :class="!isEditMode ? 'bg-edit' : 'btn-error text-white'"
         >
           {{ route.params.mode !== "edit" ? "Edit mode" : "Reset" }}
@@ -155,7 +155,7 @@ const formattDate = (date) =>
         <button
           v-show="isEditMode"
           @click="editTask()"
-          class="btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
+          class="btn itbkk-button-delete btn-success w-16 hover:bg-base-100 hover:border-base-100"
         >
           Save
         </button>

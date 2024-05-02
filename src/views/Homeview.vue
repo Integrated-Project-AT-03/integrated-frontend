@@ -31,7 +31,7 @@ onMounted(async function () {
     <div class="itbkk-button-add flex justify-end">
       <button
         @click="$router.push({ name: 'AddTask' })"
-        class="btn btn-secondary text-slate-300"
+        class="btn itbkk-button-add btn-secondary text-slate-300"
       >
         Add your task
       </button>
@@ -72,7 +72,7 @@ onMounted(async function () {
           </td>
         </tr>
         <tr
-          class="itbkk-item hover:bg-slate-200"
+          class="itbkk-item itbkk-button-action hover:bg-slate-200"
           v-for="data in datas.getTasks()"
           :key="data.id"
           @click="$router.push({ name: 'TaskDetail', params: { id: data.id } })"
