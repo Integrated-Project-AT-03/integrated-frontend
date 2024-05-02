@@ -14,7 +14,6 @@ onMounted(async () => {
   isLoading.value = false;
   if (showTask.status === 404) return router.push({ name: "Task" });
   dataModal.value = showTask;
-  console.log("hee");
 });
 
 const formattDate = (date) =>
