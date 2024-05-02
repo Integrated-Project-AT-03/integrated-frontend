@@ -2,33 +2,31 @@
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getItemById } from "./../assets/fetch.js";
+import Loading from "./Loading.vue";
 const route = useRoute();
 const router = useRouter();
 const dataModal = ref({});
 const uri = import.meta.env.VITE_SERVER_URI;
 const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const isLoading = ref(true);
 onMounted(async () => {
   const showTask = await getItemById(`${uri}/v1/tasks`, route.params.id);
+  isLoading.value = false;
   if (showTask.status === 404) return router.push({ name: "Task" });
   dataModal.value = showTask;
+  console.log("hee");
 });
 
 const formattDate = (date) =>
   new Date(date).toLocaleString("en-GB", localZone).replace(",", "");
-// async function editTask(id) {
-//   try {
-//     const edit = await editItem(`${uri}/v1/tasks`, id, dataModal);
-//     router.push({ path: `/task` });
-//     if (edit.status === 404) {
-//       console.log("Error404");
-//     }
-//   } catch (error) {}
-// }
 </script>
 
 <template>
   <div class="w-screen h-screen absolute flex justify-center items-center z-10">
-    <div class="m-auto w-[65rem] h-[47rem] bg-neutral rounded-2xl">
+    <div
+      class="relative overflow-hidden m-auto w-[65rem] h-[47rem] bg-neutral rounded-2xl"
+    >
+      <Loading :is-loading="isLoading" />
       <div class="itbkk-title text-xl text-slate-200 mt-5 ml-6 font-bold">
         <input
           class="bg-neutral hover:border-neutral"
@@ -65,7 +63,9 @@ const formattDate = (date) =>
                   : 'text-gray-400 italic'
               "
               >{{
-                dataModal?.assignees !== "" ? dataModal.assignees : "Unassigned"
+                dataModal?.assignees !== null
+                  ? dataModal.assignees
+                  : "Unassigned"
               }}</textarea
             >
           </div>

@@ -1,20 +1,24 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
+import Loading from "./../components/Loading.vue";
 import { useRoute } from "vue-router";
 import { getItems } from "./../assets/fetch.js";
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const route = useRoute();
+const isLoading = ref(true);
 onMounted(async function () {
   const data = await getItems(`${uri}/v1/tasks`);
+  isLoading.value = false;
   datas.value.setTasks(data);
 });
 </script>
 
 <template>
+  <Loading :is-loading="isLoading" />
   <div
-    class="container mx-auto flex flex-col gap-3"
+    class="container h-screen w-screen mx-auto flex flex-col gap-3"
     :class="route.params.id && 'blur-sm'"
   >
     <div class="text-5xl font-extrabold ... w-full flex justify-center m-7">
@@ -84,7 +88,7 @@ onMounted(async function () {
               class="text-sm text-gray-900 itbkk-assignees"
               :class="data?.assignees === '' && 'italic'"
             >
-              {{ data?.assignees !== "" ? data.assignees : "Unassigned" }}
+              {{ data?.assignees ?? "Unassigned" }}
             </div>
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
