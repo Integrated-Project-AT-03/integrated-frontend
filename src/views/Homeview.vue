@@ -73,8 +73,8 @@ onMounted(async function () {
         </tr>
         <tr
           class="itbkk-item hover:bg-slate-200"
-          v-for="(data, index) in datas.getTasks()"
-          :key="index"
+          v-for="data in datas.getTasks()"
+          :key="data.id"
           @click="$router.push({ name: 'TaskDetail', params: { id: data.id } })"
         >
           <td class="px-6 py-4 whitespace-nowrap">
