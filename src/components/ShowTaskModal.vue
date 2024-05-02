@@ -60,10 +60,10 @@ const formattDate = (date) =>
       >
         <input
           :disabled="!isEditMode"
-          class="itbkk-title"
+          class="itbkk-title w-[60rem]"
           :class="
             isEditMode
-              ? 'w-[60rem] h-11 rounded-2xl p-2 bg-secondary border-base-100'
+              ? ' h-11 rounded-2xl p-2 bg-secondary border-base-100'
               : ' bg-neutral hover:border-neutral'
           "
           type="text"
