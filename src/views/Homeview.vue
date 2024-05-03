@@ -22,7 +22,6 @@ onMounted(async function () {
     class="container mx-auto flex flex-col gap-3"
     :class="route.fullPath.split('/').length > 2 && 'blur-sm'"
   >
-  <!-- <DeleteTaskModal/> -->
     <div class="text-5xl font-extrabold ... w-full flex justify-center m-7">
       <span
         class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500"
