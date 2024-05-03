@@ -155,11 +155,11 @@ const formattDate = (date) =>
         <button
           v-show="isEditMode"
           @click="editTask()"
-          class="btn itbkk-button-delete btn-success w-16 hover:bg-base-100 hover:border-base-100"
+          class="itbkk-button-confirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
         >
           Save
         </button>
-        <button @click="$router.push({ path: `/task` })" class="btn">
+        <button @click="$router.push({ path: `/task` })" class="itbkk-button-cancel btn">
           Close
         </button>
       </div>
