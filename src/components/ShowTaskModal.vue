@@ -49,7 +49,9 @@ const formattDate = (date) =>
   new Date(date).toLocaleString("en-GB", localZone).replace(",", "");
 </script>
 
+
 <template>
+
   <div class="w-screen h-screen absolute flex justify-center items-center z-10">
     <div
       class="relative overflow-hidden m-auto w-[65rem] h-[49rem] bg-neutral rounded-2xl"
@@ -58,6 +60,7 @@ const formattDate = (date) =>
       <div
         class="text-xl pr-5 flex gap-5 justify-between text-slate-200 mt-5 ml-6 font-bold"
       >
+      <RouterView/>
         <input
           :disabled="!isEditMode"
           class="itbkk-title w-[60rem]"
@@ -144,6 +147,7 @@ const formattDate = (date) =>
             </div>
             <button
               class="btn btn-error w-full text-white hover:bg-base-100 hover:border-base-100"
+              @click="router.push({name: 'Delete'})"
             >
               Delete
             </button>

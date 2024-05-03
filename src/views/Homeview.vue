@@ -4,6 +4,7 @@ import TaskManagement from "./../lib/TaskManagement.js";
 import Loading from "./../components/Loading.vue";
 import { useRoute } from "vue-router";
 import { getItems } from "./../assets/fetch.js";
+import DeleteTaskModal from "@/components/DeleteTaskModal.vue";
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const route = useRoute();
@@ -21,6 +22,7 @@ onMounted(async function () {
     class="container mx-auto flex flex-col gap-3"
     :class="route.fullPath.split('/').length > 2 && 'blur-sm'"
   >
+  <!-- <DeleteTaskModal/> -->
     <div class="text-5xl font-extrabold ... w-full flex justify-center m-7">
       <span
         class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500"
