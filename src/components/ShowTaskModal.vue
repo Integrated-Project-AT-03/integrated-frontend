@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { getItemById, editItem } from "./../assets/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import Loading from "./Loading.vue";
+import Alert from "./Alert.vue";
 const route = useRoute();
 const router = useRouter();
 const dataTask = ref({
@@ -49,18 +50,16 @@ const formattDate = (date) =>
   new Date(date).toLocaleString("en-GB", localZone).replace(",", "");
 </script>
 
-
 <template>
-
   <div class="w-screen h-screen absolute flex justify-center items-center z-10">
+    <RouterView />
     <div
-      class="relative overflow-hidden m-auto w-[65rem] h-[49rem] bg-neutral rounded-2xl"
+      class="relative overflow-hidden w-[65rem] h-[49rem] bg-neutral drop-shadow-2xl rounded-2xl"
     >
       <Loading :is-loading="isLoading" />
       <div
         class="text-xl pr-5 flex gap-5 justify-between text-slate-200 mt-5 ml-6 font-bold"
       >
-      <RouterView/>
         <input
           :disabled="!isEditMode"
           class="itbkk-title w-[60rem]"
@@ -72,6 +71,7 @@ const formattDate = (date) =>
           type="text"
           v-model="dataTask.title"
         />
+
         <button
           @click="
             [
@@ -147,7 +147,7 @@ const formattDate = (date) =>
             </div>
             <button
               class="btn btn-error w-full text-white hover:bg-base-100 hover:border-base-100"
-              @click="router.push({name: 'Delete'})"
+              @click="router.push({ name: 'Delete', params: { mode: 'kuy' } })"
             >
               Delete
             </button>
@@ -163,7 +163,10 @@ const formattDate = (date) =>
         >
           Save
         </button>
-        <button @click="$router.push({ path: `/task` })" class="itbkk-button-cancel btn">
+        <button
+          @click="$router.push({ path: `/task` })"
+          class="itbkk-button-cancel btn"
+        >
           Close
         </button>
       </div>

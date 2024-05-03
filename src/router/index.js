@@ -1,10 +1,10 @@
-import { createRouter, createWebHistory } from "vue-router"
-import HomeView from "../views/Homeview.vue"
-import EmptyModal from "@/components/EmptyModal.vue"
-import AddTaskModal from "@/components/AddTaskModal.vue"
-import ShowTaskModal from "@/components/ShowTaskModal.vue"
-import { getItems } from "./../assets/fetch.js"
-import DeleteTaskModal from "@/components/DeleteTaskModal.vue"
+import { createRouter, createWebHistory } from "vue-router";
+import HomeView from "../views/Homeview.vue";
+import EmptyModal from "@/components/EmptyModal.vue";
+import AddTaskModal from "@/components/AddTaskModal.vue";
+import ShowTaskModal from "@/components/ShowTaskModal.vue";
+import { getItems } from "./../assets/fetch.js";
+import DeleteTaskModal from "@/components/DeleteTaskModal.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,7 +12,7 @@ const router = createRouter({
     {
       path: "/task",
       name: "Task",
-      component: EmptyModal
+      component: EmptyModal,
     },
     {
       path: "/task/:id",
@@ -22,31 +22,26 @@ const router = createRouter({
         {
           path: ":mode",
           name: "TaskEdit",
-          component: ShowTaskModal
+          component: EmptyModal,
         },
         {
           path: "delete",
           name: "Delete",
-          component: DeleteTaskModal
-        }
-      ]
+          component: DeleteTaskModal,
+        },
+      ],
     },
 
     {
       path: "/",
-      redirect: "/task"
+      redirect: "/task",
     },
     {
       path: "/task/add",
       name: "AddTask",
-      component: AddTaskModal
-    }
-    // {
-    //   path: "/task/delete",
-    //   name: "delete1",
-    //   component: DeleteTaskModal
-    // }
-  ]
-})
+      component: AddTaskModal,
+    },
+  ],
+});
 
-export default router
+export default router;
