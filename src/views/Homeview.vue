@@ -4,10 +4,12 @@ import TaskManagement from "./../lib/TaskManagement.js";
 import Loading from "./../components/Loading.vue";
 import { useRoute } from "vue-router";
 import { getItems } from "./../assets/fetch.js";
+import Alert from "@/components/Alert.vue";
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const route = useRoute();
 const isLoading = ref(true);
+
 onMounted(async function () {
   const data = await getItems(`${uri}/v1/tasks`);
   isLoading.value = false;
@@ -36,6 +38,7 @@ onMounted(async function () {
         Add your task
       </button>
     </div>
+    <Alert massage="llll"></Alert>
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-200">
         <tr>

@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { getItemById, editItem } from "./../assets/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import Loading from "./Loading.vue";
+import Alert from "./Alert.vue";
 const route = useRoute();
 const router = useRouter();
 const dataTask = ref({
@@ -42,9 +43,11 @@ const formattDate = (date) =>
 
 <template>
   <div class="w-screen h-screen absolute flex justify-center items-center z-10">
+   
     <div
       class="relative overflow-hidden m-auto w-[65rem] h-[47rem] bg-neutral rounded-2xl"
     >
+    
       <Loading :is-loading="isLoading" />
       <div class="itbkk-title text-xl text-slate-200 mt-5 ml-6 font-bold">
         <input
