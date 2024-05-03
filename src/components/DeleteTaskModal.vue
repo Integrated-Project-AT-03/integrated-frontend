@@ -8,7 +8,7 @@ const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const route = useRoute();
-async function deleteTask() {
+async function deleteTask(id) {
   const deleteTask = await deleteItemById(`${uri}/v1/tasks`, route.params.id);
   datas.value.deleteTask(id);
   router.push({ name: "Task" });
