@@ -18,14 +18,15 @@ async function deleteTask(id){
  
 <template>
     <div class=" w-full h-full absolute flex justify-center items-center z-20">
-        <div class="flex flex-col  border border-black rounded-lg p-4 bg-white h-auto w-fit">
-            <div class="text-2xl text-black font-bold border-b border-gray-300 pb-4">Delete a Task</div>
-            <br>
-            <div class="itbkk-message text-black border-b border-gray-300 pb-4">Do you want to delete the task "Infrastructure"?</div>
-            <div class="flex justify-end mt-4">
-                <button class="itbkk-button-cancel px-4 py-2 bg-red-500 text-white rounded-lg mr-2 border-b-2 border-gray-200 shadow-md" 
+        <div class="flex flex-col rounded-lg p-6 bg-base-100 h-auto w-fit">
+            <div class="text-2xl font-bold text-slate-300">Delete a Task</div>
+            <div class="divider"></div>
+            <div class="itbkk-message text-slate-300">Do you want to delete the task "Infrastructure"?</div>
+            <div class="divider"></div>
+            <div class="flex justify-end mt-4 gap-3">
+                <button class="itbkk-button-cancel btn btn-error text-slate-200" 
                 @click="router.push({name: 'TaskDetail'})">Cancel</button>
-                <button class="itbkk-button-confirm px-4 py-2 bg-green-500 text-white rounded-lg border-b-2 border-gray-200 shadow-md"
+                <button class="itbkk-button-confirm btn btn-success text-slate-200"
                 @click="deleteTask(route.params.id)">Confirm</button>
             </div>
         </div>
