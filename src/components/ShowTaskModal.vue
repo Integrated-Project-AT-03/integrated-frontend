@@ -6,7 +6,7 @@ import TaskManagement from "@/lib/TaskManagement";
 import Loading from "./Loading.vue";
 import Alert from "./Alert.vue";
 
-const emits = defineEmits(['message'])
+const emits = defineEmits(["message"]);
 const route = useRoute();
 const router = useRouter();
 const dataTask = ref({
@@ -43,18 +43,27 @@ const editTask = async () => {
     dataTask.value
   );
   isLoading.value = false;
-  if (response.status === 500) return router.push({ name: "Task" });
-  datas.value.updateTask(route.params.id, response);
+  if (response.status === 500) {
+    emits("message", {
+      description: "Something went wrong",
+      status: "error",
+    });
+  } else {
+    datas.value.updateTask(route.params.id, response);
+    emits("message", {
+      description: "Edit success",
+      status: "success",
+    });
+  }
   router.push({ name: "Task" });
 };
 
 const formattDate = (date) =>
   new Date(date).toLocaleString("en-GB", localZone).replace(",", "");
 
-
 const handleMessage = (e) => {
-  emits('message', e)
-}
+  emits("message", e);
+};
 </script>
 
 <template>

@@ -4,7 +4,7 @@ import { addItem } from "../assets/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import { ref } from "vue";
 
-const emits = defineEmits(['message'])
+const emits = defineEmits(["message"]);
 
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
@@ -17,21 +17,19 @@ const newData = ref({
 });
 async function addNewTask(newItem) {
   const addTask = await addItem(`${uri}/v1/tasks`, newItem);
-  if (addTask.status === 500){
-    emits('message', {
-      title: 'Error',
-      description: 'Something went wrong',
-      status: 'error'
-    })
+  if (addTask.status === 500) {
+    emits("message", {
+      description: "Something went wrong",
+      status: "error",
+    });
   } else {
     datas.value.addTask(addTask);
-    emits('message', {
-      title: 'Success',
-      description: 'Add success',
-      status: 'success'
-    })
+    emits("message", {
+      description: "Add success",
+      status: "success",
+    });
   }
-  return router.push({ name: "Task" })
+  return router.push({ name: "Task" });
 }
 </script>
 

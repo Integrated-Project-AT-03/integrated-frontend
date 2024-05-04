@@ -17,7 +17,7 @@ const props = defineProps({
     class="alert"
     :class="status === 'success' ? 'alert-success' : 'alert-error'"
   >
-    <CorrectIcon v-show="status === 'success'" />
+    <CorrectIcon />
     <ErrorIcon v-show="status === 'error'" />
     <span class="tbkk-message"> {{ message }}</span>
   </div>
