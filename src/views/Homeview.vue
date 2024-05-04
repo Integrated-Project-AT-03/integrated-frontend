@@ -45,7 +45,7 @@ onMounted(async function () {
             scope="col"
             class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
           >
-            ID
+            No.
           </th>
           <th
             scope="col"
@@ -75,12 +75,12 @@ onMounted(async function () {
         </tr>
         <tr
           class="itbkk-item itbkk-button-action hover:bg-slate-200"
-          v-for="data in datas.getTasks()"
+          v-for="(data, index) in datas.getTasks()"
           :key="data.id"
           @click="$router.push({ name: 'TaskDetail', params: { id: data.id } })"
         >
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">{{ data.id }}</div>
+            <div class="text-sm text-gray-900">{{ index + 1 }}</div>
           </td>
           <td class="itbkk-title px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ data.title }}</div>

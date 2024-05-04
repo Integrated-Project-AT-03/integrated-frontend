@@ -25,7 +25,7 @@ async function addNewTask(newItem) {
   } else {
     datas.value.addTask(newTask);
     emits("message", {
-      description: `The task "${newTask.title}" is added successfully`,
+      description: `The task has been successfully added`,
       status: "success",
     });
   }
@@ -42,7 +42,7 @@ async function addNewTask(newItem) {
         <div class="ml-12">Title</div>
         <div class="flex justify-center">
           <input
-            v-model="newData.title"
+            v-model.trim="newData.title"
             class="itbkk-title w-[60rem] h-11 rounded-2xl p-2 bg-secondary border-base-100"
           />
         </div>
@@ -50,7 +50,7 @@ async function addNewTask(newItem) {
           <div class="flex flex-col gap-3">
             <div>Description</div>
             <textarea
-              v-model="newData.description"
+              v-model.trim="newData.description"
               class="itbkk-description w-[35rem] h-[30rem] rounded-2xl border p-4 bg-secondary border-base-100"
             ></textarea>
           </div>
@@ -58,14 +58,14 @@ async function addNewTask(newItem) {
             <div class="flex flex-col gap-3">
               <div>Assignees</div>
               <textarea
-                v-model="newData.assignees"
+                v-model.trim="newData.assignees"
                 class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl border p-4 bg-secondary border-base-100"
               ></textarea>
             </div>
             <div class="flex flex-col gap-3">
               <div>Status</div>
               <select
-                v-model="newData.status"
+                v-model.trim="newData.status"
                 class="itbkk-status select w-full max-w-xs bg-base-100"
               >
                 <option value="NO_STATUS">No status</option>

@@ -30,7 +30,13 @@ const loadTask = async () => {
   isLoading.value = true;
   const response = await getItemById(`${uri}/v1/tasks`, route.params.id);
   isLoading.value = false;
-  if (response.status === 404) return router.push({ name: "Task" });
+  if (response.status === 404) {
+    emits("message", {
+      description: "The requested task does not exist",
+      status: "error",
+    });
+    return router.push({ name: "Task" });
+  }
   dataTask.value = response;
 };
 onMounted(async () => await loadTask());
@@ -43,15 +49,15 @@ const editTask = async () => {
     dataTask.value
   );
   isLoading.value = false;
-  if (response.status === 500) {
+  if (response.status === 404) {
     emits("message", {
-      description: "Something went wrong",
+      description: "The task does not exist",
       status: "error",
     });
   } else {
     datas.value.updateTask(route.params.id, response);
     emits("message", {
-      description: "Edit success",
+      description: "The task has been updated",
       status: "success",
     });
   }
@@ -85,7 +91,7 @@ const handleMessage = (e) => {
               : ' bg-neutral hover:border-neutral'
           "
           type="text"
-          v-model="dataTask.title"
+          v-model.trim="dataTask.title"
         />
 
         <button
@@ -110,7 +116,7 @@ const handleMessage = (e) => {
           <div>Description</div>
           <textarea
             :disabled="!isEditMode"
-            v-model="dataTask.description"
+            v-model.trim="dataTask.description"
             :placeholder="dataTask.description ?? 'No Description Provided'"
             class="itbkk-description w-[35rem] h-[32rem] rounded-2xl border p-4 bg-secondary placeholder:text-gray-400 placeholder:italic border-base-100"
           ></textarea>
@@ -121,7 +127,7 @@ const handleMessage = (e) => {
             <textarea
               :disabled="!isEditMode"
               :placeholder="dataTask.assignees ?? 'Unassigned'"
-              v-model="dataTask.assignees"
+              v-model.trim="dataTask.assignees"
               class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl placeholder:text-gray-400 placeholder:italic border p-4 bg-secondary border-base-100"
             ></textarea>
           </div>
@@ -129,7 +135,7 @@ const handleMessage = (e) => {
             <div>Status</div>
             <select
               :disabled="!isEditMode"
-              v-model="dataTask.status"
+              v-model.trim="dataTask.status"
               class="itbkk-status select w-full max-w-xs bg-base-100"
             >
               <option value="NO_STATUS">No status</option>
