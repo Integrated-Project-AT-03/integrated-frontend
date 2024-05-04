@@ -19,11 +19,48 @@ const handleShowMessage = (e) => {
 </script>
 
 <template>
-  <div v-show="messageModalOpenState" class="fixed bottom-2 right-2 grid place-items-center z-50">
+  <transition v-show="messageModalOpenState" class="fixed bottom-2 right-2 grid place-items-center z-50 w-fit" name="status">
     <Alert :status="status" :message="message"/>
-  </div>
+  </transition>
   <router-view @message="handleShowMessage($event)"/>
   <Homeview />
 </template>
 
-<style scoped></style>
+<style scoped>
+  @keyframes wobble {
+    0% { transform: translateX(100px); opacity: 0 }
+    50% { transform: translateY(0px); opacity: 1 }
+    60% { transform: translateX(8px); opacity: 1 }
+    70% { transform: translateX(-8px); opacity: 1 }
+    80% { transform: translateX(4px); opacity: 1 }
+    90% { transform: translateX(-4px); opacity: 1 }
+    100% { transform: translateX(0px); opacity: 1 }
+  }
+
+  @keyframes goBack {
+    0% { transform: translateY(0px); opacity: 1 }
+    100% { transform: translateX(100px); opacity: 0 }
+  }
+  .status-enter-from{
+    opacity: 0;
+    transform: translateY(-60px);
+  }
+  .status-enter-to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .status-enter-active{
+    animation: wobble 0.8s ease;
+  }
+  .status-leave-from{
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .status-leave-to{
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+  .status-leave-active{
+    animation: goBack 0.5s ease;
+  }
+</style>
