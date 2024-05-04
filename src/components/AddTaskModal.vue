@@ -16,16 +16,16 @@ const newData = ref({
   status: "NO_STATUS",
 });
 async function addNewTask(newItem) {
-  const addTask = await addItem(`${uri}/v1/tasks`, newItem);
-  if (addTask.status === 500) {
+  const newTask = await addItem(`${uri}/v1/tasks`, newItem);
+  if (newTask.status === 500) {
     emits("message", {
       description: "Something went wrong",
       status: "error",
     });
   } else {
-    datas.value.addTask(addTask);
+    datas.value.addTask(newTask);
     emits("message", {
-      description: "Add success",
+      description: `The task "${newTask.title}" is added successfully`,
       status: "success",
     });
   }

@@ -4,7 +4,6 @@ import { deleteItemById } from "../assets/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import { ref } from "vue";
 const emits = defineEmits(["message"]);
-
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
@@ -19,7 +18,9 @@ async function deleteTask(id) {
     });
   } else {
     emits("message", {
-      description: "Something went wrong",
+      description: `An error occured deleting the task "${
+        datas.value.findTask(id)?.title
+      }"  `,
       status: "error",
     });
   }
