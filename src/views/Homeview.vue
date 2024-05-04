@@ -45,7 +45,7 @@ onMounted(async function () {
             scope="col"
             class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
           >
-            No.
+            ID
           </th>
           <th
             scope="col"
@@ -75,40 +75,40 @@ onMounted(async function () {
         </tr>
         <tr
           class="itbkk-item itbkk-button-action hover:bg-slate-200"
-          v-for="(data, index) in datas.getTasks()"
-          :key="data.id"
-          @click="$router.push({ name: 'TaskDetail', params: { id: data.id } })"
+          v-for="(task, index) in datas.getTasks()"
+          :key="task.id"
+          @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })"
         >
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">{{ index + 1 }}</div>
+            <div class="text-sm text-gray-900">{{ task.id }}</div>
           </td>
           <td class="itbkk-title px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">{{ data.title }}</div>
+            <div class="text-sm text-gray-900">{{ task.title }}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
             <div
               class="text-sm text-gray-900 itbkk-assignees"
-              :class="data?.assignees ?? 'italic'"
+              :class="task?.assignees ?? 'italic'"
             >
-              {{ data?.assignees ?? "Unassigned" }}
+              {{ task?.assignees ?? "Unassigned" }}
             </div>
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
             <div
               class="flex justify-center w-20 p-2 rounded-xl text-slate-200"
               :class="
-                data.status === 'No Status'
+                task.status === 'No Status'
                   ? 'text-sm bg-red-400'
-                  : data.status === 'To Do'
+                  : task.status === 'To Do'
                   ? 'text-sm bg-yellow-500'
-                  : data.status === 'Doing'
+                  : task.status === 'Doing'
                   ? 'text-sm bg-blue-500'
-                  : data.status === 'Done'
+                  : task.status === 'Done'
                   ? 'text-sm bg-success'
                   : 'text-gray-300'
               "
             >
-              {{ data.status }}
+              {{ task.status }}
             </div>
           </td>
         </tr>

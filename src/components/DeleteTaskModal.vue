@@ -8,7 +8,7 @@ const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const route = useRoute();
-const titleTask = datas.value.findTask(route.params.id)?.title;
+const taskSeleted = datas.value.findTask(route.params.id);
 async function deleteTask(id) {
   const deleteTask = await deleteItemById(`${uri}/v1/tasks`, route.params.id);
   if (deleteTask === 200) {
@@ -33,21 +33,22 @@ async function deleteTask(id) {
       <div class="text-2xl font-bold text-slate-300">Delete a Task</div>
       <div class="divider"></div>
       <div class="itbkk-message text-slate-300">
-        Do you want to delete the task number {{ 0 }} - {{ titleTask }}?
+        Do you want to delete the task number {{ taskSeleted.id }} -
+        {{ taskSeleted.title }}?
       </div>
       <div class="divider"></div>
       <div class="flex justify-end mt-4 gap-3">
-        <button
-          class="itbkk-button-cancel btn btn-error text-slate-200"
-          @click="router.push({ name: 'TaskDetail' })"
-        >
-          Cancel
-        </button>
         <button
           class="itbkk-button-confirm btn btn-success text-slate-200"
           @click="deleteTask(route.params.id)"
         >
           Confirm
+        </button>
+        <button
+          class="itbkk-button-cancel btn btn-error text-slate-200"
+          @click="router.push({ name: 'TaskDetail' })"
+        >
+          Cancel
         </button>
       </div>
     </div>
