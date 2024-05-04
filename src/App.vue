@@ -19,7 +19,7 @@ const handleShowMessage = (e) => {
 </script>
 
 <template>
-  <transition v-show="messageModalOpenState" class="fixed bottom-2 right-2 grid place-items-center z-50 w-fit" name="status">
+  <transition v-show="messageModalOpenState" class="fixed bottom-2 right-2 grid place-items-center z-50 w-fit" name="toast">
     <Alert :status="status" :message="message"/>
   </transition>
   <router-view @message="handleShowMessage($event)"/>
@@ -41,26 +41,10 @@ const handleShowMessage = (e) => {
     0% { transform: translateY(0px); opacity: 1 }
     100% { transform: translateX(100px); opacity: 0 }
   }
-  .status-enter-from{
-    opacity: 0;
-    transform: translateY(-60px);
-  }
-  .status-enter-to{
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .status-enter-active{
+  .toast-enter-active{
     animation: wobble 0.8s ease;
   }
-  .status-leave-from{
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .status-leave-to{
-    opacity: 0;
-    transform: translateY(-100px);
-  }
-  .status-leave-active{
+  .toast-leave-active{
     animation: goBack 0.5s ease;
   }
 </style>
