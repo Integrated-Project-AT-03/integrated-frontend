@@ -154,7 +154,7 @@ const handleMessage = (e) => {
             </div>
             <button
               class="btn btn-error w-full text-white hover:bg-base-100 hover:border-base-100"
-              @click="router.push({ name: 'Delete', params: { mode: 'kuy' } })"
+              @click="router.push({ name: 'Delete' })"
             >
               Delete
             </button>
