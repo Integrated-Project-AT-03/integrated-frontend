@@ -26,6 +26,7 @@ const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const isLoading = ref(true);
+const compareTask = ref();
 const loadTask = async () => {
   isLoading.value = true;
   const response = await getItemById(`${uri}/v1/tasks`, route.params.id);
@@ -38,6 +39,7 @@ const loadTask = async () => {
     return router.push({ name: "Task" });
   }
   dataTask.value = response;
+  compareTask.value = { ...dataTask.value };
 };
 onMounted(async () => await loadTask());
 
@@ -181,7 +183,13 @@ const handleMessage = (e) => {
         <button
           v-show="isEditMode"
           @click="editTask()"
-          class="itbkk-button-confirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
+          class="itbkk-button-confirm btn drop-shadow-lg btn-success w-16 hover:bg-base-100 hover:border-base-100"
+          :disabled="
+            (dataTask.assignees ?? '') === (compareTask?.assignees ?? '') &&
+            (dataTask.description ?? '') === (compareTask?.description ?? '') &&
+            (dataTask.status ?? '') === (compareTask?.status ?? '') &&
+            (dataTask.title ?? '') === (compareTask?.title ?? '')
+          "
         >
           Save
         </button>
