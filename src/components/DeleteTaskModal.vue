@@ -3,6 +3,7 @@ import { useRoute, useRouter } from "vue-router";
 import { deleteItemById } from "../assets/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import { ref } from "vue";
+const emits = defineEmits(['message'])
 
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
@@ -10,9 +11,21 @@ const router = useRouter();
 const route = useRoute();
 async function deleteTask(id) {
   const deleteTask = await deleteItemById(`${uri}/v1/tasks`, route.params.id);
-  datas.value.deleteTask(id);
-  router.push({ name: "Task" });
-  return deleteTask;
+  if(deleteTask === 200){
+    datas.value.deleteTask(id);
+    emits('message', {
+      title: 'Success',
+      description: 'Delete success',
+      status: 'success'
+    })
+  } else {
+    emits('message', {
+      title:  'Error',
+      description: 'Something went wrong',
+      status: 'error'
+    })
+  }
+  return router.push({ name: "Task" });
 }
 </script>
  

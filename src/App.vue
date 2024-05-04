@@ -4,7 +4,7 @@ import Homeview from "./views/Homeview.vue";
 import Alert from "./components/Alert.vue";
 
 const message = ref('')
-const status = ref('')
+const status = ref(undefined)
 const messageModalOpenState = ref(false)
 
 const handleShowMessage = (e) => {
@@ -12,8 +12,9 @@ const handleShowMessage = (e) => {
   status.value = e.status
   messageModalOpenState.value = true
 
-  setTimeout(() => { messageModalOpenState.value = false }, 5000)
-}
+  setTimeout(() => { 
+    messageModalOpenState.value = false 
+  }, 5000)}
 
 </script>
 

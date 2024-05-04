@@ -20,14 +20,14 @@ async function addNewTask(newItem) {
   if (addTask.status === 500){
     emits('message', {
       title: 'Error',
-      description: 'อะไรก็ไม่รู้แต่ add ไม่ได้',
+      description: 'Something went wrong',
       status: 'error'
     })
   } else {
     datas.value.addTask(addTask);
     emits('message', {
       title: 'Success',
-      description: 'อะไรก็ไม่รู้แต่ add ได้',
+      description: 'Add success',
       status: 'success'
     })
   }

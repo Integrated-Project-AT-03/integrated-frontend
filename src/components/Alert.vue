@@ -19,6 +19,6 @@ const props = defineProps({
   >
     <CorrectIcon v-show="status === 'success'" />
     <ErrorIcon v-show="status === 'error'" />
-    <span class="tbkk-message-"> {{ message }}</span>
+    <span class="tbkk-message"> {{ message }}</span>
   </div>
 </template>

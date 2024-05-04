@@ -5,6 +5,8 @@ import { getItemById, editItem } from "./../assets/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import Loading from "./Loading.vue";
 import Alert from "./Alert.vue";
+
+const emits = defineEmits(['message'])
 const route = useRoute();
 const router = useRouter();
 const dataTask = ref({
@@ -48,11 +50,16 @@ const editTask = async () => {
 
 const formattDate = (date) =>
   new Date(date).toLocaleString("en-GB", localZone).replace(",", "");
+
+
+const handleMessage = (e) => {
+  emits('message', e)
+}
 </script>
 
 <template>
   <div class="w-screen h-screen absolute flex justify-center items-center z-10">
-    <RouterView />
+    <RouterView @message="handleMessage($event)" />
     <div
       class="relative overflow-hidden w-[65rem] h-[49rem] bg-neutral drop-shadow-2xl rounded-2xl"
     >
