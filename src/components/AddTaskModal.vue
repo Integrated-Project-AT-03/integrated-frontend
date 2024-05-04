@@ -4,6 +4,8 @@ import { addItem } from "../assets/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import { ref } from "vue";
 
+const emits = defineEmits(['message'])
+
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
@@ -15,8 +17,21 @@ const newData = ref({
 });
 async function addNewTask(newItem) {
   const addTask = await addItem(`${uri}/v1/tasks`, newItem);
-  if (addTask.status === 500) return router.push({ name: "Task" });
-  datas.value.addTask(addTask);
+  if (addTask.status === 500){
+    emits('message', {
+      title: 'Error',
+      description: 'อะไรก็ไม่รู้แต่ add ไม่ได้',
+      status: 'error'
+    })
+  } else {
+    datas.value.addTask(addTask);
+    emits('message', {
+      title: 'Success',
+      description: 'อะไรก็ไม่รู้แต่ add ได้',
+      status: 'success'
+    })
+  }
+  return router.push({ name: "Task" })
 }
 </script>
 
@@ -66,7 +81,7 @@ async function addNewTask(newItem) {
       </div>
       <div class="flex justify-end gap-3 mr-4">
         <button
-          @click="addNewTask(newData) && router.push({ name: 'Task' })"
+          @click="addNewTask(newData)"
           class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
         >
           Add

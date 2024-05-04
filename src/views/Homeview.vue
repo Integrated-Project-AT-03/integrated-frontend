@@ -35,10 +35,9 @@ onMounted(async function () {
         @click="$router.push({ name: 'AddTask' })"
         class="btn itbkk-button-add btn-secondary text-slate-300"
       >
-        Add your task
+        + Add task
       </button>
     </div>
-    <Alert massage="llll"></Alert>
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-200">
         <tr>

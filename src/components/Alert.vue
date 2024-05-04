@@ -8,7 +8,7 @@ const props = defineProps({
     },
     default: "success",
   },
-  massage: String,
+  message: String,
 });
 </script>
 <template>
@@ -19,6 +19,6 @@ const props = defineProps({
   >
     <CorrectIcon v-show="status === 'success'" />
     <ErrorIcon v-show="status === 'error'" />
-    <span class="tbkk-message-"> {{ massage }}</span>
+    <span class="tbkk-message-"> {{ message }}</span>
   </div>
 </template>
