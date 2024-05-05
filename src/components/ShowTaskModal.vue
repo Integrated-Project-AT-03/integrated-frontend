@@ -190,11 +190,12 @@ const handleMessage = (e) => {
           @click="editTask()"
           class="itbkk-button-confirm btn drop-shadow-lg btn-success w-16 hover:bg-base-100 hover:border-base-100"
           :disabled="
-            (dataTask.assignees ?? '') === (compareTask?.assignees ?? '') &&
-            (dataTask.description ?? '') === (compareTask?.description ?? '') &&
-            (dataTask.status ?? '') === (compareTask?.status ?? '') &&
-            (dataTask.title ?? '') === (compareTask?.title ?? '') &&
-            dataTask.title === ''
+            dataTask.title === '' ||
+            ((dataTask.assignees ?? '') === (compareTask?.assignees ?? '') &&
+              (dataTask.description ?? '') ===
+                (compareTask?.description ?? '') &&
+              (dataTask.status ?? '') === (compareTask?.status ?? '') &&
+              (dataTask.title ?? '') === (compareTask?.title ?? ''))
           "
         >
           Save
