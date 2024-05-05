@@ -90,7 +90,7 @@ async function addNewTask(newItem) {
           @click="router.push({ path: `/task` })"
           class="itbkk-button-cancle btn"
         >
-          Cancle
+          Cancel
         </button>
       </div>
     </div>
