@@ -56,6 +56,11 @@ const editTask = async () => {
       description: "The task does not exist",
       status: "error",
     });
+  } else if (response.status === 500) {
+    emits("message", {
+      description: "Some input is invalid",
+      status: "error",
+    });
   } else {
     datas.value.updateTask(route.params.id, response);
     emits("message", {
@@ -188,7 +193,8 @@ const handleMessage = (e) => {
             (dataTask.assignees ?? '') === (compareTask?.assignees ?? '') &&
             (dataTask.description ?? '') === (compareTask?.description ?? '') &&
             (dataTask.status ?? '') === (compareTask?.status ?? '') &&
-            (dataTask.title ?? '') === (compareTask?.title ?? '')
+            (dataTask.title ?? '') === (compareTask?.title ?? '') &&
+            dataTask.title === ''
           "
         >
           Save

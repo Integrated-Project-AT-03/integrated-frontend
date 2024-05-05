@@ -81,15 +81,16 @@ async function addNewTask(newItem) {
         <button
           @click="addNewTask(newData)"
           class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
+          :disabled="newData.title === ''"
         >
-          Add
+          Save
         </button>
 
         <button
           @click="router.push({ path: `/task` })"
           class="itbkk-button-cancle btn"
         >
-          Close
+          Cancle
         </button>
       </div>
     </div>
