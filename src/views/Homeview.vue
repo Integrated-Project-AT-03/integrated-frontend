@@ -30,7 +30,8 @@ onMounted(async function () {
         <div class="text-5xl">IT-Bangmod Kradan Kanban</div>
       </span>
     </div>
-    <div class="itbkk-button-add flex justify-end">
+    <div class="itbkk-button-add flex justify-end gap-3">
+      <button class="itbkk-manage-status btn btn-secondary">Manage Status</button>
       <button
         @click="$router.push({ name: 'AddTask' })"
         class="btn itbkk-button-add btn-secondary text-slate-300"
