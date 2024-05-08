@@ -21,7 +21,7 @@ onMounted(async function () {
   <Loading :is-loading="isLoading" />
   <div
     class="container mx-auto flex flex-col gap-3"
-    :class="route.fullPath.split('/').length > 2 && 'blur-sm'"
+    :class="route.fullPath.split('/').length > 2 || route.name === 'Addstatus' && 'blur-sm'"
   >
     <div class="text-5xl font-extrabold ... w-full flex justify-center m-7">
       <span
@@ -31,7 +31,11 @@ onMounted(async function () {
       </span>
     </div>
     <div class="itbkk-button-add flex justify-end gap-3">
-      <button class="itbkk-manage-status btn btn-secondary">Manage Status</button>
+      <button 
+      class="itbkk-manage-status btn btn-secondary"
+      @click="$router.push({ name: 'Addstatus'})">
+      Manage Status
+      </button>
       <button
         @click="$router.push({ name: 'AddTask' })"
         class="btn itbkk-button-add btn-secondary text-slate-300"
