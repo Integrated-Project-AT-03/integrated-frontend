@@ -1,4 +1,4 @@
-class TaskMannagement {
+class TaskStatusManagement {
   constructor() {
     this.tasks = []
   }
@@ -44,4 +44,4 @@ class TaskMannagement {
   }
 }
 
-export default new TaskMannagement()
+export default new TaskStatusManagement()

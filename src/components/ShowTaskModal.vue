@@ -36,6 +36,7 @@ const loadTask = async () => {
       description: "The requested task does not exist",
       status: "error",
     });
+    datas.value.deleteTask(route.params.id)
     return router.push({ name: "Task" });
   }
   dataTask.value = response;
@@ -56,6 +57,7 @@ const editTask = async () => {
       description: "The task does not exist",
       status: "error",
     });
+    datas.value.deleteTask(route.params.id)
   } else if (response.status === 500) {
     emits("message", {
       description: "Some input is invalid",

@@ -40,14 +40,9 @@ const handleMessage = (e) => {
         <div class="text-5xl">IT-Bangmod Kradan Kanban</div>
       </span>
     </div>
-    <div class="w-full flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <div @click="router.push({ name: 'Task'})" class="itbkk-button-home text-xl font-bold cursor-pointer text-primary">Home</div>
-        <ChevronRight />
-        <div @click="router.push({ name : 'Statuses'})" class="text-xl font-bold cursor-pointer">Task Status</div>
-      </div>
+    <div class="w-full flex items-center justify-end">
       <div class="flex justify-end gap-4">
-        <button class="itbkk-manage-status btn btn-secondary">Manage Status</button>
+        <button class="itbkk-manage-status btn btn-secondary" @click="router.push({ name : 'Statuses'})">Manage Status</button>
         <button
           @click="$router.push({ name: 'AddTask' })"
           class="itbkk-button-add btn btn-secondary text-slate-300"
