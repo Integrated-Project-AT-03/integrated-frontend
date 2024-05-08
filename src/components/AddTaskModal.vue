@@ -34,7 +34,7 @@ async function addNewTask(newItem) {
 </script>
 
 <template>
-  <div class="w-screen h-screen absolute flex justify-center items-center z-10">
+  <div class="w-screen top-0 h-screen absolute flex justify-center items-center z-10">
     <div class="m-auto w-[65rem] h-[48rem] bg-neutral rounded-2xl">
       <div class="text-xl mt-4 ml-6">New Task</div>
       <div class="divider"></div>

@@ -21,8 +21,7 @@ const handleShowMessage = (e) => {
   <transition v-show="messageModalOpenState" class="fixed bottom-2 right-2 grid place-items-center z-50 w-fit" name="toast">
     <Alert :status="status" :message="message"/>
   </transition>
-  <router-view @message="handleShowMessage($event)"/>
-  <Homeview />
+  <RouterView @message="handleShowMessage($event)" />
 </template>
 
 <style scoped>
