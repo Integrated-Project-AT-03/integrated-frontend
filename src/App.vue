@@ -22,6 +22,9 @@ const handleShowMessage = (e) => {
     <Alert :status="status" :message="message"/>
   </transition>
   <RouterView @message="handleShowMessage($event)" />
+  <div class="">
+
+  </div>
 </template>
 
 <style scoped>

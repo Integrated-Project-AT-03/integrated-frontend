@@ -45,7 +45,7 @@ const handleMessage = (e) => {
         <button class="itbkk-manage-status btn btn-secondary" @click="router.push({ name : 'Statuses'})">Manage Status</button>
         <button
           @click="$router.push({ name: 'AddTask' })"
-          class="itbkk-button-add btn btn-secondary text-slate-300"
+          class="itbkk-button-add btn btn-primary text-slate-300"
         >
           + Add task
         </button>

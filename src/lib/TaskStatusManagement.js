@@ -1,40 +1,39 @@
 class TaskStatusManagement {
   constructor() {
-    this.tasks = []
+    this.statuses = []
   }
 
-  async setTasks(tasks = []) {
-    const format = tasks.map((task) => this._format(task))
-    this.tasks = format
+  async setStatuses(statuses = []) {
+    this.statuses = statuses
   }
-  addTask(task) {
-    this.tasks.push(this._format(task))
-  }
-
-  getTasks() {
-    return this.tasks
-  }
-  findTaskIndex(id) {
-    return this.tasks.findIndex((task) => +task.id === +id)
-  }
-  updateTask(id, newTask) {
-    const taskIndex = this.findTaskIndex(id)
-    this.tasks[taskIndex] = this._format(newTask)
-  }
-  deleteTask(id) {
-    const taskIndex = this.findTaskIndex(id)
-    this.tasks.splice(taskIndex, 1)
-  }
-  findTask(id) {
-    return this.tasks.find((task) => +task.id === +id)
+  addStatus(status) {
+    this.statuses.push(this._format(status))
   }
 
-  _format(task) {
+  getStatuses() {
+    return this.statuses
+  }
+  findStatusIndex(id) {
+    return this.statuses.findIndex((status) => +status.id === +id)
+  }
+  updateStatus(id, newStatus) {
+    const statusIndex = this.findStatusIndex(id)
+    this.statuses[statusIndex] = this._format(newStatus)
+  }
+  deleteStatus(id) {
+    const statusIndex = this.findStatusIndex(id)
+    this.statuses.splice(statusIndex, 1)
+  }
+  findStatus(id) {
+    return this.statuses.find((status) => +status.id === +id)
+  }
+
+  _format(status) {
     return {
-      id: task.id,
-      title: task.title,
-      assignees: task.assignees,
-      status: task.status
+      id: status.id,
+      title: status.title,
+      assignees: status.assignees,
+      status: status.status
         .toLowerCase()
         .replace("_", " ")
         .split(" ")

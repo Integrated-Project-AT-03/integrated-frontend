@@ -4,7 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { getItemById, editItem } from "./../assets/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import Loading from "./Loading.vue";
-import Alert from "./Alert.vue";
+import Trash from "../assets/icons/Trash.vue";
 
 const emits = defineEmits(["message"]);
 const route = useRoute();
@@ -89,7 +89,7 @@ const handleMessage = (e) => {
     >
       <Loading :is-loading="isLoading" />
       <div
-        class="text-xl pr-5 flex gap-5 justify-between text-slate-200 mt-5 ml-6 font-bold"
+        class="text-xl pr-5 flex gap-5 justify-between items-center text-slate-200 mt-5 ml-6 font-bold"
       >
         <input
           :disabled="!isEditMode"
@@ -118,6 +118,7 @@ const handleMessage = (e) => {
         >
           {{ route.params.mode !== "edit" ? "Edit mode" : "Reset" }}
         </button>
+        <Trash @click="router.push({ name: 'Delete' })" class="text-error" />
       </div>
       <div class="divider"></div>
       <div class="flex justify-around m-4">
@@ -176,12 +177,6 @@ const handleMessage = (e) => {
                 </div>
               </div>
             </div>
-            <button
-              class="btn btn-error w-full text-white hover:bg-base-100 hover:border-base-100"
-              @click="router.push({ name: 'Delete' })"
-            >
-              Delete
-            </button>
           </div>
         </div>
       </div>

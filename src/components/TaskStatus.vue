@@ -1,17 +1,36 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import TaskManagement from "./../lib/TaskManagement.js";
+import TaskStatusManagement from '../lib/TaskStatusManagement.js'
 import { useRoute, useRouter } from "vue-router";
-import Alert from "@/components/Alert.vue";
 import ChevronRight from '../assets/icons/ChevronRight.vue' 
+import { getItems, getItemById, deleteItemById, addItem, editItem} from '../assets/fetch.js'
+import Loading from "../components/Loading.vue";
+import DeleteStatusModal from "./DeleteStatusModal.vue";
 
-const datas = ref(TaskManagement);
+const emits = defineEmits(["message"]);
+const datas = ref(TaskStatusManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const route = useRoute();
 const router = useRouter();
+const isLoading = ref(true)
+const selectedStatus = ref({})
+
+
+onMounted(async function () {
+  const data = await getItems(`${uri}/v2/statuses`);
+  isLoading.value = false;
+  datas.value.setStatuses(data);
+});
+
+const handleMessage = (e) => {
+  emits("message", e);
+};
+
+
 </script>
  
 <template>
+  <Loading :is-loading="isLoading"/>
   <div
     class="container mx-auto flex flex-col gap-3"
     :class="route.fullPath.split('/').length > 2 && 'blur-sm'"
@@ -67,52 +86,44 @@ const router = useRouter();
         </tr>
       </thead>
       <tbody class="bg-slate-100 divide-y divide-gray-300">
-        <tr v-show="datas.getTasks().length === 0">
+        <tr v-show="datas.getStatuses().length === 0">
           <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-900">
             No task
           </td>
         </tr>
         <tr
           class="itbkk-item itbkk-button-action hover:bg-slate-200"
-          v-for="(task, index) in datas.getTasks()"
-          :key="task.id"
+          v-for="(status, index) in datas.getStatuses()"
+          :key="status.id"
         >
+  
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">{{ task.id }}</div>
+            <div class="text-sm text-gray-900">{{ index+1 }}</div>
           </td>
           <td class="itbkk-title px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">{{ task.title }}</div>
+            <div class="text-sm text-gray-900">{{ status.name }}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
             <div
               class="text-sm text-gray-900 itbkk-assignees"
-              :class="task?.assignees ?? 'italic'"
+              :class="status?.description ?? 'italic'"
             >
-              {{ task?.assignees ?? "Unassigned" }}
+              {{ status?.description ?? "Unassigned" }}
             </div>
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
-            <div
-              class="flex justify-center w-20 p-2 rounded-xl text-slate-200"
-              :class="
-                task.status === 'No Status'
-                  ? 'text-sm bg-red-400'
-                  : task.status === 'To Do'
-                  ? 'text-sm bg-yellow-500'
-                  : task.status === 'Doing'
-                  ? 'text-sm bg-blue-500'
-                  : task.status === 'Done'
-                  ? 'text-sm bg-success'
-                  : 'text-gray-300'
-              "
-            >
-              {{ task.status }}
+            <div class="flex gap-2">
+              <button class="btn btn-neutral">Edit</button>
+              <button @click="() => selectedStatus = {...status,index}" class="btn btn-neutral" onclick="deleteModal.showModal()">
+                Delete
+              </button>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+  <DeleteStatusModal @message="handleMessage" :status="selectedStatus"/>
 </template>
  
 <style scoped>

@@ -7,6 +7,7 @@ import { getItems } from "./../assets/fetch.js"
 import DeleteTaskModal from "@/components/DeleteTaskModal.vue"
 import TaskStatus from "@/components/TaskStatus.vue"
 import Homeview from "../views/Homeview.vue"
+import DeleteStatusModal from "@/components/DeleteStatusModal.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
