@@ -113,8 +113,8 @@ const handleMessage = (e) => {
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
             <div class="flex gap-2">
-              <button class="btn btn-neutral">Edit</button>
-              <button @click="() => selectedStatus = {...status,index}" class="btn btn-neutral" onclick="deleteModal.showModal()">
+              <button class="btn bg-edit border-0">Edit</button>
+              <button @click="() => selectedStatus = {...status,index}" class="btn btn-error" onclick="deleteModal.showModal()">
                 Delete
               </button>
             </div>
