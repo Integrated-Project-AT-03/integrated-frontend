@@ -28,20 +28,6 @@ class TaskMannagement {
   findTask(id) {
     return this.tasks.find((task) => +task.id === +id);
   }
-
-  // _format(task) {
-  //   return {
-  //     id: task.id,
-  //     title: task.title,
-  //     assignees: task.assignees,
-  //     status: task.status
-  //       .toLowerCase()
-  //       .replace("_", " ")
-  //       .split(" ")
-  //       .map((word = "") => word[0].toUpperCase() + word.slice(1, word.length))
-  //       .join(" ")
-  //   }
-  // }
 }
 
 export default new TaskMannagement();

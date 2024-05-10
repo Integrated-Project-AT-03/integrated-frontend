@@ -64,3 +64,4 @@ async function deleteStatus(id) {
 </template>
 
 <style scoped></style>
+@/lib/Colors.js

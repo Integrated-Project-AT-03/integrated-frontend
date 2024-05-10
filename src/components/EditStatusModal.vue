@@ -3,11 +3,11 @@ import { useRoute, useRouter } from "vue-router";
 import { getItemById, editItem } from "../assets/fetch.js";
 import { onMounted, ref } from "vue";
 import Loading from "../components/Loading.vue";
-import TaskStatusManagement from "@/lib/TaskStatusManagement";
+import TaskStatusManagement from "./../lib/TaskStatusManagement";
 
 const emits = defineEmits(["message"]);
 const management = ref(TaskStatusManagement);
-const datas = ref({});
+const data = ref({});
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const route = useRoute();
@@ -18,23 +18,19 @@ const formattDate = (date) =>
 
 onMounted(async function () {
   const res = await getItemById(`${uri}/v2/statuses`, route.params.id);
-  datas.value = res;
+  data.value = res;
   isLoading.value = false;
 });
 
 async function updateStatus() {
-  const res = await editItem(
-    `${uri}/v2/statuses`,
-    route.params.id,
-    datas.value
-  );
+  const res = await editItem(`${uri}/v2/statuses`, route.params.id, data.value);
   if (res.status === 404) {
     emits("message", {
       description: `The status does not exist"  `,
       status: "error",
     });
   } else {
-    management.value.updateStatus(route.params.id, datas.value);
+    management.value.updateStatus(route.params.id, data.value);
     emits("message", {
       description: "The status has been updated",
       status: "success",
@@ -57,14 +53,14 @@ async function updateStatus() {
           <div>Name</div>
           <input
             class="itbkk-status-name w-[60rem] h-11 rounded-2xl p-3 bg-secondary border-base-100"
-            v-model="datas.name"
+            v-model="data.name"
           />
         </div>
         <div class="flex flex-col gap-2">
           <div>Description</div>
           <textarea
             class="itbkk-status-description w-[60rem] h-[20rem] rounded-2xl border p-4 bg-secondary border-base-100"
-            v-model="datas.description"
+            v-model="data.description"
           ></textarea>
         </div>
       </div>
@@ -76,13 +72,13 @@ async function updateStatus() {
         <div class="flex gap-3">
           <div>Created On:</div>
           <div class="itbkk-created-on">
-            <div>Test</div>
+            <div>{{ formattDate(data.createdOn) }}</div>
           </div>
         </div>
         <div class="flex gap-3">
           <div>Updated On:</div>
           <div class="itbkk-updated-on">
-            <div>Test</div>
+            <div>{{ formattDate(data.updatedOn) }}</div>
           </div>
         </div>
       </div>
@@ -98,3 +94,4 @@ async function updateStatus() {
 </template>
 
 <style scoped></style>
+@/lib/Colors.js

@@ -3,46 +3,22 @@ import { useRouter } from "vue-router";
 import { addItem } from "../assets/fetch.js";
 import TaskStatusManagement from "@/lib/TaskStatusManagement.js";
 import { ref } from "vue";
-
-// function isSelected(colorValue) {
-//    selectedColor.value === colorValue;
-
-// }
+import colorStore from "./../lib/ColorsStore";
 
 const emits = defineEmits(["message"]);
-
 const datas = ref(TaskStatusManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const newData = ref({
-  hex: "F8719D",
+  colorId: "",
   name: "",
   description: "",
 });
 
-const colors = [
-  { value: "white", color: "#FFFFFF" },
-  { value: "RED", color: "#A52A2A" },
-  { value: "GREEN", color: "#FF4136" },
-  { value: "BLUE", color: "#FF851B" },
-  { value: "YELLOW", color: "#FFDC00" },
-  { value: "ORANGE", color: "#FFD700" },
-  { value: "PURPLE", color: "#2ECC40" },
-  { value: "PINK", color: "#01FF70" },
-  { value: "CYAN", color: "#0074D9" },
-  { value: "MAGENTA", color: "#39CCCC" },
-  { value: "LIME", color: "#7FDBFF" },
-  { value: "TEAL", color: "#B10DC9" },
-  { value: "BROWN", color: "#FF00FF" },
-  { value: "SILVER", color: "#FF6CAC" },
-  { value: "GOLD", color: "#AAAAAA" },
-  { value: "GRAY", color: "#000000" },
-];
-
 async function addNewStatus() {
   console.log(newData.value);
   const res = await addItem(`${uri}/v2/statuses`, newData.value);
-  if (res.status === 500) {
+  if (res.status === 500 || res.status === 400) {
     emits("message", {
       description: "Something went wrong",
       status: "error",
@@ -96,13 +72,17 @@ async function addNewStatus() {
               class="color-picker-container flex flex-wrap gap-2 items-center"
             >
               <div
-                v-for="color in colors"
-                :key="color.value"
+                v-for="color in colorStore"
+                :key="color.id"
                 class="color-picker-item flex items-center cursor-pointer relative"
-                @click="() => (newData.hex = color.color)"
+                @click="() => (newData.colorId = color.id)"
               >
                 <div
-                  :style="{ backgroundColor: color.color }"
+                  :style="{ backgroundColor: color.hex }"
+                  :class="
+                    newData.colorId === color.id &&
+                    'border-[4px] border-purple-500'
+                  "
                   class="color-box w-8 h-8 rounded-full border border-gray-300 mt-2 relative"
                 ></div>
                 <span class="ml-2">{{ color.name }}</span>

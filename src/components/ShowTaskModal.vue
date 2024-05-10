@@ -22,7 +22,6 @@ watch(
   () => (isEditMode.value = route.params?.mode === "edit"),
   { immediate: true }
 );
-
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -126,7 +125,10 @@ const handleMessage = (e) => {
         >
           {{ route.params.mode !== "edit" ? "Edit mode" : "Reset" }}
         </button>
-        <Trash onclick="deletetask.showModal()" class="text-error cursor-pointer" />
+        <Trash
+          onclick="deletetask.showModal()"
+          class="text-error cursor-pointer"
+        />
       </div>
       <div class="divider"></div>
       <div class="flex justify-around m-4">
@@ -213,7 +215,7 @@ const handleMessage = (e) => {
       </div>
     </div>
   </div>
-  <DeleteTaskModal @message="handleMessage"/>
+  <DeleteTaskModal @message="handleMessage" />
 </template>
 
 <style scoped></style>
