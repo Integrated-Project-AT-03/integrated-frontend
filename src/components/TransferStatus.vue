@@ -7,7 +7,7 @@ const props = defineProps({
   selectedId: Number,
 });
 const newIdStatus = ref(1);
-defineEmits(["close", "message"]);
+const emits = defineEmits(["close", "message"]);
 onMounted(async () => {
   selectStatus.value = await getItems(`${uri}/v2/statuses`);
 });
@@ -18,8 +18,24 @@ const submit = async () => {
     newIdStatus.value
   );
 
-  if (res === 404) {
+  if (res === 500) {
+    emits("message", {
+      description: "something went wrong",
+      status: "error",
+    });
+  } else if (res === 404) {
+    emits("message", {
+      description: "status donse't exist",
+      status: "error",
+    });
+  } else {
+    emits("message", {
+      description: "The status has been transfer",
+      status: "success",
+    });
+    console.log("kuy");
   }
+  emits("close");
 };
 </script>
 
@@ -62,7 +78,7 @@ const submit = async () => {
           </button>
           <button
             :disabled="selectStatus === selectedId"
-            @click="[submit(), $emit('close')]"
+            @click="submit"
             class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100 ml-1"
           >
             Transfer

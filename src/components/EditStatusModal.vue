@@ -5,7 +5,6 @@ import { onMounted, ref } from "vue";
 import Loading from "../components/Loading.vue";
 import TaskStatusManagement from "@/lib/TaskStatusManagement";
 
-// const newDatas = ref({})
 const emits = defineEmits(["message"]);
 const management = ref(TaskStatusManagement);
 const datas = ref({});
@@ -31,13 +30,13 @@ async function updateStatus() {
   );
   if (res.status === 404) {
     emits("message", {
-      description: `The task does not exist"  `,
+      description: `The status does not exist"  `,
       status: "error",
     });
   } else {
     management.value.updateStatus(route.params.id, datas.value);
     emits("message", {
-      description: "The task has been deleted",
+      description: "The status has been updated",
       status: "success",
     });
   }

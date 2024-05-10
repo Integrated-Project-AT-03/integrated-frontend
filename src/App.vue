@@ -6,10 +6,14 @@ const message = ref("");
 const status = ref(undefined);
 const messageModalOpenState = ref(false);
 
-const handleShowMessage = (e) => {
+const handleShowMessage = async (e) => {
+  if (messageModalOpenState.value) {
+    messageModalOpenState.value = false;
+    await setTimeout(() => {}, 1000);
+  }
+  messageModalOpenState.value = true;
   message.value = e.description;
   status.value = e.status;
-  messageModalOpenState.value = true;
   setTimeout(() => {
     messageModalOpenState.value = false;
   }, 5000);
