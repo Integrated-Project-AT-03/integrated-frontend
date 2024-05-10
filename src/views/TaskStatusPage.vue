@@ -18,6 +18,7 @@ const selectedStatus = ref({});
 const showTranferStauts = ref(false);
 
 onMounted(async function () {
+ 
   const data = await getItems(`${uri}/v2/statuses`);
   isLoading.value = false;
   datas.value.setStatuses(data);

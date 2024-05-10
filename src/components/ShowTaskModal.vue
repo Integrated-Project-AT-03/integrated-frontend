@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getItemById, editItem } from "./../assets/fetch.js";
+import { getItemById, editItem, getItems } from "./../assets/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import Loading from "./Loading.vue";
 import Trash from "../assets/icons/Trash.vue";
@@ -13,7 +13,7 @@ const dataTask = ref({
   title: "",
   description: "",
   assignees: "",
-  status: "NO_STATUS",
+  status: "No Status",
 });
 const isEditMode = ref();
 watch(
@@ -27,27 +27,32 @@ const uri = import.meta.env.VITE_SERVER_URI;
 const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const isLoading = ref(true);
 const compareTask = ref();
+const selectStatus = ref();
 const loadTask = async () => {
   isLoading.value = true;
-  const response = await getItemById(`${uri}/v1/tasks`, route.params.id);
+  const response = await getItemById(`${uri}/v2/tasks`, route.params.id);
   isLoading.value = false;
   if (response.status === 404) {
     emits("message", {
       description: "The requested task does not exist",
       status: "error",
     });
-    datas.value.deleteTask(route.params.id)
+    datas.value.deleteTask(route.params.id);
     return router.push({ name: "Task" });
   }
   dataTask.value = response;
   compareTask.value = { ...dataTask.value };
 };
-onMounted(async () => await loadTask());
+onMounted(async () => {
+  await loadTask();
+  selectStatus.value = await getItems(`${uri}/v2/statuses`);
+});
 
 const editTask = async () => {
+  console.log(dataTask.value);
   isLoading.value = true;
   const response = await editItem(
-    `${uri}/v1/tasks`,
+    `${uri}/v2/tasks`,
     route.params.id,
     dataTask.value
   );
@@ -57,7 +62,7 @@ const editTask = async () => {
       description: "The task does not exist",
       status: "error",
     });
-    datas.value.deleteTask(route.params.id)
+    datas.value.deleteTask(route.params.id);
   } else if (response.status === 500) {
     emits("message", {
       description: "Some input is invalid",
@@ -82,7 +87,9 @@ const handleMessage = (e) => {
 </script>
 
 <template>
-  <div class="w-screen h-screen absolute flex justify-center top-0 items-center z-10">
+  <div
+    class="w-screen h-screen absolute flex justify-center top-0 items-center z-10"
+  >
     <RouterView @message="handleMessage($event)" />
     <div
       class="relative overflow-hidden w-[65rem] h-[49rem] bg-neutral drop-shadow-2xl rounded-2xl"
@@ -148,10 +155,9 @@ const handleMessage = (e) => {
               v-model.trim="dataTask.status"
               class="itbkk-status select w-full max-w-xs bg-base-100"
             >
-              <option value="NO_STATUS">No status</option>
-              <option value="DOING">Doing</option>
-              <option value="DONE">Done</option>
-              <option value="TO_DO">To do</option>
+              <option v-for="status in selectStatus" :value="status.name">
+                {{ status.name }}
+              </option>
             </select>
           </div>
           <div

@@ -1,9 +1,9 @@
 <script setup>
 import { useRouter } from "vue-router";
-import { addItem } from "../assets/fetch.js";
+import { addItem, getItems } from "../assets/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
-import { ref } from "vue";
-
+import { onMounted, ref } from "vue";
+const selectStatus = ref();
 const emits = defineEmits(["message"]);
 
 const datas = ref(TaskManagement);
@@ -13,10 +13,16 @@ const newData = ref({
   title: "",
   description: "",
   assignees: "",
-  status: "NO_STATUS",
+  status: "No Status",
 });
+
+onMounted(async () => {
+  selectStatus.value = await getItems(`${uri}/v2/statuses`);
+});
+
 async function addNewTask(newItem) {
-  const newTask = await addItem(`${uri}/v1/tasks`, newItem);
+  const newTask = await addItem(`${uri}/v2/tasks`, newItem);
+
   if (newTask.status === 500) {
     emits("message", {
       description: "Something went wrong",
@@ -34,7 +40,9 @@ async function addNewTask(newItem) {
 </script>
 
 <template>
-  <div class="w-screen top-0 h-screen absolute flex justify-center items-center z-10">
+  <div
+    class="w-screen top-0 h-screen absolute flex justify-center items-center z-10"
+  >
     <div class="m-auto w-[65rem] h-[48rem] bg-neutral rounded-2xl">
       <div class="text-xl mt-4 ml-6">New Task</div>
       <div class="divider"></div>
@@ -68,10 +76,9 @@ async function addNewTask(newItem) {
                 v-model.trim="newData.status"
                 class="itbkk-status select w-full max-w-xs bg-base-100"
               >
-                <option value="NO_STATUS">No status</option>
-                <option value="DOING">Doing</option>
-                <option value="DONE">Done</option>
-                <option value="TO_DO">To do</option>
+                <option v-for="status in selectStatus" :value="status.name">
+                  {{ status.name }}
+                </option>
               </select>
             </div>
           </div>
