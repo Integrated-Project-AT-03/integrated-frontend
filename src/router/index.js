@@ -26,11 +26,6 @@ const router = createRouter({
               path: ":mode",
               name: "TaskEdit",
               component: EmptyModal
-            },
-            {
-              path: "delete",
-              name: "Delete",
-              component: DeleteTaskModal
             }
           ]
         },

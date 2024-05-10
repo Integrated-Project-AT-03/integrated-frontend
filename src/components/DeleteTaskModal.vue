@@ -17,6 +17,7 @@ async function deleteTask(id) {
       description: "The task has been deleted",
       status: "success",
     });
+    return router.push({ name: 'Task'})
   } else {
     emits("message", {
       description: `The task does not exist"  `,
@@ -24,12 +25,11 @@ async function deleteTask(id) {
     });
     datas.value.deleteTask(route.params.id)
   }
-  return router.push({ name: "Task" });
 }
 </script>
 
 <template>
-  <div class="w-full h-full absolute flex justify-center items-center z-20">
+  <dialog id="deletetask" class="modal">
     <div class="flex flex-col rounded-lg p-6 bg-base-100 h-auto w-fit">
       <div class="text-2xl font-bold text-slate-300">Delete a Task</div>
       <div class="divider"></div>
@@ -39,21 +39,23 @@ async function deleteTask(id) {
       </div>
       <div class="divider"></div>
       <div class="flex justify-end mt-4 gap-3">
-        <button
-          class="itbkk-button-confirm btn btn-success text-slate-200"
-          @click="deleteTask(route.params.id)"
-        >
-          Confirm
-        </button>
-        <button
-          class="itbkk-button-cancel btn btn-error text-slate-200"
-          @click="router.push({ name: 'TaskDetail' })"
-        >
-          Cancel
-        </button>
+        <form method="dialog">
+          <button
+            class="itbkk-button-confirm btn btn-success text-slate-200"
+            @click="deleteTask(route.params.id)"
+          >
+            Confirm
+          </button>
+        </form>
+        <form method="dialog">
+          <button
+            class="itbkk-button-cancel btn btn-error text-slate-200">
+            Cancel
+          </button>
+        </form>
       </div>
     </div>
-  </div>
+  </dialog>
 </template>
 
 <style scoped></style>
