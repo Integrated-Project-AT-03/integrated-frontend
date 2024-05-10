@@ -6,6 +6,7 @@ import ShowTaskModal from "@/components/ShowTaskModal.vue"
 import { getItems } from "./../assets/fetch.js"
 import DeleteTaskModal from "@/components/DeleteTaskModal.vue"
 import AddStatusModal from "@/components/AddStatusModal.vue"
+import EditStatusModal from "@/components/EditStatusModal.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,8 +46,16 @@ const router = createRouter({
     {
       path: "/statuses",
       name: "Addstatus",
-      component: AddStatusModal
-    }
+      component: AddStatusModal,
+      children: [
+        {
+          path: "/Edit/:id",
+          name: "Editstatus",
+          component: EditStatusModal,
+        }
+      ]
+    },
+    
   ]
 })
 

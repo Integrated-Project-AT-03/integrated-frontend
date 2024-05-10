@@ -36,6 +36,13 @@ onMounted(async function () {
       @click="$router.push({ name: 'Addstatus'})">
       Manage Status
       </button>
+
+      <button 
+      class="itbkk-edit-status btn btn-secondary"
+      @click="$router.push({ name: 'Editstatus'})">
+      Edit Status
+      </button>
+
       <button
         @click="$router.push({ name: 'AddTask' })"
         class="btn itbkk-button-add btn-secondary text-slate-300"
