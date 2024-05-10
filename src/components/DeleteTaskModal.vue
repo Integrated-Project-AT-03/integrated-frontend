@@ -10,14 +10,14 @@ const router = useRouter();
 const route = useRoute();
 const taskSeleted = datas.value.findTask(route.params.id);
 async function deleteTask(id) {
-  const deleteTask = await deleteItemById(`${uri}/v1/tasks`, route.params.id);
+  const deleteTask = await deleteItemById(`${uri}/v2/tasks`, route.params.id);
   if (deleteTask === 200) {
     datas.value.deleteTask(id);
     emits("message", {
       description: "The task has been deleted",
       status: "success",
     });
-    return router.push({ name: 'Task'})
+    return router.push({ name: "Task" });
   } else {
     emits("message", {
       description: `The task does not exist"  `,
@@ -48,8 +48,7 @@ async function deleteTask(id) {
           </button>
         </form>
         <form method="dialog">
-          <button
-            class="itbkk-button-cancel btn btn-error text-slate-200">
+          <button class="itbkk-button-cancel btn btn-error text-slate-200">
             Cancel
           </button>
         </form>
