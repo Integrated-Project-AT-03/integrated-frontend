@@ -113,7 +113,10 @@ const handleMessage = (e) => {
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
             <div class="flex gap-2">
-              <button class="btn bg-edit border-0">Edit</button>
+              <button class="btn bg-edit border-0"
+              @click="router.push({ name: 'EditStatus',params: {id:status.id}})">
+                Edit
+              </button>
               <button @click="() => selectedStatus = {...status,index}" class="btn btn-error" onclick="deleteModal.showModal()">
                 Delete
               </button>
@@ -124,6 +127,7 @@ const handleMessage = (e) => {
     </table>
   </div>
   <DeleteStatusModal @message="handleMessage" :status="selectedStatus"/>
+  <RouterView @message="handleMessage"/>
 </template>
  
 <style scoped>

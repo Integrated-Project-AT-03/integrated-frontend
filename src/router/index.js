@@ -8,6 +8,7 @@ import DeleteTaskModal from "@/components/DeleteTaskModal.vue"
 import TaskStatus from "@/components/TaskStatus.vue"
 import Homeview from "../views/Homeview.vue"
 import DeleteStatusModal from "@/components/DeleteStatusModal.vue"
+import EditStatusModal from "@/components/EditStatusModal.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,7 +42,14 @@ const router = createRouter({
     {
       path: "/statuses",
       name: "Statuses",
-      component: TaskStatus
+      component: TaskStatus,
+      children: [
+        {
+          path: "edit/:id",
+          name: "EditStatus",
+          component: EditStatusModal
+        }
+      ]
     },
     {
       path: "/",
