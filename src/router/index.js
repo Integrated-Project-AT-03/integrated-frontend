@@ -1,13 +1,10 @@
-import { createRouter, createWebHistory } from "vue-router"
-import HomeView from "../views/Homeview.vue"
-import EmptyModal from "@/components/EmptyModal.vue"
-import AddTaskModal from "@/components/AddTaskModal.vue"
-import ShowTaskModal from "@/components/ShowTaskModal.vue"
-import { getItems } from "./../assets/fetch.js"
-import DeleteTaskModal from "@/components/DeleteTaskModal.vue"
-import TaskStatus from "@/components/TaskStatus.vue"
-import Homeview from "../views/Homeview.vue"
-import DeleteStatusModal from "@/components/DeleteStatusModal.vue"
+import { createRouter, createWebHistory } from "vue-router";
+import EmptyModal from "@/components/EmptyModal.vue";
+import AddTaskModal from "@/components/AddTaskModal.vue";
+import ShowTaskModal from "@/components/ShowTaskModal.vue";
+import DeleteTaskModal from "@/components/DeleteTaskModal.vue";
+import StatusManagerPage from "./../views/TaskStatusPage.vue";
+import TaskManagerPage from "./../views/TaskManagerPage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,7 +12,7 @@ const router = createRouter({
     {
       path: "/task",
       name: "Task",
-      component: HomeView,
+      component: TaskManagerPage,
       children: [
         {
           path: ":id",
@@ -25,34 +22,34 @@ const router = createRouter({
             {
               path: ":mode",
               name: "TaskEdit",
-              component: EmptyModal
+              component: EmptyModal,
             },
             {
               path: "delete",
               name: "Delete",
-              component: DeleteTaskModal
-            }
-          ]
+              component: DeleteTaskModal,
+            },
+          ],
         },
 
         {
           path: "/task/add",
           name: "AddTask",
-          component: AddTaskModal
-        }
-      ]
+          component: AddTaskModal,
+        },
+      ],
     },
 
     {
       path: "/statuses",
       name: "Statuses",
-      component: TaskStatus
+      component: StatusManagerPage,
     },
     {
       path: "/",
-      redirect: "/task"
-    }
-  ]
-})
+      redirect: "/task",
+    },
+  ],
+});
 
-export default router
+export default router;

@@ -22,7 +22,7 @@ async function deleteTask(id) {
       description: `The task does not exist"  `,
       status: "error",
     });
-    datas.value.deleteTask(route.params.id)
+    datas.value.deleteTask(route.params.id);
   }
   return router.push({ name: "Task" });
 }

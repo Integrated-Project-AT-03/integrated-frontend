@@ -63,4 +63,22 @@ async function editItem(url, id, editItem) {
     console.log(`error: ${error}`)
   }
 }
+
+async function changeTasksStatus(url, oldIdStatus, newIdStatus) {
+  try {
+    const res = await fetch(`${url}/${id}`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({
+        ...editItem
+      })
+    })
+    const editedItem = await res.json()
+    return editedItem
+  } catch (error) {
+    console.log(`error: ${error}`)
+  }
+}
 export { getItems, getItemById, deleteItemById, addItem, editItem }

@@ -1,36 +1,32 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import TaskStatusManagement from '../lib/TaskStatusManagement.js'
+import TaskManagement from "./../lib/TaskManagement.js";
+import Loading from "./../components/Loading.vue";
 import { useRoute, useRouter } from "vue-router";
-import ChevronRight from '../assets/icons/ChevronRight.vue' 
-import { getItems, getItemById, deleteItemById, addItem, editItem} from '../assets/fetch.js'
-import Loading from "../components/Loading.vue";
-import DeleteStatusModal from "./DeleteStatusModal.vue";
+import { getItems } from "./../assets/fetch.js";
 
-const emits = defineEmits(["message"]);
-const datas = ref(TaskStatusManagement);
+const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const route = useRoute();
 const router = useRouter();
-const isLoading = ref(true)
-const selectedStatus = ref({})
+const isLoading = ref(true);
 
 
 onMounted(async function () {
-  const data = await getItems(`${uri}/v2/statuses`);
+  const data = await getItems(`${uri}/v1/tasks`);
   isLoading.value = false;
-  datas.value.setStatuses(data);
+  datas.value.setTasks(data);
 });
 
+const emits = defineEmits(["message"]);
 const handleMessage = (e) => {
   emits("message", e);
 };
 
-
 </script>
- 
+
 <template>
-  <Loading :is-loading="isLoading"/>
+  <Loading :is-loading="isLoading" />
   <div
     class="container mx-auto flex flex-col gap-3"
     :class="route.fullPath.split('/').length > 2 && 'blur-sm'"
@@ -42,17 +38,14 @@ const handleMessage = (e) => {
         <div class="text-5xl">IT-Bangmod Kradan Kanban</div>
       </span>
     </div>
-    <div class="w-full flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <div @click="router.push({ name: 'Task'})" class="itbkk-button-home text-xl font-bold cursor-pointer">Home</div>
-        <ChevronRight />
-        <div @click="router.push({ name : 'Statuses'})" class="text-xl font-bold cursor-pointer text-primary">Task Status</div>
-      </div>
+    <div class="w-full flex items-center justify-end">
       <div class="flex justify-end gap-4">
+        <button class="itbkk-manage-status btn btn-secondary" @click="router.push({ name : 'Statuses'})">Manage Status</button>
         <button
-          class="itbkk-button-add btn btn-secondary text-slate-300"
+          @click="$router.push({ name: 'AddTask' })"
+          class="itbkk-button-add btn btn-primary text-slate-300"
         >
-          Add Status
+          + Add task
         </button>
       </div>
     </div>
@@ -69,63 +62,71 @@ const handleMessage = (e) => {
             scope="col"
             class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
           >
-            Name
+            Title
           </th>
           <th
             scope="col"
             class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
           >
-            Description
+            Assignees
           </th>
           <th
             scope="col"
             class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
           >
-            Action
+            Status
           </th>
         </tr>
       </thead>
       <tbody class="bg-slate-100 divide-y divide-gray-300">
-        <tr v-show="datas.getStatuses().length === 0">
+        <tr v-show="datas.getTasks().length === 0">
           <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-900">
             No task
           </td>
         </tr>
         <tr
           class="itbkk-item itbkk-button-action hover:bg-slate-200"
-          v-for="(status, index) in datas.getStatuses()"
-          :key="status.id"
+          v-for="(task, index) in datas.getTasks()"
+          :key="task.id"
+          @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })"
         >
-  
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">{{ index+1 }}</div>
+            <div class="text-sm text-gray-900">{{ task.id }}</div>
           </td>
           <td class="itbkk-title px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">{{ status.name }}</div>
+            <div class="text-sm text-gray-900">{{ task.title }}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
             <div
               class="text-sm text-gray-900 itbkk-assignees"
-              :class="status?.description ?? 'italic'"
+              :class="task?.assignees ?? 'italic'"
             >
-              {{ status?.description ?? "Unassigned" }}
+              {{ task?.assignees ?? "Unassigned" }}
             </div>
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
-            <div class="flex gap-2">
-              <button class="btn bg-edit border-0">Edit</button>
-              <button @click="() => selectedStatus = {...status,index}" class="btn btn-error" onclick="deleteModal.showModal()">
-                Delete
-              </button>
+            <div
+              class="flex justify-center w-20 p-2 rounded-xl text-slate-200"
+              :class="
+                task.status === 'No Status'
+                  ? 'text-sm bg-red-400'
+                  : task.status === 'To Do'
+                  ? 'text-sm bg-yellow-500'
+                  : task.status === 'Doing'
+                  ? 'text-sm bg-blue-500'
+                  : task.status === 'Done'
+                  ? 'text-sm bg-success'
+                  : 'text-gray-300'
+              "
+            >
+              {{ task.status }}
             </div>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-  <DeleteStatusModal @message="handleMessage" :status="selectedStatus"/>
+  <router-view @message="handleMessage($event)"/>
 </template>
- 
-<style scoped>
 
-</style>
+<style scoped></style>

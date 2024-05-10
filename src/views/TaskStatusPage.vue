@@ -1,30 +1,31 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import TaskManagement from "./../lib/TaskManagement.js";
-import Loading from "./../components/Loading.vue";
+import TaskStatusManagement from "../lib/TaskStatusManagement.js";
 import { useRoute, useRouter } from "vue-router";
-import { getItems } from "./../assets/fetch.js";
-import Alert from "@/components/Alert.vue";
-import ChevronRight from '../assets/icons/ChevronRight.vue' 
+import ChevronRight from "../assets/icons/ChevronRight.vue";
+import StupidSelect from "../components/StupidSelect.vue";
+import { getItems } from "../assets/fetch.js";
+import Loading from "../components/Loading.vue";
+import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
 
-const datas = ref(TaskManagement);
+const emits = defineEmits(["message"]);
+const datas = ref(TaskStatusManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const route = useRoute();
 const router = useRouter();
 const isLoading = ref(true);
-
+const selectedStatus = ref({});
+const showTranferStauts = ref(false);
 
 onMounted(async function () {
-  const data = await getItems(`${uri}/v1/tasks`);
+  const data = await getItems(`${uri}/v2/statuses`);
   isLoading.value = false;
-  datas.value.setTasks(data);
+  datas.value.setStatuses(data);
 });
 
-const emits = defineEmits(["message"]);
 const handleMessage = (e) => {
   emits("message", e);
 };
-
 </script>
 
 <template>
@@ -40,14 +41,25 @@ const handleMessage = (e) => {
         <div class="text-5xl">IT-Bangmod Kradan Kanban</div>
       </span>
     </div>
-    <div class="w-full flex items-center justify-end">
-      <div class="flex justify-end gap-4">
-        <button class="itbkk-manage-status btn btn-secondary" @click="router.push({ name : 'Statuses'})">Manage Status</button>
-        <button
-          @click="$router.push({ name: 'AddTask' })"
-          class="itbkk-button-add btn btn-primary text-slate-300"
+    <div class="w-full flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div
+          @click="router.push({ name: 'Task' })"
+          class="itbkk-button-home text-xl font-bold cursor-pointer"
         >
-          + Add task
+          Home
+        </div>
+        <ChevronRight />
+        <div
+          @click="router.push({ name: 'Statuses' })"
+          class="text-xl font-bold cursor-pointer text-primary"
+        >
+          Task Status
+        </div>
+      </div>
+      <div class="flex justify-end gap-4">
+        <button class="itbkk-button-add btn btn-secondary text-slate-300">
+          Add Status
         </button>
       </div>
     </div>
@@ -64,71 +76,73 @@ const handleMessage = (e) => {
             scope="col"
             class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
           >
-            Title
+            Name
           </th>
           <th
             scope="col"
             class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
           >
-            Assignees
+            Description
           </th>
           <th
             scope="col"
             class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
           >
-            Status
+            Action
           </th>
         </tr>
       </thead>
       <tbody class="bg-slate-100 divide-y divide-gray-300">
-        <tr v-show="datas.getTasks().length === 0">
+        <tr v-show="datas.getStatuses().length === 0">
           <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-900">
             No task
           </td>
         </tr>
         <tr
           class="itbkk-item itbkk-button-action hover:bg-slate-200"
-          v-for="(task, index) in datas.getTasks()"
-          :key="task.id"
-          @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })"
+          v-for="(status, index) in datas.getStatuses()"
+          :key="status.id"
         >
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">{{ task.id }}</div>
+            <div class="text-sm text-gray-900">{{ index + 1 }}</div>
           </td>
           <td class="itbkk-title px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">{{ task.title }}</div>
+            <div class="text-sm text-gray-900">{{ status.name }}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
             <div
               class="text-sm text-gray-900 itbkk-assignees"
-              :class="task?.assignees ?? 'italic'"
+              :class="status?.description ?? 'italic'"
             >
-              {{ task?.assignees ?? "Unassigned" }}
+              {{ status?.description ?? "Unassigned" }}
             </div>
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
-            <div
-              class="flex justify-center w-20 p-2 rounded-xl text-slate-200"
-              :class="
-                task.status === 'No Status'
-                  ? 'text-sm bg-red-400'
-                  : task.status === 'To Do'
-                  ? 'text-sm bg-yellow-500'
-                  : task.status === 'Doing'
-                  ? 'text-sm bg-blue-500'
-                  : task.status === 'Done'
-                  ? 'text-sm bg-success'
-                  : 'text-gray-300'
-              "
-            >
-              {{ task.status }}
+            <div class="flex gap-2">
+              <button class="btn bg-edit border-0">Edit</button>
+              <button
+                @click="() => (selectedStatus = { ...status, index })"
+                class="btn btn-error"
+                onclick="deleteModal.showModal()"
+              >
+                Delete
+              </button>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-  <router-view @message="handleMessage($event)"/>
+  <StupidSelect
+    @close="() => (showTranferStauts = false)"
+    v-if="showTranferStauts"
+    :selected-id="selectedStatus.id"
+  />
+  <DeleteStatusModal
+    @conflict="() => (showTranferStauts = true)"
+    @message="handleMessage"
+    :status="selectedStatus"
+  />
 </template>
 
 <style scoped></style>
