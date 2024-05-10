@@ -58,8 +58,10 @@ const handleMessage = (e) => {
         </div>
       </div>
       <div class="flex justify-end gap-4">
-        <button class="itbkk-button-add btn btn-secondary text-slate-300"
-        @click="router.push({ name: 'Addstatus'})">
+        <button
+          class="itbkk-button-add btn btn-secondary text-slate-300"
+          @click="router.push({ name: 'Addstatus' })"
+        >
           Add Status
         </button>
       </div>
@@ -118,8 +120,11 @@ const handleMessage = (e) => {
               {{ status?.description ?? "Unassigned" }}
             </div>
           </td>
-          <td class="itbkk-status px-6 py-4 whitespace-nowrap">
-            <div class="flex gap-2">
+          <td class="itbkk-status flex py-4 whitespace-nowrap">
+            <div
+              v-if="status.id !== 1"
+              class="flex justify-center items-center gap-2"
+            >
               <button
                 class="btn bg-edit border-0"
                 @click="
@@ -146,7 +151,7 @@ const handleMessage = (e) => {
     @message="handleMessage"
     @close="() => (showTranferStauts = false)"
     v-if="showTranferStauts"
-    :selected-id="selectedStatus.id"
+    :selected-status="selectedStatus"
   />
 
   <DeleteStatusModal

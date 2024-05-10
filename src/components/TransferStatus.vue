@@ -4,7 +4,7 @@ const selectStatus = ref();
 import { getItems, changeTasksStatus } from "../assets/fetch.js";
 const uri = import.meta.env.VITE_SERVER_URI;
 const props = defineProps({
-  selectedId: Number,
+  selectedStatus: Object,
 });
 const newIdStatus = ref(1);
 const emits = defineEmits(["close", "message"]);
@@ -33,7 +33,6 @@ const submit = async () => {
       description: "The status has been transfer",
       status: "success",
     });
-    console.log("kuy");
   }
   emits("close");
 };
@@ -44,22 +43,23 @@ const submit = async () => {
     class="w-full top-0 h-full absolute flex justify-center items-center z-20"
   >
     <div
-      class="relative overflow-hidden w-max h-max py-3 px-10 bg-neutral drop-shadow-2xl rounded-2xl"
+      class="relative overflow-hidden w-max h-max py-4 px-10 bg-neutral drop-shadow-2xl rounded-2xl"
     >
-      <div class="text-xl mt-4 ml-6 font-semibold">Transfer a Status</div>
+      <div class="text-xl font-semibold">Transfer a Status</div>
       <div class="divider"></div>
-      <div class="flex flex-col gap-3">
-        <div class="itbkk-message ml-12">
-          There is some task associated with the Doing status.
+      <div class="flex flex-col">
+        <div class="itbkk-message">
+          There is some task associated with the
+          {{ selectedStatus.name }} status.
         </div>
         <div class="flex items-center gap-3">
-          <div class="itbkk-status ml-12">Transfer to</div>
+          <div class="itbkk-status">Transfer to</div>
           <select
             v-model="newIdStatus"
             class="itbkk-status select w-48 max-w-xs bg-base-100"
           >
             <option
-              :disabled="selectedId === status.id"
+              :disabled="selectedStatus.id === status.id"
               v-for="status in selectStatus"
               :key="status.id"
               :value="status.id"
@@ -69,7 +69,7 @@ const submit = async () => {
           </select>
         </div>
         <div class="divider"></div>
-        <div class="flex justify-end mt-4 mr-4 gap-3">
+        <div class="flex justify-end">
           <button
             @click="$emit('close')"
             class="itbkk-button-cancel btn btn-danger w-16 hover:bg-base-100 hover:border-base-100 mr-3"
