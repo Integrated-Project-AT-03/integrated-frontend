@@ -66,15 +66,7 @@ async function editItem(url, id, editItem) {
 
 async function changeTasksStatus(url, oldIdStatus, newIdStatus) {
   try {
-    const res = await fetch(`${url}/${oldIdStatus}/${newIdStatus}`, {
-      method: "PATCH",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        ...editItem,
-      }),
-    });
+    const res = await fetch(`${url}/${oldIdStatus}/${newIdStatus}`);
     const tasksUpdated = await res.json();
     return tasksUpdated;
   } catch (error) {

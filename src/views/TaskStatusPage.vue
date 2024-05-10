@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import TaskStatusManagement from "../lib/TaskStatusManagement.js";
 import { useRoute, useRouter } from "vue-router";
 import ChevronRight from "../assets/icons/ChevronRight.vue";
-import StupidSelect from "../components/StupidSelect.vue";
+import TransferStatus from "../components/TransferStatus.vue";
 import { getItems } from "../assets/fetch.js";
 import Loading from "../components/Loading.vue";
 import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
@@ -141,11 +141,13 @@ const handleMessage = (e) => {
     </table>
   </div>
 
-  <StupidSelect
+  <TransferStatus
+    @message="handleMessage"
     @close="() => (showTranferStauts = false)"
     v-if="showTranferStauts"
     :selected-id="selectedStatus.id"
   />
+
   <DeleteStatusModal
     @conflict="() => (showTranferStauts = true)"
     @message="handleMessage"

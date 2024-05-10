@@ -25,6 +25,10 @@ async function deleteStatus(id) {
     });
   } else if (deleteStatusRes === 500) {
     emits("conflict");
+    emits("message", {
+      description: `The status has relation please transfer  "  `,
+      status: "error",
+    });
   } else if (deleteStatusRes === 404) {
     emits("message", {
       description: `The task does not exist"  `,

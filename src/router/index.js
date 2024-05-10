@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import EmptyModal from "@/components/EmptyModal.vue";
 import AddTaskModal from "@/components/AddTaskModal.vue";
 import ShowTaskModal from "@/components/ShowTaskModal.vue";
-import { getItems } from "./../assets/fetch.js";
 import DeleteTaskModal from "@/components/DeleteTaskModal.vue";
 import StatusManagerPage from "./../views/TaskStatusPage.vue";
 import TaskManagerPage from "./../views/TaskManagerPage.vue";
