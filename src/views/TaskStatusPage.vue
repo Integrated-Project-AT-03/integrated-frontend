@@ -18,7 +18,6 @@ const selectedStatus = ref({});
 const showTranferStauts = ref(false);
 
 onMounted(async function () {
- 
   const data = await getItems(`${uri}/v2/statuses`);
   isLoading.value = false;
   datas.value.setStatuses(data);
@@ -120,7 +119,14 @@ const handleMessage = (e) => {
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
             <div class="flex gap-2">
-              <button class="btn bg-edit border-0">Edit</button>
+              <button
+                class="btn bg-edit border-0"
+                @click="
+                  router.push({ name: 'EditStatus', params: { id: status.id } })
+                "
+              >
+                Edit
+              </button>
               <button
                 @click="() => (selectedStatus = { ...status, index })"
                 class="btn btn-error"
@@ -134,6 +140,7 @@ const handleMessage = (e) => {
       </tbody>
     </table>
   </div>
+
   <StupidSelect
     @close="() => (showTranferStauts = false)"
     v-if="showTranferStauts"
@@ -144,6 +151,7 @@ const handleMessage = (e) => {
     @message="handleMessage"
     :status="selectedStatus"
   />
+  <RouterView @message="handleMessage" />
 </template>
 
 <style scoped></style>

@@ -5,6 +5,7 @@ import { getItemById, editItem, getItems } from "./../assets/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import Loading from "./Loading.vue";
 import Trash from "../assets/icons/Trash.vue";
+import DeleteTaskModal from "./DeleteTaskModal.vue";
 
 const emits = defineEmits(["message"]);
 const route = useRoute();
@@ -125,7 +126,7 @@ const handleMessage = (e) => {
         >
           {{ route.params.mode !== "edit" ? "Edit mode" : "Reset" }}
         </button>
-        <Trash @click="router.push({ name: 'Delete' })" class="text-error" />
+        <Trash onclick="deletetask.showModal()" class="text-error" />
       </div>
       <div class="divider"></div>
       <div class="flex justify-around m-4">
@@ -212,6 +213,7 @@ const handleMessage = (e) => {
       </div>
     </div>
   </div>
+  <DeleteTaskModal @message="handleMessage"/>
 </template>
 
 <style scoped></style>

@@ -18,7 +18,7 @@ class TaskStatusManagement {
   }
   updateStatus(id, newStatus) {
     const statusIndex = this.findStatusIndex(id)
-    this.statuses[statusIndex] = this._format(newStatus)
+    this.statuses[statusIndex] = newStatus
   }
   deleteStatus(id) {
     const statusIndex = this.findStatusIndex(id)

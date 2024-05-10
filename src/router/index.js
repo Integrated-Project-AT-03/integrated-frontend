@@ -2,9 +2,11 @@ import { createRouter, createWebHistory } from "vue-router";
 import EmptyModal from "@/components/EmptyModal.vue";
 import AddTaskModal from "@/components/AddTaskModal.vue";
 import ShowTaskModal from "@/components/ShowTaskModal.vue";
+import { getItems } from "./../assets/fetch.js";
 import DeleteTaskModal from "@/components/DeleteTaskModal.vue";
 import StatusManagerPage from "./../views/TaskStatusPage.vue";
 import TaskManagerPage from "./../views/TaskManagerPage.vue";
+import EditStatusModal from "@/components/EditStatusModal.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +46,13 @@ const router = createRouter({
       path: "/statuses",
       name: "Statuses",
       component: StatusManagerPage,
+      children: [
+        {
+          path: "edit/:id",
+          name: "EditStatus",
+          component: EditStatusModal,
+        },
+      ],
     },
     {
       path: "/",
