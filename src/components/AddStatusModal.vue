@@ -1,66 +1,70 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { addItem } from "../assets/fetch.js";
-import TaskManagement from "@/lib/TaskManagement";
+import TaskStatusManagement from "@/lib/TaskStatusManagement.js";
 import { ref } from "vue";
 
-const selectedColor = ref(null);
 
-function selectColor(colorValue) {
-  selectedColor.value = colorValue;
-}
 
-function isSelected(colorValue) {
-  return selectedColor.value === colorValue;
-}
+
+// function isSelected(colorValue) {
+//    selectedColor.value === colorValue;
+
+// }
 
 const emits = defineEmits(["message"]);
 
-const datas = ref(TaskManagement);
+const datas = ref(TaskStatusManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const newData = ref({ 
-  title: "",
+  hex: "C_F8719D",
+  name: "",
   description: "",
-  assignees: "",
-  status: "NO_STATUS",
 });
 
+// function selectColor(colorValue) {
+//   selectedColor.value = colorValue;
+//   newData.value.hex = colorValue
+// }
+
 const colors = [
-  { value: "white", color: "#FFFFFF" }, 
-  { value: "RED", color: "#A52A2A" },
-  { value: "GREEN", color: "#FF4136" },
-  { value: "BLUE", color: "#FF851B" },
-  { value: "YELLOW", color: "#FFDC00" },
-  { value: "ORANGE", color: "#FFD700" },
-  { value: "PURPLE", color: "#2ECC40" },
-  { value: "PINK", color: "#01FF70" },
-  { value: "CYAN", color: "#0074D9" },
-  { value: "MAGENTA", color: "#39CCCC" },
-  { value: "LIME", color: "#7FDBFF" },
-  { value: "TEAL", color: "#B10DC9" },
-  { value: "BROWN", color: "#FF00FF" },
-  { value: "SILVER", color: "#FF6CAC" },
-  { value: "GOLD", color: "#AAAAAA" },
-  { value: "GRAY", color: "#000000" },
+  { value: "white", color: "C_F8719D" }, 
+  { value: "RED", color: "C_F8719D" },
+  { value: "GREEN", color: "C_F8719D" },
+  { value: "BLUE", color: "C_F8719D" },
+  { value: "YELLOW", color: "C_F8719D" },
+  { value: "ORANGE", color: "C_F8719D" },
+  { value: "PURPLE", color: "C_F8719D" },
+  { value: "PINK", color: "C_F8719D" },
+  { value: "CYAN", color: "C_F8719D" },
+  { value: "MAGENTA", color: "C_F8719D" },
+  { value: "LIME", color: "C_F8719D" },
+  { value: "TEAL", color: "C_F8719D" },
+  { value: "BROWN", color: "C_F8719D" },
+  { value: "SILVER", color: "C_F8719D" },
+  { value: "GOLD", color: "C_F8719D" },
+  { value: "GRAY", color: "C_F8719D" },
 ]; 
 
-async function addNewTask(newItem) {
-  const newTask = await addItem(`${uri}/v1/tasks`, newItem);
-  if (newTask.status === 500) {
+async function addNewStatus() {
+console.log(newData.value);
+  const res = await addItem(`${uri}/v2/statuses`, newData.value);
+  if (res.status === 500) {
     emits("message", {
       description: "Something went wrong",
       status: "error",
     });
   } else {
-    datas.value.addTask(newTask);
+    datas.value.addStatus(res);
     emits("message", {
-      description: `The task has been successfully added`,
+      description: `The status has been successfully added`,
       status: "success",
     });
   }
-  return router.push({ name: "Task" });
+  router.push({ name: "Statuses" });
 }
+
 
 </script>
 
@@ -76,7 +80,7 @@ async function addNewTask(newItem) {
           <div class="itbkk-status-name ml-12">Name</div>
           <div class="flex justify-center">
             <input
-              v-model.trim="newData.title"
+              v-model.trim="newData.name"
               class="itbkk-title w-[60rem] h-[3rem] rounded-2xl p-2 bg-secondary border-base-100 "
               placeholder="Please Write Name"
             />
@@ -92,20 +96,20 @@ async function addNewTask(newItem) {
           </div>
 
           <div class="itbkk-status-color ml-12">Color</div>
+        
           <div class="flex justify-center">
             <div class="color-picker-container flex flex-wrap gap-2 items-center">
               <div
                 v-for="color in colors"
                 :key="color.value"
                 class="color-picker-item flex items-center cursor-pointer relative"
-                @click="selectColor(color.value)"
-                :class="{ 'border-green-500': isSelected(color.value), 'bg-transparent': !isSelected(color.value) }"
+                @click="() => newData.hex = color.color "
               >
                 <div :style="{ backgroundColor: color.color }" class="color-box w-8 h-8 rounded-full border border-gray-300 mt-2 relative">
-                  <div
+                  <!-- <div
                     v-if="isSelected(color.value)"
                     class="absolute top-0 left-0 right-0 bottom-0 border-green-900 border-2 rounded-full"
-                  ></div>
+                  ></div> -->
                 </div>
                 <span class="ml-2">{{ color.name }}</span>
               </div>
@@ -116,14 +120,13 @@ async function addNewTask(newItem) {
         <div class="divider"></div>
         <div class="flex justify-end mt-4 mr-4 gap-3">
           <button
-            @click="addNewTask(newData)"
+            @click="addNewStatus(newData)"
             class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
-            :disabled="newData.title === ''"
           >
             Save
           </button>
           <button
-            @click="router.push({ path: `/task` })"
+            @click="router.push({ name: 'statuses' })"
             class="itbkk-button-cancle btn"
           >
             Cancel

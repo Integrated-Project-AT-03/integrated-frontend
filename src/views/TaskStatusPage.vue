@@ -58,7 +58,8 @@ const handleMessage = (e) => {
         </div>
       </div>
       <div class="flex justify-end gap-4">
-        <button class="itbkk-button-add btn btn-secondary text-slate-300">
+        <button class="itbkk-button-add btn btn-secondary text-slate-300"
+        @click="router.push({name: 'AddStatus'})">
           Add Status
         </button>
       </div>
@@ -152,6 +153,7 @@ const handleMessage = (e) => {
     :status="selectedStatus"
   />
   <RouterView @message="handleMessage" />
+
 </template>
 
 <style scoped></style>

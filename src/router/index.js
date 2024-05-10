@@ -7,6 +7,7 @@ import DeleteTaskModal from "@/components/DeleteTaskModal.vue";
 import StatusManagerPage from "./../views/TaskStatusPage.vue";
 import TaskManagerPage from "./../views/TaskManagerPage.vue";
 import EditStatusModal from "@/components/EditStatusModal.vue";
+import AddStatusModal from "@/components/AddStatusModal.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,6 +53,11 @@ const router = createRouter({
           name: "EditStatus",
           component: EditStatusModal,
         },
+        {
+          path: "add",
+          name: "AddStatus",
+          component: AddStatusModal,
+        }
       ],
     },
     {
