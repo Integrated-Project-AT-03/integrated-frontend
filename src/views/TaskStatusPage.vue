@@ -58,7 +58,8 @@ const handleMessage = (e) => {
         </div>
       </div>
       <div class="flex justify-end gap-4">
-        <button class="itbkk-button-add btn btn-secondary text-slate-300">
+        <button class="itbkk-button-add btn btn-secondary text-slate-300"
+        @click="router.push({ name: 'Addstatus'})">
           Add Status
         </button>
       </div>

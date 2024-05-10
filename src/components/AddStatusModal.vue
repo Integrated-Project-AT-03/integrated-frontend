@@ -65,7 +65,7 @@ async function addNewTask(newItem) {
 </script>
 
 <template>
-  <div class="w-screen h-screen absolute flex justify-center items-center z-10">
+  <div class="w-screen h-screen absolute top-0 flex justify-center items-center z-10">
     <div class="relative overflow-hidden w-[65rem] h-[49rem] bg-neutral drop-shadow-2xl rounded-2xl">
       <br>
       <div class="text-xl mt-4 ml-6">Add Status</div>
@@ -123,7 +123,7 @@ async function addNewTask(newItem) {
             Save
           </button>
           <button
-            @click="router.push({ path: `/task` })"
+            @click="router.push({ name: 'Statuses'})"
             class="itbkk-button-cancle btn"
           >
             Cancel
