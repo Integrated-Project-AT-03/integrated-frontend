@@ -126,7 +126,7 @@ const handleMessage = (e) => {
         >
           {{ route.params.mode !== "edit" ? "Edit mode" : "Reset" }}
         </button>
-        <Trash onclick="deletetask.showModal()" class="text-error" />
+        <Trash onclick="deletetask.showModal()" class="text-error cursor-pointer" />
       </div>
       <div class="divider"></div>
       <div class="flex justify-around m-4">
