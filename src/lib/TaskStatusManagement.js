@@ -7,7 +7,7 @@ class TaskStatusManagement {
     this.statuses = statuses
   }
   addStatus(status) {
-    this.statuses.push(this._format(status))
+    this.statuses.push(status)
   }
 
   getStatuses() {

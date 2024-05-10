@@ -60,7 +60,7 @@ const handleMessage = (e) => {
       <div class="flex justify-end gap-4">
         <button
           class="itbkk-button-add btn btn-secondary text-slate-300"
-          @click="router.push({ name: 'Addstatus' })"
+          @click="router.push({ name: 'AddStatus' })"
         >
           Add Status
         </button>
@@ -163,3 +163,4 @@ const handleMessage = (e) => {
 </template>
 
 <style scoped></style>
+../lib/Colors.js
