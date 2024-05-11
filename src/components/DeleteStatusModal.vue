@@ -26,7 +26,7 @@ async function deleteStatus(id) {
     emits("conflict");
   } else if (deleteStatusRes === 404) {
     emits("message", {
-      description: `The task does not exist"  `,
+      description: `An error has occurred, the status does not exist.`,
       status: "error",
     });
   }

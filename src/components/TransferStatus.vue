@@ -1,12 +1,18 @@
 <script setup>
 import { onMounted, ref } from "vue";
+import TaskStatusManagement from "@/lib/TaskStatusManagement";
+const datas = ref(TaskStatusManagement);
 const selectStatus = ref();
-import { getItems, changeTasksStatus } from "../assets/fetch.js";
+import {
+  getItems,
+  changeTasksStatus,
+  deleteItemById,
+} from "../assets/fetch.js";
 const uri = import.meta.env.VITE_SERVER_URI;
 const props = defineProps({
   selectedStatus: Object,
 });
-const newIdStatus = ref(1);
+const newIdStatus = ref(null);
 const emits = defineEmits(["close", "message"]);
 onMounted(async () => {
   selectStatus.value = await getItems(`${uri}/v2/statuses`);
@@ -14,10 +20,9 @@ onMounted(async () => {
 const submit = async () => {
   const res = await changeTasksStatus(
     `${uri}/v2/tasks/status`,
-    props.selectedId,
+    props.selectedStatus.id,
     newIdStatus.value
   );
-
   if (res === 500) {
     emits("message", {
       description: "something went wrong",
@@ -28,11 +33,29 @@ const submit = async () => {
       description: "status donse't exist",
       status: "error",
     });
-  } else {
+  } else if (res === 400) {
     emits("message", {
-      description: "The status has been transfer",
-      status: "success",
+      description: "Bad Request",
+      status: "error",
     });
+  } else {
+    const deleteStatusRes = await deleteItemById(
+      `${uri}/v2/statuses`,
+      props.selectedStatus.id
+    );
+    if (deleteStatusRes === 200) {
+      datas.value.deleteStatus(props.selectedStatus.id);
+      emits("message", {
+        description:
+          "The task(s) have been transferred and the status has been deleted",
+        status: "success",
+      });
+    } else if (deleteStatusRes === 404) {
+      emits("message", {
+        description: `An error has occurred, the status does not exist.`,
+        status: "error",
+      });
+    }
   }
   emits("close");
 };
@@ -43,7 +66,7 @@ const submit = async () => {
     class="w-full top-0 h-full absolute flex justify-center items-center z-20"
   >
     <div
-      class="relative overflow-hidden w-max h-max py-4 px-10 bg-neutral drop-shadow-2xl rounded-2xl"
+      class="relative overflow-hprops.selectedIdden w-max h-max py-4 px-10 bg-neutral drop-shadow-2xl rounded-2xl"
     >
       <div class="text-xl font-semibold">Transfer a Status</div>
       <div class="divider"></div>
@@ -77,11 +100,11 @@ const submit = async () => {
             Cancel
           </button>
           <button
-            :disabled="selectStatus === selectedId"
+            :disabled="!newIdStatus"
             @click="submit"
             class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100 ml-1"
           >
-            Transfer
+            Transfer and Delete
           </button>
         </div>
       </div>
