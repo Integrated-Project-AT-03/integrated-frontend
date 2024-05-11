@@ -10,7 +10,7 @@ const datas = ref(TaskStatusManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const newData = ref({
-  colorId: "",
+  colorId: 1,
   name: "",
   description: "",
 });
@@ -85,7 +85,9 @@ async function addNewStatus() {
                   "
                   class="color-box w-8 h-8 rounded-full border border-gray-300 mt-2 relative"
                 ></div>
-                <span class="ml-2">{{ color.name }}</span>
+                <span class="ml-2">{{
+                  color.name[0].toUpperCase() + color.name.slice(1)
+                }}</span>
               </div>
             </div>
           </div>

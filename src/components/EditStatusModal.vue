@@ -8,6 +8,7 @@ import colorStore from "../lib/ColorsStore.js";
 
 const emits = defineEmits(["message"]);
 const management = ref(TaskStatusManagement);
+let compareStatus;
 const data = ref({});
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
@@ -20,7 +21,16 @@ const formattDate = (date) =>
 
 onMounted(async function () {
   const res = await getItemById(`${uri}/v2/statuses`, route.params.id);
+  if (res.status === 404) {
+    emits("message", {
+      description: `An error has occurred, the status does not exist.`,
+      status: "error",
+    });
+    management.value.deleteStatus(route.params.id);
+    router.push({ name: "Statuses" });
+  }
   data.value = res;
+  compareStatus = { ...res };
   isLoading.value = false;
 });
 
@@ -31,6 +41,7 @@ async function updateStatus() {
       description: `An error has occurred, the status does not exist.`,
       status: "error",
     });
+    management.value.deleteStatus(route.params.id);
   } else {
     management.value.updateStatus(route.params.id, res);
     emits("message", {
@@ -86,29 +97,40 @@ async function updateStatus() {
       </div>
       <div class="divider"></div>
       <div class="flex w-fit ml-10">
+        <div class="color-picker-container flex flex-wrap gap-2 items-center">
+          <div>Color Tag :</div>
+          <div
+            v-for="color in colorStore"
+            :key="color.id"
+            class="color-picker-item flex items-center justify-center cursor-pointer relative"
+            @click="() => (data.colorId = color.id)"
+          >
             <div
-              class="color-picker-container flex flex-wrap gap-2 items-center"
-            >
-              <div
-                v-for="color in colorStore"
-                :key="color.id"
-                class="color-picker-item flex items-center cursor-pointer relative"
-                @click="() => (data.colorId = color.id)"
-              >
-                <div
-                  :style="{ backgroundColor: color.hex }"
-                  :class="
-                    data.colorId === color.id &&
-                    'border-[4px] border-purple-500'
-                  "
-                  class="color-box w-8 h-8 rounded-full border border-gray-300 mt-2 relative"
-                ></div>
-                <span class="ml-2">{{ color.name }}</span>
-              </div>
-            </div>
+              :style="{ backgroundColor: color.hex }"
+              :class="
+                data.colorId === color.id && 'border-[4px] border-purple-500'
+              "
+              class="color-box w-8 h-8 rounded-full border border-gray-300 relative"
+            ></div>
+            <span class="ml-2">{{
+              color.name[0].toUpperCase() + color.name.slice(1)
+            }}</span>
+          </div>
         </div>
+      </div>
       <div class="flex gap-3 justify-end mr-5">
-        <button @click="updateStatus()" class="btn btn-success">Save</button>
+        <button
+          @click="updateStatus()"
+          class="btn btn-success"
+          :disabled="
+            data.name === '' ||
+            ((data.name ?? '') === (compareStatus?.name ?? '') &&
+              (data.description ?? '') === (compareStatus?.description ?? '') &&
+              (data.colorId ?? '') === (compareStatus?.colorId ?? ''))
+          "
+        >
+          Save
+        </button>
         <button @click="router.push({ name: 'Statuses' })" class="btn">
           Cancel
         </button>
