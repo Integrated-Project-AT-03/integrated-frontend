@@ -20,13 +20,13 @@ async function addNewStatus() {
   const res = await addItem(`${uri}/v2/statuses`, newData.value);
   if (res.status === 500 || res.status === 400) {
     emits("message", {
-      description: "Something went wrong",
+      description: "An error has occurred, the status could not be added.",
       status: "error",
     });
   } else {
     datas.value.addStatus(res);
     emits("message", {
-      description: `The status has been successfully added`,
+      description: `The status has been added`,
       status: "success",
     });
   }
@@ -50,7 +50,7 @@ async function addNewStatus() {
           <div class="itbkk-status-name ml-12">Name</div>
           <div class="flex justify-center">
             <input
-              v-model.trim="newData.name"
+              v-model="newData.name"
               class="itbkk-title w-[60rem] h-[3rem] rounded-2xl p-2 bg-secondary border-base-100"
               placeholder="Please Write Name"
             />
@@ -59,7 +59,7 @@ async function addNewStatus() {
           <div class="itbkk-status-description ml-12">Description</div>
           <div class="flex justify-center">
             <textarea
-              v-model.trim="newData.description"
+              v-model="newData.description"
               class="itbkk-title w-[60rem] h-[20rem] rounded-2xl p-2 bg-secondary border-base-100"
               placeholder="Please Write Description"
             ></textarea>
@@ -96,6 +96,7 @@ async function addNewStatus() {
           <button
             @click="addNewStatus(newData)"
             class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
+            :disabled="newData.name === ''"
           >
             Save
           </button>

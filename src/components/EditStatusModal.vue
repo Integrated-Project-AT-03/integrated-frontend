@@ -28,7 +28,7 @@ async function updateStatus() {
   const res = await editItem(`${uri}/v2/statuses`, route.params.id, data.value);
   if (res.status === 404) {
     emits("message", {
-      description: `The status does not exist"  `,
+      description: `An error has occurred, the status does not exist.`,
       status: "error",
     });
   } else {
