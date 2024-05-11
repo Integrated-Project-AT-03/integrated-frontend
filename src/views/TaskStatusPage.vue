@@ -110,7 +110,9 @@ const handleMessage = (e) => {
             <div class="text-sm text-gray-900">{{ index + 1 }}</div>
           </td>
           <td class="itbkk-title px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">{{ status.name }}</div>
+            <div class="text-sm text-gray-900 w-[5rem] flex justify-center p-2 rounded-xl text-slate-200"
+            :style="`background-color: ${status.colorHex}`"
+            >{{ status.name }}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
             <div

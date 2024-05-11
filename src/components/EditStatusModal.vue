@@ -4,6 +4,7 @@ import { getItemById, editItem } from "../assets/fetch.js";
 import { onMounted, ref } from "vue";
 import Loading from "../components/Loading.vue";
 import TaskStatusManagement from "./../lib/TaskStatusManagement";
+import colorStore from "../lib/ColorsStore.js";
 
 const emits = defineEmits(["message"]);
 const management = ref(TaskStatusManagement);
@@ -13,6 +14,7 @@ const router = useRouter();
 const route = useRoute();
 const isLoading = ref(true);
 const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
 const formattDate = (date) =>
   new Date(date).toLocaleString("en-GB", localZone).replace(",", "");
 
@@ -30,13 +32,13 @@ async function updateStatus() {
       status: "error",
     });
   } else {
-    management.value.updateStatus(route.params.id, data.value);
+    management.value.updateStatus(route.params.id, res);
     emits("message", {
       description: "The status has been updated",
       status: "success",
     });
   }
-  return router.push({ name: "Statuses" });
+  router.push({ name: "Statuses" });
 }
 </script>
 
@@ -45,7 +47,7 @@ async function updateStatus() {
     class="w-screen top-0 h-screen absolute flex justify-center items-center z-10"
   >
     <Loading :is-loading="isLoading" />
-    <div class="m-auto w-[65rem] h-[44rem] bg-neutral rounded-2xl">
+    <div class="m-auto w-[65rem] h-[48rem] bg-neutral rounded-2xl">
       <div class="text-xl mt-4 ml-6">Edit Status</div>
       <div class="divider"></div>
       <div class="itbkk-modal-status flex flex-col gap-4 items-center">
@@ -83,6 +85,28 @@ async function updateStatus() {
         </div>
       </div>
       <div class="divider"></div>
+      <div class="flex w-fit ml-10">
+            <div
+              class="color-picker-container flex flex-wrap gap-2 items-center"
+            >
+              <div
+                v-for="color in colorStore"
+                :key="color.id"
+                class="color-picker-item flex items-center cursor-pointer relative"
+                @click="() => (data.colorId = color.id)"
+              >
+                <div
+                  :style="{ backgroundColor: color.hex }"
+                  :class="
+                    data.colorId === color.id &&
+                    'border-[4px] border-purple-500'
+                  "
+                  class="color-box w-8 h-8 rounded-full border border-gray-300 mt-2 relative"
+                ></div>
+                <span class="ml-2">{{ color.name }}</span>
+              </div>
+            </div>
+        </div>
       <div class="flex gap-3 justify-end mr-5">
         <button @click="updateStatus()" class="btn btn-success">Save</button>
         <button @click="router.push({ name: 'Statuses' })" class="btn">
@@ -94,4 +118,3 @@ async function updateStatus() {
 </template>
 
 <style scoped></style>
-@/lib/Colors.js
