@@ -34,8 +34,8 @@ async function deleteTask(id) {
       <div class="text-2xl font-bold text-slate-300">Delete a Task</div>
       <div class="divider"></div>
       <div class="itbkk-message text-slate-300">
-        Do you want to delete the task number {{ taskSeleted.id }} -
-        {{ taskSeleted.title }}?
+        Do you want to delete the task number {{ taskSeleted?.id }} -
+        {{ taskSeleted?.title }}?
       </div>
       <div class="divider"></div>
       <div class="flex justify-end mt-4 gap-3">

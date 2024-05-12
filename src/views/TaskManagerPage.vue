@@ -27,7 +27,10 @@ const handleMessage = (e) => {
   <Loading :is-loading="isLoading" />
   <div
     class="container mx-auto flex flex-col gap-3"
-    :class="route.fullPath.split('/').length > 2 || route.name === 'Addstatus' && 'blur-sm'"
+    :class="
+      route.fullPath.split('/').length > 2 ||
+      (route.name === 'Addstatus' && 'blur-sm')
+    "
   >
     <div class="text-5xl font-extrabold ... w-full flex justify-center m-7">
       <span

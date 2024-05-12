@@ -25,22 +25,17 @@ const router = createRouter({
             {
               path: ":mode",
               name: "TaskEdit",
-              component: EmptyModal
+              component: EmptyModal,
             },
-            {
-              path: "delete",
-              name: "Delete",
-              component: DeleteTaskModal
-            }
-          ]
+          ],
         },
 
         {
           path: "/task/add",
           name: "AddTask",
-          component: AddTaskModal
-        }
-      ]
+          component: AddTaskModal,
+        },
+      ],
     },
 
     {
@@ -51,20 +46,20 @@ const router = createRouter({
         {
           path: "edit/:id",
           name: "EditStatus",
-          component: EditStatusModal
+          component: EditStatusModal,
         },
         {
           path: "add",
           name: "AddStatus",
           component: AddStatusModal,
-        }
+        },
       ],
     },
     {
       path: "/",
-      redirect: "/task"
-    }
-  ]
-})
+      redirect: "/task",
+    },
+  ],
+});
 
-export default router
+export default router;

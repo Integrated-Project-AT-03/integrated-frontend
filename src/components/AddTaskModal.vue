@@ -87,14 +87,14 @@ async function addNewTask(newItem) {
       <div class="flex justify-end gap-3 mr-4">
         <button
           @click="addNewTask(newData)"
-          class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
+          class="itbkk-button-confirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
           :disabled="newData.title === ''"
         >
           Save
         </button>
 
         <button
-          @click="router.push({ path: `/task` })"
+          @click="router.push({ name: "Task" })"
           class="itbkk-button-cancle btn"
         >
           Cancel

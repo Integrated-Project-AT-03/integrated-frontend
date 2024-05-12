@@ -30,6 +30,7 @@ const compareTask = ref();
 const selectStatus = ref();
 const loadTask = async () => {
   isLoading.value = true;
+
   const response = await getItemById(`${uri}/v2/tasks`, route.params.id);
   isLoading.value = false;
   if (response.status === 404) {
@@ -38,6 +39,7 @@ const loadTask = async () => {
       status: "error",
     });
     datas.value.deleteTask(route.params.id);
+
     return router.push({ name: "Task" });
   }
   dataTask.value = response;
