@@ -72,7 +72,7 @@ async function addNewStatus() {
               class="color-picker-container flex flex-wrap gap-2 items-center"
             >
               <div
-                v-for="color in colorStore"
+                v-for="color in colorStore.getColors()"
                 :key="color.id"
                 class="color-picker-item flex items-center cursor-pointer relative"
                 @click="() => (newData.colorId = color.id)"
