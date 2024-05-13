@@ -94,7 +94,7 @@ async function addNewTask(newItem) {
         </button>
 
         <button
-          @click="$route.push({ name: 'Task' })"
+          @click="$router.push({ name: 'Task' })"
           class="itbkk-button-cancle btn"
         >
           Cancel

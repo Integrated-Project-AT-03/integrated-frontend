@@ -209,7 +209,7 @@ const handleMessage = (e) => {
           Save
         </button>
         <button
-          @click="$router.push({ path: `/task` })"
+         @click="$router.push({ name:'Task' })"
           class="itbkk-button-cancel btn"
         >
           Close
