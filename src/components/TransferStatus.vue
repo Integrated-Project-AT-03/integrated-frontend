@@ -43,14 +43,14 @@ const submit = async () => {
       `${uri}/v2/statuses`,
       props.selectedStatus.id
     );
-    if (deleteStatusRes === 200) {
+    if (deleteStatusRes === 200 && res.length !== 0) {
       datas.value.deleteStatus(props.selectedStatus.id);
       emits("message", {
-        description:
-          "The task(s) have been transferred and the status has been deleted",
+        description: `${res.length} task(s) have been transferred and the status has been deleted`,
         status: "success",
       });
     } else if (deleteStatusRes === 404) {
+      datas.value.deleteStatus(props.selectedStatus.id);
       emits("message", {
         description: `An error has occurred, the status does not exist.`,
         status: "error",

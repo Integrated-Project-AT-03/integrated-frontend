@@ -115,7 +115,11 @@ const handleMessage = (e) => {
               class="status flex justify-center text-sm w-20 p-2 rounded-xl text-slate-200"
               :style="`background-color: ${task.statusColor}`"
             >
-              {{ task.status }}
+              {{
+                task.status.length > 10
+                  ? task.status.slice(0, 7) + "..."
+                  : task.status
+              }}
             </div>
           </td>
         </tr>

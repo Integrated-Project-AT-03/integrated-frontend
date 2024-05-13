@@ -50,6 +50,7 @@ async function addNewStatus() {
           <div class="itbkk-status-name ml-12">Name</div>
           <div class="flex justify-center">
             <input
+              maxlength="50"
               v-model="newData.name"
               class="itbkk-title w-[60rem] h-[3rem] rounded-2xl p-2 bg-secondary border-base-100"
               placeholder="Please Write Name"
@@ -59,6 +60,7 @@ async function addNewStatus() {
           <div class="itbkk-status-description ml-12">Description</div>
           <div class="flex justify-center">
             <textarea
+              maxlength="200"
               v-model="newData.description"
               class="itbkk-title w-[60rem] h-[20rem] rounded-2xl p-2 bg-secondary border-base-100"
               placeholder="Please Write Description"

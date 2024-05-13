@@ -67,6 +67,7 @@ async function updateStatus() {
           <input
             class="itbkk-status-name w-[60rem] h-11 rounded-2xl p-3 bg-secondary border-base-100"
             v-model="data.name"
+            maxlength="50"
           />
         </div>
         <div class="flex flex-col gap-2">
@@ -74,6 +75,8 @@ async function updateStatus() {
           <textarea
             class="itbkk-status-description w-[60rem] h-[20rem] rounded-2xl border p-4 bg-secondary border-base-100"
             v-model="data.description"
+            placeholder="No description is provided."
+            maxlength="200"
           ></textarea>
         </div>
       </div>

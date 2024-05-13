@@ -114,15 +114,19 @@ const handleMessage = (e) => {
               class="text-sm text-gray-900 w-[5rem] flex justify-center p-2 rounded-xl text-slate-200"
               :style="`background-color: ${status.colorHex}`"
             >
-              {{ status.name }}
+              {{
+                status.name.length > 10
+                  ? status.name.slice(0, 7) + "..."
+                  : status.name
+              }}
             </div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
             <div
               class="text-sm text-gray-900 itbkk-assignees"
-              :class="status?.description ?? 'italic'"
+              :class="status?.description ?? 'italic text-gray-400'"
             >
-              {{ status?.description ?? "Unassigned" }}
+              {{ status?.description ?? "No description is provided." }}
             </div>
           </td>
           <td class="itbkk-status flex py-4 whitespace-nowrap">

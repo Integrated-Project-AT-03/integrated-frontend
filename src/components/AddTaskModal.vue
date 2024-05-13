@@ -50,6 +50,7 @@ async function addNewTask(newItem) {
         <div class="ml-12">Title</div>
         <div class="flex justify-center">
           <input
+            maxlength="100"
             v-model.trim="newData.title"
             class="itbkk-title w-[60rem] h-11 rounded-2xl p-2 bg-secondary border-base-100"
           />
@@ -58,6 +59,7 @@ async function addNewTask(newItem) {
           <div class="flex flex-col gap-3">
             <div>Description</div>
             <textarea
+              maxlength="500"
               v-model.trim="newData.description"
               class="itbkk-description w-[35rem] h-[30rem] rounded-2xl border p-4 bg-secondary border-base-100"
             ></textarea>
@@ -66,6 +68,7 @@ async function addNewTask(newItem) {
             <div class="flex flex-col gap-3">
               <div>Assignees</div>
               <textarea
+                maxlength="30"
                 v-model.trim="newData.assignees"
                 class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl border p-4 bg-secondary border-base-100"
               ></textarea>

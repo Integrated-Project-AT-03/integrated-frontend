@@ -25,6 +25,7 @@ async function deleteStatus(id) {
   } else if (deleteStatusRes === 500) {
     emits("conflict");
   } else if (deleteStatusRes === 404) {
+    datas.value.deleteStatus(id);
     emits("message", {
       description: `An error has occurred, the status does not exist.`,
       status: "error",

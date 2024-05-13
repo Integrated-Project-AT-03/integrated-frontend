@@ -110,6 +110,7 @@ const handleMessage = (e) => {
           "
           type="text"
           v-model.trim="dataTask.title"
+          maxlength="100"
         />
 
         <button
@@ -137,6 +138,7 @@ const handleMessage = (e) => {
         <div class="flex flex-col gap-2 text-slate-200">
           <div>Description</div>
           <textarea
+            maxlength="500"
             :disabled="!isEditMode"
             v-model.trim="dataTask.description"
             :placeholder="dataTask.description ?? 'No Description Provided'"
@@ -147,6 +149,7 @@ const handleMessage = (e) => {
           <div class="flex flex-col gap-2 text-slate-200">
             <div>Assignees</div>
             <textarea
+              maxlength="30"
               :disabled="!isEditMode"
               :placeholder="dataTask.assignees ?? 'Unassigned'"
               v-model.trim="dataTask.assignees"
@@ -209,7 +212,7 @@ const handleMessage = (e) => {
           Save
         </button>
         <button
-         @click="$router.push({ name:'Task' })"
+          @click="$router.push({ name: 'Task' })"
           class="itbkk-button-cancel btn"
         >
           Close
