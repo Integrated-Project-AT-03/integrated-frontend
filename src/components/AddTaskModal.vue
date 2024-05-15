@@ -20,7 +20,6 @@ const newData = ref({
 
 onMounted(async () => {
   statuses.value = await getItems(`${uri}/v2/statuses`);
-  console.log(statuses.value);
 });
 
 async function addNewTask(newItem) {
