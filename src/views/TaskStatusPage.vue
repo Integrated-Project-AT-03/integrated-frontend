@@ -59,7 +59,7 @@ const handleMessage = (e) => {
         </div>
       </div>
       <div class="flex justify-end gap-4">
-        <Button class="itbkk-button-add" bgcolor="#666666" message="Add Status" @click="router.push({ name: 'AddStatus' })"/>
+        <Button class="itbkk-button-add" bgcolor="#06b6d4" message="Add Status" @click="router.push({ name: 'AddStatus' })"/>
       </div>
     </div>
     <table class="min-w-full divide-y divide-gray-200">
