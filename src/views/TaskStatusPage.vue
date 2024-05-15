@@ -20,7 +20,7 @@ const showTranferStauts = ref(false);
 onMounted(async function () {
   const data = await getItems(`${uri}/v2/statuses`);
   isLoading.value = false;
-  datas.value.setStatuses(data);
+  datas.value.setStatuses(data.items);
 });
 
 const handleMessage = (e) => {
@@ -157,6 +157,7 @@ const handleMessage = (e) => {
   </div>
 
   <TransferStatus
+    v-model="isLoading"
     @message="handleMessage"
     @close="() => (showTranferStauts = false)"
     v-if="showTranferStauts"
@@ -164,6 +165,7 @@ const handleMessage = (e) => {
   />
 
   <DeleteStatusModal
+    v-model="isLoading"
     @conflict="() => (showTranferStauts = true)"
     @message="handleMessage"
     :status="selectedStatus"

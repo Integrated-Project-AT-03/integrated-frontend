@@ -3,7 +3,7 @@ import { useRouter } from "vue-router";
 import { addItem, getItems } from "../assets/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import { onMounted, ref } from "vue";
-const selectStatus = ref();
+const statuses = ref();
 const emits = defineEmits(["message"]);
 
 const datas = ref(TaskManagement);
@@ -13,11 +13,12 @@ const newData = ref({
   title: "",
   description: "",
   assignees: "",
-  status: "No Status",
+  status: 1,
 });
 
 onMounted(async () => {
-  selectStatus.value = await getItems(`${uri}/v2/statuses`);
+  statuses.value = await getItems(`${uri}/v2/statuses`);
+  console.log(statuses.value);
 });
 
 async function addNewTask(newItem) {
@@ -76,10 +77,10 @@ async function addNewTask(newItem) {
             <div class="flex flex-col gap-3">
               <div>Status</div>
               <select
-                v-model.trim="newData.status"
+                v-model="newData.status"
                 class="itbkk-status select w-full max-w-xs bg-base-100"
               >
-                <option v-for="status in selectStatus" :value="status.name">
+                <option v-for="status in statuses?.items" :value="status.id">
                   {{ status.name }}
                 </option>
               </select>

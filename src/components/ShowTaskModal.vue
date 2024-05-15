@@ -14,7 +14,7 @@ const dataTask = ref({
   title: "",
   description: "",
   assignees: "",
-  status: "No Status",
+  status: {},
 });
 const isEditMode = ref();
 watch(
@@ -27,10 +27,10 @@ const uri = import.meta.env.VITE_SERVER_URI;
 const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const isLoading = ref(true);
 const compareTask = ref();
-const selectStatus = ref();
+const statuses = ref();
+
 const loadTask = async () => {
   isLoading.value = true;
-
   const response = await getItemById(`${uri}/v2/tasks`, route.params.id);
   isLoading.value = false;
   if (response.status === 404) {
@@ -39,42 +39,43 @@ const loadTask = async () => {
       status: "error",
     });
     datas.value.deleteTask(route.params.id);
-
     return router.push({ name: "Task" });
   }
-  dataTask.value = response;
-  compareTask.value = { ...dataTask.value };
+
+  dataTask.value = { ...response, status: response.status.id };
+  compareTask.value = { ...response, status: response.status.id };
+
 };
 onMounted(async () => {
   await loadTask();
-  selectStatus.value = await getItems(`${uri}/v2/statuses`);
+  statuses.value = await getItems(`${uri}/v2/statuses`);
+  console.log(statuses.value);
 });
 
 const editTask = async () => {
-  console.log(dataTask.value);
   isLoading.value = true;
-  const response = await editItem(
+  const res = await editItem(
     `${uri}/v2/tasks`,
     route.params.id,
     dataTask.value
   );
   isLoading.value = false;
-  if (response.status === 404) {
+  if (res.httpStatus === 200) {
+    datas.value.updateTask(route.params.id, res);
+    emits("message", {
+      description: "The task has been updated",
+      status: "success",
+    });
+  } else if (res.status === 404) {
     emits("message", {
       description: "The task does not exist",
       status: "error",
     });
     datas.value.deleteTask(route.params.id);
-  } else if (response.status === 500) {
+  } else if (res.status === 500) {
     emits("message", {
       description: "Some input is invalid",
       status: "error",
-    });
-  } else {
-    datas.value.updateTask(route.params.id, response);
-    emits("message", {
-      description: "The task has been updated",
-      status: "success",
     });
   }
   router.push({ name: "Task" });
@@ -156,14 +157,15 @@ const handleMessage = (e) => {
               class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl placeholder:text-gray-400 placeholder:italic border p-4 bg-secondary border-base-100"
             ></textarea>
           </div>
+
           <div class="flex flex-col gap-2 text-slate-200">
             <div>Status</div>
             <select
               :disabled="!isEditMode"
-              v-model.trim="dataTask.status"
+              v-model="dataTask.status"
               class="itbkk-status select w-full max-w-xs bg-base-100"
             >
-              <option v-for="status in selectStatus" :value="status.name">
+              <option v-for="status in statuses?.items" :value="status.id">
                 {{ status.name }}
               </option>
             </select>
@@ -205,7 +207,7 @@ const handleMessage = (e) => {
             ((dataTask.assignees ?? '') === (compareTask?.assignees ?? '') &&
               (dataTask.description ?? '') ===
                 (compareTask?.description ?? '') &&
-              (dataTask.status ?? '') === (compareTask?.status ?? '') &&
+              dataTask?.status === compareTask?.status &&
               (dataTask.title ?? '') === (compareTask?.title ?? ''))
           "
         >

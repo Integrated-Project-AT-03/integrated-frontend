@@ -35,18 +35,26 @@ onMounted(async function () {
 });
 
 async function updateStatus() {
+  isLoading.value = true;
   const res = await editItem(`${uri}/v2/statuses`, route.params.id, data.value);
-  if (res.status === 404) {
+  isLoading.value = false;
+
+  if (res.httpStatus === 200) {
+    management.value.updateStatus(route.params.id, res);
+    emits("message", {
+      description: "The status has been updated",
+      status: "success",
+    });
+  } else if (res.status === 404) {
     emits("message", {
       description: `An error has occurred, the status does not exist.`,
       status: "error",
     });
     management.value.deleteStatus(route.params.id);
-  } else {
-    management.value.updateStatus(route.params.id, res);
+  } else if (res.status === 500) {
     emits("message", {
-      description: "The status has been updated",
-      status: "success",
+      description: `The name of status must be unique`,
+      status: "error",
     });
   }
   router.push({ name: "Statuses" });

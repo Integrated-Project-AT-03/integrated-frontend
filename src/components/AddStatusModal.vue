@@ -4,11 +4,12 @@ import { addItem } from "../assets/fetch.js";
 import TaskStatusManagement from "@/lib/TaskStatusManagement.js";
 import { ref } from "vue";
 import colorStore from "./../lib/ColorsStore";
-
+import Loading from "./Loading.vue";
 const emits = defineEmits(["message"]);
 const datas = ref(TaskStatusManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
+const isLoading = ref(false);
 const newData = ref({
   colorId: 1,
   name: "",
@@ -16,18 +17,20 @@ const newData = ref({
 });
 
 async function addNewStatus() {
-  console.log(newData.value);
+  isLoading.value = true;
   const res = await addItem(`${uri}/v2/statuses`, newData.value);
-  if (res.status === 500 || res.status === 400) {
-    emits("message", {
-      description: "An error has occurred, the status could not be added.",
-      status: "error",
-    });
-  } else {
+  isLoading.value = false;
+
+  if (res.httpStatus === 201) {
     datas.value.addStatus(res);
     emits("message", {
       description: `The status has been added`,
       status: "success",
+    });
+  } else if (res.status === 500 || res.status === 400) {
+    emits("message", {
+      description: "An error has occurred, the status could not be added.",
+      status: "error",
     });
   }
   router.push({ name: "Statuses" });
@@ -111,6 +114,7 @@ async function addNewStatus() {
             Cancel
           </button>
         </div>
+        <Loading :is-loading="isLoading" />
       </div>
     </div>
   </div>

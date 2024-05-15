@@ -15,15 +15,26 @@ const props = defineProps({
 const newIdStatus = ref(null);
 const emits = defineEmits(["close", "message"]);
 onMounted(async () => {
-  selectStatus.value = await getItems(`${uri}/v2/statuses`);
+  emits("update:modelValue", true);
+  selectStatus.value = (await getItems(`${uri}/v2/statuses`)).items;
+  emits("update:modelValue", false);
 });
 const submit = async () => {
+  emits("update:modelValue", true);
   const res = await changeTasksStatus(
-    `${uri}/v2/tasks/status`,
+    `${uri}/v2/statuses`,
     props.selectedStatus.id,
     newIdStatus.value
   );
-  if (res === 500) {
+  emits("update:modelValue", false);
+  if (res.httpStatus === 200) {
+    emits("message", {
+      description: `${res.tasksUpdated} task(s) have been transferred and the status has been deleted`,
+      status: "success",
+    });
+    datas.value.deleteStatus(props.selectedStatus.id);
+    emits("close");
+  } else if (res === 500) {
     emits("message", {
       description: "something went wrong",
       status: "error",
@@ -33,31 +44,13 @@ const submit = async () => {
       description: "status donse't exist",
       status: "error",
     });
+    datas.value.deleteStatus(props.selectedStatus.id);
   } else if (res === 400) {
     emits("message", {
       description: "Bad Request",
       status: "error",
     });
-  } else {
-    const deleteStatusRes = await deleteItemById(
-      `${uri}/v2/statuses`,
-      props.selectedStatus.id
-    );
-    if (deleteStatusRes === 200 && res.length !== 0) {
-      datas.value.deleteStatus(props.selectedStatus.id);
-      emits("message", {
-        description: `${res.length} task(s) have been transferred and the status has been deleted`,
-        status: "success",
-      });
-    } else if (deleteStatusRes === 404) {
-      datas.value.deleteStatus(props.selectedStatus.id);
-      emits("message", {
-        description: `An error has occurred, the status does not exist.`,
-        status: "error",
-      });
-    }
   }
-  emits("close");
 };
 </script>
 

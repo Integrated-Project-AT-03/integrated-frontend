@@ -14,7 +14,7 @@ const isLoading = ref(true);
 onMounted(async function () {
   const data = await getItems(`${uri}/v2/tasks`);
   isLoading.value = false;
-  datas.value.setTasks(data);
+  datas.value.setTasks(data.items);
 });
 
 const emits = defineEmits(["message"]);
@@ -113,12 +113,12 @@ const handleMessage = (e) => {
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
             <div
               class="status flex justify-center text-sm w-20 p-2 rounded-xl text-slate-200"
-              :style="`background-color: ${task.statusColor}`"
+              :style="`background-color: ${task.status.colorHex}`"
             >
               {{
                 task.status.length > 10
-                  ? task.status.slice(0, 7) + "..."
-                  : task.status
+                  ? task.status.name.slice(0, 7) + "..."
+                  : task.status.name
               }}
             </div>
           </td>

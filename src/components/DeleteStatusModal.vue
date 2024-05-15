@@ -2,6 +2,7 @@
 import { useRoute, useRouter } from "vue-router";
 import { deleteItemById } from "../assets/fetch.js";
 import TaskStatusManagement from "@/lib/TaskStatusManagement";
+import Loading from "./Loading.vue";
 import { ref } from "vue";
 
 const props = defineProps({
@@ -9,13 +10,15 @@ const props = defineProps({
     type: Object,
   },
 });
-const emits = defineEmits(["message", "conflict"]);
+const emits = defineEmits(["message", "conflict", "update:modelValue"]);
 const router = useRouter();
 const datas = ref(TaskStatusManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 
 async function deleteStatus(id) {
+  emits("update:modelValue", true);
   const deleteStatusRes = await deleteItemById(`${uri}/v2/statuses`, id);
+  emits("update:modelValue", false);
   if (deleteStatusRes === 200) {
     datas.value.deleteStatus(id);
     emits("message", {
@@ -31,10 +34,10 @@ async function deleteStatus(id) {
       status: "error",
     });
   }
+
   return router.push({ name: "Statuses" });
 }
 </script>
-
 <template>
   <dialog id="deleteModal" class="modal">
     <div class="flex flex-col rounded-lg p-6 bg-neutral h-auto w-fit">

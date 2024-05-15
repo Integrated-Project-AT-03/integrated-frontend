@@ -1,17 +1,18 @@
 async function getItems(url) {
   try {
-    const data = await fetch(url);
-    const items = await data.json();
-    return items;
+    const res = await fetch(url);
+    const items = await res.json();
+    console.log({ ...items, httpStatus: res.status });
+    return { items: [...items], httpStatus: res.status };
   } catch (error) {
     console.log(`error: ${error}`);
   }
 }
 async function getItemById(url, id) {
   try {
-    const data = await fetch(`${url}/${id}`);
-    const item = await data.json();
-    return item;
+    const res = await fetch(`${url}/${id}`);
+    const item = await res.json();
+    return { ...item, httpStatus: res.status };
   } catch (error) {
     console.log(`error: ${error}`);
   }
@@ -40,7 +41,7 @@ async function addItem(url, newItem) {
       }),
     });
     const addedItem = await res.json();
-    return addedItem;
+    return { ...addedItem, httpStatus: res.status };
   } catch (error) {
     console.log(`error: ${error}`);
   }
@@ -58,17 +59,20 @@ async function editItem(url, id, editItem) {
       }),
     });
     const editedItem = await res.json();
-    return editedItem;
+    return { ...editedItem, httpStatus: res.status };
   } catch (error) {
     console.log(`error: ${error}`);
   }
 }
 
-async function changeTasksStatus(url, oldIdStatus, newIdStatus) {
+async function changeTasksStatus(url, deletedId, changeId) {
   try {
-    const res = await fetch(`${url}/${oldIdStatus}/${newIdStatus}`);
+    const res = await fetch(`${url}/${deletedId}/${changeId}`, {
+      method: "DELETE",
+    });
     const tasksUpdated = await res.json();
-    return tasksUpdated;
+    console.log({ ...tasksUpdated, httpStatus: res.status });
+    return { tasksUpdated, httpStatus: res.status };
   } catch (error) {
     console.log(`error: ${error}`);
   }
