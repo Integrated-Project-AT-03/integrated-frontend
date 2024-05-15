@@ -8,6 +8,7 @@ import { getItems } from "../assets/fetch.js";
 import Loading from "../components/Loading.vue";
 import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
 import Button from "../components/ButtonModal.vue"
+import StatusModal from "@/components/StatusModal.vue";
 
 const emits = defineEmits(["message"]);
 const datas = ref(TaskStatusManagement);
@@ -31,30 +32,19 @@ const handleMessage = (e) => {
 
 <template>
   <Loading :is-loading="isLoading" />
-  <div
-    class="container mx-auto flex flex-col gap-3"
-    :class="route.fullPath.split('/').length > 2 && 'blur-sm'"
-  >
+  <div class="container mx-auto flex flex-col gap-3" :class="route.fullPath.split('/').length > 2 && 'blur-sm'">
     <div class="text-5xl font-extrabold ... w-full flex justify-center m-7">
-      <span
-        class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500"
-      >
+      <span class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
         <div class="text-5xl">IT-Bangmod Kradan Kanban</div>
       </span>
     </div>
     <div class="w-full flex items-center justify-between">
       <div class="flex items-center gap-4">
-        <div
-          @click="router.push({ name: 'Task' })"
-          class="itbkk-button-home text-xl font-bold cursor-pointer"
-        >
+        <div @click="router.push({ name: 'Task' })" class="itbkk-button-home text-xl font-bold cursor-pointer">
           Home
         </div>
         <ChevronRight />
-        <div
-          @click="router.push({ name: 'Statuses' })"
-          class="text-xl font-bold cursor-pointer text-primary"
-        >
+        <div @click="router.push({ name: 'Statuses' })" class="text-xl font-bold cursor-pointer text-primary">
           Task Status
         </div>
       </div>
@@ -65,28 +55,16 @@ const handleMessage = (e) => {
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-200">
         <tr>
-          <th
-            scope="col"
-            class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
-          >
+          <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider">
             ID
           </th>
-          <th
-            scope="col"
-            class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
-          >
+          <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider">
             Name
           </th>
-          <th
-            scope="col"
-            class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
-          >
+          <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider">
             Description
           </th>
-          <th
-            scope="col"
-            class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
-          >
+          <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider">
             Action
           </th>
         </tr>
@@ -97,31 +75,16 @@ const handleMessage = (e) => {
             No task
           </td>
         </tr>
-        <tr
-          class="itbkk-item itbkk-button-action hover:bg-slate-200"
-          v-for="(status, index) in datas.getStatuses()"
-          :key="status.id"
-        >
+        <tr class="itbkk-item itbkk-button-action hover:bg-slate-200" v-for="(status, index) in datas.getStatuses()"
+          :key="status.id">
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ index + 1 }}</div>
           </td>
           <td class="itbkk-title px-6 py-4 whitespace-nowrap">
-            <div
-              class="text-sm text-gray-900 w-[5rem] flex justify-center p-2 rounded-xl text-slate-200"
-              :style="`background-color: ${status.colorHex}`"
-            >
-              {{
-                status.name.length > 10
-                  ? status.name.slice(0, 7) + "..."
-                  : status.name
-              }}
-            </div>
+            <StatusModal :status-color="status.colorHex" :text="status.name" />
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div
-              class="text-sm text-gray-900 itbkk-assignees"
-              :class="status?.description ?? 'italic text-gray-400'"
-            >
+            <div class="text-sm text-gray-900 itbkk-assignees" :class="status?.description ?? 'italic text-gray-400'">
               {{ status?.description ?? "No description is provided." }}
             </div>
           </td>
@@ -134,6 +97,7 @@ const handleMessage = (e) => {
               <Button class="itbkk-button-delete" bgcolor="#ef4444" message="Delete" @click="() => (selectedStatus = { ...status, index })" onclick="deleteModal.showModal()"/>
             </div>
           </td>
+
         </tr>
       </tbody>
     </table>
