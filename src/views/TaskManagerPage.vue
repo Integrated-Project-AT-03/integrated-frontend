@@ -6,6 +6,7 @@ import { useRoute, useRouter } from "vue-router";
 import { getItems } from "./../assets/fetch.js";
 import StatusModal from "@/components/StatusModal.vue";
 
+
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const route = useRoute();
@@ -56,8 +57,13 @@ const handleMessage = (e) => {
           <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider">
             Assignees
           </th>
-          <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider">
-            Status
+          <th scope="col" class="flex flex-row px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider border border-red-500">
+            <div>
+              Status
+            </div> 
+            <div class="itbkk-status-sort m-[auto] ml-[10px]">
+              <img class="w-[20px]" src="/images/up-down-arrow.png"/> 
+            </div>
           </th>
         </tr>
       </thead>
