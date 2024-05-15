@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import TaskStatusManagement from "@/lib/TaskStatusManagement";
+import Button from "./ButtonModal.vue";
 const datas = ref(TaskStatusManagement);
 const selectStatus = ref();
 import {
@@ -86,19 +87,8 @@ const submit = async () => {
         </div>
         <div class="divider"></div>
         <div class="flex justify-end">
-          <button
-            @click="$emit('close')"
-            class="itbkk-button-cancel btn btn-danger w-16 hover:bg-base-100 hover:border-base-100 mr-3"
-          >
-            Cancel
-          </button>
-          <button
-            :disabled="!newIdStatus"
-            @click="submit"
-            class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100 ml-1"
-          >
-            Transfer and Delete
-          </button>
+          <Button class="itbkk-button-cancel w-16 hover:bg-base-100 hover:border-base-100 mr-3" message="Cancel" @click="$emit('close')"/>
+          <Button class="itbkk-button-comfirm btn-success w-16 hover:bg-base-100 hover:border-base-100 ml-1" message="Transfer and Delete" :disabled="!newIdStatus" @click="submit"/>
         </div>
       </div>
     </div>

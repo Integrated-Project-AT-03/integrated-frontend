@@ -4,6 +4,7 @@ import { deleteItemById } from "../assets/fetch.js";
 import TaskStatusManagement from "@/lib/TaskStatusManagement";
 import Loading from "./Loading.vue";
 import { ref } from "vue";
+import Button from "./ButtonModal.vue";
 
 const props = defineProps({
   status: {
@@ -50,17 +51,10 @@ async function deleteStatus(id) {
       <div class="divider"></div>
       <div class="flex justify-end mt-4 gap-3">
         <form method="dialog">
-          <button
-            class="itbkk-button-confirm btn btn-success text-slate-200"
-            @click="deleteStatus(status.id)"
-          >
-            Confirm
-          </button>
+          <Button class="itbkk-button-confirm" bgcolor="#16a34a" message="Confirm" @click="deleteStatus(status.id)"/>
         </form>
         <form method="dialog">
-          <button class="itbkk-button-cancel btn btn-error text-slate-200">
-            Cancel
-          </button>
+          <Button class="itbkk-button-cancel" bgcolor="#ef4444" message="Cancel"/>
         </form>
       </div>
     </div>

@@ -3,6 +3,8 @@ import { useRouter } from "vue-router";
 import { addItem, getItems } from "../assets/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import { onMounted, ref } from "vue";
+import Button from "./ButtonModal.vue";
+
 const statuses = ref();
 const emits = defineEmits(["message"]);
 
@@ -89,20 +91,8 @@ async function addNewTask(newItem) {
         </div>
       </div>
       <div class="flex justify-end gap-3 mr-4">
-        <button
-          @click="addNewTask(newData)"
-          class="itbkk-button-confirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
-          :disabled="newData.title === ''"
-        >
-          Save
-        </button>
-
-        <button
-          @click="$router.push({ name: 'Task' })"
-          class="itbkk-button-cancle btn"
-        >
-          Cancel
-        </button>
+        <Button class="itbkk-button-confirm btn-success" message="Save" @click="addNewTask(newData)" :disabled="newData.title === ''"/>
+        <Button class="itbkk-button-cancle" message="Cancel" @click="router.push({ name: 'Task' })"/>
       </div>
     </div>
   </div>

@@ -6,6 +6,7 @@ import TaskManagement from "@/lib/TaskManagement";
 import Loading from "./Loading.vue";
 import Trash from "../assets/icons/Trash.vue";
 import DeleteTaskModal from "./DeleteTaskModal.vue";
+import Button from "./ButtonModal.vue";
 
 const emits = defineEmits(["message"]);
 const route = useRoute();
@@ -198,27 +199,15 @@ const handleMessage = (e) => {
       </div>
       <div class="divider"></div>
       <div class="flex justify-end m-4 gap-3">
-        <button
-          v-show="isEditMode"
-          @click="editTask()"
-          class="itbkk-button-confirm btn drop-shadow-lg btn-success w-16 hover:bg-base-100 hover:border-base-100"
-          :disabled="
+        <Button class="itbkk-button-confirm w-16 hover:bg-base-100 hover:border-base-100 drop-shadow-lg btn-success" v-show="isEditMode" @click="editTask()" :disabled="
             dataTask.title === '' ||
             ((dataTask.assignees ?? '') === (compareTask?.assignees ?? '') &&
               (dataTask.description ?? '') ===
                 (compareTask?.description ?? '') &&
               dataTask?.status === compareTask?.status &&
               (dataTask.title ?? '') === (compareTask?.title ?? ''))
-          "
-        >
-          Save
-        </button>
-        <button
-          @click="$router.push({ name: 'Task' })"
-          class="itbkk-button-cancel btn"
-        >
-          Close
-        </button>
+          " message="Save" bgcolor=""/>
+        <Button class="itbkk-button-cancel" message="Close" @click="router.push({ name: 'Task' })"/>
       </div>
     </div>
   </div>

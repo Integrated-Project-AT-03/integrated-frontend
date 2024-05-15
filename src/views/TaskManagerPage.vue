@@ -4,6 +4,7 @@ import TaskManagement from "./../lib/TaskManagement.js";
 import Loading from "./../components/Loading.vue";
 import { useRoute, useRouter } from "vue-router";
 import { getItems } from "./../assets/fetch.js";
+import Button from "@/components/ButtonModal.vue";
 
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
@@ -41,18 +42,15 @@ const handleMessage = (e) => {
     </div>
     <div class="w-full flex items-center justify-end">
       <div class="flex justify-end gap-4">
-        <button
-          class="itbkk-manage-status btn btn-secondary"
-          @click="router.push({ name: 'Statuses' })"
-        >
-          Manage Status
-        </button>
-        <button
+        <Button class="itbkk-manage-status" bgcolor="#666666" message="Manage Status" @click="router.push({ name: 'Statuses' })" />
+        <Button class="itbkk-button-add" bgcolor="#06b6d4" message="Add task" @click="$router.push({ name: 'AddTask' })"/>
+
+        <!-- <button
           @click="$router.push({ name: 'AddTask' })"
           class="itbkk-button-add btn btn-primary text-slate-300"
         >
           + Add task
-        </button>
+        </button> -->
       </div>
     </div>
     <table class="min-w-full divide-y divide-gray-200">

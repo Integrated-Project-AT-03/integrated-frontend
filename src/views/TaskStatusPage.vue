@@ -7,6 +7,7 @@ import TransferStatus from "../components/TransferStatus.vue";
 import { getItems } from "../assets/fetch.js";
 import Loading from "../components/Loading.vue";
 import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
+import Button from "../components/ButtonModal.vue"
 
 const emits = defineEmits(["message"]);
 const datas = ref(TaskStatusManagement);
@@ -58,12 +59,7 @@ const handleMessage = (e) => {
         </div>
       </div>
       <div class="flex justify-end gap-4">
-        <button
-          class="itbkk-button-add btn btn-secondary text-slate-300"
-          @click="router.push({ name: 'AddStatus' })"
-        >
-          Add Status
-        </button>
+        <Button class="itbkk-button-add" bgcolor="#666666" message="Add Status" @click="router.push({ name: 'AddStatus' })"/>
       </div>
     </div>
     <table class="min-w-full divide-y divide-gray-200">
@@ -134,21 +130,8 @@ const handleMessage = (e) => {
               v-if="status.id !== 1"
               class="flex justify-center items-center gap-2"
             >
-              <button
-                class="btn bg-edit border-0"
-                @click="
-                  router.push({ name: 'EditStatus', params: { id: status.id } })
-                "
-              >
-                Edit
-              </button>
-              <button
-                @click="() => (selectedStatus = { ...status, index })"
-                class="btn btn-error"
-                onclick="deleteModal.showModal()"
-              >
-                Delete
-              </button>
+              <Button class="itbkk-button-edit" bgcolor="#A020F0" message="Edit" @click="router.push({ name: 'EditStatus', params: { id: status.id } })"/>
+              <Button class="itbkk-button-delete" bgcolor="#ef4444" message="Delete" @click="() => (selectedStatus = { ...status, index })" onclick="deleteModal.showModal()"/>
             </div>
           </td>
         </tr>
