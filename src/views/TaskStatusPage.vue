@@ -81,7 +81,7 @@ const handleMessage = (e) => {
             <div class="text-sm text-gray-900">{{ index + 1 }}</div>
           </td>
           <td class="itbkk-title px-6 py-4 whitespace-nowrap">
-            <StatusModal :status-color="status.colorHex" :text="status.name" />
+            <StatusModal class="text-slate-200" :status-color="status.colorHex" :text="status.name" />
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900 itbkk-assignees" :class="status?.description ?? 'italic text-gray-400'">

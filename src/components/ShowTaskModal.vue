@@ -7,6 +7,7 @@ import Loading from "./Loading.vue";
 import Trash from "../assets/icons/Trash.vue";
 import DeleteTaskModal from "./DeleteTaskModal.vue";
 import Button from "./ButtonModal.vue";
+import PenEdit from "../assets/icons/PenEdit.vue"
 
 const emits = defineEmits(["message"]);
 const route = useRoute();

@@ -80,7 +80,7 @@ const handleMessage = (e) => {
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
 
-            <StatusModal :status-color="task.status.colorHex" :text="task.status.name" />
+            <StatusModal class="text-slate-200" :status-color="task.status.colorHex" :text="task.status.name" />
 
           </td>
         </tr>
