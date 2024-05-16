@@ -28,6 +28,7 @@ const clearAll = () => {
 
 const datas = ref(TaskManagement);
 const dataAsc = ref([])
+const dataSort = ref([])
 
 const uri = import.meta.env.VITE_SERVER_URI;
 const route = useRoute();
@@ -41,7 +42,6 @@ const sortOrder = ref('default');
 
 
 const sortImage = computed(() => {
-  console.log("Current sortOrder:", sortOrder.value);
   switch (sortOrder.value) {
     case 'ascending':
       return { src: '/images/from-a-to-z (1).png' };
@@ -61,7 +61,6 @@ const toggleSortOrder = () => {
   } else {
     sortOrder.value = 'default';
   }
-  console.log("New sortOrder:", sortOrder.value);
 };
 
 
@@ -79,6 +78,25 @@ async function sortTask(){
   dataAsc.value = res.items
   isSorted.value = true
   bool.value = !bool.value
+}
+
+async function sortTask2(){
+  const sort = ref('')
+  const res = await getItems(`${uri}/v2/tasks?sortBy=status&sortDirection=${sort}&filterStatuses=Goko,done,Add`)
+  if(sortOrder.value === 'default'){
+    isLoading.value = false;
+    datas.value.getTasks()
+  } else if (sortOrder.value === 'ascending'){
+    isLoading.value = false;
+    sort.value = 'ASC'
+    dataSort.value = res.items
+    isSorted.value = true
+  } else if (sortOrder.value === 'descending'){
+    isLoading.value = false;
+    sort.value = 'DES'
+    dataSort.value = res.items
+    isSorted.value = true
+  }
 }
 
 const emits = defineEmits(["message"]);
@@ -157,8 +175,8 @@ const handleMessage = (e) => {
             <div>
               Status
             </div>
-            <div class="itbkk-status-sort m-auto ml-2 cursor-pointer flex items-center" @click="sortTask()">
-              <img :class="`w-5 ${sortImage}`" :src="sortImage.src" @click="toggleSortOrder" />
+            <div class="itbkk-status-sort m-auto ml-2 cursor-pointer flex items-center" @click="toggleSortOrder">
+              <img :class="`w-5 ${sortImage}`" :src="sortImage.src" @click="sortTask2" />
             </div>
           </th>
         </tr>
@@ -169,7 +187,7 @@ const handleMessage = (e) => {
             No task
           </td>
         </tr>
-        <tr class="itbkk-item itbkk-button-action hover:bg-slate-200" v-for="(task, index) in isSorted ? dataAsc : datas.getTasks()"
+        <tr class="itbkk-item itbkk-button-action hover:bg-slate-200" v-for="(task, index) in isSorted ? dataSort : datas.getTasks()"
           :key="task.id" @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })">
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ index + 1 }}</div>
