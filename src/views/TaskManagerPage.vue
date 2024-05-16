@@ -6,6 +6,25 @@ import { useRoute, useRouter } from "vue-router";
 import { getItems } from "./../assets/fetch.js";
 import StatusModal from "@/components/StatusModal.vue";
 
+
+const newItem = ref('');
+const items = ref([]);
+
+const addItem = () => {
+  if (newItem.value.trim() !== '') {
+    items.value.push(newItem.value.trim());
+    newItem.value = '';
+  }
+};
+
+const removeItem = (index) => {
+  items.value.splice(index, 1);
+};
+
+const clearAll = () => {
+  items.value = [];
+};
+
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const route = useRoute();
@@ -62,6 +81,27 @@ const handleMessage = (e) => {
         <div class="text-5xl">IT-Bangmod Kradan Kanban</div>
       </span>
     </div>
+
+
+    <div class="container mx-auto p-4">
+      <div class="flex items-center">
+        <input class="border p-2 rounded-md mr-2 w-1/3" type="text" v-model="newItem" @keyup.enter="addItem"
+          placeholder="Add a new item" />
+        <button class="btn btn-secondary" @click="clearAll">
+          Clear All
+        </button>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-4">
+        <div v-for="(item, index) in items" :key="index"
+          class="relative border p-2 rounded-md flex items-center bg-white">
+          <span>{{ item }}</span>
+          <button class="absolute top-0 right-0 text-red-500 p-1" @click="removeItem(index)">
+            &times;
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="w-full flex items-center justify-end">
       <div class="flex justify-end gap-4">
         <button class="btn btn-secondary" @click="router.push({ name: 'Statuses' })">
