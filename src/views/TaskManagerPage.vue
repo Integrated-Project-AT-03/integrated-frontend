@@ -157,7 +157,7 @@ const handleMessage = (e) => {
             <div>
               Status
             </div>
-            <div class="itbkk-status-sort m-auto ml-2 cursor-pointer flex items-center">
+            <div class="itbkk-status-sort m-auto ml-2 cursor-pointer flex items-center" @click="sortTask()">
               <img :class="`w-5 ${sortImage}`" :src="sortImage.src" @click="toggleSortOrder" />
             </div>
           </th>
