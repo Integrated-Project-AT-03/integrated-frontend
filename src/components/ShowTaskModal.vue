@@ -50,7 +50,6 @@ const loadTask = async () => {
 onMounted(async () => {
   await loadTask();
   statuses.value = await getItems(`${uri}/v2/statuses`);
-  console.log(statuses.value);
 });
 
 const editTask = async () => {
