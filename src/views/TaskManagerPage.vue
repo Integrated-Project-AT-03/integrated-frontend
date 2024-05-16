@@ -8,16 +8,30 @@ import Button from "@/components/ButtonModal.vue";
 import StatusModal from "@/components/StatusModal.vue";
 
 const datas = ref(TaskManagement);
+const dataAsc = ref([])
+
 const uri = import.meta.env.VITE_SERVER_URI;
 const route = useRoute();
 const router = useRouter();
 const isLoading = ref(true);
+const isSorted = ref(false)
+const bool = ref(false)
 
 onMounted(async function () {
   const data = await getItems(`${uri}/v2/tasks`);
   isLoading.value = false;
   datas.value.setTasks(data.items);
 });
+
+async function sortTask(){
+  const sort = bool.value ? 'ASC' : 'DES'
+  console.log(sort);
+  const res = await getItems(`${uri}/v2/tasks?sortBy=status&sortDirection=${sort}&filterStatuses=Goko,done,Add`)
+  isLoading.value = false;
+  dataAsc.value = res.items
+  isSorted.value = true
+  bool.value = !bool.value
+}
 
 const emits = defineEmits(["message"]);
 const handleMessage = (e) => {
@@ -55,6 +69,10 @@ const handleMessage = (e) => {
           </th>
           <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider">
             Status
+            <button class="bg-black text-slate-200 rounded-xl p-2 hover:bg-slate-700"
+            @click="sortTask()">
+              clickme
+            </button>
           </th>
         </tr>
       </thead>
@@ -64,7 +82,7 @@ const handleMessage = (e) => {
             No task
           </td>
         </tr>
-        <tr class="itbkk-item itbkk-button-action hover:bg-slate-200" v-for="(task, index) in datas.getTasks()"
+        <tr class="itbkk-item itbkk-button-action hover:bg-slate-200" v-for="(task, index) in isSorted ? dataAsc : datas.getTasks()"
           :key="task.id" @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })">
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ index.id }}</div>
@@ -79,8 +97,7 @@ const handleMessage = (e) => {
 
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
-
-            <StatusModal class="text-slate-200" :status-color="task.status.colorHex" :text="task.status.name" />
+            <StatusModal class="text-slate-200" :status-color="task.statusColorHex" :text="task.status" />
 
           </td>
         </tr>
