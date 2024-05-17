@@ -118,27 +118,20 @@ const handleMessage = (e) => {
       </span>
     </div>
 
-
-    <div class="container mx-auto p-4">
+    <div class="w-full flex items-center justify-around">
+      <div class="container mx-auto p-4">
       <div class="flex items-center">
-        <input class="border p-2 rounded-md mr-2 w-1/3" type="text" v-model="newItem" @keyup.enter="addItem"
+        <input class="border p-2 rounded-md mr-2 w-1/3 text-gray-900" type="text" v-model="newItem" @keyup.enter="addItem"
           placeholder="Add a new item" />
-        <button class="btn btn-secondary" @click="clearAll">
-          Clear All
-        </button>
+          <Button message="Clear All" @click="clearAll" bgcolor="#666666" />
       </div>
-      <div class="flex flex-wrap gap-2 mt-4">
+      <div class="flex flex-wrap gap-2 mt-2">
         <div v-for="(item, index) in items" :key="index"
-          class="relative border p-2 rounded-md flex items-center bg-white">
+          class="relative p-3 rounded-md flex items-center bg-white text-gray-900 cursor-pointer hover:bg-slate-300" @click="removeItem(index)">
           <span>{{ item }}</span>
-          <button class="absolute top-0 right-0 text-red-500 p-1" @click="removeItem(index)">
-            &times;
-          </button>
         </div>
       </div>
     </div>
-
-    <div class="w-full flex items-center justify-end">
       <div class="flex justify-end gap-4">
         <Button
           class="itbkk-manage-status"
