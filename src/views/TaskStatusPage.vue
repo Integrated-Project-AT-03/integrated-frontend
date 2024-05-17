@@ -9,6 +9,8 @@ import Loading from "../components/Loading.vue";
 import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
 import Button from "../components/ButtonModal.vue"
 import StatusModal from "@/components/StatusModal.vue";
+import Setting from "@/assets/icons/Setting.vue";
+import StatusSetting from "@/components/StatusSetting.vue";
 
 const emits = defineEmits(["message"]);
 const datas = ref(TaskStatusManagement);
@@ -33,6 +35,9 @@ const handleMessage = (e) => {
 <template>
   <Loading :is-loading="isLoading" />
   <div class="container mx-auto flex flex-col gap-3" :class="route.fullPath.split('/').length > 2 && 'blur-sm'">
+    <div class="flex justify-end mt-6" onclick="status_setting.showModal()">
+        <Setting />
+      </div>
     <div class="text-5xl font-extrabold ... w-full flex justify-center m-7">
       <span class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
         <div class="text-5xl">IT-Bangmod Kradan Kanban</div>
@@ -118,6 +123,7 @@ const handleMessage = (e) => {
     :status="selectedStatus"
   />
   <RouterView @message="handleMessage" />
+  <StatusSetting />
 </template>
 
 <style scoped></style>

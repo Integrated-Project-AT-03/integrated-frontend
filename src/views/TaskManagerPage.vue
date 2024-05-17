@@ -57,7 +57,6 @@ const sortImage = computed(() => {
 const toggleSortOrder = () => {
   if (sortOrder.value === 'default') {
     sortOrder.value = 'ascending';
-    console.log('kkkk');
   } else if (sortOrder.value === 'ascending') {
     sortOrder.value = 'descending';
   } else {
@@ -76,20 +75,15 @@ onMounted(async function () {
 async function sortTask(){
   if(sortOrder.value === 'default'){
     sort.value = 'default'
-  
     isSorted.value = false
   } else if (sortOrder.value === 'ascending'){
-
     sort.value = 'ASC'
     isSorted.value = true
   } else if (sortOrder.value === 'descending'){
-   
     sort.value = 'DES'
     isSorted.value = true
   }
-  isLoading.value = true
   dataSort.value = (await getItems(`${uri}/v2/tasks?sortBy=statusStatusName&sortDirection=${sort.value}&filterStatuses=Goko,done,Add`)).items
-  isLoading.value = false;
 }
 
 const emits = defineEmits(["message"]);
