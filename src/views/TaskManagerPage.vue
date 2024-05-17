@@ -7,14 +7,13 @@ import { getItems } from "./../assets/fetch.js";
 import Button from "@/components/ButtonModal.vue";
 import StatusModal from "@/components/StatusModal.vue";
 
-
-const newItem = ref('');
+const newItem = ref("");
 const items = ref([]);
 
 const addItem = () => {
-  if (newItem.value.trim() !== '') {
+  if (newItem.value.trim() !== "") {
     items.value.push(newItem.value.trim());
-    newItem.value = '';
+    newItem.value = "";
   }
 };
 
@@ -27,42 +26,38 @@ const clearAll = () => {
 };
 
 const datas = ref(TaskManagement);
-const dataAsc = ref([])
-const dataSort = ref([])
+const dataAsc = ref([]);
+const dataSort = ref([]);
 
 const uri = import.meta.env.VITE_SERVER_URI;
 const route = useRoute();
 const router = useRouter();
 const isLoading = ref(true);
-const isSorted = ref(false)
-const bool = ref(false)
+const isSorted = ref(false);
+const bool = ref(false);
 
-
-const sortOrder = ref('default');
-
+const sortOrder = ref("default");
 
 const sortImage = computed(() => {
   switch (sortOrder.value) {
-    case 'ascending':
-      return { src: '/images/from-a-to-z (1).png' };
-    case 'descending':
-      return { src: '/images/from-a-to-z (2).png' };
+    case "ascending":
+      return { src: "/images/from-a-to-z (1).png" };
+    case "descending":
+      return { src: "/images/from-a-to-z (2).png" };
     default:
-      return { src: '/images/from-a-to-z.png' };
+      return { src: "/images/from-a-to-z.png" };
   }
 });
 
-
 const toggleSortOrder = () => {
-  if (sortOrder.value === 'default') {
-    sortOrder.value = 'ascending';
-  } else if (sortOrder.value === 'ascending') {
-    sortOrder.value = 'descending';
+  if (sortOrder.value === "default") {
+    sortOrder.value = "ascending";
+  } else if (sortOrder.value === "ascending") {
+    sortOrder.value = "descending";
   } else {
-    sortOrder.value = 'default';
+    sortOrder.value = "default";
   }
 };
-
 
 onMounted(async function () {
   const data = await getItems(`${uri}/v2/tasks`);
@@ -70,32 +65,36 @@ onMounted(async function () {
   datas.value.setTasks(data.items);
 });
 
-async function sortTask(){
-  const sort = bool.value ? 'ASC' : 'DES'
+async function sortTask() {
+  const sort = bool.value ? "ASC" : "DES";
   console.log(sort);
-  const res = await getItems(`${uri}/v2/tasks?sortBy=status&sortDirection=${sort}&filterStatuses=Goko,done,Add`)
+  const res = await getItems(
+    `${uri}/v2/tasks?sortBy=status&sortDirection=${sort}&filterStatuses=Goko,done,Add`
+  );
   isLoading.value = false;
-  dataAsc.value = res.items
-  isSorted.value = true
-  bool.value = !bool.value
+  dataAsc.value = res.items;
+  isSorted.value = true;
+  bool.value = !bool.value;
 }
 
-async function sortTask2(){
-  const sort = ref('')
-  const res = await getItems(`${uri}/v2/tasks?sortBy=status&sortDirection=${sort}&filterStatuses=Goko,done,Add`)
-  if(sortOrder.value === 'default'){
+async function sortTask2() {
+  const sort = ref("");
+  const res = await getItems(
+    `${uri}/v2/tasks?sortBy=status&sortDirection=${sort}&filterStatuses=Goko,done,Add`
+  );
+  if (sortOrder.value === "default") {
     isLoading.value = false;
-    datas.value.getTasks()
-  } else if (sortOrder.value === 'ascending'){
+    datas.value.getTasks();
+  } else if (sortOrder.value === "ascending") {
     isLoading.value = false;
-    sort.value = 'ASC'
-    dataSort.value = res.items
-    isSorted.value = true
-  } else if (sortOrder.value === 'descending'){
+    sort.value = "ASC";
+    dataSort.value = res.items;
+    isSorted.value = true;
+  } else if (sortOrder.value === "descending") {
     isLoading.value = false;
-    sort.value = 'DES'
-    dataSort.value = res.items
-    isSorted.value = true
+    sort.value = "DES";
+    dataSort.value = res.items;
+    isSorted.value = true;
   }
 }
 
@@ -122,27 +121,34 @@ const handleMessage = (e) => {
       </span>
     </div>
 
-
-    <div class="container mx-auto p-4">
-      <div class="flex items-center">
-        <input class="border p-2 rounded-md mr-2 w-1/3" type="text" v-model="newItem" @keyup.enter="addItem"
-          placeholder="Add a new item" />
-        <button class="btn btn-secondary" @click="clearAll">
-          Clear All
-        </button>
-      </div>
-      <div class="flex flex-wrap gap-2 mt-4">
-        <div v-for="(item, index) in items" :key="index"
-          class="relative border p-2 rounded-md flex items-center bg-white">
-          <span>{{ item }}</span>
-          <button class="absolute top-0 right-0 text-red-500 p-1" @click="removeItem(index)">
-            &times;
-          </button>
+    <div class="w-full flex items-center justify-end">
+      <div class="container mx-auto p-4">
+        <div class="flex items-center">
+          <input
+            class="border p-2 rounded-md mr-2 w-1/3"
+            type="text"
+            v-model="newItem"
+            @keyup.enter="addItem"
+            placeholder="Add a new item"
+          />
+          <button class="btn btn-secondary" @click="clearAll">Clear All</button>
+        </div>
+        <div class="flex flex-wrap gap-2 mt-4">
+          <div
+            v-for="(item, index) in items"
+            :key="index"
+            class="relative border p-2 rounded-md flex items-center bg-white"
+          >
+            <span>{{ item }}</span>
+            <button
+              class="absolute top-0 right-0 text-red-500 p-1"
+              @click="removeItem(index)"
+            >
+              &times;
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div class="w-full flex items-center justify-end">
       <div class="flex justify-end gap-4">
         <Button
           class="itbkk-manage-status"
@@ -161,22 +167,38 @@ const handleMessage = (e) => {
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-200">
         <tr>
-          <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider">
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+          >
             ID
           </th>
-          <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider">
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+          >
             Title
           </th>
-          <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider">
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+          >
             Assignees
           </th>
-          <th scope="col"
-            class="flex flex-row px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider">
-            <div>
-              Status
-            </div>
-            <div class="itbkk-status-sort m-auto ml-2 cursor-pointer flex items-center" @click="toggleSortOrder">
-              <img :class="`w-5 ${sortImage}`" :src="sortImage.src" @click="sortTask2" />
+          <th
+            scope="col"
+            class="flex flex-row px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+          >
+            <div>Status</div>
+            <div
+              class="itbkk-status-sort m-auto ml-2 cursor-pointer flex items-center"
+              @click="toggleSortOrder"
+            >
+              <img
+                :class="`w-5 ${sortImage}`"
+                :src="sortImage.src"
+                @click="sortTask2"
+              />
             </div>
           </th>
         </tr>
@@ -187,8 +209,12 @@ const handleMessage = (e) => {
             No task
           </td>
         </tr>
-        <tr class="itbkk-item itbkk-button-action hover:bg-slate-200" v-for="(task, index) in isSorted ? dataSort : datas.getTasks()"
-          :key="task.id" @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })">
+        <tr
+          class="itbkk-item itbkk-button-action hover:bg-slate-200"
+          v-for="(task, index) in isSorted ? dataSort : datas.getTasks()"
+          :key="task.id"
+          @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })"
+        >
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ index + 1 }}</div>
           </td>
@@ -204,8 +230,11 @@ const handleMessage = (e) => {
             </div>
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
-            <StatusModal class="text-slate-200" :status-color="task.statusColorHex" :text="task.status" />
-
+            <StatusModal
+              class="text-slate-200"
+              :status-color="task.statusColorHex"
+              :text="task.status"
+            />
           </td>
         </tr>
       </tbody>

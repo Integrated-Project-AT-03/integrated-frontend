@@ -41,6 +41,11 @@ const submit = async () => {
       description: `${res.tasksUpdated.message}`,
       status: "error",
     });
+  } else if (res.httpStatus === 404) {
+    emits("message", {
+      description: `${res.tasksUpdated.message}`,
+      status: "error",
+    });
     datas.value.deleteStatus(props.selectedStatus.id);
   } else if (res.httpStatus === 400) {
     emits("message", {
