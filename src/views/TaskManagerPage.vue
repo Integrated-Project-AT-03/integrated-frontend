@@ -83,7 +83,7 @@ async function sortTask(){
     sort.value = 'DES'
     isSorted.value = true
   }
-  dataSort.value = (await getItems(`${uri}/v2/tasks?sortBy=statusStatusName&sortDirection=${sort.value}&filterStatuses=Goko,done,Add`)).items
+  dataSort.value = (await getItems(`${uri}/v2/tasks?sortBy=statusStatusName&sortDirection=${sort.value}`)).items
 }
 
 const emits = defineEmits(["message"]);
@@ -113,11 +113,11 @@ const handleMessage = (e) => {
     </div>
 
     <div class="w-full flex items-center justify-around">
-      <div class="container mx-auto p-4">
+      <div class="container mx-auto">
       <div class="flex items-center">
         <input class="border p-2 rounded-md mr-2 w-1/3 text-gray-900" type="text" v-model="newItem" @keyup.enter="addItem"
           placeholder="Add a new item" />
-          <Button message="Clear All" @click="clearAll" bgcolor="#666666" />
+          <Button message="Clear All" @click="clearAll" bgcolor="#ef4444" />
       </div>
       <div class="flex flex-wrap gap-2 mt-2">
         <div v-for="(item, index) in items" :key="index"
