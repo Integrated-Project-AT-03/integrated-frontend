@@ -7,7 +7,7 @@ import Loading from "./Loading.vue";
 import Trash from "../assets/icons/Trash.vue";
 import DeleteTaskModal from "./DeleteTaskModal.vue";
 import Button from "./ButtonModal.vue";
-import PenEdit from "../assets/icons/PenEdit.vue"
+import PenEdit from "../assets/icons/PenEdit.vue";
 
 const emits = defineEmits(["message"]);
 const route = useRoute();
@@ -46,7 +46,6 @@ const loadTask = async () => {
 
   dataTask.value = { ...response, status: response.status.id };
   compareTask.value = { ...response, status: response.status.id };
-
 };
 onMounted(async () => {
   await loadTask();
@@ -74,8 +73,9 @@ const editTask = async () => {
     });
     datas.value.deleteTask(route.params.id);
   } else if (res.status === 500) {
+    console.log(res);
     emits("message", {
-      description: "Some input is invalid",
+      description: `${res.message}`,
       status: "error",
     });
   }
@@ -199,15 +199,26 @@ const handleMessage = (e) => {
       </div>
       <div class="divider"></div>
       <div class="flex justify-end m-4 gap-3">
-        <Button class="itbkk-button-confirm w-16 hover:bg-base-100 hover:border-base-100 drop-shadow-lg btn-success" v-show="isEditMode" @click="editTask()" :disabled="
+        <Button
+          class="itbkk-button-confirm w-16 hover:bg-base-100 hover:border-base-100 drop-shadow-lg btn-success"
+          v-show="isEditMode"
+          @click="editTask()"
+          :disabled="
             dataTask.title === '' ||
             ((dataTask.assignees ?? '') === (compareTask?.assignees ?? '') &&
               (dataTask.description ?? '') ===
                 (compareTask?.description ?? '') &&
               dataTask?.status === compareTask?.status &&
               (dataTask.title ?? '') === (compareTask?.title ?? ''))
-          " message="Save" bgcolor=""/>
-        <Button class="itbkk-button-cancel" message="Close" @click="router.push({ name: 'Task' })"/>
+          "
+          message="Save"
+          bgcolor=""
+        />
+        <Button
+          class="itbkk-button-cancel"
+          message="Close"
+          @click="router.push({ name: 'Task' })"
+        />
       </div>
     </div>
   </div>

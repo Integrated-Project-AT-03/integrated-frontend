@@ -27,7 +27,7 @@ async function addNewTask(newItem) {
 
   if (newTask.status === 500) {
     emits("message", {
-      description: "Something went wrong",
+      description: `${res.message}`,
       status: "error",
     });
   } else {
@@ -90,8 +90,17 @@ async function addNewTask(newItem) {
         </div>
       </div>
       <div class="flex justify-end gap-3 mr-4">
-        <Button class="itbkk-button-confirm btn-success" message="Save" @click="addNewTask(newData)" :disabled="newData.title === ''"/>
-        <Button class="itbkk-button-cancle" message="Cancel" @click="router.push({ name: 'Task' })"/>
+        <Button
+          class="itbkk-button-confirm btn-success"
+          message="Save"
+          @click="addNewTask(newData)"
+          :disabled="newData.title === ''"
+        />
+        <Button
+          class="itbkk-button-cancle"
+          message="Cancel"
+          @click="router.push({ name: 'Task' })"
+        />
       </div>
     </div>
   </div>
