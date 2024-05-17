@@ -6,6 +6,8 @@ import { useRoute, useRouter } from "vue-router";
 import { getItems } from "./../assets/fetch.js";
 import Button from "@/components/ButtonModal.vue";
 import StatusModal from "@/components/StatusModal.vue";
+import Setting from '../assets/icons/Setting.vue'
+import StatusSetting from '../components/StatusSetting.vue'
 
 
 const newItem = ref('');
@@ -105,6 +107,9 @@ const handleMessage = (e) => {
       (route.name === 'Addstatus' && 'blur-sm')
     "
   >
+    <div class="w-full flex justify-end mt-6">
+      <Setting class="cursor-pointer" onclick="status_setting.showModal()" />
+    </div>
     <div class="text-5xl font-extrabold ... w-full flex justify-center m-7">
       <span
         class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500"
@@ -203,6 +208,7 @@ const handleMessage = (e) => {
     </table>
   </div>
   <router-view @message="handleMessage($event)" />
+  <StatusSetting />
 </template>
 
 <style scoped></style>
