@@ -27,7 +27,6 @@ const clearAll = () => {
 };
 
 const datas = ref(TaskManagement);
-const dataAsc = ref([])
 const dataSort = ref([])
 
 const uri = import.meta.env.VITE_SERVER_URI;
@@ -35,7 +34,7 @@ const route = useRoute();
 const router = useRouter();
 const isLoading = ref(true);
 const isSorted = ref(false)
-const bool = ref(false)
+const sort = ref('')
 
 
 const sortOrder = ref('default');
@@ -56,11 +55,13 @@ const sortImage = computed(() => {
 const toggleSortOrder = () => {
   if (sortOrder.value === 'default') {
     sortOrder.value = 'ascending';
+    console.log('kkkk');
   } else if (sortOrder.value === 'ascending') {
     sortOrder.value = 'descending';
   } else {
     sortOrder.value = 'default';
   }
+  sortTask();
 };
 
 
@@ -71,32 +72,22 @@ onMounted(async function () {
 });
 
 async function sortTask(){
-  const sort = bool.value ? 'ASC' : 'DES'
-  console.log(sort);
-  const res = await getItems(`${uri}/v2/tasks?sortBy=status&sortDirection=${sort}&filterStatuses=Goko,done,Add`)
-  isLoading.value = false;
-  dataAsc.value = res.items
-  isSorted.value = true
-  bool.value = !bool.value
-}
-
-async function sortTask2(){
-  const sort = ref('')
-  const res = await getItems(`${uri}/v2/tasks?sortBy=status&sortDirection=${sort}&filterStatuses=Goko,done,Add`)
   if(sortOrder.value === 'default'){
-    isLoading.value = false;
-    datas.value.getTasks()
+    sort.value = 'default'
+  
+    isSorted.value = false
   } else if (sortOrder.value === 'ascending'){
-    isLoading.value = false;
+
     sort.value = 'ASC'
-    dataSort.value = res.items
     isSorted.value = true
   } else if (sortOrder.value === 'descending'){
-    isLoading.value = false;
+   
     sort.value = 'DES'
-    dataSort.value = res.items
     isSorted.value = true
   }
+  isLoading.value = true
+  dataSort.value = (await getItems(`${uri}/v2/tasks?sortBy=statusStatusName&sortDirection=${sort.value}&filterStatuses=Goko,done,Add`)).items
+  isLoading.value = false;
 }
 
 const emits = defineEmits(["message"]);
@@ -176,7 +167,7 @@ const handleMessage = (e) => {
               Status
             </div>
             <div class="itbkk-status-sort m-auto ml-2 cursor-pointer flex items-center" @click="toggleSortOrder">
-              <img :class="`w-5 ${sortImage}`" :src="sortImage.src" @click="sortTask2" />
+              <img :class="`w-5 ${sortImage}`" :src="sortImage.src" />
             </div>
           </th>
         </tr>
