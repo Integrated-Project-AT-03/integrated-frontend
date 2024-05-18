@@ -31,9 +31,7 @@ const compareTask = ref();
 const statuses = ref();
 
 const validateInput = computed(() => {
-  if(dataTask.title > 100){
-    //code here
-  }
+  return {title: dataTask.value.title.length > 10, description: dataTask.value.description.length > 500, assignees: dataTask.value.assignees.length > 30}
 })
 
 const loadTask = async () => {
@@ -101,51 +99,57 @@ const handleMessage = (e) => {
   >
     <RouterView @message="handleMessage($event)" />
     <div
-      class="relative overflow-hidden w-[65rem] h-[49rem] bg-neutral drop-shadow-2xl rounded-2xl"
+      class="relative overflow-hidden w-[65rem] h-[50rem] bg-neutral drop-shadow-2xl rounded-2xl"
     >
       <Loading :is-loading="isLoading" />
       <div
-        class="text-xl pr-5 flex gap-5 justify-between items-center text-slate-200 mt-5 ml-6 font-bold"
+        class="text-xl pr-5 flex gap-5 h-[5rem] justify-between items-center text-slate-200 mt-2 ml-6 font-bold"
       >
-        <input
-          :disabled="!isEditMode"
-          class="itbkk-title w-[60rem]"
-          :class="
-            isEditMode
-              ? ' h-11 rounded-2xl p-2 bg-secondary border-base-100'
-              : ' bg-neutral hover:border-neutral'
-          "
-          type="text"
-          v-model.trim="dataTask.title"
-          maxlength="100"
-        />
-
-        <button
-          @click="
-            [
-              $router.push({
-                name: `${!isEditMode ? 'TaskEdit' : 'TaskDetail'}`,
-                [`${!isEditMode ? 'params' : '_'}`]: { mode: 'edit' },
-              }),
-              isEditMode && loadTask(),
-            ]
-          "
-          class="btn itbkk-button-edit w-30 hover:bg-base-100 border-0 hover:border-base-100"
-          :class="!isEditMode ? 'bg-edit' : 'btn-error text-white'"
-        >
-          {{ route.params.mode !== "edit" ? "Edit mode" : "Reset" }}
-        </button>
-        <Trash
-          onclick="deletetask.showModal()"
-          class="text-error cursor-pointer"
-        />
+          <div class="flex flex-col gap-2">
+            <div class="text-error text-sm">{{ validateInput.title ? 'Out of length' : ''}}</div>
+            <input
+              :disabled="!isEditMode"
+              class="itbkk-title w-[50rem]"
+              :class="
+                isEditMode
+                  ? ' h-11 rounded-2xl p-2 bg-secondary border-base-100 w-[40rem]'
+                  : ' bg-neutral hover:border-neutral'
+              "
+              type="text"
+              v-model.trim="dataTask.title"
+            />
+          </div>
+        
+        <div class="flex gap-4 items-center">
+          <button
+            @click="
+              [
+                $router.push({
+                  name: `${!isEditMode ? 'TaskEdit' : 'TaskDetail'}`,
+                  [`${!isEditMode ? 'params' : '_'}`]: { mode: 'edit' },
+                }),
+                isEditMode && loadTask(),
+              ]
+            "
+            class="btn itbkk-button-edit w-30 hover:bg-base-100 border-0 hover:border-base-100"
+            :class="!isEditMode ? 'bg-edit' : 'btn-error text-white'"
+          >
+            {{ route.params.mode !== "edit" ? "Edit mode" : "Reset" }}
+          </button>
+          <Trash
+            onclick="deletetask.showModal()"
+            class="text-error cursor-pointer"
+          />
+        </div>
       </div>
       <div class="divider"></div>
       <div class="flex justify-around m-4">
         <div class="flex flex-col gap-2 text-slate-200">
-          <div>Description</div>
+          <div class="flex gap-4">
+            <div>Description</div>
+            <div class="text-error text-sm">{{ validateInput.description ? '(Out of length)' : ''}}</div>
+          </div>
           <textarea
-            maxlength="500"
             :disabled="!isEditMode"
             v-model.trim="dataTask.description"
             :placeholder="dataTask.description ?? 'No Description Provided'"
@@ -154,9 +158,11 @@ const handleMessage = (e) => {
         </div>
         <div class="flex flex-col gap-10">
           <div class="flex flex-col gap-2 text-slate-200">
-            <div>Assignees</div>
+            <div class="flex gap-4">
+              <div>Assignees</div>
+              <div class="text-error text-sm">{{ validateInput.assignees ? '(Out of length)' : ''}}</div>
+            </div>
             <textarea
-              maxlength="30"
               :disabled="!isEditMode"
               :placeholder="dataTask.assignees ?? 'Unassigned'"
               v-model.trim="dataTask.assignees"
