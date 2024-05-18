@@ -22,7 +22,10 @@ const handleShowMessage = async (e) => {
 </script>
 
 <template>
-  <div class="container mx-auto flex flex-col gap-3 overflow-x-hidden">
+  <div
+    class="container mx-auto flex flex-col gap-3"
+    :class="$route.fullPath.split('/').length > 2 && 'blur-sm'"
+  >
     <div class="w-full flex justify-end mt-6">
       <Setting class="cursor-pointer" onclick="status_setting.showModal()" />
     </div>
