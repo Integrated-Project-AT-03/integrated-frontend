@@ -1,7 +1,7 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
 import { getItemById, editItem } from "../assets/fetch.js";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import Loading from "../components/Loading.vue";
 import TaskStatusManagement from "./../lib/TaskStatusManagement";
 import colorStore from "../lib/ColorsStore.js";
@@ -10,6 +10,10 @@ const emits = defineEmits(["message"]);
 const management = ref(TaskStatusManagement);
 let compareStatus;
 const data = ref({});
+
+const validateInput = computed(() => {
+  return {name: data.value.name?.length > 50, description: data.value.description?.length > 200}
+})
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const route = useRoute();
@@ -71,20 +75,24 @@ async function updateStatus() {
       <div class="divider"></div>
       <div class="itbkk-modal-status flex flex-col gap-4 items-center">
         <div class="flex flex-col gap-2">
-          <div>Name</div>
+          <div class="flex gap-4">
+            <div>Name</div>
+            <div class="text-error">{{ validateInput?.name ? '(Out of length)' : ''}}</div>
+          </div>
           <input
             class="itbkk-status-name w-[60rem] h-11 rounded-2xl p-3 bg-secondary border-base-100"
             v-model="data.name"
-            maxlength="50"
           />
         </div>
         <div class="flex flex-col gap-2">
-          <div>Description</div>
+          <div class="flex gap-4">
+            <div>Description</div>
+            <div class="text-error">{{ validateInput?.description ? '(Out of length)' : ''}}</div>
+          </div>
           <textarea
             class="itbkk-status-description w-[60rem] h-[20rem] rounded-2xl border p-4 bg-secondary border-base-100"
             v-model="data.description"
             placeholder="No description is provided."
-            maxlength="200"
           ></textarea>
         </div>
       </div>

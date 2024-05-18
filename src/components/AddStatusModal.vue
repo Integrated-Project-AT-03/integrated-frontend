@@ -2,7 +2,7 @@
 import { useRouter } from "vue-router";
 import { addItem } from "../assets/fetch.js";
 import TaskStatusManagement from "@/lib/TaskStatusManagement.js";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import colorStore from "./../lib/ColorsStore";
 import Loading from "./Loading.vue";
 const emits = defineEmits(["message"]);
@@ -15,6 +15,10 @@ const newData = ref({
   name: "",
   description: "",
 });
+
+const validateInput = computed(() => {
+  return {name: newData.value.name.length > 50, description: newData.value.description.length > 200}
+})
 
 async function addNewStatus() {
   isLoading.value = true;
@@ -50,20 +54,24 @@ async function addNewStatus() {
         <div class="divider"></div>
 
         <div class="flex flex-col gap-3">
-          <div class="itbkk-status-name ml-12">Name</div>
+          <div class="flex gap-4">
+            <div class="itbkk-status-name ml-12">Name</div>
+            <div class="text-error">{{ validateInput.name ? '(Out of length)' : ''}}</div>
+          </div>
           <div class="flex justify-center">
             <input
-              maxlength="50"
               v-model="newData.name"
               class="itbkk-title w-[60rem] h-[3rem] rounded-2xl p-2 bg-secondary border-base-100"
               placeholder="Please Write Name"
             />
           </div>
 
-          <div class="itbkk-status-description ml-12">Description</div>
+          <div class="flex gap-4">
+            <div class="itbkk-status-description ml-12">Description</div>
+            <div class="text-error">{{ validateInput.description ? '(Out of length)' : ''}}</div>
+          </div>
           <div class="flex justify-center">
             <textarea
-              maxlength="200"
               v-model="newData.description"
               class="itbkk-title w-[60rem] h-[20rem] rounded-2xl p-2 bg-secondary border-base-100"
               placeholder="Please Write Description"
