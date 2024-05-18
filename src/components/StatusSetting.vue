@@ -1,10 +1,19 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { patchItemById, getItemById } from "./../assets/fetch";
 const uri = import.meta.env.VITE_SERVER_URI;
 const setting = ref({});
-onMounted(async () => {
+const loadSetting = async () => {
   setting.value = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
+};
+onMounted(async () => loadSetting());
+const validation = computed(() => {
+  return {
+    limitTasks:
+      setting.value.value < 10 ||
+      setting.value.value > 30 ||
+      typeof setting.value.value !== "number",
+  };
 });
 const emits = defineEmits(["message"]);
 const saveSetting = async () => {
@@ -24,6 +33,7 @@ const saveSetting = async () => {
       description: `${res.errors[0].field} ${res.errors[0].message}`,
       status: "error",
     });
+    loadSetting();
   } else {
     emits("message", {
       description: `something went wrong`,
@@ -58,11 +68,17 @@ const saveSetting = async () => {
       </div>
       <div class="flex gap-4 items-center">
         <div>Maximum tasks</div>
-        <input
-          v-model="setting.value"
-          type="text"
-          class="itbkk-max-task input input-bordered input-md w-[15rem] max-w-xs"
-        />
+        <div class="flex flex-col gap-1">
+          <input
+            v-model.number="setting.value"
+            type="text"
+            maxlength="2"
+            class="itbkk-max-task input input-bordered input-md w-[15rem] max-w-xs"
+          />
+          <p class="text-error text-xs" v-show="validation.limitTasks">
+            the value must between 10 to 30
+          </p>
+        </div>
       </div>
       <div class="divider"></div>
       <div class="flex justify-end mt-4 gap-3">
@@ -70,12 +86,16 @@ const saveSetting = async () => {
           <button
             @click="saveSetting"
             class="itbkk-button-confirm btn btn-success text-slate-200"
+            :disabled="validation.limitTasks"
           >
             Save
           </button>
         </form>
         <form method="dialog">
-          <button class="itbkk-button-cancel btn btn-error text-slate-200">
+          <button
+            class="itbkk-button-cancel btn btn-error text-slate-200"
+            @click="loadSetting"
+          >
             Cancel
           </button>
         </form>

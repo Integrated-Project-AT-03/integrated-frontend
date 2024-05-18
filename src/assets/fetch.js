@@ -22,7 +22,8 @@ async function deleteItemById(url, id) {
     const res = await fetch(`${url}/${id}`, {
       method: "DELETE",
     });
-    return res.status;
+    const item = await res.json();
+    return { ...item, httpStatus: res.status };
   } catch (error) {
     console.log(`error: ${error}`);
   }

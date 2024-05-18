@@ -31,8 +31,12 @@ const compareTask = ref();
 const statuses = ref();
 
 const validateInput = computed(() => {
-  return {title: dataTask.value.title.length > 100, description: dataTask.value.description.length > 500, assignees: dataTask.value.assignees.length > 30}
-})
+  return {
+    title: dataTask.value.title.length > 100,
+    description: dataTask.value.description.length > 500,
+    assignees: dataTask.value.assignees.length > 30,
+  };
+});
 
 const loadTask = async () => {
   isLoading.value = true;
@@ -95,7 +99,7 @@ const handleMessage = (e) => {
 
 <template>
   <div
-    class="w-screen h-screen absolute flex justify-center top-0 items-center z-10"
+    class="w-screen  h-screen absolute flex justify-center top-0 items-center z-10"
   >
     <RouterView @message="handleMessage($event)" />
     <div
@@ -105,21 +109,23 @@ const handleMessage = (e) => {
       <div
         class="text-xl pr-5 flex gap-5 h-[5rem] justify-between items-center text-slate-200 mt-2 ml-6 font-bold"
       >
-          <div class="flex flex-col gap-2">
-            <div class="text-error text-sm">{{ validateInput.title ? 'Max 100 characters' : ''}}</div>
-            <input
-              :disabled="!isEditMode"
-              class="itbkk-title w-[50rem]"
-              :class="
-                isEditMode
-                  ? ' h-11 rounded-2xl p-2 bg-secondary border-base-100 w-[40rem]'
-                  : ' bg-neutral hover:border-neutral'
-              "
-              type="text"
-              v-model.trim="dataTask.title"
-            />
+        <div class="flex flex-col gap-2">
+          <div class="text-error text-sm">
+            {{ validateInput.title ? "Max 100 characters" : "" }}
           </div>
-        
+          <input
+            :disabled="!isEditMode"
+            class="itbkk-title w-[50rem]"
+            :class="
+              isEditMode
+                ? ' h-11 rounded-2xl p-2 bg-secondary border-base-100 w-[40rem]'
+                : ' bg-neutral hover:border-neutral'
+            "
+            type="text"
+            v-model.trim="dataTask.title"
+          />
+        </div>
+
         <div class="flex gap-4 items-center">
           <button
             @click="
@@ -147,7 +153,9 @@ const handleMessage = (e) => {
         <div class="flex flex-col gap-2 text-slate-200">
           <div class="flex gap-4">
             <div>Description</div>
-            <div class="text-error text-sm">{{ validateInput.description ? '(Max 500 characters)' : ''}}</div>
+            <div class="text-error text-sm">
+              {{ validateInput.description ? "(Max 500 characters)" : "" }}
+            </div>
           </div>
           <textarea
             :disabled="!isEditMode"
@@ -160,7 +168,9 @@ const handleMessage = (e) => {
           <div class="flex flex-col gap-2 text-slate-200">
             <div class="flex gap-4">
               <div>Assignees</div>
-              <div class="text-error text-sm">{{ validateInput.assignees ? '(Max 30 characters' : ''}}</div>
+              <div class="text-error text-sm">
+                {{ validateInput.assignees ? "(Max 30 characters" : "" }}
+              </div>
             </div>
             <textarea
               :disabled="!isEditMode"

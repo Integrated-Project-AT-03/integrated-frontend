@@ -18,17 +18,22 @@ const uri = import.meta.env.VITE_SERVER_URI;
 
 async function deleteStatus(id) {
   emits("update:modelValue", true);
-  const deleteStatusRes = await deleteItemById(`${uri}/v2/statuses`, id);
+  const res = await deleteItemById(`${uri}/v2/statuses`, id);
   emits("update:modelValue", false);
-  if (deleteStatusRes === 200) {
+  if (res.httpStatus === 200) {
     datas.value.deleteStatus(id);
     emits("message", {
       description: "The task has been deleted",
       status: "success",
     });
-  } else if (deleteStatusRes === 500) {
+  } else if (res.status === 422) {
+    emits("message", {
+      description: `${res.message}`,
+      status: "error",
+    });
+  } else if (res.status === 500) {
     emits("conflict");
-  } else if (deleteStatusRes === 404) {
+  } else if (res.status === 404) {
     datas.value.deleteStatus(id);
     emits("message", {
       description: `An error has occurred, the status does not exist.`,
@@ -51,10 +56,19 @@ async function deleteStatus(id) {
       <div class="divider"></div>
       <div class="flex justify-end mt-4 gap-3">
         <form method="dialog">
-          <Button class="itbkk-button-confirm" bgcolor="#16a34a" message="Confirm" @click="deleteStatus(status.id)"/>
+          <Button
+            class="itbkk-button-confirm"
+            bgcolor="#16a34a"
+            message="Confirm"
+            @click="deleteStatus(status.id)"
+          />
         </form>
         <form method="dialog">
-          <Button class="itbkk-button-cancel" bgcolor="#ef4444" message="Cancel"/>
+          <Button
+            class="itbkk-button-cancel"
+            bgcolor="#ef4444"
+            message="Cancel"
+          />
         </form>
       </div>
     </div>

@@ -44,7 +44,7 @@ const router = createRouter({
       component: StatusManagerPage,
       children: [
         {
-          path: "edit/:id",
+          path: ":id/edit",
           name: "EditStatus",
           component: EditStatusModal,
         },

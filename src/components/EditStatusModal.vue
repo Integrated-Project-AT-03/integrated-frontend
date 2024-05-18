@@ -12,8 +12,11 @@ let compareStatus;
 const data = ref({});
 
 const validateInput = computed(() => {
-  return {name: data.value.name?.length > 50, description: data.value.description?.length > 200}
-})
+  return {
+    name: data.value.name?.length > 50,
+    description: data.value.description?.length > 200,
+  };
+});
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const route = useRoute();
@@ -31,6 +34,12 @@ onMounted(async function () {
       status: "error",
     });
     management.value.deleteStatus(route.params.id);
+    router.push({ name: "Statuses" });
+  } else if (res.id === 1 || res.id === 4) {
+    emits("message", {
+      description: `The ${res.name} is not allow to editing`,
+      status: "error",
+    });
     router.push({ name: "Statuses" });
   }
   data.value = res;
@@ -55,6 +64,11 @@ async function updateStatus() {
       status: "error",
     });
     management.value.deleteStatus(route.params.id);
+  } else if (res.status === 422) {
+    emits("message", {
+      description: `${res.message}`,
+      status: "error",
+    });
   } else if (res.status === 500) {
     emits("message", {
       description: `The name of status must be unique`,
@@ -77,7 +91,9 @@ async function updateStatus() {
         <div class="flex flex-col gap-2">
           <div class="flex gap-4">
             <div>Name</div>
-            <div class="text-error">{{ validateInput?.name ? '(Max 50 characters)' : ''}}</div>
+            <div class="text-error">
+              {{ validateInput?.name ? "(Max 50 characters)" : "" }}
+            </div>
           </div>
           <input
             class="itbkk-status-name w-[60rem] h-11 rounded-2xl p-3 bg-secondary border-base-100"
@@ -87,7 +103,9 @@ async function updateStatus() {
         <div class="flex flex-col gap-2">
           <div class="flex gap-4">
             <div>Description</div>
-            <div class="text-error">{{ validateInput?.description ? '(Max 200 characters)' : ''}}</div>
+            <div class="text-error">
+              {{ validateInput?.description ? "(Max 200 characters)" : "" }}
+            </div>
           </div>
           <textarea
             class="itbkk-status-description w-[60rem] h-[20rem] rounded-2xl border p-4 bg-secondary border-base-100"

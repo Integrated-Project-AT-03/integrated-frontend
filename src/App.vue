@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from "vue";
 import Alert from "./components/Alert.vue";
-
+import StatusSetting from "./components/StatusSetting.vue";
+import Setting from "./assets/icons/Setting.vue";
 const message = ref("");
 const status = ref(undefined);
 const messageModalOpenState = ref(false);
@@ -21,15 +22,27 @@ const handleShowMessage = async (e) => {
 </script>
 
 <template>
-  <transition
-    v-show="messageModalOpenState"
-    class="fixed bottom-2 right-2 grid place-items-center z-50 w-fit"
-    name="toast"
-  >
-    <Alert :status="status" :message="message" />
-  </transition>
-  <RouterView @message="handleShowMessage($event)" />
-  <div class=""></div>
+  <div class="container mx-auto flex flex-col gap-3 overflow-x-hidden">
+    <div class="w-full flex justify-end mt-6">
+      <Setting class="cursor-pointer" onclick="status_setting.showModal()" />
+    </div>
+    <div class="text-5xl font-extrabold w-full flex justify-center m-7">
+      <span
+        class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500"
+      >
+        <div class="text-5xl">IT-Bangmod Kradan Kanban</div>
+      </span>
+    </div>
+    <transition
+      v-show="messageModalOpenState"
+      class="fixed bottom-2 right-2 grid place-items-center z-50 w-fit"
+      name="toast"
+    >
+      <Alert :status="status" :message="message" />
+    </transition>
+    <RouterView @message="handleShowMessage($event)" />
+    <StatusSetting @message="handleMessage($event)" />
+  </div>
 </template>
 
 <style scoped>
