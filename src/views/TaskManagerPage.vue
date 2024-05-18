@@ -9,14 +9,13 @@ import StatusModal from "@/components/StatusModal.vue";
 import Setting from '../assets/icons/Setting.vue'
 import StatusSetting from '../components/StatusSetting.vue'
 
-
-const newItem = ref('');
+const newItem = ref("");
 const items = ref([]);
 
 const addItem = () => {
-  if (newItem.value.trim() !== '') {
+  if (newItem.value.trim() !== "") {
     items.value.push(newItem.value.trim());
-    newItem.value = '';
+    newItem.value = "";
   }
 };
 
@@ -44,27 +43,25 @@ const sortOrder = ref('default');
 
 const sortImage = computed(() => {
   switch (sortOrder.value) {
-    case 'ascending':
-      return { src: '/images/from-a-to-z (1).png' };
-    case 'descending':
-      return { src: '/images/from-a-to-z (2).png' };
+    case "ascending":
+      return { src: "/images/from-a-to-z (1).png" };
+    case "descending":
+      return { src: "/images/from-a-to-z (2).png" };
     default:
-      return { src: '/images/from-a-to-z.png' };
+      return { src: "/images/from-a-to-z.png" };
   }
 });
 
-
 const toggleSortOrder = () => {
-  if (sortOrder.value === 'default') {
-    sortOrder.value = 'ascending';
-  } else if (sortOrder.value === 'ascending') {
-    sortOrder.value = 'descending';
+  if (sortOrder.value === "default") {
+    sortOrder.value = "ascending";
+  } else if (sortOrder.value === "ascending") {
+    sortOrder.value = "descending";
   } else {
-    sortOrder.value = 'default';
+    sortOrder.value = "default";
   }
   sortTask();
 };
-
 
 onMounted(async function () {
   const data = await getItems(`${uri}/v2/tasks`);
@@ -144,13 +141,22 @@ const handleMessage = (e) => {
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-200">
         <tr>
-          <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider">
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+          >
             ID
           </th>
-          <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider">
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+          >
             Title
           </th>
-          <th scope="col" class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider">
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+          >
             Assignees
           </th>
           <th scope="col"
@@ -170,8 +176,12 @@ const handleMessage = (e) => {
             No task
           </td>
         </tr>
-        <tr class="itbkk-item itbkk-button-action hover:bg-slate-200" v-for="(task, index) in isSorted ? dataSort : datas.getTasks()"
-          :key="task.id" @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })">
+        <tr
+          class="itbkk-item itbkk-button-action hover:bg-slate-200"
+          v-for="(task, index) in isSorted ? dataSort : datas.getTasks()"
+          :key="task.id"
+          @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })"
+        >
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ index + 1 }}</div>
           </td>
@@ -187,15 +197,18 @@ const handleMessage = (e) => {
             </div>
           </td>
           <td class="itbkk-status px-6 py-4 whitespace-nowrap">
-            <StatusModal class="text-slate-200" :status-color="task.statusColorHex" :text="task.status" />
-
+            <StatusModal
+              class="text-slate-200"
+              :status-color="task.statusColorHex"
+              :text="task.status"
+            />
           </td>
         </tr>
       </tbody>
     </table>
   </div>
   <router-view @message="handleMessage($event)" />
-  <StatusSetting />
+  <StatusSetting @message="handleMessage($event)" />
 </template>
 
 <style scoped></style>

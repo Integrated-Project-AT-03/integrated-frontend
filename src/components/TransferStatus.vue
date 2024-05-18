@@ -27,26 +27,27 @@ const submit = async () => {
     props.selectedStatus.id,
     newIdStatus.value
   );
+  console.log(res);
   emits("update:modelValue", false);
   if (res.httpStatus === 200) {
     emits("message", {
-      description: `${res.tasksUpdated} task(s) have been transferred and the status has been deleted`,
+      description: `${res.body} task(s) have been transferred and the status has been deleted`,
       status: "success",
     });
     datas.value.deleteStatus(props.selectedStatus.id);
     emits("close");
-  } else if (res === 500) {
+  } else if (res.httpStatus === 500 || res.httpStatus === 404) {
     emits("message", {
-      description: "something went wrong",
+      description: `${res.body.message}`,
       status: "error",
     });
-  } else if (res === 404) {
+  } else if (res.httpStatus === 404) {
     emits("message", {
-      description: "status donse't exist",
+      description: `${res.body.message}`,
       status: "error",
     });
     datas.value.deleteStatus(props.selectedStatus.id);
-  } else if (res === 400) {
+  } else if (res.httpStatus === 400) {
     emits("message", {
       description: "Bad Request",
       status: "error",
@@ -87,8 +88,17 @@ const submit = async () => {
         </div>
         <div class="divider"></div>
         <div class="flex justify-end">
-          <Button class="itbkk-button-cancel w-16 hover:bg-base-100 hover:border-base-100 mr-3" message="Cancel" @click="$emit('close')"/>
-          <Button class="itbkk-button-comfirm btn-success w-16 hover:bg-base-100 hover:border-base-100 ml-1" message="Transfer and Delete" :disabled="!newIdStatus" @click="submit"/>
+          <Button
+            class="itbkk-button-cancel w-16 hover:bg-base-100 hover:border-base-100 mr-3"
+            message="Cancel"
+            @click="$emit('close')"
+          />
+          <Button
+            class="itbkk-button-comfirm btn-success w-16 hover:bg-base-100 hover:border-base-100 ml-1"
+            message="Transfer and Delete"
+            :disabled="!newIdStatus"
+            @click="submit"
+          />
         </div>
       </div>
     </div>

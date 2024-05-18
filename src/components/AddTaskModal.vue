@@ -11,7 +11,7 @@ const emits = defineEmits(["message"]);
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
-const validateBool = ref(false)
+const validateBool = ref(false);
 const newData = ref({
   title: "",
   description: "",
@@ -20,8 +20,12 @@ const newData = ref({
 });
 
 const validateInput = computed(() => {
-  return {title: newData.value.title.length > 100, description: newData.value.description.length > 500, assignees: newData.value.assignees.length > 30}
-})
+  return {
+    title: newData.value.title.length > 100,
+    description: newData.value.description.length > 500,
+    assignees: newData.value.assignees.length > 30,
+  };
+});
 
 onMounted(async () => {
   statuses.value = await getItems(`${uri}/v2/statuses`);
@@ -30,21 +34,20 @@ onMounted(async () => {
 async function addNewTask(newItem) {
   const newTask = await addItem(`${uri}/v2/tasks`, newItem);
 
-  if (newTask.status === 500) {
-    emits("message", {
-      description: "Something went wrong",
-      status: "error",
-    });
-  } else {
-    datas.value.addTask(newTask);
+  if (newTask.httpStatus === 201) {
     emits("message", {
       description: `The task has been successfully added`,
       status: "success",
     });
+    datas.value.addTask(newTask);
+  } else {
+    emits("message", {
+      description: `${res.message}`,
+      status: "error",
+    });
   }
   return router.push({ name: "Task" });
 }
-
 </script>
 
 <template>
@@ -57,7 +60,9 @@ async function addNewTask(newItem) {
       <div class="flex flex-col gap-3">
         <div class="flex gap-4">
           <div class="ml-9">Title</div>
-          <div class="text-error">{{ validateInput.title ? '(Max 100 characters)' : ''}}</div>
+          <div class="text-error">
+            {{ validateInput.title ? "(Max 100 characters)" : "" }}
+          </div>
         </div>
         <div class="flex justify-center">
           <input
@@ -69,7 +74,9 @@ async function addNewTask(newItem) {
           <div class="flex flex-col gap-3">
             <div class="flex gap-4">
               <div>Description</div>
-              <div class="text-error">{{ validateInput.description ? '(Max 500 characters)' : ''}}</div>
+              <div class="text-error">
+                {{ validateInput.description ? "(Max 500 characters)" : "" }}
+              </div>
             </div>
             <textarea
               v-model.trim="newData.description"
@@ -80,7 +87,9 @@ async function addNewTask(newItem) {
             <div class="flex flex-col gap-3">
               <div class="flex gap-4">
                 <div>Assignees</div>
-                <div class="text-error">{{ validateInput.assignees  ? '(Max 30 characters)' : ''}}</div>
+                <div class="text-error">
+                  {{ validateInput.assignees ? "(Max 30 characters)" : "" }}
+                </div>
               </div>
               <textarea
                 v-model.trim="newData.assignees"
@@ -102,8 +111,17 @@ async function addNewTask(newItem) {
         </div>
       </div>
       <div class="flex justify-end gap-3 mr-4">
-        <Button class="itbkk-button-confirm btn-success" message="Save"  @click="addNewTask(newData)" :disabled="newData.title === ''"/>
-        <Button class="itbkk-button-cancle" message="Cancel" @click="router.push({ name: 'Task' })"/>
+        <Button
+          class="itbkk-button-confirm btn-success"
+          message="Save"
+          @click="addNewTask(newData)"
+          :disabled="newData.title === ''"
+        />
+        <Button
+          class="itbkk-button-cancle"
+          message="Cancel"
+          @click="router.push({ name: 'Task' })"
+        />
       </div>
     </div>
   </div>
