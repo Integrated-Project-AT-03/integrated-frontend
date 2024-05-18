@@ -123,7 +123,7 @@ const handleMessage = (e) => {
     :status="selectedStatus"
   />
   <RouterView @message="handleMessage" />
-  <StatusSetting />
+  <StatusSetting @message="handleMessage($event)" />
 </template>
 
 <style scoped></style>

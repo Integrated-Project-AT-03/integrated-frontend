@@ -6,7 +6,7 @@ const setting = ref({});
 onMounted(async () => {
   setting.value = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
 });
-
+const emits = defineEmits(["message"]);
 const saveSetting = async () => {
   const res = await patchItemById(
     `${uri}/v2/settings`,
@@ -14,7 +14,22 @@ const saveSetting = async () => {
     setting.value.value,
     setting.value.enable ? "enable" : "disable"
   );
-  console.log(setting.value.enable, setting.value.value);
+  if (res.httpStatus === 200) {
+    emits("message", {
+      description: `Set the setting is done`,
+      status: "success",
+    });
+  } else if (res.httpStatus === 400) {
+    emits("message", {
+      description: `${res.errors[0].field} ${res.errors[0].message}`,
+      status: "error",
+    });
+  } else {
+    emits("message", {
+      description: `something went wrong`,
+      status: "error",
+    });
+  }
 };
 </script>
 

@@ -31,9 +31,10 @@ async function deleteItemById(url, id) {
 async function patchItemById(url, id, value, status) {
   try {
     const res = await fetch(`${url}/${id}/${value}/${status}`, {
-      method: "PATCH",
+      method: "PUT",
     });
-    return res.status;
+    const item = await res.json();
+    return { ...item, httpStatus: res.status };
   } catch (error) {
     console.log(`error: ${error}`);
   }

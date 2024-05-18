@@ -208,7 +208,7 @@ const handleMessage = (e) => {
     </table>
   </div>
   <router-view @message="handleMessage($event)" />
-  <StatusSetting />
+  <StatusSetting @message="handleMessage($event)" />
 </template>
 
 <style scoped></style>
