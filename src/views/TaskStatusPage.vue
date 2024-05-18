@@ -67,7 +67,7 @@ const handleMessage = (e) => {
           scope="col"
           class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
         >
-          ID
+          No
         </th>
         <th
           scope="col"

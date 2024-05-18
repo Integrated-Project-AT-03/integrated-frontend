@@ -12,17 +12,6 @@ import StatusSetting from "../components/StatusSetting.vue";
 const newItem = ref("");
 const items = ref([]);
 
-const addItem = () => {
-  if (newItem.value.trim() !== "") {
-    items.value.push(newItem.value.trim());
-    newItem.value = "";
-  }
-};
-
-const removeItem = (index) => {
-  items.value.splice(index, 1);
-};
-
 const clearAll = () => {
   items.value = [];
 };
@@ -36,6 +25,7 @@ const router = useRouter();
 const isLoading = ref(true);
 const isSorted = ref(false);
 const sort = ref("");
+const listTask = ref();
 
 const sortOrder = ref("default");
 
@@ -65,25 +55,54 @@ onMounted(async function () {
   const data = await getItems(`${uri}/v2/tasks`);
   isLoading.value = false;
   datas.value.setTasks(data.items);
+  listTask.value = datas.value.getTasks();
 });
 
 async function sortTask() {
   if (sortOrder.value === "default") {
-    sort.value = "default";
-    isSorted.value = false;
+    sort.value = "";
+    if (items.value.length === 0)
+      return (listTask.value = datas.value.getTasks());
   } else if (sortOrder.value === "ascending") {
     sort.value = "ASC";
-    isSorted.value = true;
   } else if (sortOrder.value === "descending") {
     sort.value = "DES";
-    isSorted.value = true;
   }
-  dataSort.value = (
+  listTask.value = (
     await getItems(
-      `${uri}/v2/tasks?sortBy=statusStatusName&sortDirection=${sort.value}`
+      `${uri}/v2/tasks?sortBy=statusStatusName&sortDirection=${
+        sort.value
+      }&filterStatuses=${items.value.join(",")}`
     )
   ).items;
 }
+
+const removeItem = async (index) => {
+  items.value.splice(index, 1);
+  if (items.value.length === 0)
+    return (listTask.value = datas.value.getTasks());
+  listTask.value = (
+    await getItems(
+      `${uri}/v2/tasks?sortBy=statusStatusName&sortDirection=${
+        sort.value
+      }&filterStatuses=${items.value.join(",")}`
+    )
+  ).items;
+};
+
+const addItem = async () => {
+  if (newItem.value.trim() !== "") {
+    items.value.push(newItem.value.trim());
+    newItem.value = "";
+  }
+  listTask.value = (
+    await getItems(
+      `${uri}/v2/tasks?sortBy=statusStatusName&sortDirection=${
+        sort.value
+      }&filterStatuses=${items.value.join(",")}`
+    )
+  ).items;
+};
 
 const emits = defineEmits(["message"]);
 const handleMessage = (e) => {
@@ -110,9 +129,10 @@ const handleMessage = (e) => {
         <div
           v-for="(item, index) in items"
           :key="index"
-          class="relative p-3 rounded-md flex items-center bg-white text-gray-900 cursor-pointer hover:bg-slate-300"
+          class="relative p-3 rounded-md relative flex items-center bg-white text-gray-900 cursor-pointer hover:bg-slate-300"
           @click="removeItem(index)"
         >
+          <span class="text-error absolute -top-1 right-1">x</span>
           <span>{{ item }}</span>
         </div>
       </div>
@@ -139,7 +159,7 @@ const handleMessage = (e) => {
           scope="col"
           class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
         >
-          ID
+          No
         </th>
         <th
           scope="col"
@@ -175,12 +195,12 @@ const handleMessage = (e) => {
       </tr>
       <tr
         class="itbkk-item itbkk-button-action hover:bg-slate-200"
-        v-for="(task, index) in isSorted ? dataSort : datas.getTasks()"
+        v-for="(task, index) in listTask"
         :key="task.id"
         @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })"
       >
         <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-900">{{ index + 1 }}</div>
+          <div class="text-gray-900">{{ index + 1 }}</div>
         </td>
         <td class="px-6 py-4 whitespace-nowrap">
           <div class="text-sm text-gray-900">{{ task.title }}</div>

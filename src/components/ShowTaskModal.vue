@@ -32,9 +32,9 @@ const statuses = ref();
 
 const validateInput = computed(() => {
   return {
-    title: dataTask.value.title.length > 100,
-    description: dataTask.value.description.length > 500,
-    assignees: dataTask.value.assignees.length > 30,
+    title: dataTask.value.title?.length > 100,
+    description: dataTask.value.description?.length > 500,
+    assignees: dataTask.value.assignees?.length > 30,
   };
 });
 
@@ -99,7 +99,7 @@ const handleMessage = (e) => {
 
 <template>
   <div
-    class="w-screen  h-screen absolute flex justify-center top-0 items-center z-10"
+    class="w-screen h-screen absolute flex justify-center top-0 items-center z-10"
   >
     <RouterView @message="handleMessage($event)" />
     <div

@@ -10,20 +10,26 @@ const router = useRouter();
 const route = useRoute();
 const taskSeleted = datas.value.findTask(route.params.id);
 async function deleteTask(id) {
-  const deleteTask = await deleteItemById(`${uri}/v2/tasks`, route.params.id);
-  if (deleteTask === 200) {
+  const res = await deleteItemById(`${uri}/v2/tasks`, route.params.id);
+  if (res.httpStatus === 200) {
     datas.value.deleteTask(id);
     emits("message", {
       description: "The task has been deleted",
       status: "success",
     });
     return router.push({ name: "Task" });
-  } else {
+  } else if (res.httpStatus === 404) {
     emits("message", {
-      description: `The task does not exist"  `,
+      description: `The task does not exist"`,
       status: "error",
     });
     datas.value.deleteTask(route.params.id);
+    return router.push({ name: "Task" });
+  } else {
+    emits("message", {
+      description: `Something went wrong`,
+      status: "error",
+    });
   }
 }
 </script>

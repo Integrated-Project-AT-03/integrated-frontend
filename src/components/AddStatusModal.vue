@@ -17,8 +17,11 @@ const newData = ref({
 });
 
 const validateInput = computed(() => {
-  return {name: newData.value.name.length > 50, description: newData.value.description.length > 200}
-})
+  return {
+    name: newData.value.name.length > 50,
+    description: newData.value.description.length > 200,
+  };
+});
 
 async function addNewStatus() {
   isLoading.value = true;
@@ -31,7 +34,12 @@ async function addNewStatus() {
       description: `The status has been added`,
       status: "success",
     });
-  } else if (res.status === 500 || res.status === 400) {
+  } else if (res.status === 400) {
+    emits("message", {
+      description: "An error has occurred, the status could not be added.",
+      status: "error",
+    });
+  } else if (res.status === 500) {
     emits("message", {
       description: "An error has occurred, the status could not be added.",
       status: "error",
@@ -56,7 +64,9 @@ async function addNewStatus() {
         <div class="flex flex-col gap-3">
           <div class="flex gap-4">
             <div class="itbkk-status-name ml-12">Name</div>
-            <div class="text-error">{{ validateInput.name ? '(Max 50 characters)' : ''}}</div>
+            <div class="text-error">
+              {{ validateInput.name ? "(Max 50 characters)" : "" }}
+            </div>
           </div>
           <div class="flex justify-center">
             <input
@@ -68,7 +78,9 @@ async function addNewStatus() {
 
           <div class="flex gap-4">
             <div class="itbkk-status-description ml-12">Description</div>
-            <div class="text-error">{{ validateInput.description ? '(Max 200 characters)' : ''}}</div>
+            <div class="text-error">
+              {{ validateInput.description ? "(Max 200 characters)" : "" }}
+            </div>
           </div>
           <div class="flex justify-center">
             <textarea
