@@ -31,7 +31,7 @@ const compareTask = ref();
 const statuses = ref();
 
 const validateInput = computed(() => {
-  return {title: dataTask.value.title.length > 10, description: dataTask.value.description.length > 500, assignees: dataTask.value.assignees.length > 30}
+  return {title: dataTask.value.title.length > 100, description: dataTask.value.description.length > 500, assignees: dataTask.value.assignees.length > 30}
 })
 
 const loadTask = async () => {
@@ -106,7 +106,7 @@ const handleMessage = (e) => {
         class="text-xl pr-5 flex gap-5 h-[5rem] justify-between items-center text-slate-200 mt-2 ml-6 font-bold"
       >
           <div class="flex flex-col gap-2">
-            <div class="text-error text-sm">{{ validateInput.title ? 'Out of length' : ''}}</div>
+            <div class="text-error text-sm">{{ validateInput.title ? 'Max 100 characters' : ''}}</div>
             <input
               :disabled="!isEditMode"
               class="itbkk-title w-[50rem]"
@@ -147,7 +147,7 @@ const handleMessage = (e) => {
         <div class="flex flex-col gap-2 text-slate-200">
           <div class="flex gap-4">
             <div>Description</div>
-            <div class="text-error text-sm">{{ validateInput.description ? '(Out of length)' : ''}}</div>
+            <div class="text-error text-sm">{{ validateInput.description ? '(Max 500 characters)' : ''}}</div>
           </div>
           <textarea
             :disabled="!isEditMode"
@@ -160,7 +160,7 @@ const handleMessage = (e) => {
           <div class="flex flex-col gap-2 text-slate-200">
             <div class="flex gap-4">
               <div>Assignees</div>
-              <div class="text-error text-sm">{{ validateInput.assignees ? '(Out of length)' : ''}}</div>
+              <div class="text-error text-sm">{{ validateInput.assignees ? '(Max 30 characters' : ''}}</div>
             </div>
             <textarea
               :disabled="!isEditMode"

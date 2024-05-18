@@ -77,7 +77,7 @@ async function updateStatus() {
         <div class="flex flex-col gap-2">
           <div class="flex gap-4">
             <div>Name</div>
-            <div class="text-error">{{ validateInput?.name ? '(Out of length)' : ''}}</div>
+            <div class="text-error">{{ validateInput?.name ? '(Max 50 characters)' : ''}}</div>
           </div>
           <input
             class="itbkk-status-name w-[60rem] h-11 rounded-2xl p-3 bg-secondary border-base-100"
@@ -87,7 +87,7 @@ async function updateStatus() {
         <div class="flex flex-col gap-2">
           <div class="flex gap-4">
             <div>Description</div>
-            <div class="text-error">{{ validateInput?.description ? '(Out of length)' : ''}}</div>
+            <div class="text-error">{{ validateInput?.description ? '(Max 200 characters)' : ''}}</div>
           </div>
           <textarea
             class="itbkk-status-description w-[60rem] h-[20rem] rounded-2xl border p-4 bg-secondary border-base-100"

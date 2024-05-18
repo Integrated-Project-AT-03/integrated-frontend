@@ -57,7 +57,7 @@ async function addNewTask(newItem) {
       <div class="flex flex-col gap-3">
         <div class="flex gap-4">
           <div class="ml-9">Title</div>
-          <div class="text-error">{{ validateInput.title ? '(Out of length)' : ''}}</div>
+          <div class="text-error">{{ validateInput.title ? '(Max 100 characters)' : ''}}</div>
         </div>
         <div class="flex justify-center">
           <input
@@ -69,7 +69,7 @@ async function addNewTask(newItem) {
           <div class="flex flex-col gap-3">
             <div class="flex gap-4">
               <div>Description</div>
-              <div class="text-error">{{ validateInput.description ? '(Out of length)' : ''}}</div>
+              <div class="text-error">{{ validateInput.description ? '(Max 500 characters)' : ''}}</div>
             </div>
             <textarea
               v-model.trim="newData.description"
@@ -80,7 +80,7 @@ async function addNewTask(newItem) {
             <div class="flex flex-col gap-3">
               <div class="flex gap-4">
                 <div>Assignees</div>
-                <div class="text-error">{{ validateInput.assignees  ? '(Out of length)' : ''}}</div>
+                <div class="text-error">{{ validateInput.assignees  ? '(Max 30 characters)' : ''}}</div>
               </div>
               <textarea
                 v-model.trim="newData.assignees"
