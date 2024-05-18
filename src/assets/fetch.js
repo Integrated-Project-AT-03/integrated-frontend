@@ -81,8 +81,8 @@ async function changeTasksStatus(url, deletedId, changeId) {
     const res = await fetch(`${url}/${deletedId}/${changeId}`, {
       method: "DELETE",
     });
-    const tasksUpdated = await res.json();
-    return { tasksUpdated, httpStatus: res.status };
+    const body = await res.json();
+    return { body, httpStatus: res.status };
   } catch (error) {
     console.log(`error: ${error}`);
   }

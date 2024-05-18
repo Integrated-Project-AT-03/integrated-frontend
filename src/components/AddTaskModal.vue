@@ -25,16 +25,16 @@ onMounted(async () => {
 async function addNewTask(newItem) {
   const newTask = await addItem(`${uri}/v2/tasks`, newItem);
 
-  if (newTask.status === 500) {
-    emits("message", {
-      description: `${res.message}`,
-      status: "error",
-    });
-  } else {
-    datas.value.addTask(newTask);
+  if (newTask.httpStatus === 201) {
     emits("message", {
       description: `The task has been successfully added`,
       status: "success",
+    });
+    datas.value.addTask(newTask);
+  } else {
+    emits("message", {
+      description: `${res.message}`,
+      status: "error",
     });
   }
   return router.push({ name: "Task" });
