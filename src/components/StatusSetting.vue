@@ -14,7 +14,7 @@ const saveSetting = async () => {
     setting.value.value,
     setting.value.enable ? "enable" : "disable"
   );
-  console.log(setting.value.enable);
+  console.log(setting.value.enable, setting.value.value);
 };
 </script>
 
