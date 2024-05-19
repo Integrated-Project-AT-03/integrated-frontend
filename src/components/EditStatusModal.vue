@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import { getItemById, editItem } from "../assets/fetch.js";
+import { getItemById, editItem } from "../lib/fetch.js";
 import { computed, onMounted, ref } from "vue";
 import Loading from "../components/Loading.vue";
 import TaskStatusManagement from "./../lib/TaskStatusManagement";
@@ -154,18 +154,24 @@ async function updateStatus() {
         </div>
       </div>
       <div class="flex gap-3 justify-end mr-5 mt-5">
-        <Button class="btn-success" message="Save" @click="updateStatus()" :disabled="
+        <Button
+          class="btn-success"
+          message="Save"
+          @click="updateStatus()"
+          :disabled="
             data.name === '' ||
             validateInput.description ||
             validateInput.name ||
             ((data.name ?? '') === (compareStatus?.name ?? '') &&
               (data.description ?? '') === (compareStatus?.description ?? '') &&
               (data.colorId ?? '') === (compareStatus?.colorId ?? ''))
-          "/>
-          <Button message="Cancel" @click="router.push({ name: 'Statuses' })"/>
+          "
+        />
+        <Button message="Cancel" @click="router.push({ name: 'Statuses' })" />
       </div>
     </div>
   </div>
 </template>
 
 <style scoped></style>
+../lib/fetch.js

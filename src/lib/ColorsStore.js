@@ -1,4 +1,4 @@
-import { getItems } from "@/assets/fetch";
+import { getItems } from "@/lib/fetch";
 class ColorsStore {
   colors = [];
   constructor() {}

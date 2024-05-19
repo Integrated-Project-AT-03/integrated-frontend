@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from "vue-router";
-import { addItem, getItems } from "../assets/fetch.js";
+import { addItem, getItems } from "../lib/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import { computed, onMounted, ref } from "vue";
 import Button from "./ButtonModal.vue";
@@ -136,3 +136,4 @@ async function addNewTask(newItem) {
 </template>
 
 <style scoped></style>
+../lib/fetch.js

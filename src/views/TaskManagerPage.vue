@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
 import Loading from "./../components/Loading.vue";
-import { getItems } from "./../assets/fetch.js";
+import { getItems } from "./../lib/fetch.js";
 import Button from "@/components/ButtonModal.vue";
 import StatusModal from "@/components/StatusModal.vue";
 import SortAsc from "./../assets/icons/SortAsc.vue";
@@ -114,7 +114,12 @@ const handleMessage = (e) => {
             @keyup.enter="addItem"
             placeholder="Filter by status(es)"
           />
-          <Button class="itbkk-filter-clear"message="Clear All" @click="clearAll" bgcolor="#ef4444" />
+          <Button
+            class="itbkk-filter-clear"
+            message="Clear All"
+            @click="clearAll"
+            bgcolor="#ef4444"
+          />
         </div>
         <div class="flex flex-wrap gap-2 mt-2">
           <div
@@ -225,3 +230,4 @@ const handleMessage = (e) => {
 </template>
 
 <style scoped></style>
+../lib/fetch.js

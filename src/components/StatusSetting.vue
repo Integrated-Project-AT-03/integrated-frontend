@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
-import { patchItemById, getItemById } from "./../assets/fetch";
+import { patchItemById, getItemById } from "./../lib/fetch";
 import Button from "./ButtonModal.vue";
 
 const uri = import.meta.env.VITE_SERVER_URI;
@@ -118,3 +118,4 @@ const saveSetting = async () => {
 </template>
 
 <style scoped></style>
+../lib/fetch

@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import { deleteItemById } from "../assets/fetch.js";
+import { deleteItemById } from "../lib/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import { ref } from "vue";
 import Button from "./ButtonModal.vue";
@@ -48,10 +48,17 @@ async function deleteTask(id) {
       <div class="divider"></div>
       <div class="flex justify-end mt-4 gap-3">
         <form method="dialog">
-          <Button class="itbkk-button-confirm btn-success text-slate-200" message="Confirm" @click="deleteTask(route.params.id)"/>
+          <Button
+            class="itbkk-button-confirm btn-success text-slate-200"
+            message="Confirm"
+            @click="deleteTask(route.params.id)"
+          />
         </form>
         <form method="dialog">
-          <Button class="itbkk-button-cancel btn-error text-slate-200" message="Cancel"/>
+          <Button
+            class="itbkk-button-cancel btn-error text-slate-200"
+            message="Cancel"
+          />
         </form>
       </div>
     </div>
@@ -59,3 +66,4 @@ async function deleteTask(id) {
 </template>
 
 <style scoped></style>
+../lib/fetch.js

@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getItemById, editItem, getItems } from "./../assets/fetch.js";
+import { getItemById, editItem, getItems } from "./../lib/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import Loading from "./Loading.vue";
 import Trash from "../assets/icons/Trash.vue";
@@ -250,3 +250,4 @@ const handleMessage = (e) => {
 </template>
 
 <style scoped></style>
+../lib/fetch.js

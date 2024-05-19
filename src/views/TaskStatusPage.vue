@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import TaskStatusManagement from "../lib/TaskStatusManagement.js";
 import ChevronRight from "../assets/icons/ChevronRight.vue";
 import TransferStatus from "../components/TransferStatus.vue";
-import { getItems } from "../assets/fetch.js";
+import { getItems } from "../lib/fetch.js";
 import Loading from "../components/Loading.vue";
 import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
 import Button from "../components/ButtonModal.vue";
@@ -126,7 +126,10 @@ const handleMessage = (e) => {
                 bgcolor="#A020F0"
                 message="Edit"
                 @click="
-                  $router.push({ name: 'EditStatus', params: { id: status.id } })
+                  $router.push({
+                    name: 'EditStatus',
+                    params: { id: status.id },
+                  })
                 "
               />
               <Button
@@ -161,4 +164,4 @@ const handleMessage = (e) => {
 </template>
 
 <style scoped></style>
-../lib/Colors.js
+../lib/Colors.js ../lib/fetch.js

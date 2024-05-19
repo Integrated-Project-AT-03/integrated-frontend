@@ -4,14 +4,13 @@ import TaskStatusManagement from "@/lib/TaskStatusManagement";
 import Button from "./ButtonModal.vue";
 const datas = ref(TaskStatusManagement);
 const selectStatus = ref();
-import { getItems, changeTasksStatus } from "../assets/fetch.js";
-
+import { getItems, changeTasksStatus } from "../lib/fetch.js";
 const uri = import.meta.env.VITE_SERVER_URI;
 const props = defineProps({
   selectedStatus: Object,
 });
 const newIdStatus = ref(null);
-const emits = defineEmits(["close", "message"]);
+const emits = defineEmits(["close", "message", "update:modelValue"]);
 onMounted(async () => {
   emits("update:modelValue", true);
   selectStatus.value = (await getItems(`${uri}/v2/statuses`)).items;
