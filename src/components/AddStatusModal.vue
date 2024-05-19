@@ -119,7 +119,7 @@ async function addNewStatus() {
         <div class="divider"></div>
         <div class="flex justify-end mt-8 mr-4 gap-3">
           <Button class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100" message="Save" 
-          :disabled="newData.name === '' || validateInput.description || validateInput.name"/>
+          :disabled="newData.name === '' || validateInput.description || validateInput.name" @click="addNewStatus"/>
           <Button class="itbkk-button-cancle" message="Cancel" @click="router.push({ name: 'Statuses' })"/>
         </div>
         <Loading :is-loading="isLoading" />
