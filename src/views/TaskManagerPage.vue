@@ -17,9 +17,9 @@ const sortOrder = ref("default");
 const sortImage = computed(() => {
   switch (sortOrder.value) {
     case "ascending":
-      return { src: "/images/sort-desc.png" };
-    case "descending":
       return { src: "/images/sort-asc.png" };
+    case "descending":
+      return { src: "/images/sort-desc.png" };
     default:
       return { src: "/images/sort-disable.png" };
   }

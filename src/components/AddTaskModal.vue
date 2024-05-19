@@ -11,7 +11,6 @@ const emits = defineEmits(["message"]);
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
-const validateBool = ref(false);
 const newData = ref({
   title: "",
   description: "",
