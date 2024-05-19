@@ -30,7 +30,7 @@ async function deleteStatus(id) {
       description: `${res.message}`,
       status: "error",
     });
-  } else if (res.status === 500) {
+  } else if (res.status === 400) {
     emits("conflict");
   } else if (res.status === 404) {
     datas.value.deleteStatus(id);
