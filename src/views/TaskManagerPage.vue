@@ -182,8 +182,8 @@ const handleMessage = (e) => {
                 v-show="sortImage === 1"
                 class="w-5 scale-[190%] h-5"
               />
-              <SortDesc v-show="sortImage === 2" class="w-5 h-5" />
-              <SortAsc v-show="sortImage === 3" class="w-5 h-5" />
+              <SortAsc v-show="sortImage === 2" class="w-5 h-5" />
+              <SortDesc v-show="sortImage === 3" class="w-5 h-5" />
             </div>
           </th>
         </tr>
