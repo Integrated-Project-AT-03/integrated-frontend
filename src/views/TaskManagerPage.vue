@@ -16,16 +16,6 @@ const uri = import.meta.env.VITE_SERVER_URI;
 const isLoading = ref(true);
 const sort = ref("");
 const sortOrder = ref("default");
-// const sortImage = computed(() => {
-//   switch (sortOrder.value) {
-//     case "ascending":
-//       return { src: "/images/sort-asc.png" };
-//     case "descending":
-//       return { src: "/images/sort-desc.png" };
-//     default:
-//       return { src: "/images/sort-disable.png" };
-//   }
-// });
 
 const sortImage = computed(() => {
   switch (sortOrder.value) {
@@ -71,8 +61,21 @@ const toggleSortOrder = () => {
   loadTasks();
 };
 
+const loadTasksSortById = async () => {
+  datas.value.setTasks(
+    (
+      await getItems(
+        `${uri}/v2/tasks?sortBy=id&sortDirection=${
+          sort.value
+        }&filterStatuses=${items.value.join(",")}`
+      )
+    ).items
+  );
+};
+
 const removeItem = async (index) => {
   items.value.splice(index, 1);
+  if (!sort.value) return loadTasksSortById();
   loadTasks();
 };
 
@@ -85,6 +88,7 @@ const addItem = async () => {
     items.value.push(newItem.value.trim());
     newItem.value = "";
   }
+  if (!sort.value) return loadTasksSortById();
   loadTasks();
 };
 const emits = defineEmits(["message"]);

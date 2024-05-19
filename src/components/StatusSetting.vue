@@ -5,8 +5,10 @@ import Button from "./ButtonModal.vue";
 
 const uri = import.meta.env.VITE_SERVER_URI;
 const setting = ref({});
+const compareSetting = ref({});
 const loadSetting = async () => {
   setting.value = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
+  compareSetting.value = { ...setting.value };
 };
 onMounted(async () => loadSetting());
 const validation = computed(() => {
@@ -26,10 +28,16 @@ const saveSetting = async () => {
     setting.value.enable ? "enable" : "disable"
   );
   if (res.httpStatus === 200) {
-    emits("message", {
-      description: `Set the setting is done`,
-      status: "success",
-    });
+    if (setting.value.enable)
+      emits("message", {
+        description: `The Kanban board now limits ${setting.value.value} tasks in each status`,
+        status: "success",
+      });
+    else
+      emits("message", {
+        description: `The Kanban board has disabled the task limit in each status`,
+        status: "success",
+      });
   } else if (res.httpStatus === 400) {
     emits("message", {
       description: `${res.errors[0].field} ${res.errors[0].message}`,
@@ -85,10 +93,19 @@ const saveSetting = async () => {
       <div class="divider"></div>
       <div class="flex justify-end mt-4 gap-3">
         <form method="dialog">
-          <Button class="itbkk-button-confirm btn-success text-slate-200" message="Save" @click="saveSetting" :disabled="validation.limitTasks"/>
+          <Button
+            class="itbkk-button-confirm btn-success text-slate-200"
+            message="Save"
+            @click="saveSetting"
+            :disabled="validation.limitTasks"
+          />
         </form>
         <form method="dialog">
-          <Button class="itbkk-button-cancel btn-error text-slate-200" message="Cancel" @click="loadSetting" />
+          <Button
+            class="itbkk-button-cancel btn-error text-slate-200"
+            message="Cancel"
+            @click="loadSetting"
+          />
         </form>
       </div>
     </div>
