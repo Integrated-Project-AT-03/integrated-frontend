@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import TaskStatusManagement from "../lib/TaskStatusManagement.js";
-
 import ChevronRight from "../assets/icons/ChevronRight.vue";
 import TransferStatus from "../components/TransferStatus.vue";
 import { getItems } from "../assets/fetch.js";
@@ -10,12 +9,9 @@ import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
 import Button from "../components/ButtonModal.vue";
 import StatusModal from "@/components/StatusModal.vue";
 
-
 const emits = defineEmits(["message"]);
 const datas = ref(TaskStatusManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
-
-
 const isLoading = ref(true);
 const selectedStatus = ref({});
 const showTranferStauts = ref(false);

@@ -11,13 +11,13 @@ import Button from "./ButtonModal.vue";
 const emits = defineEmits(["message"]);
 const route = useRoute();
 const router = useRouter();
+const isEditMode = ref();
 const dataTask = ref({
   title: "",
   description: "",
   assignees: "",
   status: {},
 });
-const isEditMode = ref();
 watch(
   () => route.params.mode,
   () => (isEditMode.value = route.params?.mode === "edit"),

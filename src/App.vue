@@ -3,6 +3,7 @@ import { ref } from "vue";
 import Alert from "./components/Alert.vue";
 import StatusSetting from "./components/StatusSetting.vue";
 import Setting from "./assets/icons/Setting.vue";
+
 const message = ref("");
 const status = ref(undefined);
 const messageModalOpenState = ref(false);

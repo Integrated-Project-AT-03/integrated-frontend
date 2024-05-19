@@ -5,6 +5,8 @@ import TaskStatusManagement from "@/lib/TaskStatusManagement.js";
 import { computed, ref } from "vue";
 import colorStore from "./../lib/ColorsStore";
 import Loading from "./Loading.vue";
+import Button from "./ButtonModal.vue";
+
 const emits = defineEmits(["message"]);
 const datas = ref(TaskStatusManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
@@ -118,22 +120,11 @@ async function addNewStatus() {
             </div>
           </div>
         </div>
-
         <div class="divider"></div>
         <div class="flex justify-end mt-4 mr-4 gap-3">
-          <button
-            @click="addNewStatus(newData)"
-            class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
-            :disabled="newData.name === '' || validateInput.description || validateInput.name"
-          >
-            Save
-          </button>
-          <button
-            @click="router.push({ name: 'Statuses' })"
-            class="itbkk-button-cancle btn"
-          >
-            Cancel
-          </button>
+          <Button class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100" message="Save" 
+          :disabled="newData.name === '' || validateInput.description || validateInput.name"/>
+          <Button class="itbkk-button-cancle" message="Cancel" @click="router.push({ name: 'Statuses' })"/>
         </div>
         <Loading :is-loading="isLoading" />
       </div>

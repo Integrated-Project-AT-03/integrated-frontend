@@ -5,6 +5,7 @@ import { computed, onMounted, ref } from "vue";
 import Loading from "../components/Loading.vue";
 import TaskStatusManagement from "./../lib/TaskStatusManagement";
 import colorStore from "../lib/ColorsStore.js";
+import Button from "./ButtonModal.vue";
 
 const emits = defineEmits(["message"]);
 const management = ref(TaskStatusManagement);
@@ -156,23 +157,15 @@ async function updateStatus() {
         </div>
       </div>
       <div class="flex gap-3 justify-end mr-5">
-        <button
-          @click="updateStatus()"
-          class="btn btn-success"
-          :disabled="
+        <Button class="btn-success" message="Save" @click="updateStatus()" :disabled="
             data.name === '' ||
             validateInput.description ||
             validateInput.name ||
             ((data.name ?? '') === (compareStatus?.name ?? '') &&
               (data.description ?? '') === (compareStatus?.description ?? '') &&
               (data.colorId ?? '') === (compareStatus?.colorId ?? ''))
-          "
-        >
-          Save
-        </button>
-        <button @click="router.push({ name: 'Statuses' })" class="btn">
-          Cancel
-        </button>
+          "/>
+          <Button message="Cancel" @click="router.push({ name: 'Statuses' })"/>
       </div>
     </div>
   </div>

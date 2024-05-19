@@ -4,11 +4,8 @@ import TaskStatusManagement from "@/lib/TaskStatusManagement";
 import Button from "./ButtonModal.vue";
 const datas = ref(TaskStatusManagement);
 const selectStatus = ref();
-import {
-  getItems,
-  changeTasksStatus,
-  deleteItemById,
-} from "../assets/fetch.js";
+import { getItems, changeTasksStatus } from "../assets/fetch.js";
+
 const uri = import.meta.env.VITE_SERVER_URI;
 const props = defineProps({
   selectedStatus: Object,

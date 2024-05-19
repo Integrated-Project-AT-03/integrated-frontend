@@ -1,8 +1,7 @@
 <script setup>
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { deleteItemById } from "../assets/fetch.js";
 import TaskStatusManagement from "@/lib/TaskStatusManagement";
-import Loading from "./Loading.vue";
 import { ref } from "vue";
 import Button from "./ButtonModal.vue";
 

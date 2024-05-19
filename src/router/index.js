@@ -1,13 +1,11 @@
-import { createRouter, createWebHistory } from "vue-router";
-import EmptyModal from "@/components/EmptyModal.vue";
-import AddTaskModal from "@/components/AddTaskModal.vue";
-import ShowTaskModal from "@/components/ShowTaskModal.vue";
-import { getItems } from "./../assets/fetch.js";
-import DeleteTaskModal from "@/components/DeleteTaskModal.vue";
-import StatusManagerPage from "./../views/TaskStatusPage.vue";
-import TaskManagerPage from "./../views/TaskManagerPage.vue";
-import EditStatusModal from "@/components/EditStatusModal.vue";
-import AddStatusModal from "@/components/AddStatusModal.vue";
+import { createRouter, createWebHistory } from "vue-router"
+import EmptyModal from "@/components/EmptyModal.vue"
+import AddTaskModal from "@/components/AddTaskModal.vue"
+import ShowTaskModal from "@/components/ShowTaskModal.vue"
+import StatusManagerPage from "./../views/TaskStatusPage.vue"
+import TaskManagerPage from "./../views/TaskManagerPage.vue"
+import EditStatusModal from "@/components/EditStatusModal.vue"
+import AddStatusModal from "@/components/AddStatusModal.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,17 +23,17 @@ const router = createRouter({
             {
               path: ":mode",
               name: "TaskEdit",
-              component: EmptyModal,
-            },
-          ],
+              component: EmptyModal
+            }
+          ]
         },
 
         {
           path: "/task/add",
           name: "AddTask",
-          component: AddTaskModal,
-        },
-      ],
+          component: AddTaskModal
+        }
+      ]
     },
 
     {
@@ -46,20 +44,20 @@ const router = createRouter({
         {
           path: ":id/edit",
           name: "EditStatus",
-          component: EditStatusModal,
+          component: EditStatusModal
         },
         {
           path: "add",
           name: "AddStatus",
-          component: AddStatusModal,
-        },
-      ],
+          component: AddStatusModal
+        }
+      ]
     },
     {
       path: "/",
-      redirect: "/task",
-    },
-  ],
-});
+      redirect: "/task"
+    }
+  ]
+})
 
-export default router;
+export default router

@@ -1,6 +1,8 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import { patchItemById, getItemById } from "./../assets/fetch";
+import Button from "./ButtonModal.vue";
+
 const uri = import.meta.env.VITE_SERVER_URI;
 const setting = ref({});
 const loadSetting = async () => {
@@ -83,21 +85,10 @@ const saveSetting = async () => {
       <div class="divider"></div>
       <div class="flex justify-end mt-4 gap-3">
         <form method="dialog">
-          <button
-            @click="saveSetting"
-            class="itbkk-button-confirm btn btn-success text-slate-200"
-            :disabled="validation.limitTasks"
-          >
-            Save
-          </button>
+          <Button class="itbkk-button-confirm btn-success text-slate-200" message="Save" @click="saveSetting" :disabled="validation.limitTasks"/>
         </form>
         <form method="dialog">
-          <button
-            class="itbkk-button-cancel btn btn-error text-slate-200"
-            @click="loadSetting"
-          >
-            Cancel
-          </button>
+          <Button class="itbkk-button-cancel btn-error text-slate-200" message="Cancel" @click="loadSetting" />
         </form>
       </div>
     </div>

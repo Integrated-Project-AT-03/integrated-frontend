@@ -7,7 +7,6 @@ import Button from "./ButtonModal.vue";
 
 const statuses = ref();
 const emits = defineEmits(["message"]);
-
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
