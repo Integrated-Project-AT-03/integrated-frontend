@@ -27,6 +27,7 @@ const saveSetting = async () => {
     setting.value.value,
     setting.value.enable ? "enable" : "disable"
   );
+  await loadSetting();
   if (res.httpStatus === 200) {
     if (setting.value.enable)
       emits("message", {
@@ -97,7 +98,11 @@ const saveSetting = async () => {
             class="itbkk-button-confirm btn-success text-slate-200"
             message="Save"
             @click="saveSetting"
-            :disabled="validation.limitTasks"
+            :disabled="
+              validation.limitTasks ||
+              (compareSetting.value === setting.value &&
+                compareSetting.enable === setting.enable)
+            "
           />
         </form>
         <form method="dialog">
