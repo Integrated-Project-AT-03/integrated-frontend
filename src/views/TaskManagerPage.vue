@@ -5,6 +5,9 @@ import Loading from "./../components/Loading.vue";
 import { getItems } from "./../assets/fetch.js";
 import Button from "@/components/ButtonModal.vue";
 import StatusModal from "@/components/StatusModal.vue";
+import SortAsc from "./../assets/icons/SortAsc.vue";
+import SortDesc from "./../assets/icons/SortDesc.vue";
+import SortDisable from "./../assets/icons/SortDisable.vue";
 
 const newItem = ref("");
 const items = ref([]);
@@ -14,14 +17,25 @@ const uri = import.meta.env.VITE_SERVER_URI;
 const isLoading = ref(true);
 const sort = ref("");
 const sortOrder = ref("default");
+// const sortImage = computed(() => {
+//   switch (sortOrder.value) {
+//     case "ascending":
+//       return { src: "/images/sort-asc.png" };
+//     case "descending":
+//       return { src: "/images/sort-desc.png" };
+//     default:
+//       return { src: "/images/sort-disable.png" };
+//   }
+// });
+
 const sortImage = computed(() => {
   switch (sortOrder.value) {
     case "ascending":
-      return { src: "/images/sort-asc.png" };
+      return 2;
     case "descending":
-      return { src: "/images/sort-desc.png" };
+      return 3;
     default:
-      return { src: "/images/sort-disable.png" };
+      return 1;
   }
 });
 
@@ -156,7 +170,12 @@ const handleMessage = (e) => {
               class="itbkk-status-sort m-auto ml-2 cursor-pointer flex items-center"
               @click="toggleSortOrder"
             >
-              <img :class="`w-5 ${sortImage}`" :src="sortImage.src" />
+              <SortDisable
+                v-show="sortImage === 1"
+                class="w-5 scale-[190%] h-5"
+              />
+              <SortDesc v-show="sortImage === 2" class="w-5 h-5" />
+              <SortAsc v-show="sortImage === 3" class="w-5 h-5" />
             </div>
           </th>
         </tr>
