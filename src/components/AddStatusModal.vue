@@ -85,15 +85,38 @@ async function addNewStatus() {
           <div class="flex justify-center">
             <textarea
               v-model="newData.description"
-              class="itbkk-title w-[60rem] h-[20rem] rounded-2xl p-2 bg-secondary border-base-100"
+              class="itbkk-title w-[60rem] h-[18rem] rounded-2xl p-2 bg-secondary border-base-100"
               placeholder="Please Write Description"
             ></textarea>
           </div>
 
           <div class="itbkk-status-color ml-12">Color</div>
 
-          <div class="flex justify-center">
+          <div class="flex justify-center px-10">
             <div
+              class="color-picker-container flex flex-wrap gap-2 items-center"
+            >
+              <div>Color Tag :</div>
+              <div
+                v-for="color in colorStore.getColors()"
+                :key="color.id"
+                class="color-picker-item flex items-center justify-center cursor-pointer relative"
+                @click="() => (newData.colorId = color.id)"
+              >
+                <div
+                  :style="{ backgroundColor: color.hex }"
+                  :class="
+                    newData.colorId === color.id &&
+                    'border-[4px] border-purple-500'
+                  "
+                  class="color-box w-8 h-8 rounded-full border border-gray-300 relative"
+                ></div>
+                <span class="ml-2">{{
+                  color.name[0].toUpperCase() + color.name.slice(1)
+                }}</span>
+              </div>
+            </div>
+            <!-- <div
               class="color-picker-container flex flex-wrap gap-2 items-center"
             >
               <div
@@ -114,7 +137,7 @@ async function addNewStatus() {
                   color.name[0].toUpperCase() + color.name.slice(1)
                 }}</span>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
 

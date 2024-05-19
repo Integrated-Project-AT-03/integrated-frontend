@@ -27,20 +27,6 @@ class TaskStatusManagement {
   findStatus(id) {
     return this.statuses.find((status) => +status.id === +id);
   }
-
-  _format(status) {
-    return {
-      id: status.id,
-      title: status.title,
-      assignees: status.assignees,
-      status: status.status
-        .toLowerCase()
-        .replace("_", " ")
-        .split(" ")
-        .map((word = "") => word[0].toUpperCase() + word.slice(1, word.length))
-        .join(" "),
-    };
-  }
 }
 
 export default new TaskStatusManagement();

@@ -12,10 +12,6 @@ import StatusSetting from "../components/StatusSetting.vue";
 const newItem = ref("");
 const items = ref([]);
 
-const clearAll = () => {
-  items.value = [];
-};
-
 const datas = ref(TaskManagement);
 const dataSort = ref([]);
 
@@ -51,43 +47,44 @@ const toggleSortOrder = () => {
   sortTask();
 };
 
+const loadTasks = async () => {
+  if (sort.value === "" && items.value.length === 0)
+    return datas.value.setTasks((await getItems(`${uri}/v2/tasks`)).items);
+  datas.value.setTasks(
+    (
+      await getItems(
+        `${uri}/v2/tasks?sortBy=statusStatusName&sortDirection=${
+          sort.value
+        }&filterStatuses=${items.value.join(",")}`
+      )
+    ).items
+  );
+};
+
 onMounted(async function () {
-  const data = await getItems(`${uri}/v2/tasks`);
+  await loadTasks();
   isLoading.value = false;
-  datas.value.setTasks(data.items);
-  listTask.value = datas.value.getTasks();
 });
 
 async function sortTask() {
   if (sortOrder.value === "default") {
     sort.value = "";
-    if (items.value.length === 0)
-      return (listTask.value = datas.value.getTasks());
   } else if (sortOrder.value === "ascending") {
     sort.value = "ASC";
   } else if (sortOrder.value === "descending") {
     sort.value = "DES";
   }
-  listTask.value = (
-    await getItems(
-      `${uri}/v2/tasks?sortBy=statusStatusName&sortDirection=${
-        sort.value
-      }&filterStatuses=${items.value.join(",")}`
-    )
-  ).items;
+  loadTasks();
 }
 
 const removeItem = async (index) => {
   items.value.splice(index, 1);
-  if (items.value.length === 0)
-    return (listTask.value = datas.value.getTasks());
-  listTask.value = (
-    await getItems(
-      `${uri}/v2/tasks?sortBy=statusStatusName&sortDirection=${
-        sort.value
-      }&filterStatuses=${items.value.join(",")}`
-    )
-  ).items;
+  loadTasks();
+};
+
+const clearAll = async () => {
+  items.value = [];
+  loadTasks();
 };
 
 const addItem = async () => {
@@ -95,13 +92,7 @@ const addItem = async () => {
     items.value.push(newItem.value.trim());
     newItem.value = "";
   }
-  listTask.value = (
-    await getItems(
-      `${uri}/v2/tasks?sortBy=statusStatusName&sortDirection=${
-        sort.value
-      }&filterStatuses=${items.value.join(",")}`
-    )
-  ).items;
+  loadTasks();
 };
 
 const emits = defineEmits(["message"]);
@@ -114,7 +105,7 @@ const handleMessage = (e) => {
   <Loading :is-loading="isLoading" />
 
   <div class="w-full flex items-center justify-around">
-    <div class="container mx-auto">
+    <div class="container">
       <div class="flex items-center">
         <input
           class="border p-2 rounded-md mr-2 w-1/3 text-gray-900"
@@ -129,7 +120,7 @@ const handleMessage = (e) => {
         <div
           v-for="(item, index) in items"
           :key="index"
-          class="relative p-3 rounded-md relative flex items-center bg-white text-gray-900 cursor-pointer hover:bg-slate-300"
+          class="p-3 rounded-md relative flex items-center bg-white text-gray-900 cursor-pointer hover:bg-slate-300"
           @click="removeItem(index)"
         >
           <span class="text-error absolute -top-1 right-1">x</span>
@@ -169,14 +160,15 @@ const handleMessage = (e) => {
         </th>
         <th
           scope="col"
-          class="px-6 py-3 text-left min-w-[160px] text-sm font-bold text-gray-900 uppercase tracking-wider"
+          class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
         >
           Assignees
         </th>
         <th
           scope="col"
-          class="flex flex-row px-6 py-3 min-w-[326px] text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+          class="flex flex-row px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
         >
+          8
           <div>Status</div>
           <div
             class="itbkk-status-sort m-auto ml-2 cursor-pointer flex items-center"
@@ -195,7 +187,7 @@ const handleMessage = (e) => {
       </tr>
       <tr
         class="itbkk-item itbkk-button-action hover:bg-slate-200"
-        v-for="(task, index) in listTask"
+        v-for="(task, index) in datas.getTasks()"
         :key="task.id"
         @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })"
       >

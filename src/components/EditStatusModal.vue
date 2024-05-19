@@ -108,7 +108,7 @@ async function updateStatus() {
             </div>
           </div>
           <textarea
-            class="itbkk-status-description w-[60rem] h-[20rem] rounded-2xl border p-4 bg-secondary border-base-100"
+            class="itbkk-status-description w-[60rem] h-[19rem] rounded-2xl border p-4 bg-secondary border-base-100"
             v-model="data.description"
             placeholder="No description is provided."
           ></textarea>
@@ -133,7 +133,7 @@ async function updateStatus() {
         </div>
       </div>
       <div class="divider"></div>
-      <div class="flex w-fit ml-10">
+      <div class="flex w-fit ml-10 px-10">
         <div class="color-picker-container flex flex-wrap gap-2 items-center">
           <div>Color Tag :</div>
           <div
@@ -161,6 +161,8 @@ async function updateStatus() {
           class="btn btn-success"
           :disabled="
             data.name === '' ||
+            validateInput.description ||
+            validateInput.name ||
             ((data.name ?? '') === (compareStatus?.name ?? '') &&
               (data.description ?? '') === (compareStatus?.description ?? '') &&
               (data.colorId ?? '') === (compareStatus?.colorId ?? ''))

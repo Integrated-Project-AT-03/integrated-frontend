@@ -3,14 +3,18 @@ class TaskMannagement {
     this.tasks = [];
   }
 
-  async setTasks(tasks = []) {
-    const format = tasks.map((task) => task);
-    this.tasks = format;
+  async setTasks(tasks) {
+    this.tasks = tasks;
   }
   addTask(task) {
     this.tasks.push(task);
   }
-
+  setDirection(direction) {
+    this.direction = direction;
+  }
+  setFilterStatus(filterStatus) {
+    this.direction = filterStatus;
+  }
   getTasks() {
     return this.tasks;
   }
