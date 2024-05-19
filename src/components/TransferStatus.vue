@@ -27,7 +27,6 @@ const submit = async () => {
     props.selectedStatus.id,
     newIdStatus.value
   );
-  console.log(res);
   emits("update:modelValue", false);
   if (res.httpStatus === 200) {
     emits("message", {

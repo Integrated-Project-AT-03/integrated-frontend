@@ -7,7 +7,7 @@ const message = ref("");
 const status = ref(undefined);
 const messageModalOpenState = ref(false);
 
-const handleShowMessage = async (e) => {
+const handleMessage = async (e) => {
   if (messageModalOpenState.value) {
     messageModalOpenState.value = false;
     await setTimeout(() => {}, 1000);
@@ -25,10 +25,6 @@ const handleShowMessage = async (e) => {
   <div
     class="container h-screen w-full relative mx-auto flex items-center flex-col gap-3"
   >
-    <!-- :class="
-      $route.fullPath.split('/').length > 2 ||
-      ($route.name === 'Addstatus' && 'blur-sm')
-    " -->
     <div class="w-full flex justify-end mt-6">
       <Setting class="cursor-pointer" onclick="status_setting.showModal()" />
     </div>
@@ -46,7 +42,7 @@ const handleShowMessage = async (e) => {
     >
       <Alert :status="status" :message="message" />
     </transition>
-    <RouterView @message="handleShowMessage($event)" />
+    <RouterView @message="handleMessage($event)" />
     <StatusSetting @message="handleMessage($event)" />
   </div>
 </template>
