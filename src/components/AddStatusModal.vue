@@ -94,15 +94,14 @@ async function addNewStatus() {
 
           <div class="itbkk-status-color ml-12">Color</div>
 
-          <div class="flex justify-center px-10">
+          <div class="flex justify-center">
             <div
-              class="color-picker-container flex flex-wrap gap-2 items-center"
+              class="color-picker-container flex flex-wrap gap-6 items-center"
             >
-              <div>Color Tag :</div>
               <div
                 v-for="color in colorStore.getColors()"
                 :key="color.id"
-                class="color-picker-item flex items-center justify-center cursor-pointer relative"
+                class="color-picker-item cursor-pointer relative flex justify-center items-center"
                 @click="() => (newData.colorId = color.id)"
               >
                 <div
@@ -111,17 +110,14 @@ async function addNewStatus() {
                     newData.colorId === color.id &&
                     'border-[4px] border-purple-500'
                   "
-                  class="color-box w-8 h-8 rounded-full border border-gray-300 relative"
+                  class="color-box w-8 h-8 rounded-full border border-gray-300"
                 ></div>
-                <span class="ml-2">{{
-                  color.name[0].toUpperCase() + color.name.slice(1)
-                }}</span>
               </div>
             </div>
           </div>
         </div>
         <div class="divider"></div>
-        <div class="flex justify-end mt-4 mr-4 gap-3">
+        <div class="flex justify-end mt-8 mr-4 gap-3">
           <Button class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100" message="Save" 
           :disabled="newData.name === '' || validateInput.description || validateInput.name"/>
           <Button class="itbkk-button-cancle" message="Cancel" @click="router.push({ name: 'Statuses' })"/>

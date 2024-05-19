@@ -135,7 +135,7 @@ async function updateStatus() {
       </div>
       <div class="divider"></div>
       <div class="flex w-fit ml-10 px-10">
-        <div class="color-picker-container flex flex-wrap gap-2 items-center">
+        <div class="color-picker-container flex flex-wrap gap-6 items-center">
           <div>Color Tag :</div>
           <div
             v-for="color in colorStore.getColors()"
@@ -150,13 +150,10 @@ async function updateStatus() {
               "
               class="color-box w-8 h-8 rounded-full border border-gray-300 relative"
             ></div>
-            <span class="ml-2">{{
-              color.name[0].toUpperCase() + color.name.slice(1)
-            }}</span>
           </div>
         </div>
       </div>
-      <div class="flex gap-3 justify-end mr-5">
+      <div class="flex gap-3 justify-end mr-5 mt-5">
         <Button class="btn-success" message="Save" @click="updateStatus()" :disabled="
             data.name === '' ||
             validateInput.description ||
