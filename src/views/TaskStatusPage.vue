@@ -60,7 +60,7 @@ const handleMessage = (e) => {
       />
     </div>
   </div>
-  <table class="min-w-full divide-y divide-gray-200">
+  <table class="min-w-full divide-y h-[10px] divide-gray-200">
     <thead class="bg-gray-200">
       <tr>
         <th
@@ -89,7 +89,7 @@ const handleMessage = (e) => {
         </th>
       </tr>
     </thead>
-    <tbody class="bg-slate-100 divide-y divide-gray-300">
+    <tbody class="bg-slate-100 divide-y divide-gray-300 ">
       <tr v-show="datas.getStatuses().length === 0">
         <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-900">
           No task

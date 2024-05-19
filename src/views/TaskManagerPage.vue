@@ -163,19 +163,19 @@ const handleMessage = (e) => {
         </th>
         <th
           scope="col"
-          class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+          class="px-6 py-3 min-w-[852px] text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
         >
           Title
         </th>
         <th
           scope="col"
-          class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+          class="px-6 py-3 text-left min-w-[160px] text-sm font-bold text-gray-900 uppercase tracking-wider"
         >
           Assignees
         </th>
         <th
           scope="col"
-          class="flex flex-row px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+          class="flex flex-row px-6 py-3 min-w-[326px] text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
         >
           <div>Status</div>
           <div
@@ -223,6 +223,7 @@ const handleMessage = (e) => {
       </tr>
     </tbody>
   </table>
+
   <router-view @message="handleMessage($event)" />
 </template>
 

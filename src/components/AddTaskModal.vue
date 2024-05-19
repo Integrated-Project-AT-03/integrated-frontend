@@ -32,15 +32,15 @@ onMounted(async () => {
 });
 
 async function addNewTask(newItem) {
-  const newTask = await addItem(`${uri}/v2/tasks`, newItem);
+  const res = await addItem(`${uri}/v2/tasks`, newItem);
 
-  if (newTask.httpStatus === 201) {
+  if (res.httpStatus === 201) {
     emits("message", {
       description: `The task has been successfully added.`,
       status: "success",
     });
-    datas.value.addTask(newTask);
-  } else if (newTask.status === 400) {
+    datas.value.addTask(res);
+  } else if (res.status === 400 || res.status === 500) {
     emits("message", {
       description: `${res.message}`,
       status: "error",
@@ -57,7 +57,7 @@ async function addNewTask(newItem) {
 
 <template>
   <div
-    class="w-screen top-0 h-screen absolute flex justify-center items-center z-10"
+    class="w-full top-0 h-screen absolute flex justify-center items-center z-10"
   >
     <div class="m-auto w-[65rem] h-[48rem] bg-neutral rounded-2xl">
       <div class="text-xl mt-4 ml-6">New Task</div>

@@ -23,7 +23,7 @@ const handleShowMessage = async (e) => {
 
 <template>
   <div
-    class="container h-screen w-screen relative overflow-x-hidden mx-auto flex items-center flex-col gap-3"
+    class="container h-screen w-full relative mx-auto flex items-center flex-col gap-3"
   >
     <!-- :class="
       $route.fullPath.split('/').length > 2 ||
