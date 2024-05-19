@@ -120,7 +120,12 @@ async function addNewTask(newItem) {
           class="itbkk-button-confirm btn-success"
           message="Save"
           @click="addNewTask(newData)"
-          :disabled="newData.title === ''"
+          :disabled="
+            newData.title === '' ||
+            validateInput.assignees ||
+            validateInput.description ||
+            validateInput.title
+          "
         />
         <Button
           class="itbkk-button-cancle"

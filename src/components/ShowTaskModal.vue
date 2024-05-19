@@ -226,6 +226,9 @@ const handleMessage = (e) => {
           @click="editTask()"
           :disabled="
             dataTask.title === '' ||
+            validateInput.assignees ||
+            validateInput.description ||
+            validateInput.title ||
             ((dataTask.assignees ?? '') === (compareTask?.assignees ?? '') &&
               (dataTask.description ?? '') ===
                 (compareTask?.description ?? '') &&

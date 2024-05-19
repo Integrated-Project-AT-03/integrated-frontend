@@ -116,28 +116,6 @@ async function addNewStatus() {
                 }}</span>
               </div>
             </div>
-            <!-- <div
-              class="color-picker-container flex flex-wrap gap-2 items-center"
-            >
-              <div
-                v-for="color in colorStore.getColors()"
-                :key="color.id"
-                class="color-picker-item flex items-center cursor-pointer relative"
-                @click="() => (newData.colorId = color.id)"
-              >
-                <div
-                  :style="{ backgroundColor: color.hex }"
-                  :class="
-                    newData.colorId === color.id &&
-                    'border-[4px] border-purple-500'
-                  "
-                  class="color-box w-8 h-8 rounded-full border border-gray-300 mt-2 relative"
-                ></div>
-                <span class="ml-2">{{
-                  color.name[0].toUpperCase() + color.name.slice(1)
-                }}</span>
-              </div>
-            </div> -->
           </div>
         </div>
 
@@ -146,7 +124,7 @@ async function addNewStatus() {
           <button
             @click="addNewStatus(newData)"
             class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
-            :disabled="newData.name === ''"
+            :disabled="newData.name === '' || validateInput.description || validateInput.name"
           >
             Save
           </button>
