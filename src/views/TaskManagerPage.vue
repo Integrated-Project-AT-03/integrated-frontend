@@ -104,19 +104,19 @@ const handleMessage = (e) => {
       <div class="container">
         <div class="flex items-center">
           <input
-            class="border p-2 rounded-md mr-2 w-1/3 text-gray-900"
+            class="itbkk-status-filter border p-2 rounded-md mr-2 w-1/3 text-gray-900"
             type="text"
             v-model="newItem"
             @keyup.enter="addItem"
-            placeholder="Add a new item"
+            placeholder="Filter by status(es)"
           />
-          <Button message="Clear All" @click="clearAll" bgcolor="#ef4444" />
+          <Button class="itbkk-filter-clear"message="Clear All" @click="clearAll" bgcolor="#ef4444" />
         </div>
         <div class="flex flex-wrap gap-2 mt-2">
           <div
             v-for="(item, index) in items"
             :key="index"
-            class="p-3 rounded-md relative flex items-center bg-white text-gray-900 cursor-pointer hover:bg-slate-300"
+            class="itbkk-filter-item itbkk-filter-item-clear p-3 rounded-md relative flex items-center bg-white text-gray-900 cursor-pointer hover:bg-slate-300"
             @click="removeItem(index)"
           >
             <span class="text-error absolute -top-1 right-1">x</span>
