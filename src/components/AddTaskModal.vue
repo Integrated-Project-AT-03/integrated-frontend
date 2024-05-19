@@ -36,13 +36,18 @@ async function addNewTask(newItem) {
 
   if (newTask.httpStatus === 201) {
     emits("message", {
-      description: `The task has been successfully added`,
+      description: `The task has been successfully added.`,
       status: "success",
     });
     datas.value.addTask(newTask);
-  } else {
+  } else if (newTask.status === 400) {
     emits("message", {
       description: `${res.message}`,
+      status: "error",
+    });
+  } else {
+    emits("message", {
+      description: `Someting went wrong.`,
       status: "error",
     });
   }

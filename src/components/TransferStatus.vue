@@ -31,7 +31,7 @@ const submit = async () => {
   emits("update:modelValue", false);
   if (res.httpStatus === 200) {
     emits("message", {
-      description: `${res.body} task(s) have been transferred and the status has been deleted`,
+      description: `${res.body} task(s) have been transferred and the status has been deleted.`,
       status: "success",
     });
     datas.value.deleteStatus(props.selectedStatus.id);

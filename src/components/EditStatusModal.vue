@@ -55,7 +55,7 @@ async function updateStatus() {
   if (res.httpStatus === 200) {
     management.value.updateStatus(route.params.id, res);
     emits("message", {
-      description: "The status has been updated",
+      description: "The status has been updated.",
       status: "success",
     });
   } else if (res.status === 404) {
@@ -71,7 +71,7 @@ async function updateStatus() {
     });
   } else if (res.status === 500) {
     emits("message", {
-      description: `The name of status must be unique`,
+      description: `The name of status must be unique.`,
       status: "error",
     });
   }

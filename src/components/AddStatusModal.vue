@@ -31,7 +31,7 @@ async function addNewStatus() {
   if (res.httpStatus === 201) {
     datas.value.addStatus(res);
     emits("message", {
-      description: `The status has been added`,
+      description: `The status has been added.`,
       status: "success",
     });
   } else if (res.status === 400) {
@@ -41,7 +41,7 @@ async function addNewStatus() {
     });
   } else if (res.status === 500) {
     emits("message", {
-      description: "An error has occurred, the status could not be added.",
+      description: "   The name of status must be unique.",
       status: "error",
     });
   }
