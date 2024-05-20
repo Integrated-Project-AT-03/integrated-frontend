@@ -59,24 +59,32 @@ async function updateStatus() {
       description: "The status has been updated.",
       status: "success",
     });
+    router.push({ name: "Statuses" });
   } else if (res.status === 404) {
     emits("message", {
       description: `An error has occurred, the status does not exist.`,
       status: "error",
     });
+    router.push({ name: "Statuses" });
     management.value.deleteStatus(route.params.id);
   } else if (res.status === 422) {
     emits("message", {
       description: `${res.message}`,
       status: "error",
     });
-  } else if (res.status === 500) {
+    router.push({ name: "Statuses" });
+  } else if (res.status === 400) {
     emits("message", {
-      description: `The name of status must be unique.`,
+      description: `Status name must be uniques, please choose another name.`,
       status: "error",
     });
+  } else {
+    emits("message", {
+      description: `something went wrong, please try again`,
+      status: "error",
+    });
+    router.push({ name: "Statuses" });
   }
-  router.push({ name: "Statuses" });
 }
 </script>
 

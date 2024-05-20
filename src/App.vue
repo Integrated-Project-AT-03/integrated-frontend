@@ -1,13 +1,18 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import Alert from "./components/Alert.vue";
 import StatusSetting from "./components/StatusSetting.vue";
 import Setting from "./assets/icons/Setting.vue";
-
+import { getItemById } from "./lib/fetch.js";
+const uri = import.meta.env.VITE_SERVER_URI;
 const message = ref("");
-const status = ref(undefined);
+const status = ref();
 const messageModalOpenState = ref(false);
-
+const limitState = ref();
+onMounted(async () => {
+  const setting = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
+  limitState.value = setting.enable;
+});
 const handleMessage = async (e) => {
   if (messageModalOpenState.value) {
     messageModalOpenState.value = false;
@@ -43,8 +48,11 @@ const handleMessage = async (e) => {
     >
       <Alert :status="status" :message="message" />
     </transition>
-    <RouterView @message="handleMessage($event)" />
-    <StatusSetting @message="handleMessage($event)" />
+    <RouterView :stateLimit="limitState" @message="handleMessage($event)" />
+    <StatusSetting
+      @loadSetting="(state) => (limitState = state)"
+      @message="handleMessage($event)"
+    />
   </div>
 </template>
 

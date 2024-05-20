@@ -16,7 +16,9 @@ const uri = import.meta.env.VITE_SERVER_URI;
 const isLoading = ref(true);
 const sort = ref("");
 const sortOrder = ref("default");
-
+defineProps({
+  stateLimit: Boolean,
+});
 const sortImage = computed(() => {
   switch (sortOrder.value) {
     case "ascending":
@@ -34,7 +36,7 @@ const loadTasks = async () => {
   datas.value.setTasks(
     (
       await getItems(
-        `${uri}/v2/tasks?sortBy=statusStatusName&sortDirection=${
+        `${uri}/v2/tasks?sortBy=status.name&sortDirection=${
           sort.value
         }&filterStatuses=${items.value.join(",")}`
       )
@@ -57,15 +59,17 @@ const toggleSortOrder = () => {
   } else {
     sortOrder.value = "default";
     sort.value = "";
+    return loadTasksSortDefault();
   }
+
   loadTasks();
 };
 
-const loadTasksSortById = async () => {
+const loadTasksSortDefault = async () => {
   datas.value.setTasks(
     (
       await getItems(
-        `${uri}/v2/tasks?sortBy=id&sortDirection=${
+        `${uri}/v2/tasks?sortDirection=${
           sort.value
         }&filterStatuses=${items.value.join(",")}`
       )
@@ -75,7 +79,7 @@ const loadTasksSortById = async () => {
 
 const removeItem = async (index) => {
   items.value.splice(index, 1);
-  if (!sort.value) return loadTasksSortById();
+  if (!sort.value) return loadTasksSortDefault();
   loadTasks();
 };
 
@@ -88,7 +92,7 @@ const addItem = async () => {
     items.value.push(newItem.value.trim());
     newItem.value = "";
   }
-  if (!sort.value) return loadTasksSortById();
+  if (!sort.value) return loadTasksSortDefault();
   loadTasks();
 };
 const emits = defineEmits(["message"]);

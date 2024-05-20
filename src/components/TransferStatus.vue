@@ -21,7 +21,7 @@ const submit = async () => {
   const res = await changeTasksStatus(
     `${uri}/v2/statuses`,
     props.selectedStatus.id,
-    newIdStatus.value
+    newIdStatus.value.id
   );
   emits("update:modelValue", false);
   if (res.httpStatus === 200) {
@@ -43,8 +43,14 @@ const submit = async () => {
     });
     datas.value.deleteStatus(props.selectedStatus.id);
   } else if (res.httpStatus === 400) {
+    console.log(selectStatus.value);
     emits("message", {
-      description: "Bad Request",
+      description: `Cannot transfer to ${newIdStatus.value.name} status since it will exceed the limit.  Please choose another status to transfer to.`,
+      status: "error",
+    });
+  } else {
+    emits("message", {
+      description: `something went wrong, please try again`,
       status: "error",
     });
   }
@@ -75,7 +81,7 @@ const submit = async () => {
               :disabled="selectedStatus.id === status.id"
               v-for="status in selectStatus"
               :key="status.id"
-              :value="status.id"
+              :value="status"
             >
               {{ status.name }}
             </option>

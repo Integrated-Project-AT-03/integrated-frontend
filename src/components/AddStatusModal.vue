@@ -36,18 +36,19 @@ async function addNewStatus() {
       description: `The status has been added.`,
       status: "success",
     });
+    router.push({ name: "Statuses" });
   } else if (res.status === 400) {
     emits("message", {
-      description: "An error has occurred, the status could not be added.",
+      description: "Status name must be uniques, please choose another name.",
       status: "error",
     });
-  } else if (res.status === 500) {
+  } else {
     emits("message", {
-      description: "   The name of status must be unique.",
+      description: "Somthing went wrong, Please try again",
       status: "error",
     });
+    router.push({ name: "Statuses" });
   }
-  router.push({ name: "Statuses" });
 }
 </script>
 

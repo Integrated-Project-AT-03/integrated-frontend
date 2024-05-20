@@ -8,13 +8,15 @@ import Loading from "../components/Loading.vue";
 import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
 import Button from "../components/ButtonModal.vue";
 import StatusModal from "@/components/StatusModal.vue";
-
 const emits = defineEmits(["message"]);
 const datas = ref(TaskStatusManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const isLoading = ref(true);
 const selectedStatus = ref({});
 const showTranferStauts = ref(false);
+defineProps({
+  stateLimit: Boolean,
+});
 
 onMounted(async function () {
   const data = await getItems(`${uri}/v2/statuses`);
@@ -57,6 +59,12 @@ const handleMessage = (e) => {
           @click="$router.push({ name: 'AddStatus' })"
         />
       </div>
+    </div>
+    <div>
+      The limit status :
+      <span :class="stateLimit ? 'text-success' : 'text-error'">
+        {{ stateLimit ? "enable" : "disable" }} state
+      </span>
     </div>
     <table class="min-w-full divide-y h-[10px] divide-gray-200">
       <thead class="bg-gray-200">

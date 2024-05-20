@@ -12,6 +12,7 @@ const emits = defineEmits(["message"]);
 const route = useRoute();
 const router = useRouter();
 const isEditMode = ref();
+const setting = ref();
 const dataTask = ref({
   title: "",
   description: "",
@@ -57,6 +58,7 @@ const loadTask = async () => {
 onMounted(async () => {
   await loadTask();
   statuses.value = await getItems(`${uri}/v2/statuses`);
+  setting.value = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
 });
 
 const editTask = async () => {
@@ -79,10 +81,18 @@ const editTask = async () => {
       status: "error",
     });
     datas.value.deleteTask(route.params.id);
-  } else if (res.status === 500) {
-    console.log(res);
+  } else if (res.status === 400) {
     emits("message", {
-      description: `${res.message}`,
+      description: `On over limit, provide an appropriate message. The status ${
+        statuses.value.items.find(({ id }) => +id === +dataTask.value.status)
+          .name
+      }  will have too many tasks.  Please make progress and update status of existing tasks first.`,
+      status: "error",
+    });
+    datas.value.deleteTask(route.params.id);
+  } else {
+    emits("message", {
+      description: `something went wrong, please try again`,
       status: "error",
     });
   }
@@ -191,6 +201,12 @@ const handleMessage = (e) => {
                 {{ status.name }}
               </option>
             </select>
+            <div>
+              The limit status :
+              <span :class="setting?.enable ? 'text-success' : 'text-error'">
+                {{ setting?.enable ? "enable" : "disable" }} state
+              </span>
+            </div>
           </div>
           <div
             class="flex flex-col justify-between h-3/4 gap-3 pb-3 text-slate-200"

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { patchItemById, getItemById } from "./../lib/fetch";
 import Button from "./ButtonModal.vue";
 
@@ -11,6 +11,12 @@ const loadSetting = async () => {
   compareSetting.value = { ...setting.value };
 };
 onMounted(async () => loadSetting());
+watch(
+  () => setting.value.enable,
+  () => {
+    if (!setting.value.enable) setting.value.value = compareSetting.value.value;
+  }
+);
 const validation = computed(() => {
   return {
     limitTasks:
@@ -19,7 +25,7 @@ const validation = computed(() => {
       typeof setting.value.value !== "number",
   };
 });
-const emits = defineEmits(["message"]);
+const emits = defineEmits(["message", "loadSetting"]);
 const saveSetting = async () => {
   const res = await patchItemById(
     `${uri}/v2/settings`,
@@ -27,7 +33,7 @@ const saveSetting = async () => {
     setting.value.value,
     setting.value.enable ? "enable" : "disable"
   );
-  await loadSetting();
+
   if (res.httpStatus === 200) {
     if (setting.value.enable)
       emits("message", {
@@ -39,17 +45,20 @@ const saveSetting = async () => {
         description: `The Kanban board has disabled the task limit in each status`,
         status: "success",
       });
+    loadSetting();
+    emits("loadSetting", setting.value.enable);
   } else if (res.httpStatus === 400) {
     emits("message", {
       description: `${res.errors[0].field} ${res.errors[0].message}`,
       status: "error",
     });
-    loadSetting();
+    setting.value = { ...compareSetting.value };
   } else {
     emits("message", {
-      description: `something went wrong`,
+      description: `something went wrong, please try again`,
       status: "error",
     });
+    setting.value = { ...compareSetting.value };
   }
 };
 </script>
@@ -66,7 +75,7 @@ const saveSetting = async () => {
           User can limit the number of task in a status by setting the Maximum
         </div>
         <div>
-          tasks in each status (exxcept "No status" and "Done" statuses).
+          tasks in each status (except "No status" and "Done" statuses).
         </div>
       </div>
       <div class="flex gap-4">
@@ -81,6 +90,7 @@ const saveSetting = async () => {
         <div>Maximum tasks</div>
         <div class="flex flex-col gap-1">
           <input
+            :disabled="!setting.enable"
             v-model.number="setting.value"
             type="text"
             maxlength="2"
@@ -96,7 +106,7 @@ const saveSetting = async () => {
         <form method="dialog">
           <Button
             class="itbkk-button-confirm btn-success text-slate-200"
-            message="Save"
+            message="Confirm"
             @click="saveSetting"
             :disabled="
               validation.limitTasks ||
@@ -109,7 +119,7 @@ const saveSetting = async () => {
           <Button
             class="itbkk-button-cancel btn-error text-slate-200"
             message="Cancel"
-            @click="loadSetting"
+            @click="() => (setting = { ...compareSetting })"
           />
         </form>
       </div>

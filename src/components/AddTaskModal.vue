@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from "vue-router";
-import { addItem, getItems } from "../lib/fetch.js";
+import { addItem, getItems, getItemById } from "../lib/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
 import { computed, onMounted, ref } from "vue";
 import Button from "./ButtonModal.vue";
@@ -10,27 +10,33 @@ const emits = defineEmits(["message"]);
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
-const newData = ref({
+const setting = ref();
+const taskForm = ref({
   title: "",
   description: "",
   assignees: "",
-  status: 1,
+  status: {},
 });
 
 const validateInput = computed(() => {
   return {
-    title: newData.value.title.length > 100,
-    description: newData.value.description.length > 500,
-    assignees: newData.value.assignees.length > 30,
+    title: taskForm.value.title.length > 100,
+    description: taskForm.value.description.length > 500,
+    assignees: taskForm.value.assignees.length > 30,
   };
 });
 
 onMounted(async () => {
   statuses.value = await getItems(`${uri}/v2/statuses`);
+  taskForm.value.status = statuses.value.items[0];
+  setting.value = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
 });
 
 async function addNewTask(newItem) {
-  const res = await addItem(`${uri}/v2/tasks`, newItem);
+  const res = await addItem(`${uri}/v2/tasks`, {
+    ...newItem,
+    status: newItem.status.id,
+  });
 
   if (res.httpStatus === 201) {
     emits("message", {
@@ -38,9 +44,9 @@ async function addNewTask(newItem) {
       status: "success",
     });
     datas.value.addTask(res);
-  } else if (res.status === 400 || res.status === 500) {
+  } else if (res.status === 400) {
     emits("message", {
-      description: `${res.message}`,
+      description: `The status ${newItem.status.name}  will have too many tasks.  Please make progress and update status of existing tasks first.`,
       status: "error",
     });
   } else {
@@ -58,7 +64,9 @@ async function addNewTask(newItem) {
     class="w-full top-0 h-screen absolute flex justify-center items-center z-10"
   >
     <div class="m-auto w-[65rem] h-[48rem] bg-neutral rounded-2xl">
-      <div class="text-xl mt-4 ml-6">New Task</div>
+      <div class="flex mt-4 px-5 items-center justify-between">
+        <div class="text-xl">New Task</div>
+      </div>
       <div class="divider"></div>
       <div class="flex flex-col gap-3">
         <div class="flex gap-4">
@@ -69,7 +77,7 @@ async function addNewTask(newItem) {
         </div>
         <div class="flex justify-center">
           <input
-            v-model.trim="newData.title"
+            v-model.trim="taskForm.title"
             class="itbkk-title w-[60rem] h-11 rounded-2xl p-2 bg-secondary border-base-100"
           />
         </div>
@@ -82,7 +90,7 @@ async function addNewTask(newItem) {
               </div>
             </div>
             <textarea
-              v-model.trim="newData.description"
+              v-model.trim="taskForm.description"
               class="itbkk-description w-[35rem] h-[28rem] rounded-2xl border p-4 bg-secondary border-base-100"
             ></textarea>
           </div>
@@ -95,20 +103,26 @@ async function addNewTask(newItem) {
                 </div>
               </div>
               <textarea
-                v-model.trim="newData.assignees"
+                v-model.trim="taskForm.assignees"
                 class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl border p-4 bg-secondary border-base-100"
               ></textarea>
             </div>
             <div class="flex flex-col gap-3">
               <div>Status</div>
               <select
-                v-model="newData.status"
+                v-model="taskForm.status"
                 class="itbkk-status select w-full max-w-xs bg-base-100"
               >
-                <option v-for="status in statuses?.items" :value="status.id">
+                <option v-for="status in statuses?.items" :value="status">
                   {{ status.name }}
                 </option>
               </select>
+              <div>
+                The limit status :
+                <span :class="setting?.enable ? 'text-success' : 'text-error'">
+                  {{ setting?.enable ? "enable" : "disable" }} state
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -117,9 +131,9 @@ async function addNewTask(newItem) {
         <Button
           class="itbkk-button-confirm btn-success"
           message="Save"
-          @click="addNewTask(newData)"
+          @click="addNewTask(taskForm)"
           :disabled="
-            newData.title === '' ||
+            taskForm.title === '' ||
             validateInput.assignees ||
             validateInput.description ||
             validateInput.title
