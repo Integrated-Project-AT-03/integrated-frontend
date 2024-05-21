@@ -1,7 +1,6 @@
 class TaskStatusManagement {
   constructor() {
     this.statuses = [];
-    this.colorsStatus = [];
   }
   async setStatuses(statuses = []) {
     this.statuses = statuses;
@@ -13,6 +12,12 @@ class TaskStatusManagement {
   getStatuses() {
     return this.statuses;
   }
+  getStatusesByName(name) {
+    return this.statuses.filter((status) =>
+      status.name.toLowerCase().includes(name.toLowerCase())
+    );
+  }
+
   findStatusIndex(id) {
     return this.statuses.findIndex((status) => +status.id === +id);
   }

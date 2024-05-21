@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
+import StatusManagement from "./../lib/TaskStatusManagement";
 import Loading from "./../components/Loading.vue";
 import { getItems } from "./../lib/fetch.js";
 import Button from "@/components/ButtonModal.vue";
@@ -11,11 +12,14 @@ import SortDisable from "./../assets/icons/SortDisable.vue";
 
 const newItem = ref("");
 const items = ref([]);
-const datas = ref(TaskManagement);
+const taskManager = ref(TaskManagement);
+const statusManager = ref(StatusManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const isLoading = ref(true);
 const sort = ref("");
 const sortOrder = ref("default");
+const openSearch = ref(false);
+let timeoutBlur = null;
 defineProps({
   stateLimit: Boolean,
 });
@@ -32,8 +36,10 @@ const sortImage = computed(() => {
 
 const loadTasks = async () => {
   if (sort.value === "" && items.value.length === 0)
-    return datas.value.setTasks((await getItems(`${uri}/v2/tasks`)).items);
-  datas.value.setTasks(
+    return taskManager.value.setTasks(
+      (await getItems(`${uri}/v2/tasks`)).items
+    );
+  taskManager.value.setTasks(
     (
       await getItems(
         `${uri}/v2/tasks?sortBy=status.name&sortDirection=${
@@ -46,6 +52,8 @@ const loadTasks = async () => {
 
 onMounted(async function () {
   await loadTasks();
+  const res = await getItems(`${uri}/v2/statuses`);
+  statusManager.value.setStatuses(res.items);
   isLoading.value = false;
 });
 
@@ -66,7 +74,7 @@ const toggleSortOrder = () => {
 };
 
 const loadTasksSortDefault = async () => {
-  datas.value.setTasks(
+  taskManager.value.setTasks(
     (
       await getItems(
         `${uri}/v2/tasks?sortDirection=${
@@ -86,6 +94,7 @@ const removeItem = async (index) => {
 const clearAll = async () => {
   items.value = [];
   loadTasks();
+  openSearch.value = false;
 };
 const addItem = async () => {
   if (newItem.value.trim() !== "") {
@@ -99,6 +108,14 @@ const emits = defineEmits(["message"]);
 const handleMessage = (e) => {
   emits("message", e);
 };
+const handleBlur = () => {
+  timeoutBlur = setTimeout(() => (openSearch.value = false), 200);
+};
+const handleSelect = async (name) => {
+  clearTimeout(timeoutBlur);
+  newItem.value = name;
+  addItem();
+};
 </script>
 
 <template>
@@ -110,30 +127,52 @@ const handleMessage = (e) => {
   >
     <div class="w-full flex items-center justify-around">
       <div class="container">
-        <div class="flex items-center">
-          <input
-            class="itbkk-status-filter border p-2 rounded-md mr-2 w-1/3 text-gray-900"
-            type="text"
-            v-model="newItem"
-            @keyup.enter="addItem"
-            placeholder="Filter by status(es)"
-          />
+        <div class="flex gap-2 items-center">
+          <label class="flex flex-col gap-2 relative">
+            <input
+              class="itbkk-status-filter border p-2 w-[300px] rounded-md text-gray-900"
+              type="text"
+              v-model="newItem"
+              @keyup.enter="addItem"
+              placeholder="Filter by status(es)"
+              @focus="openSearch = true"
+              @blur="handleBlur"
+            />
+            <div
+              v-show="openSearch"
+              class="absolute w-full flex-col pt-3 gap top-8 rounded-md flex h-max overflow-hidden bg-white"
+            >
+              <div
+                v-for="status in statusManager
+                  .getStatusesByName(newItem)
+                  .slice(0, 9)"
+                class="h-[30px] text-black hover:bg-slate-300 px-3"
+                @click="handleSelect(status.name)"
+              >
+                {{
+                  status.name.length > 25
+                    ? status.name.slice(0, 22) + "..."
+                    : status.name
+                }}
+              </div>
+            </div>
+          </label>
           <Button
             class="itbkk-filter-clear"
             message="Clear All"
             @click="clearAll"
             bgcolor="#ef4444"
           />
-        </div>
-        <div class="flex flex-wrap gap-2 mt-2">
-          <div
-            v-for="(item, index) in items"
-            :key="index"
-            class="itbkk-filter-item itbkk-filter-item-clear p-3 rounded-md relative flex items-center bg-white text-gray-900 cursor-pointer hover:bg-slate-300"
-            @click="removeItem(index)"
-          >
-            <span class="text-error absolute -top-1 right-1">x</span>
-            <span>{{ item }}</span>
+          <div class="flex flex-wrap gap-2">
+            <div
+              v-for="(item, index) in items"
+              :key="index"
+              class="itbkk-filter-item itbkk-filter-item-clear p-3 rounded-md relative flex items-center bg-white text-gray-900 cursor-pointer hover:bg-slate-300"
+              @click="removeItem(index)"
+            >
+              <span class="text-error absolute -top-1 right-1">x</span>
+              <span>{{ item }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -193,14 +232,14 @@ const handleMessage = (e) => {
         </tr>
       </thead>
       <tbody class="bg-slate-100 divide-y divide-gray-300">
-        <tr v-show="datas.getTasks().length === 0">
+        <tr v-show="taskManager.getTasks().length === 0">
           <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-900">
             No task
           </td>
         </tr>
         <tr
           class="itbkk-item itbkk-button-action hover:bg-slate-200"
-          v-for="(task, index) in datas.getTasks()"
+          v-for="(task, index) in taskManager.getTasks()"
           :key="task.id"
           @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })"
         >

@@ -12,7 +12,6 @@ async function getItemById(url, id) {
   try {
     const res = await fetch(`${url}/${id}`);
     const item = await res.json();
-    console.log(item);
     return { ...item, httpStatus: res.status };
   } catch (error) {
     console.log(`error: ${error}`);
@@ -25,7 +24,6 @@ async function deleteItemById(url, id) {
       method: "DELETE",
     });
     const item = await res.json();
-    console.log(item);
     return { ...item, httpStatus: res.status };
   } catch (error) {
     console.log(`error: ${error}`);
@@ -38,7 +36,6 @@ async function patchItemById(url, id, value, status) {
       method: "PUT",
     });
     const item = await res.json();
-    console.log(item);
     return { ...item, httpStatus: res.status };
   } catch (error) {
     console.log(`error: ${error}`);
@@ -57,7 +54,6 @@ async function addItem(url, newItem) {
       }),
     });
     const item = await res.json();
-    console.log(item);
     return { ...item, httpStatus: res.status };
   } catch (error) {
     console.log(`error: ${error}`);
