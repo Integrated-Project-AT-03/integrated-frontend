@@ -36,10 +36,10 @@ const sortImage = computed(() => {
 
 const loadTasks = async () => {
   if (sort.value === "" && items.value.length === 0)
-    return taskManager.value.setTasks(
+    taskManager.value.setTasks(
       (await getItems(`${uri}/v2/tasks`)).items
     );
-  taskManager.value.setTasks(
+  else { taskManager.value.setTasks(
     (
       await getItems(
         `${uri}/v2/tasks?sortBy=status.name&sortDirection=${
@@ -47,7 +47,7 @@ const loadTasks = async () => {
         }&filterStatuses=${items.value.join(",")}`
       )
     ).items
-  );
+  )};
 };
 
 onMounted(async function () {
@@ -221,10 +221,7 @@ const handleSelect = async (name) => {
               class="itbkk-status-sort m-auto ml-2 cursor-pointer flex items-center"
               @click="toggleSortOrder"
             >
-              <SortDisable
-                v-show="sortImage === 1"
-                class="w-5 scale-[190%] h-5"
-              />
+              <SortDisable v-show="sortImage === 1" class="w-5 scale-[190%] h-5"/>
               <SortAsc v-show="sortImage === 2" class="w-5 h-5" />
               <SortDesc v-show="sortImage === 3" class="w-5 h-5" />
             </div>
