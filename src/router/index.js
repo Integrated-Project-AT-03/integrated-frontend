@@ -38,7 +38,7 @@ const router = createRouter({
 
     {
       path: "/status",
-      name: "Statuses",
+      name: "Status",
       component: StatusManagerPage,
       children: [
         {

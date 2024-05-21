@@ -36,7 +36,7 @@ async function addNewStatus() {
       description: `The status has been added.`,
       status: "success",
     });
-    router.push({ name: "Statuses" });
+    router.push({ name: "Status" });
   } else if (res.status === 400) {
     emits("message", {
       description: "Status name must be uniques, please choose another name.",
@@ -47,7 +47,7 @@ async function addNewStatus() {
       description: "Somthing went wrong, Please try again",
       status: "error",
     });
-    router.push({ name: "Statuses" });
+    router.push({ name: "Status" });
   }
 }
 </script>
@@ -132,7 +132,7 @@ async function addNewStatus() {
           <Button
             class="itbkk-button-cancle"
             message="Cancel"
-            @click="router.push({ name: 'Statuses' })"
+            @click="router.push({ name: 'Status' })"
           />
         </div>
         <Loading :is-loading="isLoading" />

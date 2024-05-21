@@ -40,7 +40,7 @@ async function deleteStatus(id) {
     });
   }
 
-  return router.push({ name: "Statuses" });
+  return router.push({ name: "Status" });
 }
 </script>
 <template>

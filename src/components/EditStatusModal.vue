@@ -35,13 +35,13 @@ onMounted(async function () {
       status: "error",
     });
     management.value.deleteStatus(route.params.id);
-    router.push({ name: "Statuses" });
+    router.push({ name: "Status" });
   } else if (res.id === 1 || res.id === 4) {
     emits("message", {
       description: `The ${res.name} is not allow to editing`,
       status: "error",
     });
-    router.push({ name: "Statuses" });
+    router.push({ name: "Status" });
   }
   data.value = res;
   compareStatus = { ...res };
@@ -59,20 +59,20 @@ async function updateStatus() {
       description: "The status has been updated.",
       status: "success",
     });
-    router.push({ name: "Statuses" });
+    router.push({ name: "Status" });
   } else if (res.status === 404) {
     emits("message", {
       description: `An error has occurred, the status does not exist.`,
       status: "error",
     });
-    router.push({ name: "Statuses" });
+    router.push({ name: "Status" });
     management.value.deleteStatus(route.params.id);
   } else if (res.status === 422) {
     emits("message", {
       description: `${res.message}`,
       status: "error",
     });
-    router.push({ name: "Statuses" });
+    router.push({ name: "Status" });
   } else if (res.status === 400) {
     emits("message", {
       description: `Status name must be uniques, please choose another name.`,
@@ -83,7 +83,7 @@ async function updateStatus() {
       description: `something went wrong, please try again`,
       status: "error",
     });
-    router.push({ name: "Statuses" });
+    router.push({ name: "Status" });
   }
 }
 </script>
@@ -175,7 +175,7 @@ async function updateStatus() {
               (data.colorId ?? '') === (compareStatus?.colorId ?? ''))
           "
         />
-        <Button message="Cancel" @click="router.push({ name: 'Statuses' })" />
+        <Button message="Cancel" @click="router.push({ name: 'Status' })" />
       </div>
     </div>
   </div>

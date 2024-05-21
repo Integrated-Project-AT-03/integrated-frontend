@@ -45,7 +45,7 @@ const handleMessage = (e) => {
         </div>
         <ChevronRight />
         <div
-          @click="$router.push({ name: 'Statuses' })"
+          @click="$router.push({ name: 'Status' })"
           class="text-xl font-bold cursor-pointer text-primary"
         >
           Task Status
