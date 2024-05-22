@@ -1,15 +1,17 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import TaskStatusManagement from "@/lib/TaskStatusManagement";
+import { getItemById } from "../lib/fetch.js";
 import Button from "./ButtonModal.vue";
-const datas = ref(TaskStatusManagement);
+const statusManager = ref();
+
 const selectStatus = ref();
 import { getItems, changeTasksStatus } from "../lib/fetch.js";
 const uri = import.meta.env.VITE_SERVER_URI;
 const props = defineProps({
-  selectedStatus: Object,
+  sourceStatus: Object,
 });
-const newIdStatus = ref(null);
+const destinationStatus = ref(null);
 const emits = defineEmits(["close", "message", "update:modelValue"]);
 onMounted(async () => {
   emits("update:modelValue", true);
@@ -20,8 +22,8 @@ const submit = async () => {
   emits("update:modelValue", true);
   const res = await changeTasksStatus(
     `${uri}/v2/statuses`,
-    props.selectedStatus.id,
-    newIdStatus.value.id
+    props.sourceStatus.id,
+    destinationStatus.value.id
   );
   emits("update:modelValue", false);
   if (res.httpStatus === 200) {
@@ -29,7 +31,11 @@ const submit = async () => {
       description: `${res.body} task(s) have been transferred and the status has been deleted.`,
       status: "success",
     });
-    datas.value.deleteStatus(props.selectedStatus.id);
+    statusManager.value.deleteStatus(props.sourceStatus.id);
+    statusManager.value.updateStatus(destinationStatus.value.id, {
+      ...destinationStatus.value,
+      numOfTask: res.body + destinationStatus.value.numOfTask,
+    });
     emits("close");
   } else if (res.httpStatus === 500 || res.httpStatus === 404) {
     emits("message", {
@@ -41,11 +47,10 @@ const submit = async () => {
       description: `${res.body.message}`,
       status: "error",
     });
-    datas.value.deleteStatus(props.selectedStatus.id);
+    statusManager.value.deleteStatus(props.sourceStatus.id);
   } else if (res.httpStatus === 400) {
-    console.log(selectStatus.value);
     emits("message", {
-      description: `Cannot transfer to ${newIdStatus.value.name} status since it will exceed the limit.  Please choose another status to transfer to.`,
+      description: `Cannot transfer to ${destinationStatus.value.name} status since it will exceed the limit.  Please choose another status to transfer to.`,
       status: "error",
     });
   } else {
@@ -69,16 +74,16 @@ const submit = async () => {
       <div class="flex flex-col">
         <div class="itbkk-message">
           There is some task associated with the
-          {{ selectedStatus.name }} status.
+          {{ sourceStatus.name }} status.
         </div>
         <div class="flex items-center gap-3">
           <div class="itbkk-status">Transfer to</div>
           <select
-            v-model="newIdStatus"
+            v-model="destinationStatus"
             class="itbkk-status select w-48 max-w-xs bg-base-100"
           >
             <option
-              :disabled="selectedStatus.id === status.id"
+              :disabled="sourceStatus.id === status.id"
               v-for="status in selectStatus"
               :key="status.id"
               :value="status"
@@ -97,7 +102,7 @@ const submit = async () => {
           <Button
             class="itbkk-button-comfirm btn-success w-16 hover:bg-base-100 hover:border-base-100 ml-1"
             message="Transfer and Delete"
-            :disabled="!newIdStatus"
+            :disabled="!destinationStatus"
             @click="submit"
           />
         </div>

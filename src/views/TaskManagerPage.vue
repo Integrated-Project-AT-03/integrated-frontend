@@ -19,9 +19,10 @@ const isLoading = ref(true);
 const sort = ref("");
 const sortOrder = ref("default");
 const openSearch = ref(false);
+
 let timeoutBlur = null;
 defineProps({
-  stateLimit: Boolean,
+  setting: Object,
 });
 const sortImage = computed(() => {
   switch (sortOrder.value) {
@@ -35,8 +36,14 @@ const sortImage = computed(() => {
 });
 
 const loadTasks = async () => {
-  if (sort.value === "" && items.value.length === 0)
-    taskManager.value.setTasks((await getItems(`${uri}/v2/tasks`)).items);
+  if (sort.value === "")
+    taskManager.value.setTasks(
+      (
+        await getItems(
+          `${uri}/v2/tasks?filterStatuses=${items.value.join(",")}`
+        )
+      ).items
+    );
   else {
     taskManager.value.setTasks(
       (
@@ -57,6 +64,13 @@ onMounted(async function () {
   isLoading.value = false;
 });
 
+const searchStatus = computed(() =>
+  statusManager.value
+    .getStatusesByName(newItem.value)
+    .filter((status) => !items.value.includes(status.name))
+    .slice(0, 9)
+);
+
 const toggleSortOrder = () => {
   if (sortOrder.value === "default") {
     sortOrder.value = "ascending";
@@ -67,27 +81,12 @@ const toggleSortOrder = () => {
   } else {
     sortOrder.value = "default";
     sort.value = "";
-    return loadTasksSortDefault();
   }
-
   loadTasks();
-};
-
-const loadTasksSortDefault = async () => {
-  taskManager.value.setTasks(
-    (
-      await getItems(
-        `${uri}/v2/tasks?sortDirection=${
-          sort.value
-        }&filterStatuses=${items.value.join(",")}`
-      )
-    ).items
-  );
 };
 
 const removeItem = async (index) => {
   items.value.splice(index, 1);
-  if (!sort.value) return loadTasksSortDefault();
   loadTasks();
 };
 
@@ -101,7 +100,6 @@ const addItem = async () => {
     items.value.push(newItem.value.trim());
     newItem.value = "";
   }
-  if (!sort.value) return loadTasksSortDefault();
   loadTasks();
 };
 const emits = defineEmits(["message"]);
@@ -143,9 +141,7 @@ const handleSelect = async (name) => {
               class="absolute w-full flex-col pt-3 gap top-8 rounded-md flex h-max overflow-hidden bg-white"
             >
               <div
-                v-for="status in statusManager
-                  .getStatusesByName(newItem)
-                  .slice(0, 9)"
+                v-for="status in searchStatus"
                 class="h-[30px] text-black hover:bg-slate-300 px-3"
                 @click="handleSelect(status.name)"
               >
@@ -163,7 +159,7 @@ const handleSelect = async (name) => {
             @click="clearAll"
             bgcolor="#ef4444"
           />
-          <div class="flex flex-wrap gap-2">
+          <div class="flex w-[60%] flex-wrap gap-2">
             <div
               v-for="(item, index) in items"
               :key="index"

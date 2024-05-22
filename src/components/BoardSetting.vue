@@ -1,8 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
-import { patchItemById, getItemById } from "./../lib/fetch";
+import { patchItemById, getItemById, getItems } from "./../lib/fetch";
 import Button from "./ButtonModal.vue";
-
 const uri = import.meta.env.VITE_SERVER_URI;
 const setting = ref({});
 const compareSetting = ref({});
@@ -10,6 +9,7 @@ const loadSetting = async () => {
   setting.value = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
   compareSetting.value = { ...setting.value };
 };
+const statusesOverLimts = ref([]);
 onMounted(async () => loadSetting());
 watch(
   () => setting.value.enable,
@@ -35,18 +35,28 @@ const saveSetting = async () => {
   );
 
   if (res.httpStatus === 200) {
-    if (setting.value.enable)
+    if (setting.value.enable) {
+      const statuses = await getItems(`${uri}/v2/statuses`);
+      statusesOverLimts.value = statuses.items.filter(
+        ({ numOfTask, name }) =>
+          numOfTask > setting.value.value &&
+          name !== "Done" &&
+          name !== "No Status"
+      );
+
+      if (statusesOverLimts.value.length !== 0)
+        document.getElementById("over-limit-modal").showModal();
       emits("message", {
         description: `The Kanban board now limits ${setting.value.value} tasks in each status`,
         status: "success",
       });
-    else
+    } else
       emits("message", {
         description: `The Kanban board has disabled the task limit in each status`,
         status: "success",
       });
     loadSetting();
-    emits("loadSetting", setting.value.enable);
+    emits("loadSetting", setting.value);
   } else if (res.httpStatus === 400) {
     emits("message", {
       description: `${res.errors[0].field} ${res.errors[0].message}`,
@@ -64,11 +74,28 @@ const saveSetting = async () => {
 </script>
 
 <template>
+  <dialog id="over-limit-modal" class="modal">
+    <div class="modal-box flex flex-col gap-3">
+      <h3 class="font-bold text-warning text-lg">Warning!</h3>
+      <div class="flex flex-col gap-1">
+        <p>These statuses that have reached the task limit.</p>
+        <p v-for="{ name, numOfTask } in statusesOverLimts" class="">
+          {{ name }} : <span class="text-error">[{{ numOfTask }}]</span>
+        </p>
+      </div>
+      <div class="modal-action">
+        <form method="dialog">
+          <button @click="statusesOverLimts = []" class="btn">Close</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
   <dialog id="status_setting" class="modal">
     <div
       class="itbkk-modal-setting flex flex-col rounded-lg p-5 bg-base-100 h-auto w-fit gap-4"
     >
-      <div class="text-2xl font-bold text-slate-300">Status Setting</div>
+      <div class="text-2xl font-bold text-slate-300">Board Setting</div>
       <div class="divider"></div>
       <div class="flex flex-col text-slate-300">
         <div>

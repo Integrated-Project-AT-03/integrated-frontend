@@ -12,10 +12,10 @@ const emits = defineEmits(["message"]);
 const datas = ref(TaskStatusManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const isLoading = ref(true);
-const selectedStatus = ref({});
+const sourceStatus = ref({});
 const showTranferStauts = ref(false);
 defineProps({
-  stateLimit: Boolean,
+  setting: Object,
 });
 
 onMounted(async function () {
@@ -62,8 +62,8 @@ const handleMessage = (e) => {
     </div>
     <div>
       The limit status :
-      <span :class="stateLimit ? 'text-success' : 'text-error'">
-        {{ stateLimit ? "enable" : "disable" }} state
+      <span :class="setting?.enable ? 'text-success' : 'text-error'">
+        {{ setting?.enable ? "enable" : "disable" }} state
       </span>
     </div>
     <table class="min-w-full divide-y h-[10px] divide-gray-200">
@@ -86,6 +86,12 @@ const handleMessage = (e) => {
             class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
           >
             Description
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-center text-sm font-bold text-base-100 uppercase tracking-wider"
+          >
+            Num Of Task
           </th>
           <th
             scope="col"
@@ -118,15 +124,39 @@ const handleMessage = (e) => {
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
             <div
-              class="text-sm text-gray-900 itbkk-assignees"
+              class="text-sm text-gray-900 itbkk-description"
               :class="status?.description ?? 'italic text-gray-400'"
             >
               {{ status?.description ?? "No description is provided." }}
             </div>
           </td>
+          <td class="itbkk-title px-6 py-4 whitespace-nowrap">
+            <div
+              class="text-sm text-center"
+              :class="
+                !setting.enable ||
+                status.name === 'Done' ||
+                status.name === 'No Status' ||
+                status.numOfTask < setting.value * 0.7
+                  ? 'text-black'
+                  : status.numOfTask >= setting.value
+                  ? 'text-error'
+                  : 'text-yellow-500'
+              "
+            >
+              {{ status?.numOfTask
+              }}{{
+                setting.enable &&
+                status.name !== "Done" &&
+                status.name !== "No Status"
+                  ? `/${setting.value}`
+                  : ""
+              }}
+            </div>
+          </td>
           <td class="itbkk-status flex py-4 whitespace-nowrap">
             <div
-              v-if="status.id !== 1 && status.id !== 4"
+              v-if="status.name !== 'No Status' && status.name !== 'Done'"
               class="flex justify-center items-center gap-2"
             >
               <Button
@@ -144,7 +174,7 @@ const handleMessage = (e) => {
                 class="itbkk-button-delete"
                 bgcolor="#ef4444"
                 message="Delete"
-                @click="() => (selectedStatus = { ...status, index })"
+                @click="() => (sourceStatus = { ...status, index })"
                 onclick="deleteModal.showModal()"
               />
             </div>
@@ -159,14 +189,14 @@ const handleMessage = (e) => {
     @message="handleMessage"
     @close="() => (showTranferStauts = false)"
     v-if="showTranferStauts"
-    :selected-status="selectedStatus"
+    :source-status="sourceStatus"
   />
 
   <DeleteStatusModal
     v-model="isLoading"
     @conflict="() => (showTranferStauts = true)"
     @message="handleMessage"
-    :status="selectedStatus"
+    :status="sourceStatus"
   />
   <RouterView @message="handleMessage" />
 </template>

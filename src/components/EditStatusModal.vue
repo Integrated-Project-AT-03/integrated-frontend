@@ -36,7 +36,7 @@ onMounted(async function () {
     });
     management.value.deleteStatus(route.params.id);
     router.push({ name: "Status" });
-  } else if (res.id === 1 || res.id === 4) {
+  } else if (res.name === "No Status" || res.id === "Done") {
     emits("message", {
       description: `The ${res.name} is not allow to editing`,
       status: "error",
