@@ -103,7 +103,7 @@ const handleMessage = (e) => {
       </thead>
       <tbody class="bg-slate-100 divide-y divide-gray-300">
         <tr v-show="datas.getStatuses().length === 0">
-          <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-900">
+          <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-900">
             No task
           </td>
         </tr>
