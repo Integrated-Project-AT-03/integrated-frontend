@@ -77,7 +77,7 @@ async function addNewTask(newItem) {
         </div>
         <div class="flex justify-center">
           <input
-            v-model.trim="taskForm.title"
+            v-model="taskForm.title"
             class="itbkk-title w-[60rem] h-11 rounded-2xl p-2 bg-secondary border-base-100"
           />
         </div>
@@ -90,7 +90,7 @@ async function addNewTask(newItem) {
               </div>
             </div>
             <textarea
-              v-model.trim="taskForm.description"
+              v-model="taskForm.description"
               class="itbkk-description w-[35rem] h-[28rem] rounded-2xl border p-4 bg-secondary border-base-100"
             ></textarea>
           </div>
@@ -103,7 +103,7 @@ async function addNewTask(newItem) {
                 </div>
               </div>
               <textarea
-                v-model.trim="taskForm.assignees"
+                v-model="taskForm.assignees"
                 class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl border p-4 bg-secondary border-base-100"
               ></textarea>
             </div>

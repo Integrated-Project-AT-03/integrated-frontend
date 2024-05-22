@@ -32,7 +32,10 @@ const handleMessage = async (e) => {
     class="container h-screen w-full relative mx-auto flex items-center flex-col gap-3"
   >
     <div class="w-full flex justify-end mt-6">
-      <Setting class="cursor-pointer" onclick="status_setting.showModal()" />
+      <Setting
+        class="cursor-pointer itbkk-status-setting"
+        onclick="status_setting.showModal()"
+      />
     </div>
     <div class="text-5xl font-extrabold w-full flex justify-center m-7">
       <span
