@@ -14,7 +14,7 @@ const props = defineProps({
   >
   
     {{
-      text.length > 10
+      text.length > 13
         ? text.slice(0, 7) + "..."
         : text
     }}

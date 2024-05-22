@@ -147,10 +147,10 @@ const openTask = (index, id) => {
               v-show="openSearch"
               class="absolute w-full flex-col pt-3 gap top-8 rounded-md flex h-max overflow-hidden bg-white"
             >
-              <div
+              <button
                 v-for="status in searchStatus"
                 :key="status.id"
-                class="h-[30px] text-black hover:bg-slate-300 px-3"
+                class="h-[30px] text-black hover:bg-slate-300 px-3 itbkk-status-choice"
                 @click="handleSelect(status.name)"
               >
                 {{
@@ -158,7 +158,7 @@ const openTask = (index, id) => {
                     ? status.name.slice(0, 22) + "..."
                     : status.name
                 }}
-              </div>
+              </button>
             </div>
           </label>
           <Button
@@ -250,7 +250,7 @@ const openTask = (index, id) => {
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-gray-900">{{ index + 1 }}</div>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap">
+          <td class="itbkk-title px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ task.title }}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
@@ -261,9 +261,9 @@ const openTask = (index, id) => {
               {{ task?.assignees ?? "Unassigned" }}
             </div>
           </td>
-          <td class="itbkk-status px-6 py-4 whitespace-nowrap">
+          <td class="px-6 py-4 whitespace-nowrap">
             <StatusModal
-              class="text-slate-200"
+              class="itbkk-status text-slate-200"
               :status-color="task.statusColorHex"
               :text="task.status"
             />
