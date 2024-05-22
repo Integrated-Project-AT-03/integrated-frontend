@@ -109,8 +109,10 @@ const handleMessage = (e) => {
         </tr>
         <tr
           class="itbkk-item itbkk-button-action hover:bg-slate-200"
-          v-for="(status, index) in datas.getStatuses()"
-          :key="status.id"
+          v-for="(
+            { colorHex, name, description, numOfTask, id }, index
+          ) in datas.getStatuses()"
+          :key="id"
         >
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ index + 1 }}</div>
@@ -118,16 +120,22 @@ const handleMessage = (e) => {
           <td class="itbkk-title px-6 py-4 whitespace-nowrap">
             <StatusModal
               class="text-slate-200"
-              :status-color="status.colorHex"
-              :text="status.name"
+              :status-color="colorHex"
+              :text="name"
             />
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
             <div
               class="text-sm text-gray-900 itbkk-description"
-              :class="status?.description ?? 'italic text-gray-400'"
+              :class="description ?? 'italic text-gray-400'"
             >
-              {{ status?.description ?? "No description is provided." }}
+              {{
+                !description
+                  ? "No description is provided."
+                  : description.length > 100
+                  ? description.slice(0, 100) + "..."
+                  : description
+              }}
             </div>
           </td>
           <td class="itbkk-title px-6 py-4 whitespace-nowrap">
@@ -135,20 +143,18 @@ const handleMessage = (e) => {
               class="text-sm text-center"
               :class="
                 !setting.enable ||
-                status.name === 'Done' ||
-                status.name === 'No Status' ||
-                status.numOfTask < setting.value * 0.7
+                name === 'Done' ||
+                name === 'No Status' ||
+                numOfTask < setting.value * 0.7
                   ? 'text-black'
-                  : status.numOfTask >= setting.value
+                  : numOfTask >= setting.value
                   ? 'text-error'
                   : 'text-yellow-500'
               "
             >
-              {{ status?.numOfTask
+              {{ numOfTask
               }}{{
-                setting.enable &&
-                status.name !== "Done" &&
-                status.name !== "No Status"
+                setting.enable && name !== "Done" && name !== "No Status"
                   ? `/${setting.value}`
                   : ""
               }}
@@ -156,7 +162,7 @@ const handleMessage = (e) => {
           </td>
           <td class="itbkk-status flex py-4 whitespace-nowrap">
             <div
-              v-if="status.name !== 'No Status' && status.name !== 'Done'"
+              v-if="name !== 'No Status' && name !== 'Done'"
               class="flex justify-center items-center gap-2"
             >
               <Button
@@ -166,7 +172,7 @@ const handleMessage = (e) => {
                 @click="
                   $router.push({
                     name: 'EditStatus',
-                    params: { id: status.id },
+                    params: { id: id },
                   })
                 "
               />
