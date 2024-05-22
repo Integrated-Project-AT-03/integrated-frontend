@@ -8,6 +8,7 @@ import Trash from "../assets/icons/Trash.vue";
 import DeleteTaskModal from "./DeleteTaskModal.vue";
 import Button from "./ButtonModal.vue";
 
+defineProps({ indexValue: Number });
 const emits = defineEmits(["message"]);
 const route = useRoute();
 const router = useRouter();
@@ -262,7 +263,7 @@ const handleMessage = (e) => {
       </div>
     </div>
   </div>
-  <DeleteTaskModal @message="handleMessage" />
+  <DeleteTaskModal :index-value="indexValue" @message="handleMessage" />
 </template>
 
 <style scoped></style>

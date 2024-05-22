@@ -9,7 +9,8 @@ import StatusModal from "@/components/StatusModal.vue";
 import SortAsc from "./../assets/icons/SortAsc.vue";
 import SortDesc from "./../assets/icons/SortDesc.vue";
 import SortDisable from "./../assets/icons/SortDisable.vue";
-
+import { useRouter } from "vue-router";
+const selectIndex = ref(5);
 const newItem = ref("");
 const items = ref([]);
 const taskManager = ref(TaskManagement);
@@ -19,6 +20,7 @@ const isLoading = ref(true);
 const sort = ref("");
 const sortOrder = ref("default");
 const openSearch = ref(false);
+const router = useRouter();
 
 let timeoutBlur = null;
 defineProps({
@@ -114,6 +116,11 @@ const handleSelect = async (name) => {
   newItem.value = name;
   addItem();
 };
+
+const openTask = (index, id) => {
+  router.push({ name: "TaskDetail", params: { id } }),
+    (selectIndex.value = index);
+};
 </script>
 
 <template>
@@ -142,6 +149,7 @@ const handleSelect = async (name) => {
             >
               <div
                 v-for="status in searchStatus"
+                :key="status.id"
                 class="h-[30px] text-black hover:bg-slate-300 px-3"
                 @click="handleSelect(status.name)"
               >
@@ -237,7 +245,7 @@ const handleSelect = async (name) => {
           class="itbkk-item itbkk-button-action hover:bg-slate-200"
           v-for="(task, index) in taskManager.getTasks()"
           :key="task.id"
-          @click="$router.push({ name: 'TaskDetail', params: { id: task.id } })"
+          @click="openTask(index + 1, task.id)"
         >
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-gray-900">{{ index + 1 }}</div>
@@ -265,7 +273,7 @@ const handleSelect = async (name) => {
     </table>
   </div>
 
-  <router-view @message="handleMessage($event)" />
+  <router-view :index-value="selectIndex" @message="handleMessage($event)" />
 </template>
 
 <style scoped></style>

@@ -11,6 +11,7 @@ const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const route = useRoute();
 const taskSeleted = datas.value.findTask(route.params.id);
+defineProps({ indexValue: Number });
 async function deleteTask(id) {
   const res = await deleteItemById(`${uri}/v2/tasks`, route.params.id);
   if (res.httpStatus === 200) {
@@ -42,7 +43,7 @@ async function deleteTask(id) {
       <div class="text-2xl font-bold text-slate-300">Delete a Task</div>
       <div class="divider"></div>
       <div class="itbkk-message text-slate-300">
-        Do you want to delete the task number {{ taskSeleted?.id }} -
+        Do you want to delete the task number {{ indexValue }} -
         {{ taskSeleted?.title }}?
       </div>
       <div class="divider"></div>
