@@ -6,7 +6,7 @@ import { ref } from "vue";
 import Button from "./ButtonModal.vue";
 
 const props = defineProps({
-  status: {
+  sourceStatus: {
     type: Object,
   },
 });
@@ -49,8 +49,8 @@ async function deleteStatus(id) {
       <div class="text-2xl font-bold text-slate-300">Delete a Status</div>
       <div class="divider"></div>
       <div class="itbkk-message text-slate-300">
-        Do you want to delete the {{ status.name }} status
-        {{ status.index + 1 }}
+        Do you want to delete the {{ sourceStatus.name }} status
+        {{ sourceStatus.index + 1 }}
       </div>
       <div class="divider"></div>
       <div class="flex justify-end mt-4 gap-3">
@@ -59,7 +59,7 @@ async function deleteStatus(id) {
             class="itbkk-button-confirm"
             bgcolor="#16a34a"
             message="Confirm"
-            @click="deleteStatus(status.id)"
+            @click="deleteStatus(sourceStatus.id)"
           />
         </form>
         <form method="dialog">
@@ -75,4 +75,3 @@ async function deleteStatus(id) {
 </template>
 
 <style scoped></style>
-@/lib/Colors.js ../lib/fetch.js

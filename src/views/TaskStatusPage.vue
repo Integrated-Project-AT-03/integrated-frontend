@@ -180,7 +180,7 @@ const handleMessage = (e) => {
                 class="itbkk-button-delete"
                 bgcolor="#ef4444"
                 message="Delete"
-                @click="() => (sourceStatus = { ...status, index })"
+                @click="() => (sourceStatus = { name, id, index })"
                 onclick="deleteModal.showModal()"
               />
             </div>
@@ -202,7 +202,7 @@ const handleMessage = (e) => {
     v-model="isLoading"
     @conflict="() => (showTranferStauts = true)"
     @message="handleMessage"
-    :status="sourceStatus"
+    :source-status="sourceStatus"
   />
   <RouterView @message="handleMessage" />
 </template>
