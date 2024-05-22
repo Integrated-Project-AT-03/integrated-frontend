@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import TaskStatusManagement from "@/lib/TaskStatusManagement";
 import { getItemById } from "../lib/fetch.js";
 import Button from "./ButtonModal.vue";
-const statusManager = ref();
+const statusManager = ref(TaskStatusManagement);
 
 const selectStatus = ref();
 import { getItems, changeTasksStatus } from "../lib/fetch.js";
