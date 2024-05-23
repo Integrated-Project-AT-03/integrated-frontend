@@ -83,14 +83,13 @@ const editTask = async () => {
     });
     datas.value.deleteTask(route.params.id);
   } else if (res.status === 400) {
-    emits("message", {
+    return emits("message", {
       description: `On over limit, provide an appropriate message. The status ${
         statuses.value.items.find(({ id }) => +id === +dataTask.value.status)
           .name
       }  will have too many tasks.  Please make progress and update status of existing tasks first.`,
       status: "error",
     });
-    datas.value.deleteTask(route.params.id);
   } else {
     emits("message", {
       description: `something went wrong, please try again`,
