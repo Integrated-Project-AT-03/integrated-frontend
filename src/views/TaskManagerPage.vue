@@ -150,7 +150,7 @@ const openTask = (index, id) => {
               <button
                 v-for="status in searchStatus"
                 :key="status.id"
-                class="h-[30px] text-black hover:bg-slate-300 px-3 itbkk-status-choice"
+                class="h-[30px] text-start text-black hover:bg-slate-300 px-3 itbkk-status-choice"
                 @click="handleSelect(status.name)"
               >
                 {{
