@@ -2,7 +2,7 @@ class TaskStatusManagement {
   constructor() {
     this.statuses = [];
   }
-  async setStatuses(statuses = []) {
+  setStatuses(statuses = []) {
     this.statuses = statuses;
   }
   addStatus(status) {

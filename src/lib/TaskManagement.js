@@ -3,7 +3,7 @@ class TaskMannagement {
     this.tasks = [];
   }
 
-  async setTasks(tasks) {
+  setTasks(tasks) {
     this.tasks = tasks;
   }
   addTask(task) {
