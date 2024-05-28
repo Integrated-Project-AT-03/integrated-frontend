@@ -43,7 +43,6 @@ const validateInput = computed(() => {
 const loadTask = async () => {
   isLoading.value = true;
   const response = await getItemById(`${uri}/v2/tasks`, route.params.id);
-  isLoading.value = false;
   if (response.status === 404) {
     emits("message", {
       description: "The requested task does not exist",
@@ -60,6 +59,7 @@ onMounted(async () => {
   await loadTask();
   statuses.value = await getItems(`${uri}/v2/statuses`);
   setting.value = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
+  isLoading.value = false;
 });
 
 const editTask = async () => {

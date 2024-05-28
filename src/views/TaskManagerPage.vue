@@ -124,8 +124,7 @@ const openTask = (index, id) => {
 </script>
 
 <template>
-  <Loading :is-loading="isLoading" />
-
+  <Loading class="w-screen" :is-loading="isLoading" />
   <div
     class="w-full flex-col flex gap-2"
     :class="$route.fullPath.split('/').length > 2 ? ' blur-sm' : ''"

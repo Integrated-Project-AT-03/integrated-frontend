@@ -44,6 +44,7 @@ const handleMessage = async (e) => {
         <div class="text-5xl">IT-Bangmod Kradan Kanban</div>
       </span>
     </div>
+
     <transition
       v-show="messageModalOpenState"
       class="fixed bottom-2 right-2 grid place-items-center z-50 w-fit"
