@@ -1,7 +1,7 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { deleteItemById } from "../lib/fetch.js";
-import TaskStatusManagement from "@/lib/TaskStatusManagement";
+import StatusManager from "@/lib/StatusManagement";
 import { ref } from "vue";
 import Button from "./ButtonModal.vue";
 
@@ -12,7 +12,7 @@ const props = defineProps({
 });
 const emits = defineEmits(["message", "conflict", "update:modelValue"]);
 const router = useRouter();
-const datas = ref(TaskStatusManagement);
+const datas = ref(StatusManager);
 const uri = import.meta.env.VITE_SERVER_URI;
 
 async function deleteStatus(id) {
@@ -75,3 +75,4 @@ async function deleteStatus(id) {
 </template>
 
 <style scoped></style>
+@/lib/StatusManagement.js

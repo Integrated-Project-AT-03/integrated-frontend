@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import TaskManagement from "./../lib/TaskManagement.js";
-import StatusManagement from "./../lib/TaskStatusManagement";
+import StatusManagement from "./../lib/StatusManagement";
 import Loading from "./../components/Loading.vue";
 import { getItems } from "./../lib/fetch.js";
 import Button from "@/components/ButtonModal.vue";
@@ -276,4 +276,4 @@ const openTask = (index, id) => {
 </template>
 
 <style scoped></style>
-../lib/fetch.js
+../lib/fetch.js ../lib/StatusManagement.js

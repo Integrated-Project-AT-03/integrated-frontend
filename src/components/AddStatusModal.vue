@@ -1,14 +1,14 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { addItem } from "../lib/fetch.js";
-import TaskStatusManagement from "@/lib/TaskStatusManagement.js";
+import StatusManager from "@/lib/StatusManagement.js";
 import { computed, ref } from "vue";
 import colorStore from "./../lib/ColorsStore";
 import Loading from "./Loading.vue";
 import Button from "./ButtonModal.vue";
 
 const emits = defineEmits(["message"]);
-const datas = ref(TaskStatusManagement);
+const datas = ref(StatusManager);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const isLoading = ref(false);
@@ -140,4 +140,4 @@ async function addNewStatus() {
     </div>
   </div>
 </template>
-../lib/fetch.js
+../lib/fetch.js @/lib/StatusManagement.js
