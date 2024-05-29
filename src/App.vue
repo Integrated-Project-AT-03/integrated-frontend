@@ -4,16 +4,14 @@ import Alert from "./components/Alert.vue";
 import BoardSetting from "./components/BoardSetting.vue";
 import Setting from "./assets/icons/Setting.vue";
 import { getItemById } from "./lib/fetch.js";
-import SettingManager from "./lib/SettingMangement";
 const uri = import.meta.env.VITE_SERVER_URI;
 const message = ref("");
 const status = ref();
 const messageModalOpenState = ref(false);
-
+const setting = ref();
 onMounted(async () => {
-  SettingManager.setLimitTask(
-    await getItemById(`${uri}/v2/settings`, "limit_of_tasks")
-  );
+  const settingLoad = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
+  setting.value = settingLoad;
 });
 const handleMessage = async (e) => {
   if (messageModalOpenState.value) {
@@ -54,7 +52,7 @@ const handleMessage = async (e) => {
     >
       <Alert :status="status" :message="message" />
     </transition>
-    <RouterView @message="handleMessage($event)" />
+    <RouterView :setting="setting" @message="handleMessage($event)" />
     <BoardSetting
       @loadSetting="(state) => (setting = state)"
       @message="handleMessage($event)"

@@ -2,12 +2,15 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { patchItemById, getItemById, getItems } from "./../lib/fetch";
 import Button from "./ButtonModal.vue";
-import SettingMangement from "@/lib/SettingMangement";
 const uri = import.meta.env.VITE_SERVER_URI;
-const setting = ref(SettingMangement.getSettingLimitTask());
-const compareSetting = ref();
-compareSetting.value = { ...setting.value };
+const setting = ref({});
+const compareSetting = ref({});
+const loadSetting = async () => {
+  setting.value = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
+  compareSetting.value = { ...setting.value };
+};
 const statusesOverLimts = ref([]);
+onMounted(async () => loadSetting());
 watch(
   () => setting.value.enable,
   () => {
@@ -52,7 +55,7 @@ const saveSetting = async () => {
         description: `The Kanban board has disabled the task limit in each status`,
         status: "success",
       });
-    // SettingMangement.setLimitTask()
+    loadSetting();
     emits("loadSetting", setting.value);
   } else if (res.httpStatus === 400) {
     emits("message", {

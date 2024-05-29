@@ -2,7 +2,6 @@
 import { useRouter } from "vue-router";
 import { addItem, getItems, getItemById } from "../lib/fetch.js";
 import TaskManagement from "@/lib/TaskManagement";
-import SettingMangement from "@/lib/SettingMangement";
 import { computed, onMounted, ref } from "vue";
 import Button from "./ButtonModal.vue";
 
@@ -11,7 +10,7 @@ const emits = defineEmits(["message"]);
 const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
-const setting = ref(SettingMangement);
+const setting = ref();
 const taskForm = ref({
   title: "",
   description: "",
@@ -30,6 +29,7 @@ const validateInput = computed(() => {
 onMounted(async () => {
   statuses.value = await getItems(`${uri}/v2/statuses`);
   taskForm.value.status = statuses.value.items[0];
+  setting.value = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
 });
 
 async function addNewTask(newItem) {
@@ -119,13 +119,7 @@ async function addNewTask(newItem) {
               </select>
               <div>
                 The limit status :
-                <span
-                  :class="
-                    setting.getSettingLimitTask().enable
-                      ? 'text-success'
-                      : 'text-error'
-                  "
-                >
+                <span :class="setting?.enable ? 'text-success' : 'text-error'">
                   {{ setting?.enable ? "enable" : "disable" }} state
                 </span>
               </div>

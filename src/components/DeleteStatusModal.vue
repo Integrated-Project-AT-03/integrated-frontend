@@ -1,7 +1,7 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { deleteItemById } from "../lib/fetch.js";
-import TaskStatusManagement from "@/lib/StatusManagement";
+import TaskStatusManagement from "@/lib/TaskStatusManagement";
 import { ref } from "vue";
 import Button from "./ButtonModal.vue";
 
@@ -75,4 +75,3 @@ async function deleteStatus(id) {
 </template>
 
 <style scoped></style>
-@/lib/StatusManagement.js

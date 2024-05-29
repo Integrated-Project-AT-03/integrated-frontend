@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import TaskStatusManagement from "../lib/StatusManagement.js";
+import TaskStatusManagement from "../lib/TaskStatusManagement.js";
 import ChevronRight from "../assets/icons/ChevronRight.vue";
 import TransferStatus from "../components/TransferStatus.vue";
 import { getItems } from "../lib/fetch.js";
@@ -8,14 +8,15 @@ import Loading from "../components/Loading.vue";
 import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
 import Button from "../components/ButtonModal.vue";
 import StatusModal from "@/components/StatusModal.vue";
-import SettingMangement from "@/lib/SettingMangement";
 const emits = defineEmits(["message"]);
 const datas = ref(TaskStatusManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const isLoading = ref(true);
 const sourceStatus = ref({});
 const showTranferStauts = ref(false);
-const setting = ref(SettingMangement.getSettingLimitTask());
+defineProps({
+  setting: Object,
+});
 
 onMounted(async function () {
   const data = await getItems(`${uri}/v2/statuses`);
@@ -207,4 +208,4 @@ const handleMessage = (e) => {
 </template>
 
 <style scoped></style>
-../lib/Colors.js ../lib/fetch.js ../lib/StatusManagement.js
+../lib/Colors.js ../lib/fetch.js
