@@ -3,7 +3,7 @@ import { useRoute, useRouter } from "vue-router";
 import { getItemById, editItem } from "../lib/fetch.js";
 import { computed, onMounted, ref } from "vue";
 import Loading from "../components/Loading.vue";
-import TaskStatusManagement from "./../lib/TaskStatusManagement";
+import TaskStatusManagement from "./../lib/StatusManagement";
 import colorStore from "../lib/ColorsStore.js";
 import Button from "./ButtonModal.vue";
 
@@ -182,4 +182,4 @@ async function updateStatus() {
 </template>
 
 <style scoped></style>
-../lib/fetch.js
+../lib/fetch.js ../lib/StatusManagement.js

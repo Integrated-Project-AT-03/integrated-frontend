@@ -1,7 +1,7 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { addItem } from "../lib/fetch.js";
-import TaskStatusManagement from "@/lib/TaskStatusManagement.js";
+import TaskStatusManagement from "@/lib/StatusManagement.js";
 import { computed, ref } from "vue";
 import colorStore from "./../lib/ColorsStore";
 import Loading from "./Loading.vue";
@@ -140,4 +140,4 @@ async function addNewStatus() {
     </div>
   </div>
 </template>
-../lib/fetch.js
+../lib/fetch.js @/lib/StatusManagement.js

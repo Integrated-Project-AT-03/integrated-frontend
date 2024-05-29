@@ -7,13 +7,14 @@ import Loading from "./Loading.vue";
 import Trash from "../assets/icons/Trash.vue";
 import DeleteTaskModal from "./DeleteTaskModal.vue";
 import Button from "./ButtonModal.vue";
+import SettingMangement from "@/lib/SettingMangement";
 
 defineProps({ indexValue: Number });
 const emits = defineEmits(["message"]);
 const route = useRoute();
 const router = useRouter();
 const isEditMode = ref();
-const setting = ref();
+const setting = ref(SettingMangement);
 const dataTask = ref({
   title: "",
   description: "",
@@ -58,7 +59,6 @@ const loadTask = async () => {
 onMounted(async () => {
   await loadTask();
   statuses.value = await getItems(`${uri}/v2/statuses`);
-  setting.value = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
   isLoading.value = false;
 });
 
@@ -204,7 +204,10 @@ const handleMessage = (e) => {
             <div>
               The limit status :
               <span :class="setting?.enable ? 'text-success' : 'text-error'">
-                {{ setting?.enable ? "enable" : "disable" }} state
+                {{
+                  setting.getSettingLimitTask().enable ? "enable" : "disable"
+                }}
+                state
               </span>
             </div>
           </div>

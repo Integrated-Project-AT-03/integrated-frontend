@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import TaskStatusManagement from "@/lib/TaskStatusManagement";
+import TaskStatusManagement from "@/lib/StatusManagement";
 import { getItemById } from "../lib/fetch.js";
 import Button from "./ButtonModal.vue";
 const statusManager = ref(TaskStatusManagement);
@@ -110,3 +110,4 @@ const submit = async () => {
     </div>
   </div>
 </template>
+@/lib/StatusManagement.js
