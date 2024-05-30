@@ -9,15 +9,16 @@ const message = ref("");
 const status = ref();
 const messageModalOpenState = ref(false);
 const setting = ref();
+let timeout;
 onMounted(async () => {
   const settingLoad = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
   setting.value = settingLoad;
 });
 const handleMessage = async (e) => {
   if (messageModalOpenState.value) {
+  clearTimeout(timeout)
     messageModalOpenState.value = false;
      setTimeout(() => {
-  
   messageModalOpenState.value = true;
   message.value = e.description;
   status.value = e.status;
@@ -29,7 +30,7 @@ const handleMessage = async (e) => {
     messageModalOpenState.value = true;
     message.value = e.description;
     status.value = e.status;
-    setTimeout(() => {
+   timeout = setTimeout(() => {
       messageModalOpenState.value = false;
     }, 5000);
   }
