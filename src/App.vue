@@ -16,14 +16,23 @@ onMounted(async () => {
 const handleMessage = async (e) => {
   if (messageModalOpenState.value) {
     messageModalOpenState.value = false;
-    await setTimeout(() => {}, 1000);
-  }
+     setTimeout(() => {
+  
   messageModalOpenState.value = true;
   message.value = e.description;
   status.value = e.status;
   setTimeout(() => {
     messageModalOpenState.value = false;
   }, 5000);
+}, 1000);
+  }else{
+    messageModalOpenState.value = true;
+    message.value = e.description;
+    status.value = e.status;
+    setTimeout(() => {
+      messageModalOpenState.value = false;
+    }, 5000);
+  }
 };
 </script>
 
