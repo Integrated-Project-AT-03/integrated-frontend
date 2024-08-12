@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import TaskManagement from './../lib/TaskManagement.js';
-import StatusManagement from './../lib/StatusManagement';
+
 import Loading from './../components/Loading.vue';
 import { getItems } from './../lib/fetch.js';
 import Button from '@/components/ButtonModal.vue';
@@ -11,12 +10,12 @@ import SortDesc from './../assets/icons/SortDesc.vue';
 import SortDisable from './../assets/icons/SortDisable.vue';
 import { useRouter } from 'vue-router';
 import { useTaskStatusStore } from './../stores/useTaskStatusStore';
-const dataTest = useTaskStatusStore();
+import { useTaskStore } from './../stores/useTaskStore';
+const taskStore = useTaskStore();
+const statusStore = useTaskStatusStore();
 const selectIndex = ref(5);
 const newItem = ref('');
 const items = ref([]);
-const taskManager = ref(TaskManagement);
-const statusManager = ref(StatusManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const isLoading = ref(true);
 const sort = ref('');
@@ -40,37 +39,31 @@ const sortImage = computed(() => {
 });
 
 const loadTasks = async () => {
-  if (sort.value === '')
-    taskManager.value.setTasks(
-      (
-        await getItems(
-          `${uri}/v2/tasks?filterStatuses=${items.value.join(',')}`
-        )
-      ).items
+  if (sort.value === '') {
+    const data = await getItems(
+      `${uri}/v2/tasks?filterStatuses=${items.value.join(',')}`
     );
-  else {
-    taskManager.value.setTasks(
-      (
-        await getItems(
-          `${uri}/v2/tasks?sortBy=status.name&sortDirection=${
-            sort.value
-          }&filterStatuses=${items.value.join(',')}`
-        )
-      ).items
+    taskStore.setTasks(data.items);
+  } else {
+    const data = await getItems(
+      `${uri}/v2/tasks?sortBy=status.name&sortDirection=${
+        sort.value
+      }&filterStatuses=${items.value.join(',')}`
     );
+    taskStore.setTasks(data.items);
   }
 };
 
 onMounted(async function () {
   await loadTasks();
   const res = await getItems(`${uri}/v2/statuses`);
-
-  statusManager.value.setStatuses(res.items);
+  statusStore.setStatuses(res.items);
+  // statusManager.value.setStatuses(res.items);
   isLoading.value = false;
 });
 
 const searchStatus = computed(() =>
-  statusManager.value
+  statusStore
     .getStatusesByName(newItem.value)
     .filter((status) => !items.value.includes(status.name))
     .slice(0, 9)
@@ -238,14 +231,14 @@ const openTask = (index, id) => {
         </tr>
       </thead>
       <tbody class="bg-slate-100 divide-y divide-gray-300">
-        <tr v-show="taskManager.getTasks().length === 0">
+        <tr v-show="taskStore.getTasks().length === 0">
           <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-900">
             No task
           </td>
         </tr>
         <tr
           class="itbkk-item itbkk-button-action hover:bg-slate-200"
-          v-for="(task, index) in taskManager.getTasks()"
+          v-for="(task, index) in taskStore.getTasks()"
           :key="task.id"
           @click="openTask(index + 1, task.id)"
         >

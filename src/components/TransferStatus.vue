@@ -1,61 +1,61 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import StatusManager from "@/lib/StatusManagement";
-import Button from "./ButtonModal.vue";
-const statusManager = ref(StatusManager);
+import { onMounted, ref } from 'vue';
+import Button from './ButtonModal.vue';
+import { useTaskStatusStore } from './../stores/useTaskStatusStore';
+const statusStore = useTaskStatusStore();
 
 const selectStatus = ref();
-import { getItems, changeTasksStatus } from "../lib/fetch.js";
+import { getItems, changeTasksStatus } from '../lib/fetch.js';
 const uri = import.meta.env.VITE_SERVER_URI;
 const props = defineProps({
   sourceStatus: Object,
 });
 const destinationStatus = ref(null);
-const emits = defineEmits(["close", "message", "update:modelValue"]);
+const emits = defineEmits(['close', 'message', 'update:modelValue']);
 onMounted(async () => {
-  emits("update:modelValue", true);
+  emits('update:modelValue', true);
   selectStatus.value = (await getItems(`${uri}/v2/statuses`)).items;
-  emits("update:modelValue", false);
+  emits('update:modelValue', false);
 });
 const submit = async () => {
-  emits("update:modelValue", true);
+  emits('update:modelValue', true);
   const res = await changeTasksStatus(
     `${uri}/v2/statuses`,
     props.sourceStatus.id,
     destinationStatus.value.id
   );
-  emits("update:modelValue", false);
+  emits('update:modelValue', false);
   if (res.httpStatus === 200) {
-    emits("message", {
+    emits('message', {
       description: `${res.body} task(s) have been transferred and the status has been deleted.`,
-      status: "success",
+      status: 'success',
     });
-    statusManager.value.deleteStatus(props.sourceStatus.id);
-    statusManager.value.updateStatus(destinationStatus.value.id, {
+    statusStore.deleteStatus(props.sourceStatus.id);
+    statusStore.updateStatus(destinationStatus.value.id, {
       ...destinationStatus.value,
       numOfTask: res.body + destinationStatus.value.numOfTask,
     });
-    emits("close");
+    emits('close');
   } else if (res.httpStatus === 500 || res.httpStatus === 404) {
-    emits("message", {
+    emits('message', {
       description: `${res.body.message}`,
-      status: "error",
+      status: 'error',
     });
   } else if (res.httpStatus === 404) {
-    emits("message", {
+    emits('message', {
       description: `${res.body.message}`,
-      status: "error",
+      status: 'error',
     });
-    statusManager.value.deleteStatus(props.sourceStatus.id);
+    statusStore.deleteStatus(props.sourceStatus.id);
   } else if (res.httpStatus === 400) {
-    emits("message", {
+    emits('message', {
       description: `Cannot transfer to ${destinationStatus.value.name} status since it will exceed the limit.  Please choose another status to transfer to.`,
-      status: "error",
+      status: 'error',
     });
   } else {
-    emits("message", {
+    emits('message', {
       description: `something went wrong, please try again`,
-      status: "error",
+      status: 'error',
     });
   }
 };

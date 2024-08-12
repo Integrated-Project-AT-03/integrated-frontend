@@ -1,31 +1,30 @@
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { getItemById, editItem, getItems } from "./../lib/fetch.js";
-import TaskManagement from "@/lib/TaskManagement";
-import Loading from "./Loading.vue";
-import Trash from "../assets/icons/Trash.vue";
-import DeleteTaskModal from "./DeleteTaskModal.vue";
-import Button from "./ButtonModal.vue";
-
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { getItemById, editItem, getItems } from './../lib/fetch.js';
+import Loading from './Loading.vue';
+import Trash from '../assets/icons/Trash.vue';
+import DeleteTaskModal from './DeleteTaskModal.vue';
+import Button from './ButtonModal.vue';
+import { useTaskStore } from './../stores/useTaskStore';
+const taskStore = useTaskStore();
 defineProps({ indexValue: Number });
-const emits = defineEmits(["message"]);
+const emits = defineEmits(['message']);
 const route = useRoute();
 const router = useRouter();
 const isEditMode = ref();
 const setting = ref();
 const dataTask = ref({
-  title: "",
-  description: "",
-  assignees: "",
+  title: '',
+  description: '',
+  assignees: '',
   status: {},
 });
 watch(
   () => route.params.mode,
-  () => (isEditMode.value = route.params?.mode === "edit"),
+  () => (isEditMode.value = route.params?.mode === 'edit'),
   { immediate: true }
 );
-const datas = ref(TaskManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const isLoading = ref(true);
@@ -44,12 +43,12 @@ const loadTask = async () => {
   isLoading.value = true;
   const response = await getItemById(`${uri}/v2/tasks`, route.params.id);
   if (response.status === 404) {
-    emits("message", {
-      description: "The requested task does not exist",
-      status: "error",
+    emits('message', {
+      description: 'The requested task does not exist',
+      status: 'error',
     });
-    datas.value.deleteTask(route.params.id);
-    return router.push({ name: "Task" });
+    taskStore.deleteTask(route.params.id);
+    return router.push({ name: 'Task' });
   }
 
   dataTask.value = { ...response, status: response.status.id };
@@ -58,7 +57,7 @@ const loadTask = async () => {
 onMounted(async () => {
   await loadTask();
   statuses.value = await getItems(`${uri}/v2/statuses`);
-  setting.value = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
+  setting.value = await getItemById(`${uri}/v2/settings`, 'limit_of_tasks');
   isLoading.value = false;
 });
 
@@ -71,39 +70,39 @@ const editTask = async () => {
   );
   isLoading.value = false;
   if (res.httpStatus === 200) {
-    datas.value.updateTask(route.params.id, res);
-    emits("message", {
-      description: "The task has been updated",
-      status: "success",
+    taskStore.updateTask(route.params.id, res);
+    emits('message', {
+      description: 'The task has been updated',
+      status: 'success',
     });
   } else if (res.status === 404) {
-    emits("message", {
-      description: "The task does not exist",
-      status: "error",
+    emits('message', {
+      description: 'The task does not exist',
+      status: 'error',
     });
-    datas.value.deleteTask(route.params.id);
+    taskStore.deleteTask(route.params.id);
   } else if (res.status === 400) {
-    return emits("message", {
+    return emits('message', {
       description: `On over limit, provide an appropriate message. The status ${
         statuses.value.items.find(({ id }) => +id === +dataTask.value.status)
           .name
       }  will have too many tasks.  Please make progress and update status of existing tasks first.`,
-      status: "error",
+      status: 'error',
     });
   } else {
-    emits("message", {
+    emits('message', {
       description: `something went wrong, please try again`,
-      status: "error",
+      status: 'error',
     });
   }
-  router.push({ name: "Task" });
+  router.push({ name: 'Task' });
 };
 
 const formattDate = (date) =>
-  new Date(date).toLocaleString("en-GB", localZone).replace(",", "");
+  new Date(date).toLocaleString('en-GB', localZone).replace(',', '');
 
 const handleMessage = (e) => {
-  emits("message", e);
+  emits('message', e);
 };
 </script>
 
@@ -121,7 +120,7 @@ const handleMessage = (e) => {
       >
         <div class="flex flex-col gap-2">
           <div class="text-error text-sm">
-            {{ validateInput.title ? "Max 100 characters" : "" }}
+            {{ validateInput.title ? 'Max 100 characters' : '' }}
           </div>
           <input
             :disabled="!isEditMode"
@@ -150,7 +149,7 @@ const handleMessage = (e) => {
             class="btn itbkk-button-edit w-30 hover:bg-base-100 border-0 hover:border-base-100"
             :class="!isEditMode ? 'bg-edit' : 'btn-error text-white'"
           >
-            {{ route.params.mode !== "edit" ? "Edit mode" : "Reset" }}
+            {{ route.params.mode !== 'edit' ? 'Edit mode' : 'Reset' }}
           </button>
           <Trash
             onclick="deletetask.showModal()"
@@ -164,7 +163,7 @@ const handleMessage = (e) => {
           <div class="flex gap-4">
             <div>Description</div>
             <div class="text-error text-sm">
-              {{ validateInput.description ? "(Max 500 characters)" : "" }}
+              {{ validateInput.description ? '(Max 500 characters)' : '' }}
             </div>
           </div>
           <textarea
@@ -179,7 +178,7 @@ const handleMessage = (e) => {
             <div class="flex gap-4">
               <div>Assignees</div>
               <div class="text-error text-sm">
-                {{ validateInput.assignees ? "(Max 30 characters" : "" }}
+                {{ validateInput.assignees ? '(Max 30 characters' : '' }}
               </div>
             </div>
             <textarea
@@ -204,7 +203,7 @@ const handleMessage = (e) => {
             <div>
               The limit status :
               <span :class="setting?.enable ? 'text-success' : 'text-error'">
-                {{ setting?.enable ? "enable" : "disable" }} state
+                {{ setting?.enable ? 'enable' : 'disable' }} state
               </span>
             </div>
           </div>

@@ -1,46 +1,46 @@
 <script setup>
-import { useRouter } from "vue-router";
-import { deleteItemById } from "../lib/fetch.js";
-import StatusManager from "@/lib/StatusManagement";
-import { ref } from "vue";
-import Button from "./ButtonModal.vue";
+import { useRouter } from 'vue-router';
+import { deleteItemById } from '../lib/fetch.js';
 
+import { ref } from 'vue';
+import Button from './ButtonModal.vue';
+import { useTaskStatusStore } from './../stores/useTaskStatusStore';
+const statusStore = useTaskStatusStore();
 const props = defineProps({
   sourceStatus: {
     type: Object,
   },
 });
-const emits = defineEmits(["message", "conflict", "update:modelValue"]);
+const emits = defineEmits(['message', 'conflict', 'update:modelValue']);
 const router = useRouter();
-const datas = ref(StatusManager);
 const uri = import.meta.env.VITE_SERVER_URI;
 
 async function deleteStatus(id) {
-  emits("update:modelValue", true);
+  emits('update:modelValue', true);
   const res = await deleteItemById(`${uri}/v2/statuses`, id);
-  emits("update:modelValue", false);
+  emits('update:modelValue', false);
   if (res.httpStatus === 200) {
-    datas.value.deleteStatus(id);
-    emits("message", {
-      description: "The task has been deleted",
-      status: "success",
+    statusStore.deleteStatus(id);
+    emits('message', {
+      description: 'The task has been deleted',
+      status: 'success',
     });
   } else if (res.status === 422) {
-    emits("message", {
+    emits('message', {
       description: `${res.message}`,
-      status: "error",
+      status: 'error',
     });
   } else if (res.status === 400) {
-    emits("conflict");
+    emits('conflict');
   } else if (res.status === 404) {
-    datas.value.deleteStatus(id);
-    emits("message", {
+    statusStore.deleteStatus(id);
+    emits('message', {
       description: `An error has occurred, the status does not exist.`,
-      status: "error",
+      status: 'error',
     });
   }
 
-  return router.push({ name: "Status" });
+  return router.push({ name: 'Status' });
 }
 </script>
 <template>

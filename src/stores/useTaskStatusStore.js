@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia';
+import { acceptHMRUpdate, defineStore } from 'pinia';
 
 export const useTaskStatusStore = defineStore('taskStatus', {
   state: () => ({
@@ -40,3 +40,7 @@ export const useTaskStatusStore = defineStore('taskStatus', {
     },
   },
 });
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useTaskStatusStore, import.meta.hot));
+}

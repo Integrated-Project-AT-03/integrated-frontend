@@ -1,14 +1,14 @@
 <script setup>
-import { useRoute, useRouter } from "vue-router";
-import { getItemById, editItem } from "../lib/fetch.js";
-import { computed, onMounted, ref } from "vue";
-import Loading from "../components/Loading.vue";
-import StatusManager from "./../lib/StatusManagement";
-import colorStore from "../lib/ColorsStore.js";
-import Button from "./ButtonModal.vue";
+import { useRoute, useRouter } from 'vue-router';
+import { getItemById, editItem } from '../lib/fetch.js';
+import { computed, onMounted, ref } from 'vue';
+import Loading from '../components/Loading.vue';
+import colorStore from '../lib/ColorsStore.js';
+import Button from './ButtonModal.vue';
+import { useTaskStatusStore } from './../stores/useTaskStatusStore';
+const statusStore = useTaskStatusStore();
+const emits = defineEmits(['message']);
 
-const emits = defineEmits(["message"]);
-const management = ref(StatusManager);
 let compareStatus;
 const data = ref({});
 
@@ -25,23 +25,23 @@ const isLoading = ref(true);
 const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 const formattDate = (date) =>
-  new Date(date).toLocaleString("en-GB", localZone).replace(",", "");
+  new Date(date).toLocaleString('en-GB', localZone).replace(',', '');
 
 onMounted(async function () {
   const res = await getItemById(`${uri}/v2/statuses`, route.params.id);
   if (res.status === 404) {
-    emits("message", {
+    emits('message', {
       description: `An error has occurred, the status does not exist.`,
-      status: "error",
+      status: 'error',
     });
-    management.value.deleteStatus(route.params.id);
-    router.push({ name: "Status" });
-  } else if (res.name === "No Status" || res.id === "Done") {
-    emits("message", {
+    statusStore.deleteStatus(route.params.id);
+    router.push({ name: 'Status' });
+  } else if (res.name === 'No Status' || res.id === 'Done') {
+    emits('message', {
       description: `The ${res.name} is not allow to editing`,
-      status: "error",
+      status: 'error',
     });
-    router.push({ name: "Status" });
+    router.push({ name: 'Status' });
   }
   data.value = res;
   compareStatus = { ...res };
@@ -54,36 +54,36 @@ async function updateStatus() {
   isLoading.value = false;
 
   if (res.httpStatus === 200) {
-    management.value.updateStatus(route.params.id, res);
-    emits("message", {
-      description: "The status has been updated.",
-      status: "success",
+    statusStore.updateStatus(route.params.id, res);
+    emits('message', {
+      description: 'The status has been updated.',
+      status: 'success',
     });
-    router.push({ name: "Status" });
+    router.push({ name: 'Status' });
   } else if (res.status === 404) {
-    emits("message", {
+    emits('message', {
       description: `An error has occurred, the status does not exist.`,
-      status: "error",
+      status: 'error',
     });
-    router.push({ name: "Status" });
-    management.value.deleteStatus(route.params.id);
+    router.push({ name: 'Status' });
+    statusStore.deleteStatus(route.params.id);
   } else if (res.status === 422) {
-    emits("message", {
+    emits('message', {
       description: `${res.message}`,
-      status: "error",
+      status: 'error',
     });
-    router.push({ name: "Status" });
+    router.push({ name: 'Status' });
   } else if (res.status === 400) {
-    emits("message", {
+    emits('message', {
       description: `Status name must be uniques, please choose another name.`,
-      status: "error",
+      status: 'error',
     });
   } else {
-    emits("message", {
+    emits('message', {
       description: `something went wrong, please try again`,
-      status: "error",
+      status: 'error',
     });
-    router.push({ name: "Status" });
+    router.push({ name: 'Status' });
   }
 }
 </script>
@@ -101,7 +101,7 @@ async function updateStatus() {
           <div class="flex gap-4">
             <div>Name</div>
             <div class="text-error">
-              {{ validateInput?.name ? "(Max 50 characters)" : "" }}
+              {{ validateInput?.name ? '(Max 50 characters)' : '' }}
             </div>
           </div>
           <input
@@ -113,7 +113,7 @@ async function updateStatus() {
           <div class="flex gap-4">
             <div>Description</div>
             <div class="text-error">
-              {{ validateInput?.description ? "(Max 200 characters)" : "" }}
+              {{ validateInput?.description ? '(Max 200 characters)' : '' }}
             </div>
           </div>
           <textarea

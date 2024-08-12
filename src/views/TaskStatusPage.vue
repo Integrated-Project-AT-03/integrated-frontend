@@ -1,15 +1,16 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import StatusManager from "../lib/StatusManagement.js";
-import ChevronRight from "../assets/icons/ChevronRight.vue";
-import TransferStatus from "../components/TransferStatus.vue";
-import { getItems } from "../lib/fetch.js";
-import Loading from "../components/Loading.vue";
-import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
-import Button from "../components/ButtonModal.vue";
-import StatusModal from "@/components/StatusModal.vue";
-const emits = defineEmits(["message"]);
-const datas = ref(StatusManager);
+import { onMounted, ref } from 'vue';
+
+import ChevronRight from '../assets/icons/ChevronRight.vue';
+import TransferStatus from '../components/TransferStatus.vue';
+import { getItems } from '../lib/fetch.js';
+import Loading from '../components/Loading.vue';
+import DeleteStatusModal from './../components/DeleteStatusModal.vue';
+import Button from '../components/ButtonModal.vue';
+import StatusModal from '@/components/StatusModal.vue';
+const emits = defineEmits(['message']);
+import { useTaskStatusStore } from './../stores/useTaskStatusStore';
+const statusStore = useTaskStatusStore();
 const uri = import.meta.env.VITE_SERVER_URI;
 const isLoading = ref(true);
 const sourceStatus = ref({});
@@ -21,11 +22,11 @@ defineProps({
 onMounted(async function () {
   const data = await getItems(`${uri}/v2/statuses`);
   isLoading.value = false;
-  datas.value.setStatuses(data.items);
+  statusStore.setStatuses(data.items);
 });
 
 const handleMessage = (e) => {
-  emits("message", e);
+  emits('message', e);
 };
 </script>
 
@@ -63,7 +64,7 @@ const handleMessage = (e) => {
     <div>
       The limit status :
       <span :class="setting?.enable ? 'text-success' : 'text-error'">
-        {{ setting?.enable ? "enable" : "disable" }} state
+        {{ setting?.enable ? 'enable' : 'disable' }} state
       </span>
     </div>
     <table class="min-w-full divide-y h-[10px] divide-gray-200">
@@ -102,7 +103,7 @@ const handleMessage = (e) => {
         </tr>
       </thead>
       <tbody class="bg-slate-100 divide-y divide-gray-300">
-        <tr v-show="datas.getStatuses().length === 0">
+        <tr v-show="statusStore.getStatuses().length === 0">
           <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-900">
             No task
           </td>
@@ -111,7 +112,7 @@ const handleMessage = (e) => {
           class="itbkk-item itbkk-button-action hover:bg-slate-200"
           v-for="(
             { colorHex, name, description, numOfTask, id }, index
-          ) in datas.getStatuses()"
+          ) in statusStore.getStatuses()"
           :key="id"
         >
           <td class="px-6 py-4 whitespace-nowrap">
@@ -131,9 +132,9 @@ const handleMessage = (e) => {
             >
               {{
                 !description
-                  ? "No description is provided."
+                  ? 'No description is provided.'
                   : description.length > 100
-                  ? description.slice(0, 100) + "..."
+                  ? description.slice(0, 100) + '...'
                   : description
               }}
             </div>
@@ -154,9 +155,9 @@ const handleMessage = (e) => {
             >
               {{ numOfTask
               }}{{
-                setting.enable && name !== "Done" && name !== "No Status"
+                setting.enable && name !== 'Done' && name !== 'No Status'
                   ? `/${setting.value}`
-                  : ""
+                  : ''
               }}
             </div>
           </td>

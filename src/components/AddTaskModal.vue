@@ -1,20 +1,19 @@
 <script setup>
-import { useRouter } from "vue-router";
-import { addItem, getItems, getItemById } from "../lib/fetch.js";
-import TaskManagement from "@/lib/TaskManagement";
-import { computed, onMounted, ref } from "vue";
-import Button from "./ButtonModal.vue";
-
+import { useRouter } from 'vue-router';
+import { addItem, getItems, getItemById } from '../lib/fetch.js';
+import { computed, onMounted, ref } from 'vue';
+import Button from './ButtonModal.vue';
+import { useTaskStore } from './../stores/useTaskStore';
+const taskStore = useTaskStore();
 const statuses = ref();
-const emits = defineEmits(["message"]);
-const datas = ref(TaskManagement);
+const emits = defineEmits(['message']);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const setting = ref();
 const taskForm = ref({
-  title: "",
-  description: "",
-  assignees: "",
+  title: '',
+  description: '',
+  assignees: '',
   status: {},
 });
 
@@ -29,7 +28,7 @@ const validateInput = computed(() => {
 onMounted(async () => {
   statuses.value = await getItems(`${uri}/v2/statuses`);
   taskForm.value.status = statuses.value.items[0];
-  setting.value = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
+  setting.value = await getItemById(`${uri}/v2/settings`, 'limit_of_tasks');
 });
 
 async function addNewTask(newItem) {
@@ -39,23 +38,23 @@ async function addNewTask(newItem) {
   });
 
   if (res.httpStatus === 201) {
-    emits("message", {
+    emits('message', {
       description: `The task has been successfully added.`,
-      status: "success",
+      status: 'success',
     });
-    datas.value.addTask(res);
+    taskStore.addTask(res);
   } else if (res.status === 400) {
-    emits("message", {
+    emits('message', {
       description: `The status ${newItem.status.name}  will have too many tasks.  Please make progress and update status of existing tasks first.`,
-      status: "error",
+      status: 'error',
     });
   } else {
-    emits("message", {
+    emits('message', {
       description: `Someting went wrong.`,
-      status: "error",
+      status: 'error',
     });
   }
-  return router.push({ name: "Task" });
+  return router.push({ name: 'Task' });
 }
 </script>
 
@@ -72,7 +71,7 @@ async function addNewTask(newItem) {
         <div class="flex gap-4">
           <div class="ml-9">Title</div>
           <div class="text-error">
-            {{ validateInput.title ? "(Max 100 characters)" : "" }}
+            {{ validateInput.title ? '(Max 100 characters)' : '' }}
           </div>
         </div>
         <div class="flex justify-center">
@@ -86,7 +85,7 @@ async function addNewTask(newItem) {
             <div class="flex gap-4">
               <div>Description</div>
               <div class="text-error">
-                {{ validateInput.description ? "(Max 500 characters)" : "" }}
+                {{ validateInput.description ? '(Max 500 characters)' : '' }}
               </div>
             </div>
             <textarea
@@ -99,7 +98,7 @@ async function addNewTask(newItem) {
               <div class="flex gap-4">
                 <div>Assignees</div>
                 <div class="text-error">
-                  {{ validateInput.assignees ? "(Max 30 characters)" : "" }}
+                  {{ validateInput.assignees ? '(Max 30 characters)' : '' }}
                 </div>
               </div>
               <textarea
@@ -120,7 +119,7 @@ async function addNewTask(newItem) {
               <div>
                 The limit status :
                 <span :class="setting?.enable ? 'text-success' : 'text-error'">
-                  {{ setting?.enable ? "enable" : "disable" }} state
+                  {{ setting?.enable ? 'enable' : 'disable' }} state
                 </span>
               </div>
             </div>

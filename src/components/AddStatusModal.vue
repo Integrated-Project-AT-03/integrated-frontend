@@ -1,15 +1,14 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { addItem } from '../lib/fetch.js';
-import StatusManager from '@/lib/StatusManagement.js';
 import { computed, ref } from 'vue';
 import colorStore from './../lib/ColorsStore';
 import Loading from './Loading.vue';
 import Button from './ButtonModal.vue';
 import { useTaskStatusStore } from './../stores/useTaskStatusStore';
+const statusStore = useTaskStatusStore();
 const emits = defineEmits(['message']);
-const datatest = useTaskStatusStore();
-const datas = ref(StatusManager);
+
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const isLoading = ref(false);
@@ -29,10 +28,11 @@ const validateInput = computed(() => {
 async function addNewStatus() {
   isLoading.value = true;
   const res = await addItem(`${uri}/v2/statuses`, newData.value);
+
   isLoading.value = false;
 
   if (res.httpStatus === 201) {
-    datas.value.addStatus(res);
+    statusStore.addStatus(res);
     emits('message', {
       description: `The status has been added.`,
       status: 'success',

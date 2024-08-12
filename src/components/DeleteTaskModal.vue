@@ -1,37 +1,35 @@
 <script setup>
-import { useRoute, useRouter } from "vue-router";
-import { deleteItemById } from "../lib/fetch.js";
-import TaskManagement from "@/lib/TaskManagement";
-import { ref } from "vue";
-import Button from "./ButtonModal.vue";
-
-const emits = defineEmits(["message"]);
-const datas = ref(TaskManagement);
+import { useRoute, useRouter } from 'vue-router';
+import { deleteItemById } from '../lib/fetch.js';
+import { ref } from 'vue';
+import Button from './ButtonModal.vue';
+import { useTaskStore } from './../stores/useTaskStore';
+const taskStore = useTaskStore();
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const route = useRoute();
-const taskSeleted = datas.value.findTask(route.params.id);
+const taskSeleted = taskStore.findTask(route.params.id);
 defineProps({ indexValue: Number });
 async function deleteTask(id) {
   const res = await deleteItemById(`${uri}/v2/tasks`, route.params.id);
   if (res.httpStatus === 200) {
-    datas.value.deleteTask(id);
-    emits("message", {
-      description: "The task has been deleted.",
-      status: "success",
+    taskStore.deleteTask(id);
+    emits('message', {
+      description: 'The task has been deleted.',
+      status: 'success',
     });
-    return router.push({ name: "Task" });
+    return router.push({ name: 'Task' });
   } else if (res.httpStatus === 404) {
-    emits("message", {
+    emits('message', {
       description: `The task does not exist."`,
-      status: "error",
+      status: 'error',
     });
-    datas.value.deleteTask(route.params.id);
-    return router.push({ name: "Task" });
+    taskStore.deleteTask(route.params.id);
+    return router.push({ name: 'Task' });
   } else {
-    emits("message", {
+    emits('message', {
       description: `Something went wrong.`,
-      status: "error",
+      status: 'error',
     });
   }
 }
