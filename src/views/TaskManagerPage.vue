@@ -1,24 +1,26 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import TaskManagement from "./../lib/TaskManagement.js";
-import StatusManagement from "./../lib/StatusManagement";
-import Loading from "./../components/Loading.vue";
-import { getItems } from "./../lib/fetch.js";
-import Button from "@/components/ButtonModal.vue";
-import StatusModal from "@/components/StatusModal.vue";
-import SortAsc from "./../assets/icons/SortAsc.vue";
-import SortDesc from "./../assets/icons/SortDesc.vue";
-import SortDisable from "./../assets/icons/SortDisable.vue";
-import { useRouter } from "vue-router";
+import { ref, computed, onMounted } from 'vue';
+import TaskManagement from './../lib/TaskManagement.js';
+import StatusManagement from './../lib/StatusManagement';
+import Loading from './../components/Loading.vue';
+import { getItems } from './../lib/fetch.js';
+import Button from '@/components/ButtonModal.vue';
+import StatusModal from '@/components/StatusModal.vue';
+import SortAsc from './../assets/icons/SortAsc.vue';
+import SortDesc from './../assets/icons/SortDesc.vue';
+import SortDisable from './../assets/icons/SortDisable.vue';
+import { useRouter } from 'vue-router';
+import { useTaskStatusStore } from './../stores/useTaskStatusStore';
+const dataTest = useTaskStatusStore();
 const selectIndex = ref(5);
-const newItem = ref("");
+const newItem = ref('');
 const items = ref([]);
 const taskManager = ref(TaskManagement);
 const statusManager = ref(StatusManagement);
 const uri = import.meta.env.VITE_SERVER_URI;
 const isLoading = ref(true);
-const sort = ref("");
-const sortOrder = ref("default");
+const sort = ref('');
+const sortOrder = ref('default');
 const openSearch = ref(false);
 const router = useRouter();
 
@@ -28,9 +30,9 @@ defineProps({
 });
 const sortImage = computed(() => {
   switch (sortOrder.value) {
-    case "ascending":
+    case 'ascending':
       return 2;
-    case "descending":
+    case 'descending':
       return 3;
     default:
       return 1;
@@ -38,11 +40,11 @@ const sortImage = computed(() => {
 });
 
 const loadTasks = async () => {
-  if (sort.value === "")
+  if (sort.value === '')
     taskManager.value.setTasks(
       (
         await getItems(
-          `${uri}/v2/tasks?filterStatuses=${items.value.join(",")}`
+          `${uri}/v2/tasks?filterStatuses=${items.value.join(',')}`
         )
       ).items
     );
@@ -52,7 +54,7 @@ const loadTasks = async () => {
         await getItems(
           `${uri}/v2/tasks?sortBy=status.name&sortDirection=${
             sort.value
-          }&filterStatuses=${items.value.join(",")}`
+          }&filterStatuses=${items.value.join(',')}`
         )
       ).items
     );
@@ -62,6 +64,7 @@ const loadTasks = async () => {
 onMounted(async function () {
   await loadTasks();
   const res = await getItems(`${uri}/v2/statuses`);
+
   statusManager.value.setStatuses(res.items);
   isLoading.value = false;
 });
@@ -74,15 +77,15 @@ const searchStatus = computed(() =>
 );
 
 const toggleSortOrder = () => {
-  if (sortOrder.value === "default") {
-    sortOrder.value = "ascending";
-    sort.value = "ASC";
-  } else if (sortOrder.value === "ascending") {
-    sortOrder.value = "descending";
-    sort.value = "DES";
+  if (sortOrder.value === 'default') {
+    sortOrder.value = 'ascending';
+    sort.value = 'ASC';
+  } else if (sortOrder.value === 'ascending') {
+    sortOrder.value = 'descending';
+    sort.value = 'DES';
   } else {
-    sortOrder.value = "default";
-    sort.value = "";
+    sortOrder.value = 'default';
+    sort.value = '';
   }
   loadTasks();
 };
@@ -98,15 +101,15 @@ const clearAll = async () => {
   openSearch.value = false;
 };
 const addItem = async () => {
-  if (newItem.value.trim() !== "") {
+  if (newItem.value.trim() !== '') {
     items.value.push(newItem.value.trim());
-    newItem.value = "";
+    newItem.value = '';
   }
   loadTasks();
 };
-const emits = defineEmits(["message"]);
+const emits = defineEmits(['message']);
 const handleMessage = (e) => {
-  emits("message", e);
+  emits('message', e);
 };
 const handleBlur = () => {
   timeoutBlur = setTimeout(() => (openSearch.value = false), 200);
@@ -118,7 +121,7 @@ const handleSelect = async (name) => {
 };
 
 const openTask = (index, id) => {
-  router.push({ name: "TaskDetail", params: { id } }),
+  router.push({ name: 'TaskDetail', params: { id } }),
     (selectIndex.value = index);
 };
 </script>
@@ -154,7 +157,7 @@ const openTask = (index, id) => {
               >
                 {{
                   status.name.length > 25
-                    ? status.name.slice(0, 22) + "..."
+                    ? status.name.slice(0, 22) + '...'
                     : status.name
                 }}
               </button>
@@ -257,7 +260,7 @@ const openTask = (index, id) => {
               class="text-sm text-gray-900 itbkk-assignees"
               :class="task?.assignees ?? 'italic'"
             >
-              {{ task?.assignees ?? "Unassigned" }}
+              {{ task?.assignees ?? 'Unassigned' }}
             </div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">

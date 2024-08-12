@@ -1,21 +1,22 @@
 <script setup>
-import { useRouter } from "vue-router";
-import { addItem } from "../lib/fetch.js";
-import StatusManager from "@/lib/StatusManagement.js";
-import { computed, ref } from "vue";
-import colorStore from "./../lib/ColorsStore";
-import Loading from "./Loading.vue";
-import Button from "./ButtonModal.vue";
-
-const emits = defineEmits(["message"]);
+import { useRouter } from 'vue-router';
+import { addItem } from '../lib/fetch.js';
+import StatusManager from '@/lib/StatusManagement.js';
+import { computed, ref } from 'vue';
+import colorStore from './../lib/ColorsStore';
+import Loading from './Loading.vue';
+import Button from './ButtonModal.vue';
+import { useTaskStatusStore } from './../stores/useTaskStatusStore';
+const emits = defineEmits(['message']);
+const datatest = useTaskStatusStore();
 const datas = ref(StatusManager);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const isLoading = ref(false);
 const newData = ref({
   colorId: 1,
-  name: "",
-  description: "",
+  name: '',
+  description: '',
 });
 
 const validateInput = computed(() => {
@@ -32,22 +33,22 @@ async function addNewStatus() {
 
   if (res.httpStatus === 201) {
     datas.value.addStatus(res);
-    emits("message", {
+    emits('message', {
       description: `The status has been added.`,
-      status: "success",
+      status: 'success',
     });
-    router.push({ name: "Status" });
+    router.push({ name: 'Status' });
   } else if (res.status === 400) {
-    emits("message", {
-      description: "Status name must be uniques, please choose another name.",
-      status: "error",
+    emits('message', {
+      description: 'Status name must be uniques, please choose another name.',
+      status: 'error',
     });
   } else {
-    emits("message", {
-      description: "Somthing went wrong, Please try again",
-      status: "error",
+    emits('message', {
+      description: 'Somthing went wrong, Please try again',
+      status: 'error',
     });
-    router.push({ name: "Status" });
+    router.push({ name: 'Status' });
   }
 }
 </script>
@@ -68,7 +69,7 @@ async function addNewStatus() {
           <div class="flex gap-4">
             <div class="itbkk-status-name ml-12">Name</div>
             <div class="text-error">
-              {{ validateInput.name ? "(Max 50 characters)" : "" }}
+              {{ validateInput.name ? '(Max 50 characters)' : '' }}
             </div>
           </div>
           <div class="flex justify-center">
@@ -82,7 +83,7 @@ async function addNewStatus() {
           <div class="flex gap-4">
             <div class="itbkk-status-description ml-12">Description</div>
             <div class="text-error">
-              {{ validateInput.description ? "(Max 200 characters)" : "" }}
+              {{ validateInput.description ? '(Max 200 characters)' : '' }}
             </div>
           </div>
           <div class="flex justify-center">
