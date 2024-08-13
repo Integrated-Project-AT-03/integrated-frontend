@@ -4,12 +4,15 @@ import Alert from "./components/Alert.vue";
 import BoardSetting from "./components/BoardSetting.vue";
 import Setting from "./assets/icons/Setting.vue";
 import { getItemById } from "./lib/fetch.js";
+
 const uri = import.meta.env.VITE_SERVER_URI;
 const message = ref("");
 const status = ref();
 const messageModalOpenState = ref(false);
 const setting = ref();
+const path = window.location.pathname;
 let timeout;
+
 onMounted(async () => {
   const settingLoad = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
   setting.value = settingLoad;
@@ -41,13 +44,13 @@ const handleMessage = async (e) => {
   <div
     class="container h-screen w-full relative mx-auto flex items-center flex-col gap-3"
   >
-    <div class="w-full flex justify-end mt-6">
+    <div v-show="path !== '/login'" class="w-full flex justify-end mt-6">
       <Setting
         class="cursor-pointer itbkk-status-setting"
         onclick="status_setting.showModal()"
       />
     </div>
-    <div class="text-5xl font-extrabold w-full flex justify-center m-7">
+    <div v-show="path !== '/login'" class="text-5xl font-extrabold w-full flex justify-center m-7">
       <span
         class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500"
       >
