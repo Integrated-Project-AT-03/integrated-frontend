@@ -108,7 +108,7 @@ const handleMessage = (e) => {
 
 <template>
   <div
-    class="w-full h-screen absolute flex justify-center top-0 items-center z-10"
+    class="w-full h-screen fixed flex justify-center top-0 items-center z-10"
   >
     <RouterView @message="handleMessage($event)" />
     <div

@@ -90,7 +90,7 @@ async function updateStatus() {
 
 <template>
   <div
-    class="w-screen top-0 h-screen absolute flex justify-center items-center z-10"
+    class="w-screen top-0 h-screen fixed flex justify-center items-center z-10"
   >
     <Loading :is-loading="isLoading" />
     <div class="m-auto w-[65rem] h-[48rem] bg-neutral rounded-2xl">

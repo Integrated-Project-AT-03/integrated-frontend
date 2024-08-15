@@ -60,7 +60,7 @@ async function addNewTask(newItem) {
 
 <template>
   <div
-    class="w-full top-0 h-screen absolute flex justify-center items-center z-10"
+    class="w-full top-0 h-screen fixed flex justify-center items-center z-10"
   >
     <div class="m-auto w-[65rem] h-[48rem] bg-neutral rounded-2xl">
       <div class="flex mt-4 px-5 items-center justify-between">
