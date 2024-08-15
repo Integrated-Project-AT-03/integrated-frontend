@@ -124,7 +124,7 @@ const openTask = (index, id) => {
   <Loading class="w-screen" :is-loading="isLoading" />
   <div
     class="w-full flex-col flex gap-2"
-    :class="$route.fullPath.split('/').length > 2 ? ' blur-sm' : ''"
+    :class="$route.fullPath.split('/').length > 3 ? ' blur-sm' : ''"
   >
     <div class="w-full flex items-center justify-around">
       <div class="container">
