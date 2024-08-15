@@ -202,13 +202,13 @@ const openTask = (index, id) => {
           </th>
           <th
             scope="col"
-            class="px-6 py-3 min-w-[852px] text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+            class="px-6 py-3 min-w-[700px] text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
           >
             Title
           </th>
           <th
             scope="col"
-            class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+            class="pl-3 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
           >
             Assignees
           </th>
@@ -243,13 +243,13 @@ const openTask = (index, id) => {
           :key="task.id"
           @click="openTask(index + 1, task.id)"
         >
-          <td class="px-6 py-4 whitespace-nowrap">
+          <td class="pl-7 py-4 whitespace-nowrap">
             <div class="text-gray-900">{{ index + 1 }}</div>
           </td>
-          <td class="itbkk-title px-6 py-4 whitespace-nowrap">
+          <td class="itbkk-title pl-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ task.title }}</div>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap">
+          <td class="py-4 whitespace-nowrap">
             <div
               class="text-sm text-gray-900 itbkk-assignees"
               :class="task?.assignees ?? 'italic'"
