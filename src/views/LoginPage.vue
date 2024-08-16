@@ -1,8 +1,10 @@
 <script setup>
 import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router'
 import Button from '../components/ButtonModal.vue'
 import { addItem } from '@/lib/fetch';
 
+const router = useRouter();
 const uri = import.meta.env.VITE_SERVER_URI
 const user = ref({
   userName: '',
@@ -18,8 +20,15 @@ const validateInput = computed(() => {
 
 async function login(data) {
     try {
-        const res = await addItem(`${uri}/Endpoint`, data)
-        return res
+        const res = await addItem(`${uri}/authentications/login`, data)
+        if(res.httpStatus === 200){
+          console.log('Okay');
+        }
+        else if(res.httpStatus === 401){
+          console.log('Username or Password is Incorrect');
+          router.push({name: 'login'})
+        }
+        return router.push({name: 'Task'})
     } catch (error) {
         return error
     }
