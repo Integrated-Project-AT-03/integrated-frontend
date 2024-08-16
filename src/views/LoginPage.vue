@@ -11,13 +11,6 @@ const user = ref({
   password: ''
 })
 
-const validateInput = computed(() => {
-  return {
-    username: user.value.userName.length > 50,
-    password: user.value.password.length > 14
-  };
-});
-
 async function login(data) {
     try {
         const res = await addItem(`${uri}/authentications/login`, data)
@@ -42,12 +35,12 @@ async function login(data) {
         <div class="text-3xl font-bold text-slate-200">Welcome To ITB-KK</div>
       <div class="flex flex-col gap-3 items-center w-full">
         <div class="flex flex-col gap-2 text-xs">
-            {{ validateInput.username ? 'Max 50 character' : '' }}
-            <input v-model="user.userName" type="text" placeholder="Username" class="itbkk-username input input-bordered w-[20rem] rounded-xl max-w-xs" />
+            <!-- {{ validateInput.username ? 'Max 50 character' : '' }} -->
+            <input v-model="user.userName" maxlength="50" type="text" placeholder="Username" class="itbkk-username input input-bordered w-[20rem] rounded-xl max-w-xs" />
         </div>
         <div class="flex flex-col gap-2 text-xs">
-            {{ validateInput.password ? 'Max 14 character' : '' }}
-            <input v-model="user.password" type="password" placeholder="Password" class="itbkk-password input input-bordered w-[20rem] rounded-xl max-w-xs" />
+            <!-- {{ validateInput.password ? 'Max 14 character' : '' }} -->
+            <input v-model="user.password" maxlength="14" type="password" placeholder="Password" class="itbkk-password input input-bordered w-[20rem] rounded-xl max-w-xs" />
         </div>
         <div class="flex gap-1 w-[20rem] justify-center">
             <div class="">
