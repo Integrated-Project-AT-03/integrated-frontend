@@ -3,25 +3,42 @@ import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router'
 import Button from '../components/ButtonModal.vue'
 import { addItem } from '@/lib/fetch';
+import {useTokenStore} from '../stores/useTokenStore.js'
 
 const router = useRouter();
 const uri = import.meta.env.VITE_SERVER_URI
+const jwtToken = ref({})
+const payloadJwt = ref({})
+const tokenStore = useTokenStore()
 const user = ref({
   userName: '',
   password: ''
 })
 
+
+function jwtDecode (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+}
+
 async function login(data) {
     try {
         const res = await addItem(`${uri}/authentications/login`, data)
         if(res.httpStatus === 200){
-          console.log('Okay');
+          jwtToken.value = res.access_token
+          payloadJwt.value = jwtDecode(jwtToken.value)
+          tokenStore.tokens.value = payloadJwt.value
+          return router.push({name: 'Task'})
         }
         else if(res.httpStatus === 401){
           console.log('Username or Password is Incorrect');
           router.push({name: 'login'})
         }
-        return router.push({name: 'Task'})
     } catch (error) {
         return error
     }
