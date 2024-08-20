@@ -1,79 +1,70 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router'
-import Button from '../components/ButtonModal.vue'
-import { addItem } from '@/lib/fetch';
-import {useTokenStore} from '../stores/useTokenStore.js'
+import Button from '../components/ButtonModal.vue';
+import { addItem, login } from '@/lib/fetch';
+import { useRouter } from 'vue-router';
 
-const router = useRouter();
-const uri = import.meta.env.VITE_SERVER_URI
-const jwtToken = ref({})
-const payloadJwt = ref({})
-const tokenStore = useTokenStore()
-const user = ref({
-  userName: '',
-  password: ''
-})
+const router = useRouter()
+const uri = import.meta.env.VITE_SERVER_URI;
 
 
-function jwtDecode (token) {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
+async function onSubmit() {
+  const response = await login(uri, userName.value, password.value)
+  console.log(response);
+  if (response.httpStatus === 401) {
+    router.push("/app")
+    console.log(response.response.message);
+  } else {
+    router.push("/app")
+  }
 }
 
-async function login(data) {
-    try {
-        const res = await addItem(`${uri}/authentications/login`, data)
-        if(res.httpStatus === 200){
-          jwtToken.value = res.access_token
-          payloadJwt.value = jwtDecode(jwtToken.value)
-          tokenStore.tokens.value = payloadJwt.value
-          return router.push({name: 'Task'})
-        }
-        else if(res.httpStatus === 401){
-          console.log('Username or Password is Incorrect');
-          router.push({name: 'login'})
-        }
-    } catch (error) {
-        return error
-    }
-}
+const userName = ref()
+const password = ref()
+
 
 </script>
 
 <template>
-  <div class="w-full h-screen flex flex-col justify-center items-center absolute">
-    <div class="flex flex-col justify-center items-center w-[35rem] h-[30rem] p-4 gap-7">
-        <div class="text-3xl font-bold text-slate-200">Welcome To ITB-KK</div>
-      <div class="flex flex-col gap-3 items-center w-full">
-        <div class="flex flex-col gap-2 text-xs">
-            <!-- {{ validateInput.username ? 'Max 50 character' : '' }} -->
-            <input v-model="user.userName" maxlength="50" type="text" placeholder="Username" class="itbkk-username input input-bordered w-[20rem] rounded-xl max-w-xs" />
-        </div>
-        <div class="flex flex-col gap-2 text-xs">
-            <!-- {{ validateInput.password ? 'Max 14 character' : '' }} -->
-            <input v-model="user.password" maxlength="14" type="password" placeholder="Password" class="itbkk-password input input-bordered w-[20rem] rounded-xl max-w-xs" />
-        </div>
-        <div class="flex gap-1 w-[20rem] justify-center">
-            <div class="">
-                <Button
-                class="itbkk-button-signup w-[10rem] rounded-[1.4rem] opacity-40"
-                bgcolor="#444444"
-                message="Sign up" />
-            </div>
-            <div class="">
-                <Button :disabled="user.userName.length <= 0 || user.password.length <= 0"
-                class="itbkk-button-signin w-[10rem] rounded-[1.4rem]"
-                bgcolor="#666666"
-                message="Sign in" 
-                @click="login(user)" />
-            </div>
-        </div>
+  <div class="min-h-screen flex flex-col justify-center items-center">
+    <div class="w-[24rem] p-8  rounded-lg">
+
+      <h2
+        class="text-3xl font-bold bg-gradient-to-r from-[#CE50B7] via-[#BF53C5] to-[#EA499A] bg-clip-text text-transparent mb-2">
+        Welcome back </h2>
+      <p class="text-lg text-gray-400 mb-8">
+        welcome to <span
+          class="bg-gradient-to-r from-[#CE50B7] via-[#BF53C5] to-[#EA499A] bg-clip-text text-transparent">IT-BKK</span>
+      </p>
+
+
+      <div class="mb-4">
+        <label for="email" class="block text-gray-400 mb-2">userName</label>
+        <input type="email" id="email" placeholder="Enter your email" v-model="userName"
+          class="w-full px-3 py-2 bg-gray-700 text-gray-300 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-[#BF53C5]" />
+      </div>
+
+
+      <div class="mb-4">
+        <label for="password" class="block text-gray-400 mb-2">Password</label>
+        <input type="password" id="password" placeholder="Password" v-model="password"
+          class="w-full px-3 py-2 bg-gray-700 text-gray-300 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-[#BF53C5]" />
+      </div>
+
+
+      <div class="text-left mb-6">
+        <a href="#" class="text-white-300 hover:underline">Forgot password?</a>
+      </div>
+
+
+      <button @click="onSubmit()"
+        class="w-full py-2 bg-gradient-to-r from-[#CE50B7] via-[#BF53C5] to-[#EA499A] text-white font-semibold rounded-lg hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-[#BF53C5]">
+        Login
+      </button>
+
+
+      <div class="text-center mt-6 text-white-100">
+        Don't have an account? <a href="#" class="text-white hover:underline">Sign up for free</a>
       </div>
     </div>
   </div>

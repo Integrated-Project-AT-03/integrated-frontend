@@ -89,6 +89,22 @@ async function changeTasksStatus(url, deletedId, changeId) {
     console.log(`error: ${error}`);
   }
 }
+
+async function login(url, userName, password) {
+  try {
+    const res = await fetch(`${url}/authentications/login`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ userName, password }),
+    });
+    const response = await res.json();
+    return { response, httpStatus: res.status };
+  } catch (error) {
+    console.log(`error: ${error}`);
+  }
+}
 export {
   getItems,
   getItemById,
@@ -97,4 +113,5 @@ export {
   editItem,
   changeTasksStatus,
   patchItemById,
+  login,
 };
