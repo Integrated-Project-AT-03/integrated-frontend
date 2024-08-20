@@ -11,7 +11,6 @@ import SortDisable from './../assets/icons/SortDisable.vue';
 import { useRouter } from 'vue-router';
 import { useTaskStatusStore } from './../stores/useTaskStatusStore';
 import { useTaskStore } from './../stores/useTaskStore';
-import { useTokenStore } from '../stores/useTokenStore.js'
 
 const taskStore = useTaskStore();
 const statusStore = useTaskStatusStore();
@@ -24,7 +23,6 @@ const sort = ref('');
 const sortOrder = ref('default');
 const openSearch = ref(false);
 const router = useRouter();
-const tokenStore = useTokenStore()
 
 let timeoutBlur = null;
 defineProps({
@@ -130,7 +128,6 @@ const openTask = (index, id) => {
   >
     <div class="w-full flex items-center justify-around">
       <div class="container">
-        {{ tokenStore.tokens.value.name }}
         <div class="flex gap-2 items-center">
           <label class="flex flex-col gap-2 relative">
             <input
@@ -205,13 +202,13 @@ const openTask = (index, id) => {
           </th>
           <th
             scope="col"
-            class="px-6 py-3 min-w-[700px] text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+            class="px-6 py-3 min-w-[852px] text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
           >
             Title
           </th>
           <th
             scope="col"
-            class="pl-3 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+            class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
           >
             Assignees
           </th>
@@ -246,13 +243,13 @@ const openTask = (index, id) => {
           :key="task.id"
           @click="openTask(index + 1, task.id)"
         >
-          <td class="pl-7 py-4 whitespace-nowrap">
+          <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-gray-900">{{ index + 1 }}</div>
           </td>
-          <td class="itbkk-title pl-6 py-4 whitespace-nowrap">
+          <td class="itbkk-title px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ task.title }}</div>
           </td>
-          <td class="py-4 whitespace-nowrap">
+          <td class="px-6 py-4 whitespace-nowrap">
             <div
               class="text-sm text-gray-900 itbkk-assignees"
               :class="task?.assignees ?? 'italic'"
