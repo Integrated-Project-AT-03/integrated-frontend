@@ -23,6 +23,7 @@ const sort = ref('');
 const sortOrder = ref('default');
 const openSearch = ref(false);
 const router = useRouter();
+const payloadJwt = ref()
 
 let timeoutBlur = null;
 defineProps({
@@ -55,12 +56,23 @@ const loadTasks = async () => {
   }
 };
 
+function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+}
 onMounted(async function () {
   await loadTasks();
   const res = await getItems(`${uri}/v2/statuses`);
   statusStore.setStatuses(res.items);
   // statusManager.value.setStatuses(res.items);
   isLoading.value = false;
+  const token = localStorage.getItem("token")
+  payloadJwt.value = await parseJwt(token)
 });
 
 const searchStatus = computed(() =>
@@ -127,6 +139,7 @@ const openTask = (index, id) => {
     :class="$route.fullPath.split('/').length > 3 ? ' blur-sm' : ''"
   >
     <div class="w-full flex items-center justify-around">
+      {{ payloadJwt?.name }}
       <div class="container">
         <div class="flex gap-2 items-center">
           <label class="flex flex-col gap-2 relative">

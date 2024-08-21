@@ -16,15 +16,18 @@ async function onSubmit() {
     return;
   }
 
-  const response = await login(uri, userName.value, password.value)
-  console.log(response);
-  if (response.httpStatus === 200) {
+  const res = await login(uri, userName.value, password.value)
+  console.log(res);
+  if (res.httpStatus === 200) {
+    const parseJson = JSON.stringify(res.response.access_token)
+    localStorage.setItem("token", parseJson)
     router.push("/app")
   } else {
     errorMessage.value = 'Username or password is incorrect';
-    console.log(response.response.message);
+    console.log(res.response.message);
   }
 }
+
 
 const userName = ref()
 const password = ref()
