@@ -23,14 +23,14 @@ async function onSubmit() {
     localStorage.setItem("token", parseJson)
     router.push("/app")
   } else {
-    errorMessage.value = 'Username or password is incorrect';
+    errorMessage.value = 'Username or Password is incorrect';
     console.log(res.response.message);
   }
 }
 
 
-const userName = ref()
-const password = ref()
+const userName = ref('')
+const password = ref('')
 const errorMessage = ref()
 
 </script>
@@ -51,18 +51,20 @@ const errorMessage = ref()
       <div class="mb-4">
         <label for="email" class="block text-gray-400 mb-2">userName</label>
         <input type="email" id="email" placeholder="Enter your email" v-model="userName"
-          class="w-full px-3 py-2 bg-gray-700 text-gray-300 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-[#BF53C5]" />
+          class="itbkk-username w-full px-3 py-2 bg-gray-700 text-gray-300 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-[#BF53C5]" 
+          maxlength="50"/>
       </div>
 
 
       <div class="mb-4">
         <label for="password" class="block text-gray-400 mb-2">Password</label>
         <input type="password" id="password" placeholder="Password" v-model="password"
-          class="w-full px-3 py-2 bg-gray-700 text-gray-300 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-[#BF53C5]" />
+          class="itbkk-password w-full px-3 py-2 bg-gray-700 text-gray-300 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-[#BF53C5]" 
+          maxlength="14"/>
       </div>
 
 
-      <div v-if="errorMessage" class="mb-4 text-red-500 text-sm">
+      <div v-show="errorMessage" class="itbkk-message mb-4 text-red-500 text-sm">
         {{ errorMessage }}
       </div>
 
@@ -72,7 +74,8 @@ const errorMessage = ref()
 
 
       <button @click="onSubmit()"
-        class="w-full py-2 bg-gradient-to-r from-[#CE50B7] via-[#BF53C5] to-[#EA499A] text-white font-semibold rounded-lg hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-[#BF53C5]">
+        class="itbkk-button-signin btn w-full py-2 bg-gradient-to-r from-[#CE50B7] via-[#BF53C5] to-[#EA499A]  text-white font-semibold rounded-lg" 
+        :disabled="userName.length === 0 || password.length ===0">
         Login
       </button>
 

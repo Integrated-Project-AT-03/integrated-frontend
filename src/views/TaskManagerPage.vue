@@ -139,7 +139,7 @@ const openTask = (index, id) => {
     :class="$route.fullPath.split('/').length > 3 ? ' blur-sm' : ''"
   >
     <div class="w-full flex items-center justify-around">
-      {{ payloadJwt?.name }}
+      <div class="itbkk-fullname">{{ payloadJwt?.name }}</div>
       <div class="container">
         <div class="flex gap-2 items-center">
           <label class="flex flex-col gap-2 relative">
