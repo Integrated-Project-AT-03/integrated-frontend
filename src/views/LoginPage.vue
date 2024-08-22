@@ -24,9 +24,27 @@ async function onSubmit() {
     router.push("/app")
   } else {
     errorMessage.value = 'Username or Password is incorrect';
-    console.log(res.response.message);
   }
 }
+
+// async function onSubmit(){
+//   errorMessage.value = ''
+
+//   if (!user.userName || !user.password) {
+//     errorMessage.value = 'Did not enter a username or password.';
+//     return;
+//   }
+
+//   const res = await addItem(`${uri}/authentications/login`, user.value)
+//   if (res.httpStatus === 200) {
+//     const parseJson = JSON.stringify(res.access_token)
+//     console.log(res.httpStatus);
+//     localStorage.setItem("token", parseJson)
+//     router.push("/app")
+//   } else {
+//     errorMessage.value = 'Username or Password is incorrect';
+//   }
+// }
 
 
 const userName = ref('')
