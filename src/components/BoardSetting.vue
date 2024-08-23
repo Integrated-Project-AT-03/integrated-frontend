@@ -2,20 +2,20 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { patchItemById, getItemById, getItems } from "./../lib/fetch";
 import Button from "./ButtonModal.vue";
+import { useSettingStore } from "./../stores/useSettingStore";
+const settingStore = useSettingStore();
+
 const uri = import.meta.env.VITE_SERVER_URI;
 const setting = ref({});
 const compareSetting = ref({});
-const loadSetting = async () => {
-  setting.value = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
-  compareSetting.value = { ...setting.value };
-};
+setting.value = { ...settingStore.getLimitTask() };
+compareSetting.value = { ...setting.value };
 const statusesOverLimts = ref([]);
-onMounted(async () => loadSetting());
 watch(
   () => setting.value.enable,
   () => {
     if (!setting.value.enable) setting.value.value = compareSetting.value.value;
-  }
+  },
 );
 const validation = computed(() => {
   return {
@@ -25,25 +25,34 @@ const validation = computed(() => {
       typeof setting.value.value !== "number",
   };
 });
-const emits = defineEmits(["message", "loadSetting"]);
+const emits = defineEmits(["message"]);
 const saveSetting = async () => {
+  // if (
+  //   compareSetting.value.value === setting.value.value &&
+  //   compareSetting.value.enable === setting.value.enable
+  // )
+  //   return;
+
+  if (setting.value.value < 10) {
+    setting.value.value = 10;
+  }
   const res = await patchItemById(
     `${uri}/v2/settings`,
     "limit_of_tasks",
     setting.value.value,
-    setting.value.enable ? "enable" : "disable"
+    setting.value.enable ? "enable" : "disable",
   );
-
   if (res.httpStatus === 200) {
+    settingStore.setLimitTask(setting.value);
+    compareSetting.value = { ...setting.value };
     if (setting.value.enable) {
       const statuses = await getItems(`${uri}/v2/statuses`);
       statusesOverLimts.value = statuses.items.filter(
         ({ numOfTask, name }) =>
           numOfTask > setting.value.value &&
           name !== "Done" &&
-          name !== "No Status"
+          name !== "No Status",
       );
-
       if (statusesOverLimts.value.length !== 0)
         document.getElementById("over-limit-modal").showModal();
       emits("message", {
@@ -55,7 +64,7 @@ const saveSetting = async () => {
         description: `The Kanban board has disabled the task limit in each status`,
         status: "success",
       });
-    loadSetting();
+
     emits("loadSetting", setting.value);
   } else if (res.httpStatus === 400) {
     emits("message", {
@@ -76,7 +85,7 @@ const saveSetting = async () => {
 <template>
   <dialog id="over-limit-modal" class="modal">
     <div class="modal-box flex flex-col gap-3">
-      <h3 class="font-bold text-warning text-lg">Warning!</h3>
+      <h3 class="text-lg font-bold text-warning">Warning!</h3>
       <div class="flex flex-col gap-1">
         <p>These statuses that have reached the task limit.</p>
         <p v-for="{ name, numOfTask } in statusesOverLimts" class="">
@@ -91,68 +100,57 @@ const saveSetting = async () => {
     </div>
   </dialog>
 
-  <dialog id="status_setting" class="modal">
-    <div
-      class="itbkk-modal-setting flex flex-col rounded-lg p-5 bg-base-100 h-auto w-fit gap-4"
-    >
-      <div class="text-2xl font-bold text-slate-300">Board Setting</div>
-      <div class="divider"></div>
-      <div class="flex flex-col text-slate-300">
-        <div>
-          User can limit the number of task in a status by setting the Maximum
-        </div>
-        <div>
-          tasks in each status (except "No status" and "Done" statuses).
-        </div>
+  <div
+    class="itbkk-modal-setting flex h-auto w-fit flex-col gap-4 rounded-lg bg-base-100 p-5"
+  >
+    <div class="flex flex-col text-slate-300">
+      <div>
+        User can limit the number of task in a status by setting the Maximum
       </div>
-      <div class="flex gap-4">
+      <div>tasks in each status (except "No status" and "Done" statuses).</div>
+    </div>
+    <div class="flex gap-4">
+      <input
+        @click="saveSetting"
+        type="checkbox"
+        class="itbkk-limit-task toggle"
+        v-model="setting.enable"
+      />
+      <div>Limit tasks in this status</div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>Maximum tasks</div>
+      <div class="flex flex-col gap-1">
         <input
-          type="checkbox"
-          class="itbkk-limit-task toggle"
-          v-model="setting.enable"
+          @blur="saveSetting"
+          :disabled="!setting.enable"
+          v-model.number="setting.value"
+          type="text"
+          maxlength="2"
+          class="itbkk-max-task input input-md input-bordered w-[15rem] max-w-xs"
         />
-        <div>Limit tasks in this status</div>
-      </div>
-      <div class="flex gap-4 items-center">
-        <div>Maximum tasks</div>
-        <div class="flex flex-col gap-1">
-          <input
-            :disabled="!setting.enable"
-            v-model.number="setting.value"
-            type="text"
-            maxlength="2"
-            class="itbkk-max-task input input-bordered input-md w-[15rem] max-w-xs"
-          />
-          <p class="text-error text-xs" v-show="validation.limitTasks">
-            the value must between 10 to 30
-          </p>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <div class="flex justify-end mt-4 gap-3">
-        <form method="dialog">
-          <Button
-            class="itbkk-button-confirm btn-success text-slate-200"
-            message="Confirm"
-            @click="saveSetting"
-            :disabled="
-              validation.limitTasks ||
-              (compareSetting.value === setting.value &&
-                compareSetting.enable === setting.enable)
-            "
-          />
-        </form>
-        <form method="dialog">
-          <Button
-            class="itbkk-button-cancel btn-error text-slate-200"
-            message="Cancel"
-            @click="() => (setting = { ...compareSetting })"
-          />
-        </form>
+        <p class="text-xs text-error" v-show="validation.limitTasks">
+          the value must between 10 to 30
+        </p>
       </div>
     </div>
-  </dialog>
+
+    <div class="mt-4 flex justify-end gap-3">
+      <form method="dialog">
+        <!-- <Button
+          class="itbkk-button-confirm btn-success text-slate-200"
+          message="Confirm"
+          @click="saveSetting"
+          :disabled="
+            validation.limitTasks ||
+            (compareSetting.value === setting.value &&
+              compareSetting.enable === setting.enable)
+          "
+        /> -->
+      </form>
+      <form method="dialog"></form>
+    </div>
+  </div>
 </template>
 
 <style scoped></style>
-../lib/fetch

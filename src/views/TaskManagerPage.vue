@@ -123,17 +123,17 @@ const openTask = (index, id) => {
 <template>
   <Loading class="w-screen" :is-loading="isLoading" />
   <div
-    class="w-full flex-col flex gap-2"
-    :class="$route.fullPath.split('/').length > 3 ? ' blur-sm' : ''"
+    class="flex w-full flex-col gap-2"
+    :class="$route.fullPath.split('/').length > 3 ? 'blur-sm' : ''"
   >
-    <div class="w-full flex items-center justify-around">
+    <div class="flex items-center justify-between">
       <!-- <div class="itbkk-fullname">{{  }}</div> -->
 
-      <div class="container">
-        <div class="flex gap-2 items-center">
-          <label class="flex-col flex gap-2 relative">
+      <div class="containe">
+        <div class="flex items-center gap-2">
+          <label class="relative flex flex-col gap-2">
             <input
-              class="itbkk-status-filter border p-2 w-[300px] rounded-md text-gray-900"
+              class="itbkk-status-filter w-[300px] rounded-md border p-2 text-gray-900"
               type="text"
               v-model="newItem"
               @keyup.enter="addItem"
@@ -143,12 +143,12 @@ const openTask = (index, id) => {
             />
             <div
               v-show="openSearch"
-              class="absolute w-full flex-col pt-3 gap top-8 rounded-md flex h-max overflow-hidden bg-white"
+              class="gap absolute top-8 flex h-max w-full flex-col overflow-hidden rounded-md bg-white pt-3"
             >
               <button
                 v-for="status in searchStatus"
                 :key="status.id"
-                class="h-[30px] text-start text-black hover:bg-slate-300 px-3 itbkk-status-choice"
+                class="itbkk-status-choice h-[30px] px-3 text-start text-black hover:bg-slate-300"
                 @click="handleSelect(status.name)"
               >
                 {{
@@ -169,10 +169,10 @@ const openTask = (index, id) => {
             <div
               v-for="(item, index) in items"
               :key="index"
-              class="itbkk-filter-item itbkk-filter-item-clear p-3 rounded-md relative flex items-center bg-white text-gray-900 cursor-pointer hover:bg-slate-300"
+              class="itbkk-filter-item itbkk-filter-item-clear relative flex cursor-pointer items-center rounded-md bg-white p-3 text-gray-900 hover:bg-slate-300"
               @click="removeItem(index)"
             >
-              <span class="text-error absolute -top-1 right-1">x</span>
+              <span class="absolute -top-1 right-1 text-error">x</span>
               <span>{{ item }}</span>
             </div>
           </div>
@@ -193,51 +193,51 @@ const openTask = (index, id) => {
         />
       </div>
     </div>
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-200">
-        <tr>
+    <table class="m-0 block divide-gray-200 p-0">
+      <tbody
+        class="block h-[500px] w-full divide-y divide-gray-300 overflow-y-scroll bg-slate-100"
+      >
+        <tr v-show="taskStore.getTasks().length === 0">
+          <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-900">
+            No task
+          </td>
+        </tr>
+        <tr class="sticky justify-between bg-slate-300">
           <th
             scope="col"
-            class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+            class="px-6 py-3 text-left text-sm font-bold uppercase tracking-wider text-gray-900"
           >
             No
           </th>
           <th
             scope="col"
-            class="px-6 py-3 min-w-[852px] text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+            class="px-6 py-3 text-left text-sm font-bold uppercase tracking-wider text-gray-900"
           >
             Title
           </th>
           <th
             scope="col"
-            class="px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+            class="px-6 py-3 text-left text-sm font-bold uppercase tracking-wider text-gray-900"
           >
-            Assignees
+            Assingness
           </th>
           <th
             scope="col"
-            class="flex flex-row px-6 py-3 text-left text-sm font-bold text-gray-900 uppercase tracking-wider"
+            class="flex flex-row px-6 py-3 text-left text-sm font-bold uppercase tracking-wider text-gray-900"
           >
             <div>Status</div>
             <div
-              class="itbkk-status-sort m-auto ml-2 cursor-pointer flex items-center"
+              class="itbkk-status-sort m-auto ml-2 flex cursor-pointer items-center"
               @click="toggleSortOrder"
             >
               <SortDisable
                 v-show="sortImage === 1"
-                class="w-5 scale-[190%] h-5"
+                class="h-5 w-5 scale-[190%]"
               />
-              <SortAsc v-show="sortImage === 2" class="w-5 h-5" />
-              <SortDesc v-show="sortImage === 3" class="w-5 h-5" />
+              <SortAsc v-show="sortImage === 2" class="h-5 w-5" />
+              <SortDesc v-show="sortImage === 3" class="h-5 w-5" />
             </div>
           </th>
-        </tr>
-      </thead>
-      <tbody class="bg-slate-100 divide-y divide-gray-300">
-        <tr v-show="taskStore.getTasks().length === 0">
-          <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-900">
-            No task
-          </td>
         </tr>
         <tr
           class="itbkk-item itbkk-button-action hover:bg-slate-200"
@@ -245,21 +245,21 @@ const openTask = (index, id) => {
           :key="task.id"
           @click="openTask(index + 1, task.id)"
         >
-          <td class="px-6 py-4 whitespace-nowrap">
+          <td class="px-6 py-4">
             <div class="text-gray-900">{{ index + 1 }}</div>
           </td>
-          <td class="itbkk-title px-6 py-4 whitespace-nowrap">
+          <td class="itbkk-title w-full whitespace-nowrap px-6 py-4">
             <div class="text-sm text-gray-900">{{ task.title }}</div>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap">
+          <td class="whitespace-nowrap px-6 py-4">
             <div
-              class="text-sm text-gray-900 itbkk-assignees"
+              class="itbkk-assignees w- text-sm text-gray-900"
               :class="task?.assignees ?? 'italic'"
             >
               {{ task?.assignees ?? "Unassigned" }}
             </div>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap">
+          <td class="whitespace-nowrap px-6 py-4">
             <StatusModal
               class="itbkk-status text-slate-200"
               :status-color="task.statusColorHex"

@@ -8,6 +8,8 @@ import Loading from "../components/Loading.vue";
 import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
 import Button from "../components/ButtonModal.vue";
 import StatusModal from "@/components/StatusModal.vue";
+import { useSettingStore } from "./../stores/useSettingStore";
+const settingStore = useSettingStore();
 const emits = defineEmits(["message"]);
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 const statusStore = useTaskStatusStore();
@@ -15,10 +17,7 @@ const uri = import.meta.env.VITE_SERVER_URI;
 const isLoading = ref(true);
 const sourceStatus = ref({});
 const showTranferStauts = ref(false);
-defineProps({
-  setting: Object,
-});
-
+// const settingStore.getLimitTask() = settingStore.getLimitTask();
 onMounted(async function () {
   const data = await getItems(`${uri}/v2/statuses`);
   isLoading.value = false;
@@ -63,8 +62,12 @@ const handleMessage = (e) => {
     </div>
     <div>
       The limit status :
-      <span :class="setting?.enable ? 'text-success' : 'text-error'">
-        {{ setting?.enable ? "enable" : "disable" }} state
+      <span
+        :class="
+          settingStore.getLimitTask().enable ? 'text-success' : 'text-error'
+        "
+      >
+        {{ settingStore.getLimitTask().enable ? "enable" : "disable" }} state
       </span>
     </div>
     <table class="h-[10px] min-w-full divide-y divide-gray-200">
@@ -143,20 +146,22 @@ const handleMessage = (e) => {
             <div
               class="text-center text-sm"
               :class="
-                !setting.enable ||
+                !settingStore.getLimitTask().enable ||
                 name === 'Done' ||
                 name === 'No Status' ||
-                numOfTask < setting.value * 0.7
+                numOfTask < settingStore.getLimitTask().value * 0.7
                   ? 'text-black'
-                  : numOfTask >= setting.value
+                  : numOfTask >= settingStore.getLimitTask().value
                     ? 'text-error'
                     : 'text-yellow-500'
               "
             >
               {{ numOfTask
               }}{{
-                setting.enable && name !== "Done" && name !== "No Status"
-                  ? `/${setting.value}`
+                settingStore.getLimitTask().enable &&
+                name !== "Done" &&
+                name !== "No Status"
+                  ? `/${settingStore.getLimitTask().value}`
                   : ""
               }}
             </div>

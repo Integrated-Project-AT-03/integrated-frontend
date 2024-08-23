@@ -1,13 +1,21 @@
 <script setup>
 import TaskIcon from "./../assets/icons/TaskIcon.vue";
-import KebabIcon from "./../assets/icons/KebabIcon.vue";
+import Xmark from "./../assets/icons/Xmark.vue";
+import Arrow from "./../assets/icons/Arrow.vue";
 import exmpleAccount from "/images/exmpleAcciont.png";
 import KababIcon from "./../assets/icons/KebabIcon.vue";
+import SettingIcon from "./../assets/icons/SettingIcon.vue";
+import BoardSetting from "./BoardSetting.vue";
 import { parseJwt } from "./../utils/helper";
-import { onMounted, ref } from "vue";
-
+import { onMounted, watch, ref } from "vue";
 const payloadJwt = ref();
 const showSelectBar = ref(false);
+const currentMenu = ref("Menu");
+const emits = defineEmits(["message"]);
+const handleMessage = (e) => {
+  emits("message", e);
+};
+
 onMounted(() => {
   const token = localStorage.getItem("token");
   payloadJwt.value = parseJwt(token);
@@ -32,23 +40,53 @@ onMounted(() => {
         <p class="text-sm">Welcome | {{ payloadJwt?.name }}</p>
       </li>
       <button
-        @click="showSelectBar = !showSelectBar"
-        class="btn btn-ghost flex items-center justify-center p-0"
+        @click="
+          () => {
+            showSelectBar = !showSelectBar;
+            currentMenu = 'Menu';
+          }
+        "
+        class="flex items-center justify-center p-0"
       >
         <KababIcon />
       </button>
     </ul>
     <div
+      :ref="seletor"
       v-show="showSelectBar"
-      class="absolute right-0 top-12 z-10 flex h-[80vh] w-[400px] flex-col rounded-b-[10px] bg-[#444444] p-5"
+      class="absolute right-0 top-12 z-10 flex h-max w-[400px] flex-col gap-3 rounded-b-[10px] bg-[#444444] p-5 transition-all duration-300"
     >
       <div class="space-y-2 text-center text-lg">
-        <div class="flex justify-between">
-          icon
-          <p>Setting</p>
-          icon
+        <div class="flex items-center justify-between">
+          <button
+            @click="currentMenu = 'Menu'"
+            v-show="currentMenu !== 'Menu'"
+            class="btn btn-ghost"
+          >
+            <Arrow />
+          </button>
+          <p>
+            {{ currentMenu }}
+          </p>
+          <button @click="showSelectBar = false" class="btn btn-ghost">
+            <Xmark />
+          </button>
         </div>
         <hr class="border-[1px] border-[#333333]" />
+      </div>
+
+      <ul v-show="currentMenu === 'Menu'">
+        <button
+          @click="currentMenu = 'Setting Board'"
+          class="btn btn-ghost flex w-full justify-between"
+        >
+          <p>Setting Board</p>
+          <SettingIcon />
+        </button>
+      </ul>
+
+      <div v-show="currentMenu === 'Setting Board'">
+        <BoardSetting @message="handleMessage($event)" />
       </div>
     </div>
   </nav>

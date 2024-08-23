@@ -1,27 +1,28 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import Alert from './../components/Alert.vue';
-import BoardSetting from './../components/BoardSetting.vue';
-import Setting from './../assets/icons/Setting.vue';
-import { getItemById } from './../lib/fetch.js';
-import { parseJwt } from './../utils/helper';
-import Navbar from '../components/NavBar.vue';
+import { onMounted, ref } from "vue";
+import Alert from "./../components/Alert.vue";
+import { getItemById } from "./../lib/fetch.js";
+import { parseJwt } from "./../utils/helper";
+import Navbar from "../components/NavBar.vue";
+import { useSettingStore } from "./../stores/useSettingStore";
 const uri = import.meta.env.VITE_SERVER_URI;
-const message = ref('');
+const message = ref("");
 const status = ref();
 const messageModalOpenState = ref(false);
 const setting = ref();
 const path = window.location.pathname;
 const payloadJwt = ref({});
+const settingStore = useSettingStore();
 let timeout;
 
 onMounted(async () => {
-  const settingLoad = await getItemById(`${uri}/v2/settings`, 'limit_of_tasks');
-  setting.value = settingLoad;
-  const token = localStorage.getItem('token');
+  const settingLoad = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
+  settingStore.setLimitTask(settingLoad);
+
+  const token = localStorage.getItem("token");
   payloadJwt.value = await parseJwt(token);
 });
-
+console.log(settingStore);
 const handleMessage = async (e) => {
   if (messageModalOpenState.value) {
     clearTimeout(timeout);
@@ -46,20 +47,20 @@ const handleMessage = async (e) => {
 </script>
 
 <template>
-  <div class="flex w-full h-screen items-center flex-col p-5">
-    <Navbar />
+  <div class="flex h-screen w-full flex-col items-center p-5">
+    <Navbar @message="handleMessage($event)" />
     <div
-      class="container h-full justify-center items-center flex-auto w-full relative flex gap-3"
+      class="container relative flex h-full w-full flex-auto items-center justify-center gap-3"
     >
       <RouterView :setting="setting" @message="handleMessage($event)" />
     </div>
-    <BoardSetting
+    <!-- <BoardSetting
       @loadSetting="(state) => (setting = state)"
       @message="handleMessage($event)"
-    />
+    /> -->
     <transition
       v-show="messageModalOpenState"
-      class="fixed bottom-2 right-2 grid place-items-center z-50 w-fit"
+      class="fixed bottom-2 right-2 z-50 grid w-fit place-items-center"
       name="toast"
     >
       <Alert :status="status" :message="message" />
