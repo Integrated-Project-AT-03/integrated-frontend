@@ -1,24 +1,23 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref } from "vue";
 
-import ChevronRight from '../assets/icons/ChevronRight.vue';
-import TransferStatus from '../components/TransferStatus.vue';
-import { getItems } from '../lib/fetch.js';
-import Loading from '../components/Loading.vue';
-import DeleteStatusModal from './../components/DeleteStatusModal.vue';
-import Button from '../components/ButtonModal.vue';
-import StatusModal from '@/components/StatusModal.vue';
-const emits = defineEmits(['message']);
-import { useTaskStatusStore } from './../stores/useTaskStatusStore';
+import ChevronRight from "../assets/icons/ChevronRight.vue";
+import TransferStatus from "../components/TransferStatus.vue";
+import { getItems } from "../lib/fetch.js";
+import Loading from "../components/Loading.vue";
+import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
+import Button from "../components/ButtonModal.vue";
+import StatusModal from "@/components/StatusModal.vue";
+import { useSettingStore } from "./../stores/useSettingStore";
+const settingStore = useSettingStore();
+const emits = defineEmits(["message"]);
+import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 const statusStore = useTaskStatusStore();
 const uri = import.meta.env.VITE_SERVER_URI;
 const isLoading = ref(true);
 const sourceStatus = ref({});
 const showTranferStauts = ref(false);
-defineProps({
-  setting: Object,
-});
-
+// const settingStore.getLimitTask() = settingStore.getLimitTask();
 onMounted(async function () {
   const data = await getItems(`${uri}/v2/statuses`);
   isLoading.value = false;
@@ -26,30 +25,43 @@ onMounted(async function () {
 });
 
 const handleMessage = (e) => {
-  emits('message', e);
+  emits("message", e);
 };
 </script>
 
 <template>
   <Loading class="w-screen" :is-loading="isLoading" />
   <div
-    class="w-full flex-col flex gap-2"
-    :class="$route.fullPath.split('/').length > 3 ? ' blur-sm' : ''"
+    class="flex w-full flex-col gap-2"
+    :class="$route.fullPath.split('/').length > 3 ? 'blur-sm' : ''"
   >
-    <div class="w-full flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <div
-          @click="$router.push({ name: 'Task' })"
-          class="itbkk-button-home text-xl font-bold cursor-pointer"
-        >
-          Home
+    <div class="flex w-full items-center justify-between">
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center gap-4">
+          <div
+            @click="$router.push({ name: 'Task' })"
+            class="itbkk-button-home cursor-pointer text-xl font-bold"
+          >
+            Home
+          </div>
+          <ChevronRight />
+          <div
+            @click="$router.push({ name: 'Status' })"
+            class="cursor-pointer text-xl font-bold text-primary"
+          >
+            Task Status
+          </div>
         </div>
-        <ChevronRight />
-        <div
-          @click="$router.push({ name: 'Status' })"
-          class="text-xl font-bold cursor-pointer text-primary"
-        >
-          Task Status
+        <div>
+          The limit status :
+          <span
+            :class="
+              settingStore.getLimitTask().enable ? 'text-success' : 'text-error'
+            "
+          >
+            {{ settingStore.getLimitTask().enable ? "enable" : "disable" }}
+            state
+          </span>
         </div>
       </div>
       <div class="flex justify-end gap-4">
@@ -61,52 +73,40 @@ const handleMessage = (e) => {
         />
       </div>
     </div>
-    <div>
-      The limit status :
-      <span :class="setting?.enable ? 'text-success' : 'text-error'">
-        {{ setting?.enable ? 'enable' : 'disable' }} state
-      </span>
-    </div>
-    <table class="min-w-full divide-y h-[10px] divide-gray-200">
-      <thead class="bg-gray-200">
-        <tr>
+
+    <table class="block max-h-[500px] divide-y divide-gray-200 overflow-scroll">
+      <tbody class="divide-y divide-gray-300 bg-slate-100">
+        <tr class="bg-gray-200">
           <th
             scope="col"
-            class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
+            class="px-6 py-3 text-center text-sm font-bold uppercase tracking-wider text-base-100"
           >
             No
           </th>
           <th
             scope="col"
-            class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
+            class="px-6 py-3 text-left text-center text-sm font-bold uppercase tracking-wider text-base-100"
           >
             Name
           </th>
           <th
             scope="col"
-            class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
+            class="w-full px-6 py-3 text-left text-sm font-bold uppercase tracking-wider text-base-100"
           >
             Description
           </th>
           <th
             scope="col"
-            class="px-6 py-3 text-center text-sm font-bold text-base-100 uppercase tracking-wider"
+            class="w- px-6 py-3 text-center text-sm font-bold uppercase tracking-wider text-base-100"
           >
-            Num Of Task
+            Tasks
           </th>
           <th
             scope="col"
-            class="px-6 py-3 text-left text-sm font-bold text-base-100 uppercase tracking-wider"
+            class="px-6 py-3 text-center text-sm font-bold uppercase tracking-wider text-base-100"
           >
             Action
           </th>
-        </tr>
-      </thead>
-      <tbody class="bg-slate-100 divide-y divide-gray-300">
-        <tr v-show="statusStore.getStatuses().length === 0">
-          <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-900">
-            No task
-          </td>
         </tr>
         <tr
           class="itbkk-item itbkk-button-action hover:bg-slate-200"
@@ -115,56 +115,58 @@ const handleMessage = (e) => {
           ) in statusStore.getStatuses()"
           :key="id"
         >
-          <td class="px-6 py-4 whitespace-nowrap">
+          <td class="whitespace-nowrap px-6 py-4">
             <div class="text-sm text-gray-900">{{ index + 1 }}</div>
           </td>
-          <td class="itbkk-title px-6 py-4 whitespace-nowrap">
+          <td class="itbkk-title whitespace-nowrap px-6 py-4">
             <StatusModal
               class="text-slate-200"
               :status-color="colorHex"
               :text="name"
             />
           </td>
-          <td class="px-6 py-4 whitespace-nowrap">
+          <td class="whitespace-nowrap px-6 py-4">
             <div
-              class="text-sm text-gray-900 itbkk-description"
+              class="itbkk-description text-sm text-gray-900"
               :class="description ?? 'italic text-gray-400'"
             >
               {{
                 !description
-                  ? 'No description is provided.'
+                  ? "No description is provided."
                   : description.length > 100
-                  ? description.slice(0, 100) + '...'
-                  : description
+                    ? description.slice(0, 100) + "..."
+                    : description
               }}
             </div>
           </td>
-          <td class="itbkk-title px-6 py-4 whitespace-nowrap">
+          <td class="itbkk-title whitespace-nowrap px-6 py-4">
             <div
-              class="text-sm text-center"
+              class="text-center text-sm"
               :class="
-                !setting.enable ||
+                !settingStore.getLimitTask().enable ||
                 name === 'Done' ||
                 name === 'No Status' ||
-                numOfTask < setting.value * 0.7
+                numOfTask < settingStore.getLimitTask().value * 0.7
                   ? 'text-black'
-                  : numOfTask >= setting.value
-                  ? 'text-error'
-                  : 'text-yellow-500'
+                  : numOfTask >= settingStore.getLimitTask().value
+                    ? 'text-error'
+                    : 'text-yellow-500'
               "
             >
               {{ numOfTask
               }}{{
-                setting.enable && name !== 'Done' && name !== 'No Status'
-                  ? `/${setting.value}`
-                  : ''
+                settingStore.getLimitTask().enable &&
+                name !== "Done" &&
+                name !== "No Status"
+                  ? `/${settingStore.getLimitTask().value}`
+                  : ""
               }}
             </div>
           </td>
-          <td class="itbkk-status flex py-4 whitespace-nowrap">
+          <td class="itbkk-status flex whitespace-nowrap py-4">
             <div
               v-if="name !== 'No Status' && name !== 'Done'"
-              class="flex justify-center items-center gap-2"
+              class="flex items-center justify-center gap-2"
             >
               <Button
                 class="itbkk-button-edit"
