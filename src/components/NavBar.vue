@@ -54,7 +54,7 @@ onMounted(() => {
     <div
       :ref="seletor"
       v-show="showSelectBar"
-      class="absolute right-0 top-12 z-10 flex h-max w-[400px] flex-col gap-3 rounded-b-[10px] bg-[#444444] p-5 transition-all duration-300"
+      class="absolute right-0 top-12 z-10 flex h-max min-w-[400px] max-w-[15%] flex-col gap-3 rounded-b-[10px] bg-[#444444] p-5 transition-all duration-300"
     >
       <div class="space-y-2 text-center text-lg">
         <div class="flex items-center justify-between">

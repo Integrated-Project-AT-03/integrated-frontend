@@ -36,19 +36,32 @@ const handleMessage = (e) => {
     :class="$route.fullPath.split('/').length > 3 ? 'blur-sm' : ''"
   >
     <div class="flex w-full items-center justify-between">
-      <div class="flex items-center gap-4">
-        <div
-          @click="$router.push({ name: 'Task' })"
-          class="itbkk-button-home cursor-pointer text-xl font-bold"
-        >
-          Home
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center gap-4">
+          <div
+            @click="$router.push({ name: 'Task' })"
+            class="itbkk-button-home cursor-pointer text-xl font-bold"
+          >
+            Home
+          </div>
+          <ChevronRight />
+          <div
+            @click="$router.push({ name: 'Status' })"
+            class="cursor-pointer text-xl font-bold text-primary"
+          >
+            Task Status
+          </div>
         </div>
-        <ChevronRight />
-        <div
-          @click="$router.push({ name: 'Status' })"
-          class="cursor-pointer text-xl font-bold text-primary"
-        >
-          Task Status
+        <div>
+          The limit status :
+          <span
+            :class="
+              settingStore.getLimitTask().enable ? 'text-success' : 'text-error'
+            "
+          >
+            {{ settingStore.getLimitTask().enable ? "enable" : "disable" }}
+            state
+          </span>
         </div>
       </div>
       <div class="flex justify-end gap-4">
@@ -60,56 +73,40 @@ const handleMessage = (e) => {
         />
       </div>
     </div>
-    <div>
-      The limit status :
-      <span
-        :class="
-          settingStore.getLimitTask().enable ? 'text-success' : 'text-error'
-        "
-      >
-        {{ settingStore.getLimitTask().enable ? "enable" : "disable" }} state
-      </span>
-    </div>
-    <table class="h-[10px] min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-200">
-        <tr>
+
+    <table class="block max-h-[500px] divide-y divide-gray-200 overflow-scroll">
+      <tbody class="divide-y divide-gray-300 bg-slate-100">
+        <tr class="bg-gray-200">
           <th
             scope="col"
-            class="px-6 py-3 text-left text-sm font-bold uppercase tracking-wider text-base-100"
+            class="px-6 py-3 text-center text-sm font-bold uppercase tracking-wider text-base-100"
           >
             No
           </th>
           <th
             scope="col"
-            class="px-6 py-3 text-left text-sm font-bold uppercase tracking-wider text-base-100"
+            class="px-6 py-3 text-left text-center text-sm font-bold uppercase tracking-wider text-base-100"
           >
             Name
           </th>
           <th
             scope="col"
-            class="px-6 py-3 text-left text-sm font-bold uppercase tracking-wider text-base-100"
+            class="w-full px-6 py-3 text-left text-sm font-bold uppercase tracking-wider text-base-100"
           >
             Description
           </th>
           <th
             scope="col"
-            class="px-6 py-3 text-center text-sm font-bold uppercase tracking-wider text-base-100"
+            class="w- px-6 py-3 text-center text-sm font-bold uppercase tracking-wider text-base-100"
           >
-            Num Of Task
+            Tasks
           </th>
           <th
             scope="col"
-            class="px-6 py-3 text-left text-sm font-bold uppercase tracking-wider text-base-100"
+            class="px-6 py-3 text-center text-sm font-bold uppercase tracking-wider text-base-100"
           >
             Action
           </th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-300 bg-slate-100">
-        <tr v-show="statusStore.getStatuses().length === 0">
-          <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-900">
-            No task
-          </td>
         </tr>
         <tr
           class="itbkk-item itbkk-button-action hover:bg-slate-200"

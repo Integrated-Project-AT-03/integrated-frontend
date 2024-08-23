@@ -143,7 +143,7 @@ const openTask = (index, id) => {
             />
             <div
               v-show="openSearch"
-              class="gap absolute top-8 flex h-max w-full flex-col overflow-hidden rounded-md bg-white pt-3"
+              class="gap absolute top-8 z-[10] flex h-max w-full flex-col overflow-hidden rounded-md bg-white pt-3"
             >
               <button
                 v-for="status in searchStatus"
@@ -165,17 +165,6 @@ const openTask = (index, id) => {
             @click="clearAll"
             bgcolor="#ef4444"
           />
-          <div class="flex w-[60%] flex-wrap gap-2">
-            <div
-              v-for="(item, index) in items"
-              :key="index"
-              class="itbkk-filter-item itbkk-filter-item-clear relative flex cursor-pointer items-center rounded-md bg-white p-3 text-gray-900 hover:bg-slate-300"
-              @click="removeItem(index)"
-            >
-              <span class="absolute -top-1 right-1 text-error">x</span>
-              <span>{{ item }}</span>
-            </div>
-          </div>
         </div>
       </div>
       <div class="flex justify-end gap-4">
@@ -193,16 +182,11 @@ const openTask = (index, id) => {
         />
       </div>
     </div>
-    <table class="m-0 block divide-gray-200 p-0">
+    <table class="m-0 block divide-gray-200 overflow-hidden rounded-sm p-0">
       <tbody
-        class="block h-[500px] w-full divide-y divide-gray-300 overflow-y-scroll bg-slate-100"
+        class="block max-h-[500px] w-full divide-y divide-gray-300 overflow-y-scroll bg-slate-100"
       >
-        <tr v-show="taskStore.getTasks().length === 0">
-          <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-900">
-            No task
-          </td>
-        </tr>
-        <tr class="sticky justify-between bg-slate-300">
+        <tr class="sticky z-0 justify-between bg-gray-200">
           <th
             scope="col"
             class="px-6 py-3 text-left text-sm font-bold uppercase tracking-wider text-gray-900"
@@ -239,6 +223,14 @@ const openTask = (index, id) => {
             </div>
           </th>
         </tr>
+        <tr v-show="taskStore.getTasks().length === 0">
+          <td
+            colspan="4"
+            class="w-screen px-6 py-4 text-center text-sm text-gray-900"
+          >
+            No task
+          </td>
+        </tr>
         <tr
           class="itbkk-item itbkk-button-action hover:bg-slate-200"
           v-for="(task, index) in taskStore.getTasks()"
@@ -269,6 +261,17 @@ const openTask = (index, id) => {
         </tr>
       </tbody>
     </table>
+    <div class="flex flex-wrap gap-2">
+      <div
+        v-for="(item, index) in items"
+        :key="index"
+        class="itbkk-filter-item itbkk-filter-item-clear relative z-10 flex cursor-pointer items-center rounded-md bg-white p-3 text-gray-900 hover:bg-slate-300"
+        @click="removeItem(index)"
+      >
+        <span class="absolute -top-1 right-1 text-error">x</span>
+        <span>{{ item }}</span>
+      </div>
+    </div>
   </div>
 
   <router-view :index-value="selectIndex" @message="handleMessage($event)" />
