@@ -100,12 +100,11 @@ const editTask = async () => {
 
 const formattDate = (date) =>
   new Date(date).toLocaleString('en-GB', localZone).replace(',', '');
-
 const handleMessage = (e) => {
   emits('message', e);
 };
 </script>
-
+onmou
 <template>
   <div
     class="w-full h-screen fixed flex justify-center top-0 items-center z-10"

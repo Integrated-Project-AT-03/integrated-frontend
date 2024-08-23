@@ -1,29 +1,29 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted } from "vue";
 
-import Loading from './../components/Loading.vue';
-import { getItems } from './../lib/fetch.js';
-import Button from '@/components/ButtonModal.vue';
-import StatusModal from '@/components/StatusModal.vue';
-import SortAsc from './../assets/icons/SortAsc.vue';
-import SortDesc from './../assets/icons/SortDesc.vue';
-import SortDisable from './../assets/icons/SortDisable.vue';
-import { useRouter } from 'vue-router';
-import { useTaskStatusStore } from './../stores/useTaskStatusStore';
-import { useTaskStore } from './../stores/useTaskStore';
+import Loading from "./../components/Loading.vue";
+import { getItems } from "./../lib/fetch.js";
+import Button from "@/components/ButtonModal.vue";
+import StatusModal from "@/components/StatusModal.vue";
+import SortAsc from "./../assets/icons/SortAsc.vue";
+import SortDesc from "./../assets/icons/SortDesc.vue";
+import SortDisable from "./../assets/icons/SortDisable.vue";
+import { useRouter } from "vue-router";
+import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
+import { useTaskStore } from "./../stores/useTaskStore";
 
 const taskStore = useTaskStore();
 const statusStore = useTaskStatusStore();
 const selectIndex = ref(5);
-const newItem = ref('');
+const newItem = ref("");
 const items = ref([]);
 const uri = import.meta.env.VITE_SERVER_URI;
 const isLoading = ref(true);
-const sort = ref('');
-const sortOrder = ref('default');
+const sort = ref("");
+const sortOrder = ref("default");
 const openSearch = ref(false);
 const router = useRouter();
-const payloadJwt = ref()
+const payloadJwt = ref();
 
 let timeoutBlur = null;
 defineProps({
@@ -31,9 +31,9 @@ defineProps({
 });
 const sortImage = computed(() => {
   switch (sortOrder.value) {
-    case 'ascending':
+    case "ascending":
       return 2;
-    case 'descending':
+    case "descending":
       return 3;
     default:
       return 1;
@@ -41,57 +41,45 @@ const sortImage = computed(() => {
 });
 
 const loadTasks = async () => {
-  if (sort.value === '') {
+  if (sort.value === "") {
     const data = await getItems(
-      `${uri}/v2/tasks?filterStatuses=${items.value.join(',')}`
+      `${uri}/v2/tasks?filterStatuses=${items.value.join(",")}`,
     );
     taskStore.setTasks(data.items);
   } else {
     const data = await getItems(
       `${uri}/v2/tasks?sortBy=status.name&sortDirection=${
         sort.value
-      }&filterStatuses=${items.value.join(',')}`
+      }&filterStatuses=${items.value.join(",")}`,
     );
     taskStore.setTasks(data.items);
   }
 };
 
-function parseJwt (token) {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-}
 onMounted(async function () {
   await loadTasks();
   const res = await getItems(`${uri}/v2/statuses`);
   statusStore.setStatuses(res.items);
-  // statusManager.value.setStatuses(res.items);
   isLoading.value = false;
-  const token = localStorage.getItem("token")
-  payloadJwt.value = await parseJwt(token)
 });
 
 const searchStatus = computed(() =>
   statusStore
     .getStatusesByName(newItem.value)
     .filter((status) => !items.value.includes(status.name))
-    .slice(0, 9)
+    .slice(0, 9),
 );
 
 const toggleSortOrder = () => {
-  if (sortOrder.value === 'default') {
-    sortOrder.value = 'ascending';
-    sort.value = 'ASC';
-  } else if (sortOrder.value === 'ascending') {
-    sortOrder.value = 'descending';
-    sort.value = 'DES';
+  if (sortOrder.value === "default") {
+    sortOrder.value = "ascending";
+    sort.value = "ASC";
+  } else if (sortOrder.value === "ascending") {
+    sortOrder.value = "descending";
+    sort.value = "DES";
   } else {
-    sortOrder.value = 'default';
-    sort.value = '';
+    sortOrder.value = "default";
+    sort.value = "";
   }
   loadTasks();
 };
@@ -107,15 +95,15 @@ const clearAll = async () => {
   openSearch.value = false;
 };
 const addItem = async () => {
-  if (newItem.value.trim() !== '') {
+  if (newItem.value.trim() !== "") {
     items.value.push(newItem.value.trim());
-    newItem.value = '';
+    newItem.value = "";
   }
   loadTasks();
 };
-const emits = defineEmits(['message']);
+const emits = defineEmits(["message"]);
 const handleMessage = (e) => {
-  emits('message', e);
+  emits("message", e);
 };
 const handleBlur = () => {
   timeoutBlur = setTimeout(() => (openSearch.value = false), 200);
@@ -127,7 +115,7 @@ const handleSelect = async (name) => {
 };
 
 const openTask = (index, id) => {
-  router.push({ name: 'TaskDetail', params: { id } }),
+  router.push({ name: "TaskDetail", params: { id } }),
     (selectIndex.value = index);
 };
 </script>
@@ -139,10 +127,11 @@ const openTask = (index, id) => {
     :class="$route.fullPath.split('/').length > 3 ? ' blur-sm' : ''"
   >
     <div class="w-full flex items-center justify-around">
-      <div class="itbkk-fullname">{{ payloadJwt?.name }}</div>
+      <!-- <div class="itbkk-fullname">{{  }}</div> -->
+
       <div class="container">
         <div class="flex gap-2 items-center">
-          <label class="flex flex-col gap-2 relative">
+          <label class="flex-col flex gap-2 relative">
             <input
               class="itbkk-status-filter border p-2 w-[300px] rounded-md text-gray-900"
               type="text"
@@ -164,7 +153,7 @@ const openTask = (index, id) => {
               >
                 {{
                   status.name.length > 25
-                    ? status.name.slice(0, 22) + '...'
+                    ? status.name.slice(0, 22) + "..."
                     : status.name
                 }}
               </button>
@@ -267,7 +256,7 @@ const openTask = (index, id) => {
               class="text-sm text-gray-900 itbkk-assignees"
               :class="task?.assignees ?? 'italic'"
             >
-              {{ task?.assignees ?? 'Unassigned' }}
+              {{ task?.assignees ?? "Unassigned" }}
             </div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
