@@ -7,9 +7,16 @@ const settingStore = useSettingStore();
 
 const uri = import.meta.env.VITE_SERVER_URI;
 const setting = ref({});
-const compareSetting = ref({});
-setting.value = { ...settingStore.getLimitTask() };
-compareSetting.value = { ...setting.value };
+
+watch(
+  () => {
+    setting.value = { ...settingStore.getLimitTask() };
+  },
+  () => settingStore.getLimitTask(),
+  { deep: true },
+);
+
+const compareSetting = ref({ ...setting.value });
 const statusesOverLimts = ref([]);
 watch(
   () => setting.value.enable,
@@ -64,8 +71,6 @@ const saveSetting = async () => {
         description: `The Kanban board has disabled the task limit in each status`,
         status: "success",
       });
-
-    emits("loadSetting", setting.value);
   } else if (res.httpStatus === 400) {
     emits("message", {
       description: `${res.errors[0].field} ${res.errors[0].message}`,

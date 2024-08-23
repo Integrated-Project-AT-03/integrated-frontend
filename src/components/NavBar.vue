@@ -52,7 +52,6 @@ onMounted(() => {
       </button>
     </ul>
     <div
-      :ref="seletor"
       v-show="showSelectBar"
       class="absolute right-0 top-12 z-10 flex h-max min-w-[400px] max-w-[15%] flex-col gap-3 rounded-b-[10px] bg-[#444444] p-5 transition-all duration-300"
     >
