@@ -8,6 +8,8 @@ import EditStatusModal from "@/components/EditStatusModal.vue";
 import AddStatusModal from "@/components/AddStatusModal.vue";
 import LoginPage from "../views/LoginPage.vue";
 import AppPage from "@/views/AppPage.vue";
+import CreateBoardModal from "../components/CreateBoardModal.vue";
+import BoardManagerPage from "../views/BoardManagerPage.vue";
 import { parseJwt } from "@/utils/helper";
 import { ref } from "vue";
 
@@ -24,14 +26,23 @@ const router = createRouter({
       component: LoginPage,
     },
     {
-      path: "/app",
-      name: "App",
+      path: "/board",
+      name: "Board",
       component: AppPage,
       children: [
         {
-          path: "/app",
-          redirect: "app/task",
+          path: "",
+          name: "Boards",
+          component: BoardManagerPage,
+          children: [
+            {
+              path: "add",
+              name: "AddBoard",
+              component: CreateBoardModal,
+            },
+          ],
         },
+
         {
           path: "task",
           name: "Task",
@@ -51,7 +62,7 @@ const router = createRouter({
             },
 
             {
-              path: "task/add",
+              path: "add",
               name: "AddTask",
               component: AddTaskModal,
             },

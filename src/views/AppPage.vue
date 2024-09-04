@@ -5,6 +5,8 @@ import { getItemById } from "./../lib/fetch.js";
 import { parseJwt } from "./../utils/helper";
 import Navbar from "../components/NavBar.vue";
 import { useSettingStore } from "./../stores/useSettingStore";
+import ButtonModal from "@/components/ButtonModal.vue";
+
 const uri = import.meta.env.VITE_SERVER_URI;
 const message = ref("");
 const status = ref();
@@ -26,7 +28,6 @@ onMounted(async () => {
   const token = localStorage.getItem("token");
   payloadJwt.value = await parseJwt(token);
   userStore.setUser()
-  console.log(userStore.getUser());
 });
 
 
@@ -57,8 +58,11 @@ const handleMessage = async (e) => {
   <div class="flex h-screen w-full flex-col items-center p-3">
       <Navbar @message="handleMessage($event)" />
     <div
-      class="container relative flex h-full w-full flex-auto items-center justify-center gap-3"
+      class="container relative flex flex-col h-full w-full flex-auto items-center justify-center gap-3"
     >
+      <div class="flex w-full justify-end">
+       
+      </div>
       <RouterView :setting="setting" @message="handleMessage($event)" />
     </div>
     <!-- <BoardSetting

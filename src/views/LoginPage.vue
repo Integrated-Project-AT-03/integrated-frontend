@@ -23,7 +23,7 @@ async function onSubmit(item) {
   if (res.httpStatus === 200) {
     const parseJson = JSON.stringify(res.access_token);
     localStorage.setItem("token", parseJson);
-    router.push("/app");
+    router.push({name: 'Board'});
   } else {
     errorMessage.value = "Username or Password is incorrect";
   }
