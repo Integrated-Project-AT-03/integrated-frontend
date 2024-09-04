@@ -24,7 +24,7 @@ onMounted(() => {
 
 <template>
   <nav
-    class="relative z-[100] flex h-[50px] w-full items-center justify-between rounded-md bg-gradient-to-r from-pink-500 to-violet-500 px-5 text-white"
+    class="relative z-[100] flex h-[80px] w-full items-center justify-between rounded-md bg-gradient-to-r from-pink-500 to-violet-500 px-5 text-white"
   >
     <ul class="flex items-center gap-2">
       <TaskIcon />

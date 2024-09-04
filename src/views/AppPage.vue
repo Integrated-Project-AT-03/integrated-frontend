@@ -47,8 +47,8 @@ const handleMessage = async (e) => {
 </script>
 
 <template>
-  <div class="flex h-screen w-full flex-col items-center p-5">
-    <Navbar @message="handleMessage($event)" />
+  <div class="flex h-screen w-full flex-col items-center p-2">
+      <Navbar @message="handleMessage($event)" />
     <div
       class="container relative flex h-full w-full flex-auto items-center justify-center gap-3"
     >
