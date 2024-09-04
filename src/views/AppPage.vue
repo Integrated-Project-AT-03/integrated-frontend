@@ -15,14 +15,21 @@ const payloadJwt = ref({});
 const settingStore = useSettingStore();
 let timeout;
 
+import {useUserStore} from '../stores/useUserStore.js'
+
+const userStore = useUserStore()
+
 onMounted(async () => {
   const settingLoad = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
   settingStore.setLimitTask(settingLoad);
 
   const token = localStorage.getItem("token");
   payloadJwt.value = await parseJwt(token);
+  userStore.setUser()
+  console.log(userStore.getUser());
 });
-console.log(settingStore);
+
+
 const handleMessage = async (e) => {
   if (messageModalOpenState.value) {
     clearTimeout(timeout);
@@ -47,7 +54,7 @@ const handleMessage = async (e) => {
 </script>
 
 <template>
-  <div class="flex h-screen w-full flex-col items-center p-2">
+  <div class="flex h-screen w-full flex-col items-center p-3">
       <Navbar @message="handleMessage($event)" />
     <div
       class="container relative flex h-full w-full flex-auto items-center justify-center gap-3"

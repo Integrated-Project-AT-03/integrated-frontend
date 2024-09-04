@@ -8,7 +8,6 @@ export const useSettingStore = defineStore("settingStore", {
   actions: {
     setLimitTask(setting) {
       this.limitTask = { enable: setting.enable, value: setting.value };
-      console.log(this.limitTask);
     },
     getLimitTask() {
       return this.limitTask;

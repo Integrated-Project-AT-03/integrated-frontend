@@ -97,7 +97,7 @@ function isTokenValid(token) {
 }
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem("jwt");
+  const token = localStorage.getItem("token");
 
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (isTokenValid(token)) {

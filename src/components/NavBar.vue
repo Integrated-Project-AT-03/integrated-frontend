@@ -24,7 +24,7 @@ onMounted(() => {
 
 <template>
   <nav
-    class="relative z-[100] flex h-[80px] w-full items-center justify-between rounded-md bg-gradient-to-r from-pink-500 to-violet-500 px-5 text-white"
+    class="relative z-[100] flex h-[75px] w-full items-center justify-between rounded-md bg-gradient-to-r from-pink-500 to-violet-500 px-5 text-white"
   >
     <ul class="flex items-center gap-2">
       <TaskIcon />
@@ -53,7 +53,7 @@ onMounted(() => {
     </ul>
     <div
       v-show="showSelectBar"
-      class="absolute right-0 top-12 z-10 flex h-max min-w-[400px] max-w-[15%] flex-col gap-3 rounded-b-[10px] bg-[#444444] p-5 transition-all duration-300"
+      class="absolute right-0 top-[4.7rem] z-10 flex h-max min-w-[400px] max-w-[15%] flex-col gap-3 rounded-b-[10px] bg-[#444444] p-5 transition-all duration-300"
     >
       <div class="space-y-2 text-center text-lg">
         <div class="flex items-center justify-between">
