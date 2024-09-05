@@ -9,9 +9,11 @@ import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
 import Button from "../components/ButtonModal.vue";
 import StatusModal from "@/components/StatusModal.vue";
 import { useSettingStore } from "./../stores/useSettingStore";
-const settingStore = useSettingStore();
-const emits = defineEmits(["message"]);
+import { useRoute } from "vue-router";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
+const settingStore = useSettingStore();
+const route = useRoute();
+const emits = defineEmits(["message"]);
 const statusStore = useTaskStatusStore();
 const uri = import.meta.env.VITE_SERVER_URI;
 const isLoading = ref(true);
@@ -19,7 +21,7 @@ const sourceStatus = ref({});
 const showTranferStauts = ref(false);
 // const settingStore.getLimitTask() = settingStore.getLimitTask();
 onMounted(async function () {
-  const data = await getItems(`${uri}/v2/statuses`);
+  const data = await getItems(`${uri}/v3/boards/${route.params.oid}/statuses`);
   isLoading.value = false;
   statusStore.setStatuses(data.items);
 });
@@ -31,10 +33,8 @@ const handleMessage = (e) => {
 
 <template>
   <Loading class="w-screen" :is-loading="isLoading" />
-  <div
-    class="flex w-full flex-col gap-2"
-    :class="$route.fullPath.split('/').length > 3 ? 'blur-sm' : ''"
-  >
+  <div class="flex w-full flex-col gap-2">
+    <!-- :class="$route.fullPath.split('/').length > 3 ? 'blur-sm' : ''" -->
     <div class="flex w-full items-center justify-between">
       <div class="flex flex-col gap-3">
         <div class="flex items-center gap-4">

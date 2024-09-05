@@ -27,12 +27,11 @@ const router = createRouter({
     },
     {
       path: "/board",
-      name: "Board",
       component: AppPage,
       children: [
         {
           path: "",
-          name: "Boards",
+          name: "Board",
           component: BoardManagerPage,
           children: [
             {
@@ -44,7 +43,7 @@ const router = createRouter({
         },
 
         {
-          path: "task",
+          path: ":oid/task",
           name: "Task",
           component: TaskManagerPage,
           children: [
@@ -70,7 +69,7 @@ const router = createRouter({
         },
 
         {
-          path: "status",
+          path: ":oid/status",
           name: "Status",
           component: StatusManagerPage,
           children: [

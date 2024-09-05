@@ -1,13 +1,13 @@
 <script setup>
-import { useRoute, useRouter } from 'vue-router';
-import { getItemById, editItem } from '../lib/fetch.js';
-import { computed, onMounted, ref } from 'vue';
-import Loading from '../components/Loading.vue';
-import colorStore from '../lib/ColorsStore.js';
-import Button from './ButtonModal.vue';
-import { useTaskStatusStore } from './../stores/useTaskStatusStore';
+import { useRoute, useRouter } from "vue-router";
+import { getItemById, editItem } from "../lib/fetch.js";
+import { computed, onMounted, ref } from "vue";
+import Loading from "../components/Loading.vue";
+import colorStore from "../lib/ColorsStore.js";
+import Button from "./ButtonModal.vue";
+import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 const statusStore = useTaskStatusStore();
-const emits = defineEmits(['message']);
+const emits = defineEmits(["message"]);
 
 let compareStatus;
 const data = ref({});
@@ -25,23 +25,23 @@ const isLoading = ref(true);
 const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 const formattDate = (date) =>
-  new Date(date).toLocaleString('en-GB', localZone).replace(',', '');
+  new Date(date).toLocaleString("en-GB", localZone).replace(",", "");
 
 onMounted(async function () {
-  const res = await getItemById(`${uri}/v2/statuses`, route.params.id);
+  const res = await getItemById(`${uri}/v3/statuses`, route.params.id);
   if (res.status === 404) {
-    emits('message', {
+    emits("message", {
       description: `An error has occurred, the status does not exist.`,
-      status: 'error',
+      status: "error",
     });
     statusStore.deleteStatus(route.params.id);
-    router.push({ name: 'Status' });
-  } else if (res.name === 'No Status' || res.id === 'Done') {
-    emits('message', {
+    router.push({ name: "Status" });
+  } else if (res.name === "No Status" || res.id === "Done") {
+    emits("message", {
       description: `The ${res.name} is not allow to editing`,
-      status: 'error',
+      status: "error",
     });
-    router.push({ name: 'Status' });
+    router.push({ name: "Status" });
   }
   data.value = res;
   compareStatus = { ...res };
@@ -50,62 +50,65 @@ onMounted(async function () {
 
 async function updateStatus() {
   isLoading.value = true;
-  const res = await editItem(`${uri}/v2/statuses`, route.params.id, data.value);
+  const res = await editItem(`${uri}/v3/statuses`, route.params.id, {
+    ...data.value,
+    boardNanoId: route.params.oid,
+  });
   isLoading.value = false;
 
   if (res.httpStatus === 200) {
     statusStore.updateStatus(route.params.id, res);
-    emits('message', {
-      description: 'The status has been updated.',
-      status: 'success',
+    emits("message", {
+      description: "The status has been updated.",
+      status: "success",
     });
-    router.push({ name: 'Status' });
+    router.push({ name: "Status" });
   } else if (res.status === 404) {
-    emits('message', {
+    emits("message", {
       description: `An error has occurred, the status does not exist.`,
-      status: 'error',
+      status: "error",
     });
-    router.push({ name: 'Status' });
+    router.push({ name: "Status" });
     statusStore.deleteStatus(route.params.id);
   } else if (res.status === 422) {
-    emits('message', {
+    emits("message", {
       description: `${res.message}`,
-      status: 'error',
+      status: "error",
     });
-    router.push({ name: 'Status' });
+    router.push({ name: "Status" });
   } else if (res.status === 400) {
-    emits('message', {
+    emits("message", {
       description: `Status name must be uniques, please choose another name.`,
-      status: 'error',
+      status: "error",
     });
   } else {
-    emits('message', {
+    emits("message", {
       description: `something went wrong, please try again`,
-      status: 'error',
+      status: "error",
     });
-    router.push({ name: 'Status' });
+    router.push({ name: "Status" });
   }
 }
 </script>
 
 <template>
   <div
-    class="w-screen top-0 h-screen fixed flex justify-center items-center z-10"
+    class="fixed top-0 z-10 flex h-screen w-screen items-center justify-center"
   >
     <Loading :is-loading="isLoading" />
-    <div class="m-auto w-[65rem] h-[48rem] bg-neutral rounded-2xl">
-      <div class="text-xl mt-4 ml-6">Edit Status</div>
+    <div class="m-auto h-[48rem] w-[65rem] rounded-2xl bg-neutral">
+      <div class="ml-6 mt-4 text-xl">Edit Status</div>
       <div class="divider"></div>
-      <div class="itbkk-modal-status flex flex-col gap-4 items-center">
+      <div class="itbkk-modal-status flex flex-col items-center gap-4">
         <div class="flex flex-col gap-2">
           <div class="flex gap-4">
             <div>Name</div>
             <div class="text-error">
-              {{ validateInput?.name ? '(Max 50 characters)' : '' }}
+              {{ validateInput?.name ? "(Max 50 characters)" : "" }}
             </div>
           </div>
           <input
-            class="itbkk-status-name w-[60rem] h-11 rounded-2xl p-3 bg-secondary border-base-100"
+            class="itbkk-status-name h-11 w-[60rem] rounded-2xl border-base-100 bg-secondary p-3"
             v-model="data.name"
           />
         </div>
@@ -113,17 +116,17 @@ async function updateStatus() {
           <div class="flex gap-4">
             <div>Description</div>
             <div class="text-error">
-              {{ validateInput?.description ? '(Max 200 characters)' : '' }}
+              {{ validateInput?.description ? "(Max 200 characters)" : "" }}
             </div>
           </div>
           <textarea
-            class="itbkk-status-description w-[60rem] h-[19rem] rounded-2xl border p-4 bg-secondary border-base-100"
+            class="itbkk-status-description h-[19rem] w-[60rem] rounded-2xl border border-base-100 bg-secondary p-4"
             v-model="data.description"
             placeholder="No description is provided."
           ></textarea>
         </div>
       </div>
-      <div class="flex justify-between ml-10 mr-10 mt-6">
+      <div class="ml-10 mr-10 mt-6 flex justify-between">
         <div class="flex gap-3">
           <div>TimeZone:</div>
           {{ localZone }}
@@ -142,13 +145,13 @@ async function updateStatus() {
         </div>
       </div>
       <div class="divider"></div>
-      <div class="flex w-fit ml-10 px-10">
-        <div class="color-picker-container flex flex-wrap gap-6 items-center">
+      <div class="ml-10 flex w-fit px-10">
+        <div class="color-picker-container flex flex-wrap items-center gap-6">
           <div>Color Tag :</div>
           <div
             v-for="color in colorStore.getColors()"
             :key="color.id"
-            class="color-picker-item flex items-center justify-center cursor-pointer relative"
+            class="color-picker-item relative flex cursor-pointer items-center justify-center"
             @click="() => (data.colorId = color.id)"
           >
             <div
@@ -156,12 +159,12 @@ async function updateStatus() {
               :class="
                 data.colorId === color.id && 'border-[4px] border-purple-500'
               "
-              class="color-box w-8 h-8 rounded-full border border-gray-300 relative"
+              class="color-box relative h-8 w-8 rounded-full border border-gray-300"
             ></div>
           </div>
         </div>
       </div>
-      <div class="flex gap-3 justify-end mr-5 mt-5">
+      <div class="mr-5 mt-5 flex justify-end gap-3">
         <Button
           class="btn-success"
           message="Save"

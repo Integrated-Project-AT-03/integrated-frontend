@@ -7,6 +7,17 @@ async function getItems(url) {
     console.log(`error: ${error}`);
   }
 }
+
+async function getItem(url) {
+  try {
+    const res = await fetch(url);
+    const item = await res.json();
+    return { item, httpStatus: res.status };
+  } catch (error) {
+    console.log(`error: ${error}`);
+  }
+}
+
 async function getItemById(url, id) {
   try {
     const res = await fetch(`${url}/${id}`);
@@ -17,12 +28,13 @@ async function getItemById(url, id) {
   }
 }
 
-async function deleteItemById(url, id) {
+async function deleteItemById(url, id, nanoIdBoard) {
   try {
-    const res = await fetch(`${url}/${id}`, {
+    const res = await fetch(`${url}/${id}/board/${nanoIdBoard}`, {
       method: "DELETE",
     });
     const item = await res.json();
+    console.log(item);
     return { ...item, httpStatus: res.status };
   } catch (error) {
     console.log(`error: ${error}`);
@@ -77,11 +89,14 @@ async function editItem(url, id, editItem) {
   }
 }
 
-async function changeTasksStatus(url, deletedId, changeId) {
+async function changeTasksStatus(url, deletedId, changeId, nanoIdBoard) {
   try {
-    const res = await fetch(`${url}/${deletedId}/${changeId}`, {
-      method: "DELETE",
-    });
+    const res = await fetch(
+      `${url}/${deletedId}/${changeId}/board/${nanoIdBoard}`,
+      {
+        method: "DELETE",
+      },
+    );
     const body = await res.json();
     return { body, httpStatus: res.status };
   } catch (error) {
@@ -97,4 +112,5 @@ export {
   editItem,
   changeTasksStatus,
   patchItemById,
+  getItem,
 };

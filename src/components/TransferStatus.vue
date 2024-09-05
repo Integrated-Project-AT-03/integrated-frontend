@@ -1,61 +1,63 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import Button from './ButtonModal.vue';
-import { useTaskStatusStore } from './../stores/useTaskStatusStore';
+import { onMounted, ref } from "vue";
+import Button from "./ButtonModal.vue";
+import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
+import { useRoute } from "vue-router";
 const statusStore = useTaskStatusStore();
-
+const route = useRoute();
 const selectStatus = ref();
-import { getItems, changeTasksStatus } from '../lib/fetch.js';
+import { getItems, changeTasksStatus } from "../lib/fetch.js";
 const uri = import.meta.env.VITE_SERVER_URI;
 const props = defineProps({
   sourceStatus: Object,
 });
 const destinationStatus = ref(null);
-const emits = defineEmits(['close', 'message', 'update:modelValue']);
+const emits = defineEmits(["close", "message", "update:modelValue"]);
 onMounted(async () => {
-  emits('update:modelValue', true);
-  selectStatus.value = (await getItems(`${uri}/v2/statuses`)).items;
-  emits('update:modelValue', false);
+  emits("update:modelValue", true);
+  selectStatus.value = (await getItems(`${uri}/v3/statuses`)).items;
+  emits("update:modelValue", false);
 });
 const submit = async () => {
-  emits('update:modelValue', true);
+  emits("update:modelValue", true);
   const res = await changeTasksStatus(
-    `${uri}/v2/statuses`,
+    `${uri}/v3/statuses`,
     props.sourceStatus.id,
-    destinationStatus.value.id
+    destinationStatus.value.id,
+    route.params.oid,
   );
-  emits('update:modelValue', false);
+  emits("update:modelValue", false);
   if (res.httpStatus === 200) {
-    emits('message', {
+    emits("message", {
       description: `${res.body} task(s) have been transferred and the status has been deleted.`,
-      status: 'success',
+      status: "success",
     });
     statusStore.deleteStatus(props.sourceStatus.id);
     statusStore.updateStatus(destinationStatus.value.id, {
       ...destinationStatus.value,
       numOfTask: res.body + destinationStatus.value.numOfTask,
     });
-    emits('close');
+    emits("close");
   } else if (res.httpStatus === 500 || res.httpStatus === 404) {
-    emits('message', {
+    emits("message", {
       description: `${res.body.message}`,
-      status: 'error',
+      status: "error",
     });
   } else if (res.httpStatus === 404) {
-    emits('message', {
+    emits("message", {
       description: `${res.body.message}`,
-      status: 'error',
+      status: "error",
     });
     statusStore.deleteStatus(props.sourceStatus.id);
   } else if (res.httpStatus === 400) {
-    emits('message', {
+    emits("message", {
       description: `Cannot transfer to ${destinationStatus.value.name} status since it will exceed the limit.  Please choose another status to transfer to.`,
-      status: 'error',
+      status: "error",
     });
   } else {
-    emits('message', {
+    emits("message", {
       description: `something went wrong, please try again`,
-      status: 'error',
+      status: "error",
     });
   }
 };
@@ -63,10 +65,10 @@ const submit = async () => {
 
 <template>
   <div
-    class="w-full top-0 h-full absolute flex justify-center items-center z-20"
+    class="absolute top-0 z-20 flex h-full w-full items-center justify-center"
   >
     <div
-      class="relative overflow-hprops.selectedIdden w-max h-max py-4 px-10 bg-neutral drop-shadow-2xl rounded-2xl"
+      class="overflow-hprops.selectedIdden relative h-max w-max rounded-2xl bg-neutral px-10 py-4 drop-shadow-2xl"
     >
       <div class="text-xl font-semibold">Transfer a Status</div>
       <div class="divider"></div>
@@ -94,12 +96,12 @@ const submit = async () => {
         <div class="divider"></div>
         <div class="flex justify-end">
           <Button
-            class="itbkk-button-cancel w-16 hover:bg-base-100 hover:border-base-100 mr-3"
+            class="itbkk-button-cancel mr-3 w-16 hover:border-base-100 hover:bg-base-100"
             message="Cancel"
             @click="$emit('close')"
           />
           <Button
-            class="itbkk-button-comfirm btn-success w-16 hover:bg-base-100 hover:border-base-100 ml-1"
+            class="itbkk-button-comfirm btn-success ml-1 w-16 hover:border-base-100 hover:bg-base-100"
             message="Transfer and Delete"
             :disabled="!destinationStatus"
             @click="submit"

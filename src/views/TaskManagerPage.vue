@@ -8,7 +8,7 @@ import StatusModal from "@/components/StatusModal.vue";
 import SortAsc from "./../assets/icons/SortAsc.vue";
 import SortDesc from "./../assets/icons/SortDesc.vue";
 import SortDisable from "./../assets/icons/SortDisable.vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 import { useTaskStore } from "./../stores/useTaskStore";
 
@@ -23,8 +23,8 @@ const sort = ref("");
 const sortOrder = ref("default");
 const openSearch = ref(false);
 const router = useRouter();
-const payloadJwt = ref();
-
+// const payloadJwt = ref();
+const route = useRoute();
 let timeoutBlur = null;
 defineProps({
   setting: Object,
@@ -41,24 +41,27 @@ const sortImage = computed(() => {
 });
 
 const loadTasks = async () => {
-  if (sort.value === "") {
-    const data = await getItems(
-      `${uri}/v2/tasks?filterStatuses=${items.value.join(",")}`,
-    );
-    taskStore.setTasks(data.items);
-  } else {
-    const data = await getItems(
-      `${uri}/v2/tasks?sortBy=status.name&sortDirection=${
-        sort.value
-      }&filterStatuses=${items.value.join(",")}`,
-    );
-    taskStore.setTasks(data.items);
-  }
+  const data = await getItems(`${uri}/v3/boards/${route.params.oid}/tasks`);
+  console.log(data);
+  taskStore.setTasks(data.items);
+  // if (sort.value === "") {
+  //   const data = await getItems(
+  //     `${uri}/v2/tasks?filterStatuses=${items.value.join(",")}`,
+  //   );
+  //   taskStore.setTasks(data.items);
+  // } else {
+  //   const data = await getItems(
+  //     `${uri}/v2/tasks?sortBy=status.name&sortDirection=${
+  //       sort.value
+  //     }&filterStatuses=${items.value.join(",")}`,
+  //   );
+  //   taskStore.setTasks(data.items);
+  // }
 };
 
 onMounted(async function () {
   await loadTasks();
-  const res = await getItems(`${uri}/v2/statuses`);
+  const res = await getItems(`${uri}/v3/boards/${route.params.oid}/statuses`);
   statusStore.setStatuses(res.items);
   isLoading.value = false;
 });
@@ -122,10 +125,8 @@ const openTask = (index, id) => {
 
 <template>
   <Loading class="w-screen" :is-loading="isLoading" />
-  <div
-    class="flex w-full flex-col gap-2"
-    :class="$route.fullPath.split('/').length > 3 ? 'blur-sm' : ''"
-  >
+  <div class="flex w-full flex-col gap-2">
+    <!-- :class="$route.fullPath.split('/').length > 3 ? 'blur-sm' : ''" -->
     <div class="flex items-center justify-between">
       <!-- <div class="itbkk-fullname">{{  }}</div> -->
 

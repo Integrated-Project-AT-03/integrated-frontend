@@ -11,7 +11,7 @@ const route = useRoute();
 const taskSeleted = taskStore.findTask(route.params.id);
 defineProps({ indexValue: Number });
 async function deleteTask(id) {
-  const res = await deleteItemById(`${uri}/v2/tasks`, route.params.id);
+  const res = await deleteItemById(`${uri}/v3/tasks`, route.params.id);
   if (res.httpStatus === 200) {
     taskStore.deleteTask(id);
     emits('message', {

@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getItemById, editItem, getItems } from "./../lib/fetch.js";
+import { getItemById, getItem, editItem, getItems } from "./../lib/fetch.js";
 import Loading from "./Loading.vue";
 import Trash from "../assets/icons/Trash.vue";
 import DeleteTaskModal from "./DeleteTaskModal.vue";
@@ -21,6 +21,7 @@ const dataTask = ref({
   description: "",
   assignees: "",
   status: {},
+  boardNanoId: route.params.oid,
 });
 watch(
   () => route.params.mode,
@@ -43,7 +44,7 @@ const validateInput = computed(() => {
 
 const loadTask = async () => {
   isLoading.value = true;
-  const response = await getItemById(`${uri}/v2/tasks`, route.params.id);
+  const response = await getItemById(`${uri}/v3/tasks`, route.params.id);
   if (response.status === 404) {
     emits("message", {
       description: "The requested task does not exist",
@@ -58,15 +59,16 @@ const loadTask = async () => {
 };
 onMounted(async () => {
   await loadTask();
-  statuses.value = await getItems(`${uri}/v2/statuses`);
-  setting.value = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
+  statuses.value = await getItems(`${uri}/v3/statuses`);
+  // set = await getItem(`${uri}/v3/boards/${route.params.oid}/settings`);
+
   isLoading.value = false;
 });
 
 const editTask = async () => {
   isLoading.value = true;
   const res = await editItem(
-    `${uri}/v2/tasks`,
+    `${uri}/v3/tasks`,
     route.params.id,
     dataTask.value,
   );
@@ -210,9 +212,7 @@ onmou
                     : 'text-error'
                 "
               >
-                {{
-                  settingStore.getLimitTask().enable ? "enable" : "disable"
-                }}
+                {{ settingStore.getLimitTask().enable ? "enable" : "disable" }}
                 state
               </span>
             </div>

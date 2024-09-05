@@ -34,12 +34,6 @@ const validation = computed(() => {
 });
 const emits = defineEmits(["message"]);
 const saveSetting = async () => {
-  // if (
-  //   compareSetting.value.value === setting.value.value &&
-  //   compareSetting.value.enable === setting.value.enable
-  // )
-  //   return;
-
   if (setting.value.value < 10) {
     setting.value.value = 10;
   }

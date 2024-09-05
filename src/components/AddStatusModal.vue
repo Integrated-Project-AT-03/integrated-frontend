@@ -1,21 +1,21 @@
 <script setup>
-import { useRouter } from 'vue-router';
-import { addItem } from '../lib/fetch.js';
-import { computed, ref } from 'vue';
-import colorStore from './../lib/ColorsStore';
-import Loading from './Loading.vue';
-import Button from './ButtonModal.vue';
-import { useTaskStatusStore } from './../stores/useTaskStatusStore';
+import { useRouter, useRoute } from "vue-router";
+import { addItem } from "../lib/fetch.js";
+import { computed, ref } from "vue";
+import colorStore from "./../lib/ColorsStore";
+import Loading from "./Loading.vue";
+import Button from "./ButtonModal.vue";
+import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 const statusStore = useTaskStatusStore();
-const emits = defineEmits(['message']);
-
+const emits = defineEmits(["message"]);
+const route = useRoute();
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const isLoading = ref(false);
 const newData = ref({
   colorId: 1,
-  name: '',
-  description: '',
+  name: "",
+  description: "",
 });
 
 const validateInput = computed(() => {
@@ -27,41 +27,44 @@ const validateInput = computed(() => {
 
 async function addNewStatus() {
   isLoading.value = true;
-  const res = await addItem(`${uri}/v2/statuses`, newData.value);
+  const res = await addItem(`${uri}/v3/statuses`, {
+    ...newData.value,
+    boardNanoId: route.params.oid,
+  });
 
   isLoading.value = false;
 
   if (res.httpStatus === 201) {
     statusStore.addStatus(res);
-    emits('message', {
+    emits("message", {
       description: `The status has been added.`,
-      status: 'success',
+      status: "success",
     });
-    router.push({ name: 'Status' });
+    router.push({ name: "Status" });
   } else if (res.status === 400) {
-    emits('message', {
-      description: 'Status name must be uniques, please choose another name.',
-      status: 'error',
+    emits("message", {
+      description: "Status name must be uniques, please choose another name.",
+      status: "error",
     });
   } else {
-    emits('message', {
-      description: 'Somthing went wrong, Please try again',
-      status: 'error',
+    emits("message", {
+      description: "Somthing went wrong, Please try again",
+      status: "error",
     });
-    router.push({ name: 'Status' });
+    router.push({ name: "Status" });
   }
 }
 </script>
 
 <template>
   <div
-    class="w-screen h-screen absolute top-0 flex justify-center items-center z-10"
+    class="absolute top-0 z-10 flex h-screen w-screen items-center justify-center"
   >
     <div
-      class="relative overflow-hidden w-[65rem] h-[49rem] bg-neutral drop-shadow-2xl rounded-2xl"
+      class="relative h-[49rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
     >
       <br />
-      <div class="text-xl mt-4 ml-6">Add Status</div>
+      <div class="ml-6 mt-4 text-xl">Add Status</div>
       <div class="itbkk-modal-status">
         <div class="divider"></div>
 
@@ -69,13 +72,13 @@ async function addNewStatus() {
           <div class="flex gap-4">
             <div class="itbkk-status-name ml-12">Name</div>
             <div class="text-error">
-              {{ validateInput.name ? '(Max 50 characters)' : '' }}
+              {{ validateInput.name ? "(Max 50 characters)" : "" }}
             </div>
           </div>
           <div class="flex justify-center">
             <input
               v-model="newData.name"
-              class="itbkk-title w-[60rem] h-[3rem] rounded-2xl p-2 bg-secondary border-base-100"
+              class="itbkk-title h-[3rem] w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
               placeholder="Please Write Name"
             />
           </div>
@@ -83,13 +86,13 @@ async function addNewStatus() {
           <div class="flex gap-4">
             <div class="itbkk-status-description ml-12">Description</div>
             <div class="text-error">
-              {{ validateInput.description ? '(Max 200 characters)' : '' }}
+              {{ validateInput.description ? "(Max 200 characters)" : "" }}
             </div>
           </div>
           <div class="flex justify-center">
             <textarea
               v-model="newData.description"
-              class="itbkk-title w-[60rem] h-[18rem] rounded-2xl p-2 bg-secondary border-base-100"
+              class="itbkk-title h-[18rem] w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
               placeholder="Please Write Description"
             ></textarea>
           </div>
@@ -98,12 +101,12 @@ async function addNewStatus() {
 
           <div class="flex justify-center">
             <div
-              class="color-picker-container flex flex-wrap gap-6 items-center"
+              class="color-picker-container flex flex-wrap items-center gap-6"
             >
               <div
                 v-for="color in colorStore.getColors()"
                 :key="color.id"
-                class="color-picker-item cursor-pointer relative flex justify-center items-center"
+                class="color-picker-item relative flex cursor-pointer items-center justify-center"
                 @click="() => (newData.colorId = color.id)"
               >
                 <div
@@ -112,16 +115,16 @@ async function addNewStatus() {
                     newData.colorId === color.id &&
                     'border-[4px] border-purple-500'
                   "
-                  class="color-box w-8 h-8 rounded-full border border-gray-300"
+                  class="color-box h-8 w-8 rounded-full border border-gray-300"
                 ></div>
               </div>
             </div>
           </div>
         </div>
         <div class="divider"></div>
-        <div class="flex justify-end mt-8 mr-4 gap-3">
+        <div class="mr-4 mt-8 flex justify-end gap-3">
           <Button
-            class="itbkk-button-comfirm btn btn-success w-16 hover:bg-base-100 hover:border-base-100"
+            class="itbkk-button-comfirm btn btn-success w-16 hover:border-base-100 hover:bg-base-100"
             message="Save"
             :disabled="
               newData.name === '' ||
