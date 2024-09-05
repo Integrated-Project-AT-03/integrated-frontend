@@ -20,14 +20,16 @@ let timeout;
 import {useUserStore} from '../stores/useUserStore.js'
 
 const userStore = useUserStore()
+userStore.setUser()
 
 onMounted(async () => {
+
   const settingLoad = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
   settingStore.setLimitTask(settingLoad);
-
   const token = localStorage.getItem("token");
   payloadJwt.value = await parseJwt(token);
-  userStore.setUser()
+
+
 });
 
 

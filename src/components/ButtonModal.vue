@@ -15,7 +15,7 @@ const props = defineProps({
 
 <template>
 
-  <button class="btn border-0 text-slate-200" :style="{ backgroundColor: props.bgcolor }">
+  <button class="btn border-0 text-slate-200 w-fit" :style="{ backgroundColor: props.bgcolor }">
     {{ props.message }}
   </button>
 

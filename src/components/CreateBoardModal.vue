@@ -3,7 +3,7 @@ import Button from './ButtonModal.vue';
 </script>
  
 <template>
-<div class="flex absolute flex-col rounded-lg p-6 bg-base-100 h-auto w-[27rem]">
+<div class="flex absolute flex-col rounded-lg p-6 bg-base-100 border-2 border-[#666666] h-auto w-[27rem]">
       <div class="text-2xl font-bold text-slate-300">New Board</div>
       <div class="divider"></div>
       <div class="itbkk-message text-slate-300 flex flex-col gap-2">
