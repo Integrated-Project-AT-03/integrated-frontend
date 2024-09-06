@@ -3,11 +3,15 @@ import { onMounted, ref } from "vue";
 import Button from "./ButtonModal.vue";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 import { useRoute } from "vue-router";
+import {
+  transferTasksToNewStatus,
+  getStatusesByNanoIdBoard,
+} from "../services/apiStatus";
+
 const statusStore = useTaskStatusStore();
 const route = useRoute();
 const selectStatus = ref();
-import { getItems, changeTasksStatus } from "../lib/fetch.js";
-const uri = import.meta.env.VITE_SERVER_URI;
+
 const props = defineProps({
   sourceStatus: Object,
 });
@@ -15,13 +19,12 @@ const destinationStatus = ref(null);
 const emits = defineEmits(["close", "message", "update:modelValue"]);
 onMounted(async () => {
   emits("update:modelValue", true);
-  selectStatus.value = (await getItems(`${uri}/v3/statuses`)).items;
+  selectStatus.value = (await getStatusesByNanoIdBoard(route.params.oid)).data;
   emits("update:modelValue", false);
 });
 const submit = async () => {
   emits("update:modelValue", true);
-  const res = await changeTasksStatus(
-    `${uri}/v3/statuses`,
+  const res = await transferTasksToNewStatus(
     props.sourceStatus.id,
     destinationStatus.value.id,
     route.params.oid,
@@ -29,23 +32,23 @@ const submit = async () => {
   emits("update:modelValue", false);
   if (res.httpStatus === 200) {
     emits("message", {
-      description: `${res.body} task(s) have been transferred and the status has been deleted.`,
+      description: `${res.data} task(s) have been transferred and the status has been deleted.`,
       status: "success",
     });
     statusStore.deleteStatus(props.sourceStatus.id);
     statusStore.updateStatus(destinationStatus.value.id, {
       ...destinationStatus.value,
-      numOfTask: res.body + destinationStatus.value.numOfTask,
+      numOfTask: res.data + destinationStatus.value.numOfTask,
     });
     emits("close");
   } else if (res.httpStatus === 500 || res.httpStatus === 404) {
     emits("message", {
-      description: `${res.body.message}`,
+      description: `${res.data.message}`,
       status: "error",
     });
   } else if (res.httpStatus === 404) {
     emits("message", {
-      description: `${res.body.message}`,
+      description: `${res.data.message}`,
       status: "error",
     });
     statusStore.deleteStatus(props.sourceStatus.id);

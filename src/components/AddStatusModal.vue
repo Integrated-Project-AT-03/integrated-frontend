@@ -1,15 +1,14 @@
 <script setup>
 import { useRouter, useRoute } from "vue-router";
-import { addItem } from "../lib/fetch.js";
+import { addStatus } from "../services/apiStatus";
 import { computed, ref } from "vue";
-import colorStore from "./../lib/ColorsStore";
+import colorStore from "./../stores/ColorsStore";
 import Loading from "./Loading.vue";
 import Button from "./ButtonModal.vue";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 const statusStore = useTaskStatusStore();
 const emits = defineEmits(["message"]);
 const route = useRoute();
-const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const isLoading = ref(false);
 const newData = ref({
@@ -27,21 +26,17 @@ const validateInput = computed(() => {
 
 async function addNewStatus() {
   isLoading.value = true;
-  const res = await addItem(`${uri}/v3/statuses`, {
-    ...newData.value,
-    boardNanoId: route.params.oid,
-  });
-
+  const res = await addStatus(newData.value, route.params.oid);
   isLoading.value = false;
 
   if (res.httpStatus === 201) {
-    statusStore.addStatus(res);
+    statusStore.addStatus(res.data);
     emits("message", {
       description: `The status has been added.`,
       status: "success",
     });
     router.push({ name: "Status" });
-  } else if (res.status === 400) {
+  } else if (res.httpStatus === 400) {
     emits("message", {
       description: "Status name must be uniques, please choose another name.",
       status: "error",

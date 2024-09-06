@@ -41,7 +41,10 @@ const router = createRouter({
             },
           ],
         },
-
+        {
+          path: ":oid",
+          redirect: { name: "Task" },
+        },
         {
           path: ":oid/task",
           name: "Task",

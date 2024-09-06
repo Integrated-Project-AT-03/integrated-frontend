@@ -1,13 +1,15 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getItemById, getItem, editItem, getItems } from "./../lib/fetch.js";
+import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
+import { getTaskById, editTaskById } from "./../services/apiTask";
 import Loading from "./Loading.vue";
 import Trash from "../assets/icons/Trash.vue";
 import DeleteTaskModal from "./DeleteTaskModal.vue";
 import Button from "./ButtonModal.vue";
 import { useTaskStore } from "./../stores/useTaskStore";
 import { useSettingStore } from "./../stores/useSettingStore";
+
 const settingStore = useSettingStore();
 const taskStore = useTaskStore();
 defineProps({ indexValue: Number });
@@ -15,7 +17,6 @@ const emits = defineEmits(["message"]);
 const route = useRoute();
 const router = useRouter();
 const isEditMode = ref();
-const setting = ref();
 const dataTask = ref({
   title: "",
   description: "",
@@ -28,7 +29,6 @@ watch(
   () => (isEditMode.value = route.params?.mode === "edit"),
   { immediate: true },
 );
-const uri = import.meta.env.VITE_SERVER_URI;
 const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const isLoading = ref(true);
 const compareTask = ref();
@@ -43,9 +43,8 @@ const validateInput = computed(() => {
 });
 
 const loadTask = async () => {
-  isLoading.value = true;
-  const response = await getItemById(`${uri}/v3/tasks`, route.params.id);
-  if (response.status === 404) {
+  const response = await getTaskById(route.params.id);
+  if (response.httpStatus === 404) {
     emits("message", {
       description: "The requested task does not exist",
       status: "error",
@@ -53,26 +52,23 @@ const loadTask = async () => {
     taskStore.deleteTask(route.params.id);
     return router.push({ name: "Task" });
   }
-
-  dataTask.value = { ...response, status: response.status.id };
-  compareTask.value = { ...response, status: response.status.id };
+  dataTask.value = { ...response.data, status: response.data.status.id };
+  compareTask.value = { ...response.data, status: response.data.status.id };
 };
+
 onMounted(async () => {
   await loadTask();
-  statuses.value = await getItems(
-    `${uri}/v3/boards/${route.params.oid}/statuses`,
-  );
-  // set = await getItem(`${uri}/v3/boards/${route.params.oid}/settings`);
-
+  statuses.value = (await getStatusesByNanoIdBoard(route.params.oid)).data;
   isLoading.value = false;
 });
 
-const editTask = async () => {
+const handleEditTask = async () => {
   isLoading.value = true;
-  const res = await editItem(`${uri}/v3/tasks`, route.params.id, {
-    ...dataTask.value,
-    boardNanoId: route.params.oid,
-  });
+  const res = await editTaskById(
+    route.params.id,
+    dataTask.value,
+    route.params.oid,
+  );
   isLoading.value = false;
   if (res.httpStatus === 200) {
     taskStore.updateTask(route.params.id, res);
@@ -200,7 +196,7 @@ onmou
               v-model="dataTask.status"
               class="itbkk-status select w-full max-w-xs bg-base-100"
             >
-              <option v-for="status in statuses?.items" :value="status.id">
+              <option v-for="status in statuses" :value="status.id">
                 {{ status.name }}
               </option>
             </select>
@@ -249,7 +245,7 @@ onmou
         <Button
           class="itbkk-button-confirm btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
           v-show="isEditMode"
-          @click="editTask()"
+          @click="handleEditTask()"
           :disabled="
             dataTask.title === '' ||
             validateInput.assignees ||

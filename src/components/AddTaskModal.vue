@@ -1,19 +1,22 @@
 <script setup>
-import { useRouter } from 'vue-router';
-import { addItem, getItems, getItemById } from '../lib/fetch.js';
-import { computed, onMounted, ref } from 'vue';
-import Button from './ButtonModal.vue';
-import { useTaskStore } from './../stores/useTaskStore';
+import { useRouter, useRoute } from "vue-router";
+import { editSettingByNanoIdBoard } from "../services/apiSetting";
+import { getStatusesByNanoIdBoard } from "../services/apiStatus";
+import { addTask } from "../services/apiTask";
+import { computed, onMounted, ref } from "vue";
+import Button from "./ButtonModal.vue";
+import { useTaskStore } from "./../stores/useTaskStore";
 const taskStore = useTaskStore();
 const statuses = ref();
-const emits = defineEmits(['message']);
+const emits = defineEmits(["message"]);
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
+const route = useRoute();
 const setting = ref();
 const taskForm = ref({
-  title: '',
-  description: '',
-  assignees: '',
+  title: "",
+  description: "",
+  assignees: "",
   status: {},
 });
 
@@ -26,44 +29,47 @@ const validateInput = computed(() => {
 });
 
 onMounted(async () => {
-  statuses.value = await getItems(`${uri}/v2/statuses`);
-  taskForm.value.status = statuses.value.items[0];
-  setting.value = await getItemById(`${uri}/v2/settings`, 'limit_of_tasks');
+  statuses.value = (await getStatusesByNanoIdBoard(route.params.oid)).data;
+  taskForm.value.status = statuses.value[0];
+  setting.value = (await editSettingByNanoIdBoard(route.params.oid)).data;
 });
 
 async function addNewTask(newItem) {
-  const res = await addItem(`${uri}/v2/tasks`, {
-    ...newItem,
-    status: newItem.status.id,
-  });
+  const res = await addTask(
+    {
+      ...newItem,
+      status: newItem.status.id,
+    },
+    route.params.oid,
+  );
 
   if (res.httpStatus === 201) {
-    emits('message', {
+    emits("message", {
       description: `The task has been successfully added.`,
-      status: 'success',
+      status: "success",
     });
     taskStore.addTask(res);
   } else if (res.status === 400) {
-    emits('message', {
+    emits("message", {
       description: `The status ${newItem.status.name}  will have too many tasks.  Please make progress and update status of existing tasks first.`,
-      status: 'error',
+      status: "error",
     });
   } else {
-    emits('message', {
+    emits("message", {
       description: `Someting went wrong.`,
-      status: 'error',
+      status: "error",
     });
   }
-  return router.push({ name: 'Task' });
+  return router.push({ name: "Task" });
 }
 </script>
 
 <template>
   <div
-    class="w-full top-0 h-screen fixed flex justify-center items-center z-10"
+    class="fixed top-0 z-10 flex h-screen w-full items-center justify-center"
   >
-    <div class="m-auto w-[65rem] h-[48rem] bg-neutral rounded-2xl">
-      <div class="flex mt-4 px-5 items-center justify-between">
+    <div class="m-auto h-[48rem] w-[65rem] rounded-2xl bg-neutral">
+      <div class="mt-4 flex items-center justify-between px-5">
         <div class="text-xl">New Task</div>
       </div>
       <div class="divider"></div>
@@ -71,13 +77,13 @@ async function addNewTask(newItem) {
         <div class="flex gap-4">
           <div class="ml-9">Title</div>
           <div class="text-error">
-            {{ validateInput.title ? '(Max 100 characters)' : '' }}
+            {{ validateInput.title ? "(Max 100 characters)" : "" }}
           </div>
         </div>
         <div class="flex justify-center">
           <input
             v-model="taskForm.title"
-            class="itbkk-title w-[60rem] h-11 rounded-2xl p-2 bg-secondary border-base-100"
+            class="itbkk-title h-11 w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
           />
         </div>
         <div class="flex justify-around">
@@ -85,12 +91,12 @@ async function addNewTask(newItem) {
             <div class="flex gap-4">
               <div>Description</div>
               <div class="text-error">
-                {{ validateInput.description ? '(Max 500 characters)' : '' }}
+                {{ validateInput.description ? "(Max 500 characters)" : "" }}
               </div>
             </div>
             <textarea
               v-model="taskForm.description"
-              class="itbkk-description w-[35rem] h-[28rem] rounded-2xl border p-4 bg-secondary border-base-100"
+              class="itbkk-description h-[28rem] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4"
             ></textarea>
           </div>
           <div class="flex flex-col gap-3">
@@ -98,12 +104,12 @@ async function addNewTask(newItem) {
               <div class="flex gap-4">
                 <div>Assignees</div>
                 <div class="text-error">
-                  {{ validateInput.assignees ? '(Max 30 characters)' : '' }}
+                  {{ validateInput.assignees ? "(Max 30 characters)" : "" }}
                 </div>
               </div>
               <textarea
                 v-model="taskForm.assignees"
-                class="itbkk-assignees w-[20rem] h-[12rem] rounded-2xl border p-4 bg-secondary border-base-100"
+                class="itbkk-assignees h-[12rem] w-[20rem] rounded-2xl border border-base-100 bg-secondary p-4"
               ></textarea>
             </div>
             <div class="flex flex-col gap-3">
@@ -112,21 +118,21 @@ async function addNewTask(newItem) {
                 v-model="taskForm.status"
                 class="itbkk-status select w-full max-w-xs bg-base-100"
               >
-                <option v-for="status in statuses?.items" :value="status">
+                <option v-for="status in statuses" :value="status">
                   {{ status.name }}
                 </option>
               </select>
               <div>
                 The limit status :
                 <span :class="setting?.enable ? 'text-success' : 'text-error'">
-                  {{ setting?.enable ? 'enable' : 'disable' }} state
+                  {{ setting?.enable ? "enable" : "disable" }} state
                 </span>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="flex justify-end gap-3 mr-4">
+      <div class="mr-4 flex justify-end gap-3">
         <Button
           class="itbkk-button-confirm btn-success"
           message="Save"

@@ -1,8 +1,6 @@
 <script setup>
 import { useRouter, useRoute } from "vue-router";
-import { deleteItemById } from "../lib/fetch.js";
-
-import { ref } from "vue";
+import { deleteStatusById } from "../services/apiStatus";
 import Button from "./ButtonModal.vue";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 const statusStore = useTaskStatusStore();
@@ -14,11 +12,11 @@ const props = defineProps({
 const emits = defineEmits(["message", "conflict", "update:modelValue"]);
 const router = useRouter();
 const route = useRoute();
-const uri = import.meta.env.VITE_SERVER_URI;
 
 async function deleteStatus(id) {
   emits("update:modelValue", true);
-  const res = await deleteItemById(`${uri}/v3/statuses`, id, route.params.oid);
+  const res = await deleteStatusById(id, route.params.oid);
+
   emits("update:modelValue", false);
   if (res.httpStatus === 200) {
     statusStore.deleteStatus(id);
@@ -26,14 +24,14 @@ async function deleteStatus(id) {
       description: "The task has been deleted",
       status: "success",
     });
-  } else if (res.status === 422) {
+  } else if (res.httpStatus === 422) {
     emits("message", {
       description: `${res.message}`,
       status: "error",
     });
-  } else if (res.status === 400) {
+  } else if (res.httpStatus === 400) {
     emits("conflict");
-  } else if (res.status === 404) {
+  } else if (res.httpStatus === 404) {
     statusStore.deleteStatus(id);
     emits("message", {
       description: `An error has occurred, the status does not exist.`,

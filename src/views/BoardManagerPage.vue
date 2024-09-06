@@ -1,17 +1,14 @@
 <script setup>
 import ButtonModal from "@/components/ButtonModal.vue";
 import { onMounted, ref } from "vue";
-import { getItems } from "../lib/fetch";
+import { getBoardsByUserOid } from "../services/apiBoard";
 import { useUserStore } from "../stores/useUserStore.js";
-const uri = import.meta.env.VITE_SERVER_URI;
 const userStore = useUserStore();
 const boards = ref();
 
 const loadBoards = async () => {
-  const res = await getItems(
-    `${uri}/v3/user/${userStore.getUser().oid}/boards`,
-  );
-  boards.value = res.items;
+  const res = await getBoardsByUserOid(userStore.getUser().oid);
+  boards.value = res.data;
 };
 onMounted(async () => {
   await loadBoards();

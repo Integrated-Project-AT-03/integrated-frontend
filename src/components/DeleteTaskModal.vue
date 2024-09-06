@@ -1,15 +1,14 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import { deleteTaskById } from "../lib/fetch.js";
-import { ref } from "vue";
+import { deleteTaskById } from "../services/apiTask";
 import Button from "./ButtonModal.vue";
 import { useTaskStore } from "./../stores/useTaskStore";
 const taskStore = useTaskStore();
-const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const route = useRoute();
 const emits = defineEmits(["message"]);
 const taskSeleted = taskStore.findTask(route.params.id);
+
 defineProps({ indexValue: Number });
 async function deleteTask(id) {
   const res = await deleteTaskById(route.params.id);

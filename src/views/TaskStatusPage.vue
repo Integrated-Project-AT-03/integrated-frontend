@@ -3,7 +3,8 @@ import { onMounted, ref } from "vue";
 
 import ChevronRight from "../assets/icons/ChevronRight.vue";
 import TransferStatus from "../components/TransferStatus.vue";
-import { getItems, getItem } from "../lib/fetch.js";
+import { getSettingByNanoIdBoard } from "../services/apiSetting";
+import { getStatusesByNanoIdBoard } from "../services/apiStatus";
 import Loading from "../components/Loading.vue";
 import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
 import Button from "../components/ButtonModal.vue";
@@ -11,6 +12,7 @@ import StatusModal from "@/components/StatusModal.vue";
 import { useSettingStore } from "./../stores/useSettingStore";
 import { useRoute } from "vue-router";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
+
 const settingStore = useSettingStore();
 const route = useRoute();
 const emits = defineEmits(["message"]);
@@ -21,13 +23,11 @@ const sourceStatus = ref({});
 const showTranferStauts = ref(false);
 
 onMounted(async function () {
-  const settingLoad = await getItem(
-    `${uri}/v3/boards/${route.params.oid}/settings`,
-  );
-  settingStore.setLimitTask(settingLoad.item);
-  const data = await getItems(`${uri}/v3/boards/${route.params.oid}/statuses`);
+  const settingLoad = (await getSettingByNanoIdBoard(route.params.oid)).data;
+  settingStore.setLimitTask(settingLoad);
+  const res = await getStatusesByNanoIdBoard(route.params.oid);
   isLoading.value = false;
-  statusStore.setStatuses(data.items);
+  statusStore.setStatuses(res.data);
 });
 
 const handleMessage = (e) => {

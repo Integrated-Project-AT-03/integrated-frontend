@@ -1,19 +1,13 @@
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
-import {
-  getItemById,
-  getItem,
-  getItems,
-  updaterSettingBoard,
-} from "./../lib/fetch";
+import { computed, ref, watch } from "vue";
+import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
+import { editSettingByNanoIdBoard } from "./../services/apiSetting";
 import { useRoute } from "vue-router";
 import Button from "./ButtonModal.vue";
 import { useSettingStore } from "./../stores/useSettingStore";
 const settingStore = useSettingStore();
 const route = useRoute();
-const uri = import.meta.env.VITE_SERVER_URI;
 const setting = ref({});
-
 watch(
   () => {
     setting.value = { ...settingStore.getLimitTask() };
@@ -44,16 +38,18 @@ const saveSetting = async () => {
   if (setting.value.limitsTask < 10) {
     setting.value.limitsTask = 10;
   }
-  const res = await updaterSettingBoard(route.params.oid, {
+  const res = await editSettingByNanoIdBoard(route.params.oid, {
     enableLimitsTask: setting.value.enableLimitsTask,
     limitsTask: setting.value.limitsTask,
   });
+  console.log("kuy");
   if (res.httpStatus === 200) {
     settingStore.setLimitTask(setting.value);
     compareSetting.value = { ...setting.value };
-    if (setting.value.enable) {
-      const statuses = await getItems(`${uri}/v2/statuses`);
-      statusesOverLimts.value = statuses.items.filter(
+    if (setting.value.enableLimitsTask) {
+      console.log("kuy");
+      const statuses = (await getStatusesByNanoIdBoard(route.params.oid)).data;
+      statusesOverLimts.value = statuses.filter(
         ({ numOfTask, name }) =>
           numOfTask > setting.value.limitsTask &&
           name !== "Done" &&
@@ -140,18 +136,7 @@ const saveSetting = async () => {
     </div>
 
     <div class="mt-4 flex justify-end gap-3">
-      <form method="dialog">
-        <!-- <Button
-          class="itbkk-button-confirm btn-success text-slate-200"
-          message="Confirm"
-          @click="saveSetting"
-          :disabled="
-            validation.limitTasks ||
-            (compareSetting.value === setting.value &&
-              compareSetting.enableLimitsTask === setting.enableLimitsTask)
-          "
-        /> -->
-      </form>
+      <form method="dialog"></form>
       <form method="dialog"></form>
     </div>
   </div>

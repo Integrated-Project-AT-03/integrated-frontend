@@ -1,22 +1,14 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import Alert from "./../components/Alert.vue";
-import { getItemById, getItem } from "./../lib/fetch.js";
 import { parseJwt } from "./../utils/helper";
 import Navbar from "../components/NavBar.vue";
-import { useSettingStore } from "./../stores/useSettingStore";
-import ButtonModal from "@/components/ButtonModal.vue";
-
-const uri = import.meta.env.VITE_SERVER_URI;
 const message = ref("");
 const status = ref();
 const messageModalOpenState = ref(false);
 const setting = ref();
-const path = window.location.pathname;
 const payloadJwt = ref({});
-const settingStore = useSettingStore();
 let timeout;
-
 import { useUserStore } from "../stores/useUserStore.js";
 
 const userStore = useUserStore();

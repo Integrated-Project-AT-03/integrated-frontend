@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import Button from "../components/ButtonModal.vue";
-import { addItem } from "@/lib/fetch";
+import { login } from "@/services/apiAuth";
 import { useRouter } from "vue-router";
 import Logo from "../components/Logo.vue";
 
@@ -11,7 +11,7 @@ const uri = import.meta.env.VITE_SERVER_URI;
 const user = ref({ userName: "itbkk.olarn", password: "ip23/OLA" });
 const errorMessage = ref();
 
-async function onSubmit(item) {
+async function onSubmit() {
   errorMessage.value = "";
 
   if (!user.value.userName || !user.value.password) {
@@ -19,9 +19,9 @@ async function onSubmit(item) {
     return;
   }
 
-  const res = await addItem(`${uri}/login`, item);
+  const res = await login(user.value);
   if (res.httpStatus === 200) {
-    const parseJson = JSON.stringify(res.access_token);
+    const parseJson = JSON.stringify(res.data.access_token);
     localStorage.setItem("token", parseJson);
     router.push({ name: "Board" });
   } else {
@@ -87,7 +87,7 @@ async function onSubmit(item) {
           </div>
           <div class="mt-2 text-[#888888]">Forgot password?</div>
           <button
-            @click="onSubmit(user)"
+            @click="onSubmit"
             class="itbkk-button-signin btn w-full rounded-lg bg-gradient-to-r from-[#CE50B7] via-[#BF53C5] to-[#EA499A] py-2 font-semibold text-white"
             :disabled="user.userName.length === 0 || user.password.length === 0"
           >

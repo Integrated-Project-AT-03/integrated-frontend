@@ -1,9 +1,9 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import { getItemById, editItem } from "../lib/fetch.js";
+import { getStatusById, editStatusById } from "../services/apiStatus";
 import { computed, onMounted, ref } from "vue";
 import Loading from "../components/Loading.vue";
-import colorStore from "../lib/ColorsStore.js";
+import colorStore from "../stores/ColorsStore";
 import Button from "./ButtonModal.vue";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 const statusStore = useTaskStatusStore();
@@ -18,7 +18,6 @@ const validateInput = computed(() => {
     description: data.value.description?.length > 200,
   };
 });
-const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const route = useRoute();
 const isLoading = ref(true);
@@ -28,7 +27,7 @@ const formattDate = (date) =>
   new Date(date).toLocaleString("en-GB", localZone).replace(",", "");
 
 onMounted(async function () {
-  const res = await getItemById(`${uri}/v3/statuses`, route.params.id);
+  const res = await getStatusById(route.params.id);
   if (res.status === 404) {
     emits("message", {
       description: `An error has occurred, the status does not exist.`,
@@ -36,28 +35,29 @@ onMounted(async function () {
     });
     statusStore.deleteStatus(route.params.id);
     router.push({ name: "Status" });
-  } else if (res.name === "No Status" || res.id === "Done") {
+  } else if (res.data.name === "No Status" || res.data.id === "Done") {
     emits("message", {
       description: `The ${res.name} is not allow to editing`,
       status: "error",
     });
     router.push({ name: "Status" });
   }
-  data.value = res;
-  compareStatus = { ...res };
+  data.value = res.data;
+  compareStatus = { ...res.data };
   isLoading.value = false;
 });
 
 async function updateStatus() {
   isLoading.value = true;
-  const res = await editItem(`${uri}/v3/statuses`, route.params.id, {
-    ...data.value,
-    boardNanoId: route.params.oid,
-  });
+  const res = await editStatusById(
+    route.params.id,
+    data.value,
+    route.params.oid,
+  );
   isLoading.value = false;
 
   if (res.httpStatus === 200) {
-    statusStore.updateStatus(route.params.id, res);
+    statusStore.updateStatus(route.params.id, res.data);
     emits("message", {
       description: "The status has been updated.",
       status: "success",

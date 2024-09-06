@@ -1,8 +1,9 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
-
+import { getTasksByNanoidBoard } from "./../services/apiTask";
+import { getSettingByNanoIdBoard } from "./../services/apiSetting";
 import Loading from "./../components/Loading.vue";
-import { getItems, getItem } from "./../lib/fetch.js";
+import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
 import Button from "@/components/ButtonModal.vue";
 import StatusModal from "@/components/StatusModal.vue";
 import SortAsc from "./../assets/icons/SortAsc.vue";
@@ -12,6 +13,8 @@ import { useRoute, useRouter } from "vue-router";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 import { useTaskStore } from "./../stores/useTaskStore";
 import { useSettingStore } from "./../stores/useSettingStore";
+
+
 const settingStore = useSettingStore();
 const taskStore = useTaskStore();
 const statusStore = useTaskStatusStore();
@@ -24,7 +27,6 @@ const sort = ref("");
 const sortOrder = ref("default");
 const openSearch = ref(false);
 const router = useRouter();
-// const payloadJwt = ref();
 const route = useRoute();
 let timeoutBlur = null;
 defineProps({
@@ -42,9 +44,8 @@ const sortImage = computed(() => {
 });
 
 const loadTasks = async () => {
-  const data = await getItems(`${uri}/v3/boards/${route.params.oid}/tasks`);
-  console.log(data);
-  taskStore.setTasks(data.items);
+  const res = await getTasksByNanoidBoard(route.params.oid);
+  taskStore.setTasks(res.data);
   // if (sort.value === "") {
   //   const data = await getItems(
   //     `${uri}/v2/tasks?filterStatuses=${items.value.join(",")}`,
@@ -61,13 +62,11 @@ const loadTasks = async () => {
 };
 
 onMounted(async function () {
-  const settingLoad = await getItem(
-    `${uri}/v3/boards/${route.params.oid}/settings`,
-  );
-  settingStore.setLimitTask(settingLoad.item);
+  const settingLoad = (await getSettingByNanoIdBoard(route.params.oid)).data;
+  settingStore.setLimitTask(settingLoad);
   await loadTasks();
-  const res = await getItems(`${uri}/v3/boards/${route.params.oid}/statuses`);
-  statusStore.setStatuses(res.items);
+  const res = (await getStatusesByNanoIdBoard(route.params.oid)).data;
+  statusStore.setStatuses(res);
   isLoading.value = false;
 });
 

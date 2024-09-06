@@ -1,11 +1,9 @@
-import { getItems } from "@/lib/fetch";
+import { getColors } from "@/services/apiColor";
 class ColorsStore {
   colors = [];
   constructor() {}
   async loadColors() {
-    this.colors = (
-      await getItems(`${import.meta.env.VITE_SERVER_URI}/v2/colors`)
-    ).items;
+    this.colors = (await getColors()).data;
   }
   getColors() {
     return this.colors;
