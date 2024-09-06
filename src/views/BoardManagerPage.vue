@@ -21,8 +21,8 @@ onMounted(async () => {
         <ButtonModal message="+ Create personal board" @click="$router.push({name: 'AddBoard'})" />
         <ul>
             <li v-for="(board, index) in boards" :key="board.nanoIdBoard">
-                <div class="flex w-[18rem] h-[18rem] rounded-xl bg-[#777777] p-3">
-                    {{ board }}
+                <div class="flex w-[12rem] h-[3rem] items-center p-3 rounded-xl bg-[#777777]">
+                    {{ board.name }}
                 </div>
             </li>
         </ul>
