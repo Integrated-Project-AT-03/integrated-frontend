@@ -17,19 +17,21 @@ onMounted(async () => {
 
 <template>
   <div class="flex h-screen w-full flex-col gap-3">
-    <ButtonModal
-      message="+ Create personal board"
-      @click="$router.push({ name: 'AddBoard' })"
-    />
-    <ul>
+    <div class="flex justify-end mt-6">
+        <ButtonModal
+          message="+ Create personal board"
+          @click="$router.push({ name: 'AddBoard' })"
+        />
+    </div>
+    <ul class="flex gap-3 mt-3">
       <li
         v-for="board in boards"
-        :key="board.nanoIdBoard"
+        :key="boards.nanoIdBoard"
         @click="
           $router.push({ name: 'Task', params: { oid: board.nanoIdBoard } })
         "
       >
-        <div class="flex h-[18rem] w-[18rem] rounded-xl bg-[#777777] p-3">
+        <div class="flex justify-center items-center h-[4rem] w-[10rem] rounded-xl hover:cursor-pointer bg-[#777777] p-3">
           {{ board.name }}
         </div>
       </li>
