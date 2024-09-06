@@ -30,6 +30,19 @@ async function getItemById(url, id) {
   }
 }
 
+async function deleteTaskById(id) {
+  try {
+    const res = await fetch(`${uri}/v3/tasks/${id}`, {
+      method: "DELETE",
+    });
+    const item = await res.json();
+    console.log(item);
+    return { ...item, httpStatus: res.status };
+  } catch (error) {
+    console.log(`error: ${error}`);
+  }
+}
+
 async function deleteItemById(url, id, nanoIdBoard) {
   try {
     const res = await fetch(`${url}/${id}/board/${nanoIdBoard}`, {
@@ -74,6 +87,7 @@ async function addItem(url, newItem) {
 }
 
 async function editItem(url, id, editItem) {
+  console.log(editItem);
   try {
     const res = await fetch(`${url}/${id}`, {
       method: "PUT",
@@ -126,6 +140,7 @@ async function changeTasksStatus(url, deletedId, changeId, nanoIdBoard) {
 }
 
 export {
+  deleteTaskById,
   getItems,
   getItemById,
   deleteItemById,

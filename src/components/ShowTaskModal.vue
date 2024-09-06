@@ -59,7 +59,9 @@ const loadTask = async () => {
 };
 onMounted(async () => {
   await loadTask();
-  statuses.value = await getItems(`${uri}/v3/statuses`);
+  statuses.value = await getItems(
+    `${uri}/v3/boards/${route.params.oid}/statuses`,
+  );
   // set = await getItem(`${uri}/v3/boards/${route.params.oid}/settings`);
 
   isLoading.value = false;
@@ -67,11 +69,10 @@ onMounted(async () => {
 
 const editTask = async () => {
   isLoading.value = true;
-  const res = await editItem(
-    `${uri}/v3/tasks`,
-    route.params.id,
-    dataTask.value,
-  );
+  const res = await editItem(`${uri}/v3/tasks`, route.params.id, {
+    ...dataTask.value,
+    boardNanoId: route.params.oid,
+  });
   isLoading.value = false;
   if (res.httpStatus === 200) {
     taskStore.updateTask(route.params.id, res);

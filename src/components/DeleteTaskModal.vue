@@ -1,35 +1,36 @@
 <script setup>
-import { useRoute, useRouter } from 'vue-router';
-import { deleteItemById } from '../lib/fetch.js';
-import { ref } from 'vue';
-import Button from './ButtonModal.vue';
-import { useTaskStore } from './../stores/useTaskStore';
+import { useRoute, useRouter } from "vue-router";
+import { deleteTaskById } from "../lib/fetch.js";
+import { ref } from "vue";
+import Button from "./ButtonModal.vue";
+import { useTaskStore } from "./../stores/useTaskStore";
 const taskStore = useTaskStore();
 const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const route = useRoute();
+const emits = defineEmits(["message"]);
 const taskSeleted = taskStore.findTask(route.params.id);
 defineProps({ indexValue: Number });
 async function deleteTask(id) {
-  const res = await deleteItemById(`${uri}/v3/tasks`, route.params.id);
+  const res = await deleteTaskById(route.params.id);
   if (res.httpStatus === 200) {
     taskStore.deleteTask(id);
-    emits('message', {
-      description: 'The task has been deleted.',
-      status: 'success',
+    emits("message", {
+      description: "The task has been deleted.",
+      status: "success",
     });
-    return router.push({ name: 'Task' });
+    return router.push({ name: "Task" });
   } else if (res.httpStatus === 404) {
-    emits('message', {
+    emits("message", {
       description: `The task does not exist."`,
-      status: 'error',
+      status: "error",
     });
     taskStore.deleteTask(route.params.id);
-    return router.push({ name: 'Task' });
+    return router.push({ name: "Task" });
   } else {
-    emits('message', {
+    emits("message", {
       description: `Something went wrong.`,
-      status: 'error',
+      status: "error",
     });
   }
 }
@@ -37,7 +38,7 @@ async function deleteTask(id) {
 
 <template>
   <dialog id="deletetask" class="modal">
-    <div class="flex flex-col rounded-lg p-6 bg-base-100 h-auto w-fit">
+    <div class="flex h-auto w-fit flex-col rounded-lg bg-base-100 p-6">
       <div class="text-2xl font-bold text-slate-300">Delete a Task</div>
       <div class="divider"></div>
       <div class="itbkk-message text-slate-300">
@@ -45,7 +46,7 @@ async function deleteTask(id) {
         {{ taskSeleted?.title }}?
       </div>
       <div class="divider"></div>
-      <div class="flex justify-end mt-4 gap-3">
+      <div class="mt-4 flex justify-end gap-3">
         <form method="dialog">
           <Button
             class="itbkk-button-confirm btn-success text-slate-200"

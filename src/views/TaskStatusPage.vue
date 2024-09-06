@@ -24,7 +24,7 @@ onMounted(async function () {
   const settingLoad = await getItem(
     `${uri}/v3/boards/${route.params.oid}/settings`,
   );
-  settingStore.setLimitTask(settingLoad);
+  settingStore.setLimitTask(settingLoad.item);
   const data = await getItems(`${uri}/v3/boards/${route.params.oid}/statuses`);
   isLoading.value = false;
   statusStore.setStatuses(data.items);
