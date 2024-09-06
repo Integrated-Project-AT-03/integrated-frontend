@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import Alert from "./../components/Alert.vue";
-import { getItemById } from "./../lib/fetch.js";
+import { getItemById, getItem } from "./../lib/fetch.js";
 import { parseJwt } from "./../utils/helper";
 import Navbar from "../components/NavBar.vue";
 import { useSettingStore } from "./../stores/useSettingStore";
@@ -17,21 +17,15 @@ const payloadJwt = ref({});
 const settingStore = useSettingStore();
 let timeout;
 
-import {useUserStore} from '../stores/useUserStore.js'
+import { useUserStore } from "../stores/useUserStore.js";
 
-const userStore = useUserStore()
-userStore.setUser()
+const userStore = useUserStore();
+userStore.setUser();
 
 onMounted(async () => {
-
-  const settingLoad = await getItemById(`${uri}/v2/settings`, "limit_of_tasks");
-  settingStore.setLimitTask(settingLoad);
   const token = localStorage.getItem("token");
   payloadJwt.value = await parseJwt(token);
-
-
 });
-
 
 const handleMessage = async (e) => {
   if (messageModalOpenState.value) {
@@ -58,13 +52,11 @@ const handleMessage = async (e) => {
 
 <template>
   <div class="flex h-screen w-full flex-col items-center p-3">
-      <Navbar @message="handleMessage($event)" />
+    <Navbar @message="handleMessage($event)" />
     <div
-      class="container relative flex flex-col h-full w-full flex-auto items-center justify-center gap-3"
+      class="container relative flex h-full w-full flex-auto flex-col items-center justify-center gap-3"
     >
-      <div class="flex w-full justify-end">
-       
-      </div>
+      <div class="flex w-full justify-end"></div>
       <RouterView :setting="setting" @message="handleMessage($event)" />
     </div>
     <!-- <BoardSetting

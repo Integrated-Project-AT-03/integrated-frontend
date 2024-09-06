@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from "vue";
 
 import Loading from "./../components/Loading.vue";
-import { getItems } from "./../lib/fetch.js";
+import { getItems, getItem } from "./../lib/fetch.js";
 import Button from "@/components/ButtonModal.vue";
 import StatusModal from "@/components/StatusModal.vue";
 import SortAsc from "./../assets/icons/SortAsc.vue";
@@ -11,7 +11,8 @@ import SortDisable from "./../assets/icons/SortDisable.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 import { useTaskStore } from "./../stores/useTaskStore";
-
+import { useSettingStore } from "./../stores/useSettingStore";
+const settingStore = useSettingStore();
 const taskStore = useTaskStore();
 const statusStore = useTaskStatusStore();
 const selectIndex = ref(5);
@@ -60,6 +61,10 @@ const loadTasks = async () => {
 };
 
 onMounted(async function () {
+  const settingLoad = await getItem(
+    `${uri}/v3/boards/${route.params.oid}/settings`,
+  );
+  settingStore.setLimitTask(settingLoad.item);
   await loadTasks();
   const res = await getItems(`${uri}/v3/boards/${route.params.oid}/statuses`);
   statusStore.setStatuses(res.items);

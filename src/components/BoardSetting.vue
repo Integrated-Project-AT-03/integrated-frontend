@@ -1,10 +1,16 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
-import { patchItemById, getItemById, getItems } from "./../lib/fetch";
+import {
+  getItemById,
+  getItem,
+  getItems,
+  updaterSettingBoard,
+} from "./../lib/fetch";
+import { useRoute } from "vue-router";
 import Button from "./ButtonModal.vue";
 import { useSettingStore } from "./../stores/useSettingStore";
 const settingStore = useSettingStore();
-
+const route = useRoute();
 const uri = import.meta.env.VITE_SERVER_URI;
 const setting = ref({});
 
@@ -13,7 +19,7 @@ watch(
     setting.value = { ...settingStore.getLimitTask() };
   },
   () => settingStore.getLimitTask(),
-  { deep: true },
+  { deep: false },
 );
 
 const compareSetting = ref({ ...setting.value });
@@ -21,28 +27,27 @@ const statusesOverLimts = ref([]);
 watch(
   () => setting.value.enable,
   () => {
-    if (!setting.value.enable) setting.value.value = compareSetting.value.value;
+    if (!setting.value.enable)
+      setting.value.limitsTask = compareSetting.value.limitsTask;
   },
 );
 const validation = computed(() => {
   return {
     limitTasks:
-      setting.value.value < 10 ||
-      setting.value.value > 30 ||
-      typeof setting.value.value !== "number",
+      setting.value.limitsTask < 10 ||
+      setting.value.limitsTask > 30 ||
+      typeof setting.value.limitsTask !== "number",
   };
 });
 const emits = defineEmits(["message"]);
 const saveSetting = async () => {
-  if (setting.value.value < 10) {
-    setting.value.value = 10;
+  if (setting.value.limitsTask < 10) {
+    setting.value.limitsTask = 10;
   }
-  const res = await patchItemById(
-    `${uri}/v2/settings`,
-    "limit_of_tasks",
-    setting.value.value,
-    setting.value.enable ? "enable" : "disable",
-  );
+  const res = await updaterSettingBoard(route.params.oid, {
+    enableLimitsTask: setting.value.enableLimitsTask,
+    limitsTask: setting.value.limitsTask,
+  });
   if (res.httpStatus === 200) {
     settingStore.setLimitTask(setting.value);
     compareSetting.value = { ...setting.value };
@@ -50,14 +55,14 @@ const saveSetting = async () => {
       const statuses = await getItems(`${uri}/v2/statuses`);
       statusesOverLimts.value = statuses.items.filter(
         ({ numOfTask, name }) =>
-          numOfTask > setting.value.value &&
+          numOfTask > setting.value.limitsTask &&
           name !== "Done" &&
           name !== "No Status",
       );
       if (statusesOverLimts.value.length !== 0)
         document.getElementById("over-limit-modal").showModal();
       emits("message", {
-        description: `The Kanban board now limits ${setting.value.value} tasks in each status`,
+        description: `The Kanban board now limits ${setting.value.limitsTask} tasks in each status`,
         status: "success",
       });
     } else
@@ -113,7 +118,7 @@ const saveSetting = async () => {
         @click="saveSetting"
         type="checkbox"
         class="itbkk-limit-task toggle"
-        v-model="setting.enable"
+        v-model="setting.enableLimitsTask"
       />
       <div>Limit tasks in this status</div>
     </div>
@@ -122,8 +127,8 @@ const saveSetting = async () => {
       <div class="flex flex-col gap-1">
         <input
           @blur="saveSetting"
-          :disabled="!setting.enable"
-          v-model.number="setting.value"
+          :disabled="!setting.enableLimitsTask"
+          v-model.number="setting.limitsTask"
           type="text"
           maxlength="2"
           class="itbkk-max-task input input-md input-bordered w-[15rem] max-w-xs"
@@ -143,7 +148,7 @@ const saveSetting = async () => {
           :disabled="
             validation.limitTasks ||
             (compareSetting.value === setting.value &&
-              compareSetting.enable === setting.enable)
+              compareSetting.enableLimitsTask === setting.enableLimitsTask)
           "
         /> -->
       </form>

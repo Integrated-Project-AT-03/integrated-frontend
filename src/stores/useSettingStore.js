@@ -2,12 +2,15 @@ import { acceptHMRUpdate, defineStore } from "pinia";
 
 export const useSettingStore = defineStore("settingStore", {
   state: () => ({
-    limitTask: { enable: false, value: 10 },
+    limitTask: { enableLimitsTask: false, limitsTask: 20 },
   }),
 
   actions: {
     setLimitTask(setting) {
-      this.limitTask = { enable: setting.enable, value: setting.value };
+      this.limitTask = {
+        enableLimitsTask: setting.enableLimitsTask,
+        limitsTask: setting.limitsTask,
+      };
     },
     getLimitTask() {
       return this.limitTask;

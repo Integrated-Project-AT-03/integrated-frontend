@@ -1,3 +1,5 @@
+const uri = import.meta.env.VITE_SERVER_URI;
+
 async function getItems(url) {
   try {
     const res = await fetch(url);
@@ -89,6 +91,25 @@ async function editItem(url, id, editItem) {
   }
 }
 
+async function updaterSettingBoard(nanoIdBoard, editItem) {
+  console.log(editItem);
+  try {
+    const res = await fetch(`${uri}/v3/boards/${nanoIdBoard}/settings`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        ...editItem,
+      }),
+    });
+    const editedItem = await res.json();
+    return { ...editedItem, httpStatus: res.status };
+  } catch (error) {
+    console.log(`error: ${error}`);
+  }
+}
+
 async function changeTasksStatus(url, deletedId, changeId, nanoIdBoard) {
   try {
     const res = await fetch(
@@ -113,4 +134,5 @@ export {
   changeTasksStatus,
   patchItemById,
   getItem,
+  updaterSettingBoard,
 };

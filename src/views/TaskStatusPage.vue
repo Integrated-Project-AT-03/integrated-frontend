@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 
 import ChevronRight from "../assets/icons/ChevronRight.vue";
 import TransferStatus from "../components/TransferStatus.vue";
-import { getItems } from "../lib/fetch.js";
+import { getItems, getItem } from "../lib/fetch.js";
 import Loading from "../components/Loading.vue";
 import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
 import Button from "../components/ButtonModal.vue";
@@ -19,8 +19,12 @@ const uri = import.meta.env.VITE_SERVER_URI;
 const isLoading = ref(true);
 const sourceStatus = ref({});
 const showTranferStauts = ref(false);
-// const settingStore.getLimitTask() = settingStore.getLimitTask();
+
 onMounted(async function () {
+  const settingLoad = await getItem(
+    `${uri}/v3/boards/${route.params.oid}/settings`,
+  );
+  settingStore.setLimitTask(settingLoad);
   const data = await getItems(`${uri}/v3/boards/${route.params.oid}/statuses`);
   isLoading.value = false;
   statusStore.setStatuses(data.items);
@@ -56,10 +60,16 @@ const handleMessage = (e) => {
           The limit status :
           <span
             :class="
-              settingStore.getLimitTask().enable ? 'text-success' : 'text-error'
+              settingStore.getLimitTask().enableLimitsTask
+                ? 'text-success'
+                : 'text-error'
             "
           >
-            {{ settingStore.getLimitTask().enable ? "enable" : "disable" }}
+            {{
+              settingStore.getLimitTask().enableLimitsTask
+                ? "enable"
+                : "disable"
+            }}
             state
           </span>
         </div>
@@ -143,22 +153,22 @@ const handleMessage = (e) => {
             <div
               class="text-center text-sm"
               :class="
-                !settingStore.getLimitTask().enable ||
+                !settingStore.getLimitTask().enableLimitsTask ||
                 name === 'Done' ||
                 name === 'No Status' ||
-                numOfTask < settingStore.getLimitTask().value * 0.7
+                numOfTask < settingStore.getLimitTask().limitsTask * 0.7
                   ? 'text-black'
-                  : numOfTask >= settingStore.getLimitTask().value
+                  : numOfTask >= settingStore.getLimitTask().limitsTask
                     ? 'text-error'
                     : 'text-yellow-500'
               "
             >
               {{ numOfTask
               }}{{
-                settingStore.getLimitTask().enable &&
+                settingStore.getLimitTask().enableLimitsTask &&
                 name !== "Done" &&
                 name !== "No Status"
-                  ? `/${settingStore.getLimitTask().value}`
+                  ? `/${settingStore.getLimitTask().limitsTask}`
                   : ""
               }}
             </div>
