@@ -1,5 +1,27 @@
 <script setup>
+import { ref } from 'vue';
 import Button from './ButtonModal.vue';
+import { createBoard } from '@/services/apiBoard.js'
+import {useUserStore} from '@/stores/useUserStore'
+import router from '@/router';
+import { useBoardStore } from '../stores/useBoardStore.js';
+
+const boardStore = useBoardStore()
+const userStore = useUserStore()
+const newBoard = ref({name: '', ownerOid: userStore.getUser().oid})
+const errorMessage = ref();
+
+async function onSubmit(){
+    if(!newBoard.value.name){
+        errorMessage.value = 'Did not enter a empty.'
+        return
+    }
+    const res = await createBoard(newBoard.value)
+    if(res.httpStatus === 200){
+        boardStore.addBoard(res)
+    }
+    return router.push({name: 'Board'})
+}
 </script>
  
 <template>
@@ -11,7 +33,10 @@ import Button from './ButtonModal.vue';
             Name
         </div>
         <div>
-            <input type="text" placeholder="Type here" class="input input-bordered w-full h-11" />
+            <input v-model="newBoard.name" maxlength="120"type="text" placeholder="Your board name" class="input input-bordered w-full h-11" />
+        </div>
+        <div class="text-error">
+            {{ errorMessage }}
         </div>
       </div>
       <div class="divider"></div>
@@ -20,13 +45,14 @@ import Button from './ButtonModal.vue';
           <Button
             class="itbkk-button-confirm btn-success text-slate-200"
             message="Save"
+            @click="onSubmit"
           />
         </form>
         <form method="dialog">
           <Button
             class="itbkk-button-cancel btn-error text-slate-200"
             message="Cancel"
-            @click="$router.push({name: 'Boards'})"
+            @click="$router.push({name: 'Board'})"
           />
         </form>
       </div>
