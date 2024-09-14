@@ -112,13 +112,13 @@ onmou
   >
     <RouterView @message="handleMessage($event)" />
     <div
-      class="relative h-[50rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
+      class="relative h-[30rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
     >
       <Loading :is-loading="isLoading" />
       <div
-        class="ml-6 mt-2 flex h-[5rem] items-center justify-between gap-5 pr-5 text-xl font-bold text-slate-200"
+        class="ml-6 mt-2 flex items-center justify-between pr-5 pt-2 text-xl font-bold text-slate-200"
       >
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col items-center gap-2">
           <div class="text-sm text-error">
             {{ validateInput.title ? "Max 100 characters" : "" }}
           </div>
@@ -157,7 +157,7 @@ onmou
           />
         </div>
       </div>
-      <div class="divider"></div>
+      <div class="divider m-1"></div>
       <div class="m-4 flex justify-around">
         <div class="flex flex-col gap-2 text-slate-200">
           <div class="flex gap-4">
@@ -170,10 +170,10 @@ onmou
             :disabled="!isEditMode"
             v-model.trim="dataTask.description"
             :placeholder="dataTask.description ?? 'No Description Provided'"
-            class="itbkk-description h-[32rem] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
+            class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
           ></textarea>
         </div>
-        <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-2">
           <div class="flex flex-col gap-2 text-slate-200">
             <div class="flex gap-4">
               <div>Assignees</div>
@@ -181,12 +181,12 @@ onmou
                 {{ validateInput.assignees ? "(Max 30 characters" : "" }}
               </div>
             </div>
-            <textarea
+            <input
               :disabled="!isEditMode"
               :placeholder="dataTask.assignees ?? 'Unassigned'"
               v-model.trim="dataTask.assignees"
-              class="itbkk-assignees h-[12rem] w-[20rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
-            ></textarea>
+              class="itbkk-assignees input w-[20rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
+            />
           </div>
 
           <div class="flex flex-col gap-2 text-slate-200">
@@ -215,32 +215,30 @@ onmou
             </div>
           </div>
           <div
-            class="flex h-3/4 flex-col justify-between gap-3 pb-3 text-slate-200"
+            class="flex flex-auto flex-col justify-between gap-3 pb-3 text-xs text-slate-200"
           >
-            <div>
-              <div class="flex gap-2">
-                TimeZone:
-                <div class="itbkk-timezone">
-                  {{ localZone }}
-                </div>
+            <div class="flex gap-2">
+              TimeZone:
+              <div class="itbkk-timezone">
+                {{ localZone }}
               </div>
-              <div class="flex gap-2">
-                Created On:
-                <div class="itbkk-created-on">
-                  {{ formattDate(dataTask.createdOn) }}
-                </div>
+            </div>
+            <div class="flex gap-2">
+              Created On:
+              <div class="itbkk-created-on">
+                {{ formattDate(dataTask.createdOn) }}
               </div>
-              <div class="flex gap-2">
-                Updated On:
-                <div class="itbkk-updated-on">
-                  {{ formattDate(dataTask.updatedOn) }}
-                </div>
+            </div>
+            <div class="flex gap-2">
+              Updated On:
+              <div class="itbkk-updated-on">
+                {{ formattDate(dataTask.updatedOn) }}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="divider"></div>
+
       <div class="m-4 flex justify-end gap-3">
         <Button
           class="itbkk-button-confirm btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"

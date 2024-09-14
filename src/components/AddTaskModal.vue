@@ -68,11 +68,13 @@ async function addNewTask(newItem) {
   <div
     class="fixed top-0 z-10 flex h-screen w-full items-center justify-center"
   >
-    <div class="m-auto h-[48rem] w-[65rem] rounded-2xl bg-neutral">
+    <div
+      class="relative h-[30rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
+    >
       <div class="mt-4 flex items-center justify-between px-5">
-        <div class="text-xl">New Task</div>
+        <div class="text-xl font-bold">New Task</div>
       </div>
-      <div class="divider"></div>
+      <div class="divider m-1"></div>
       <div class="flex flex-col gap-3">
         <div class="flex gap-4">
           <div class="ml-9">Title</div>
@@ -96,10 +98,10 @@ async function addNewTask(newItem) {
             </div>
             <textarea
               v-model="taskForm.description"
-              class="itbkk-description h-[28rem] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4"
+              class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
             ></textarea>
           </div>
-          <div class="flex flex-col gap-3">
+          <div class="flex flex-col justify-between gap-3">
             <div class="flex flex-col gap-3">
               <div class="flex gap-4">
                 <div>Assignees</div>
@@ -107,10 +109,10 @@ async function addNewTask(newItem) {
                   {{ validateInput.assignees ? "(Max 30 characters)" : "" }}
                 </div>
               </div>
-              <textarea
+              <input
                 v-model="taskForm.assignees"
-                class="itbkk-assignees h-[12rem] w-[20rem] rounded-2xl border border-base-100 bg-secondary p-4"
-              ></textarea>
+                class="itbkk-assignees input w-[20rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
+              />
             </div>
             <div class="flex flex-col gap-3">
               <div>Status</div>
@@ -129,26 +131,26 @@ async function addNewTask(newItem) {
                 </span>
               </div>
             </div>
+            <div class="mr-4 flex justify-end gap-3">
+              <Button
+                class="itbkk-button-confirm btn-success"
+                message="Save"
+                @click="addNewTask(taskForm)"
+                :disabled="
+                  taskForm.title === '' ||
+                  validateInput.assignees ||
+                  validateInput.description ||
+                  validateInput.title
+                "
+              />
+              <Button
+                class="itbkk-button-cancle"
+                message="Cancel"
+                @click="router.push({ name: 'Task' })"
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <div class="mr-4 flex justify-end gap-3">
-        <Button
-          class="itbkk-button-confirm btn-success"
-          message="Save"
-          @click="addNewTask(taskForm)"
-          :disabled="
-            taskForm.title === '' ||
-            validateInput.assignees ||
-            validateInput.description ||
-            validateInput.title
-          "
-        />
-        <Button
-          class="itbkk-button-cancle"
-          message="Cancel"
-          @click="router.push({ name: 'Task' })"
-        />
       </div>
     </div>
   </div>
