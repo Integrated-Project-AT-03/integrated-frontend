@@ -8,6 +8,10 @@ import { useBoardStore } from '../stores/useBoardStore.js';
 const boardStore = useBoardStore()
 const userStore = useUserStore();
 const boards = ref();
+const emits = defineEmits(["message"]);
+const handleMessage = (e) => {
+  emits("message", e);
+};
 
 const loadBoards = async () => {
   const res = await getBoardsByUserOid(userStore.getUser().oid);
@@ -41,7 +45,7 @@ onMounted(async () => {
           </li>
         </ul>
   </div>
-  <RouterView />
+  <RouterView @message="handleMessage($event)" />
 </template>
 
 <style scoped></style>
