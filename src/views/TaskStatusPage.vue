@@ -1,10 +1,11 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 
 import ChevronRight from "../assets/icons/ChevronRight.vue";
 import TransferStatus from "../components/TransferStatus.vue";
 import { getSettingByNanoIdBoard } from "../services/apiSetting";
 import { getStatusesByNanoIdBoard } from "../services/apiStatus";
+import { getTasksByNanoidBoard } from "../services/apiTask";
 import Loading from "../components/Loading.vue";
 import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
 import Button from "../components/ButtonModal.vue";
@@ -13,18 +14,31 @@ import { useSettingStore } from "./../stores/useSettingStore";
 import { useRoute } from "vue-router";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 
+import { useTaskStore } from "./../stores/useTaskStore";
 const settingStore = useSettingStore();
 const route = useRoute();
 const emits = defineEmits(["message"]);
 const statusStore = useTaskStatusStore();
-const uri = import.meta.env.VITE_SERVER_URI;
+const taskStore = useTaskStore();
 const isLoading = ref(true);
 const sourceStatus = ref({});
 const showTranferStauts = ref(false);
 
+const numTask = computed(() =>
+  taskStore.getTasks().reduce((accu, cur) => {
+    if (accu.has(cur.status)) accu.set(cur.status, accu.get(cur.status) + 1);
+    else accu.set(cur.status, 1);
+    return accu;
+  }, new Map()),
+);
+
+console.log(numTask);
+
 onMounted(async function () {
   const settingLoad = (await getSettingByNanoIdBoard(route.params.oid)).data;
   settingStore.setLimitTask(settingLoad);
+  const resTask = await getTasksByNanoidBoard(route.params.oid);
+  taskStore.setTasks(resTask.data);
   const res = await getStatusesByNanoIdBoard(route.params.oid);
   isLoading.value = false;
   statusStore.setStatuses(res.data);
@@ -121,7 +135,7 @@ const handleMessage = (e) => {
         <tr
           class="itbkk-item itbkk-button-action hover:bg-slate-200"
           v-for="(
-            { colorHex, name, description, numOfTask, id }, index
+            { colorHex, name, description, id }, index
           ) in statusStore.getStatuses()"
           :key="id"
         >
@@ -156,14 +170,16 @@ const handleMessage = (e) => {
                 !settingStore.getLimitTask().enableLimitsTask ||
                 name === 'Done' ||
                 name === 'No Status' ||
-                numOfTask < settingStore.getLimitTask().limitsTask * 0.7
+                numTask.get(name) ||
+                0 < settingStore.getLimitTask().limitsTask * 0.7
                   ? 'text-black'
-                  : numOfTask >= settingStore.getLimitTask().limitsTask
+                  : numTask.get(name) ||
+                      0 >= settingStore.getLimitTask().limitsTask
                     ? 'text-error'
                     : 'text-yellow-500'
               "
             >
-              {{ numOfTask
+              {{ numTask.get(name) || 0
               }}{{
                 settingStore.getLimitTask().enableLimitsTask &&
                 name !== "Done" &&

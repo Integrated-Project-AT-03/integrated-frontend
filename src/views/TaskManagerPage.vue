@@ -14,7 +14,6 @@ import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 import { useTaskStore } from "./../stores/useTaskStore";
 import { useSettingStore } from "./../stores/useSettingStore";
 
-
 const settingStore = useSettingStore();
 const taskStore = useTaskStore();
 const statusStore = useTaskStatusStore();
@@ -44,21 +43,12 @@ const sortImage = computed(() => {
 });
 
 const loadTasks = async () => {
-  const res = await getTasksByNanoidBoard(route.params.oid);
+  const res = await getTasksByNanoidBoard(
+    route.params.oid,
+    sort.value,
+    items.value,
+  );
   taskStore.setTasks(res.data);
-  // if (sort.value === "") {
-  //   const data = await getItems(
-  //     `${uri}/v2/tasks?filterStatuses=${items.value.join(",")}`,
-  //   );
-  //   taskStore.setTasks(data.items);
-  // } else {
-  //   const data = await getItems(
-  //     `${uri}/v2/tasks?sortBy=status.name&sortDirection=${
-  //       sort.value
-  //     }&filterStatuses=${items.value.join(",")}`,
-  //   );
-  //   taskStore.setTasks(data.items);
-  // }
 };
 
 onMounted(async function () {
@@ -101,6 +91,7 @@ const clearAll = async () => {
   loadTasks();
   openSearch.value = false;
 };
+
 const addItem = async () => {
   if (newItem.value.trim() !== "") {
     items.value.push(newItem.value.trim());
@@ -108,7 +99,9 @@ const addItem = async () => {
   }
   loadTasks();
 };
+
 const emits = defineEmits(["message"]);
+
 const handleMessage = (e) => {
   emits("message", e);
 };

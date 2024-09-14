@@ -1,8 +1,21 @@
 const uri = import.meta.env.VITE_SERVER_URI;
 
-export async function getTasksByNanoidBoard(boardNanoId) {
+export async function getTasksByNanoidBoard(
+  boardNanoId,
+  sort = "asc",
+  filterStatuses = [],
+) {
   try {
-    const res = await fetch(`${uri}/v3/boards/${boardNanoId}/tasks`);
+    // http://localhost:8080/v3/boards/1111111111/tasks?filterStatuses=no_status&sortDirection=asc&sortBy=status.name
+    let params = "?";
+    if (sort) params += `sortDirection=${sort}&sortBy=status.name&`;
+    if (filterStatuses.length) {
+      const formatFilter = filterStatuses
+        .map((status) => status.replace(" ", "_"))
+        .join(",");
+      params += `filterStatuses=${formatFilter}&`;
+    }
+    const res = await fetch(`${uri}/v3/boards/${boardNanoId}/tasks${params}`);
     const data = await res.json();
     return { data, httpStatus: res.status };
   } catch (error) {
@@ -20,7 +33,7 @@ export async function getTaskById(id) {
   }
 }
 
-export async function addTask( newTask,boardNanoId) {
+export async function addTask(newTask, boardNanoId) {
   try {
     const res = await fetch(`${uri}/v3/tasks`, {
       method: "POST",
