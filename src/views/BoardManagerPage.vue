@@ -20,8 +20,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex h-screen w-full flex-col gap-3">
-    <div class="flex justify-end mt-6">
+  <div class="flex w-full flex-col gap-3">
+    <div class="flex justify-end mt-[-10rem]">
         <ButtonModal
           message="+ Create personal board"
           @click="$router.push({ name: 'AddBoard' })"
