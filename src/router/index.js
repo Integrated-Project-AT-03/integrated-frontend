@@ -18,7 +18,7 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "/login",
+      redirect: { name: "Boards" },
     },
     {
       path: "/login",
@@ -28,12 +28,13 @@ const router = createRouter({
     {
       path: "/board",
       component: AppPage,
+      meta: { requiresAuth: true },
       children: [
         {
           path: "",
           name: "Boards",
           component: BoardManagerPage,
-          meta: { requiresAuth: true },
+
           children: [
             {
               path: "add",
