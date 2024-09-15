@@ -53,13 +53,13 @@ async function addNewStatus() {
 
 <template>
   <div
-    class="absolute top-0 z-10 flex h-screen w-screen items-center justify-center"
+    class="fixed top-0 z-10 flex h-screen w-screen items-center justify-center"
   >
     <div
-      class="relative h-[49rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
+      class="relative h-[30rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
     >
       <br />
-      <div class="ml-6 mt-4 text-xl">Add Status</div>
+      <div class="ml-6 text-xl">Add Status</div>
       <div class="itbkk-modal-status">
         <div class="divider"></div>
 
@@ -87,14 +87,13 @@ async function addNewStatus() {
           <div class="flex justify-center">
             <textarea
               v-model="newData.description"
-              class="itbkk-title h-[18rem] w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
+              class="itbkk-title h-[6rem] w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
               placeholder="Please Write Description"
             ></textarea>
           </div>
 
-          <div class="itbkk-status-color ml-12">Color</div>
-
-          <div class="flex justify-center">
+          <div class="itbkk-status-color ml-10">Color</div>
+          <div class="flex w-full items-center justify-between px-10">
             <div
               class="color-picker-container flex flex-wrap items-center gap-6"
             >
@@ -114,26 +113,26 @@ async function addNewStatus() {
                 ></div>
               </div>
             </div>
+            <div class="flex justify-end gap-3">
+              <Button
+                class="itbkk-button-comfirm btn btn-success w-16 hover:border-base-100 hover:bg-base-100"
+                message="Save"
+                :disabled="
+                  newData.name === '' ||
+                  validateInput.description ||
+                  validateInput.name
+                "
+                @click="addNewStatus"
+              />
+              <Button
+                class="itbkk-button-cancle"
+                message="Cancel"
+                @click="router.push({ name: 'Status' })"
+              />
+            </div>
           </div>
         </div>
-        <div class="divider"></div>
-        <div class="mr-4 mt-8 flex justify-end gap-3">
-          <Button
-            class="itbkk-button-comfirm btn btn-success w-16 hover:border-base-100 hover:bg-base-100"
-            message="Save"
-            :disabled="
-              newData.name === '' ||
-              validateInput.description ||
-              validateInput.name
-            "
-            @click="addNewStatus"
-          />
-          <Button
-            class="itbkk-button-cancle"
-            message="Cancel"
-            @click="router.push({ name: 'Status' })"
-          />
-        </div>
+
         <Loading :is-loading="isLoading" />
       </div>
     </div>

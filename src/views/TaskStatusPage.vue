@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, ref, computed } from "vue";
 
-import ChevronRight from "../assets/icons/ChevronRight.vue";
 import TransferStatus from "../components/TransferStatus.vue";
 import { getSettingByNanoIdBoard } from "../services/apiSetting";
 import { getStatusesByNanoIdBoard } from "../services/apiStatus";
@@ -55,21 +54,6 @@ const handleMessage = (e) => {
     <!-- :class="$route.fullPath.split('/').length > 3 ? 'blur-sm' : ''" -->
     <div class="flex w-full items-center justify-between">
       <div class="flex flex-col gap-3">
-        <div class="flex items-center gap-4">
-          <div
-            @click="$router.push({ name: 'Task' })"
-            class="itbkk-button-home cursor-pointer text-xl font-bold"
-          >
-            Home
-          </div>
-          <ChevronRight />
-          <div
-            @click="$router.push({ name: 'Status' })"
-            class="cursor-pointer text-xl font-bold text-primary"
-          >
-            Task Status
-          </div>
-        </div>
         <div>
           The limit status :
           <span

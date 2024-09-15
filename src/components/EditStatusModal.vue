@@ -96,7 +96,7 @@ async function updateStatus() {
     class="fixed top-0 z-10 flex h-screen w-screen items-center justify-center"
   >
     <Loading :is-loading="isLoading" />
-    <div class="m-auto h-[48rem] w-[65rem] rounded-2xl bg-neutral">
+    <div class="m-auto h-[30rem]  w-[65rem] rounded-2xl bg-neutral">
       <div class="ml-6 mt-4 text-xl">Edit Status</div>
       <div class="divider"></div>
       <div class="itbkk-modal-status flex flex-col items-center gap-4">
@@ -120,7 +120,7 @@ async function updateStatus() {
             </div>
           </div>
           <textarea
-            class="itbkk-status-description h-[19rem] w-[60rem] rounded-2xl border border-base-100 bg-secondary p-4"
+            class="itbkk-status-description h-[6rem] w-[60rem] rounded-2xl border border-base-100 bg-secondary p-4"
             v-model="data.description"
             placeholder="No description is provided."
           ></textarea>
@@ -145,7 +145,7 @@ async function updateStatus() {
         </div>
       </div>
       <div class="divider"></div>
-      <div class="ml-10 flex w-fit px-10">
+      <div class="flex w-full items-center justify-between px-10">
         <div class="color-picker-container flex flex-wrap items-center gap-6">
           <div>Color Tag :</div>
           <div
@@ -163,22 +163,23 @@ async function updateStatus() {
             ></div>
           </div>
         </div>
-      </div>
-      <div class="mr-5 mt-5 flex justify-end gap-3">
-        <Button
-          class="btn-success"
-          message="Save"
-          @click="updateStatus()"
-          :disabled="
-            data.name === '' ||
-            validateInput.description ||
-            validateInput.name ||
-            ((data.name ?? '') === (compareStatus?.name ?? '') &&
-              (data.description ?? '') === (compareStatus?.description ?? '') &&
-              (data.colorId ?? '') === (compareStatus?.colorId ?? ''))
-          "
-        />
-        <Button message="Cancel" @click="router.push({ name: 'Status' })" />
+        <div class="flex justify-end gap-3">
+          <Button
+            class="btn-success"
+            message="Save"
+            @click="updateStatus()"
+            :disabled="
+              data.name === '' ||
+              validateInput.description ||
+              validateInput.name ||
+              ((data.name ?? '') === (compareStatus?.name ?? '') &&
+                (data.description ?? '') ===
+                  (compareStatus?.description ?? '') &&
+                (data.colorId ?? '') === (compareStatus?.colorId ?? ''))
+            "
+          />
+          <Button message="Cancel" @click="router.push({ name: 'Status' })" />
+        </div>
       </div>
     </div>
   </div>
