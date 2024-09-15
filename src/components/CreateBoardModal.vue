@@ -8,7 +8,7 @@ import { useBoardStore } from '../stores/useBoardStore.js';
 
 const boardStore = useBoardStore()
 const userStore = useUserStore()
-const newBoard = ref({name: '', ownerOid: userStore.getUser().oid})
+const newBoard = ref({name: userStore.getUser().name, ownerOid: userStore.getUser().oid})
 const errorMessage = ref();
 const emits = defineEmits(["message"]);
 
@@ -53,6 +53,7 @@ async function onSubmit(){
             class="itbkk-button-confirm btn-success text-slate-200"
             message="Save"
             @click="onSubmit"
+            :disabled="newBoard.name.length === 0"
           />
         </form>
         <form method="dialog">

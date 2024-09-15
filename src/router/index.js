@@ -33,6 +33,7 @@ const router = createRouter({
           path: "",
           name: "Board",
           component: BoardManagerPage,
+          meta: { requiresAuth: true },
           children: [
             {
               path: "add",
@@ -103,8 +104,13 @@ function isTokenValid(token) {
     const token = localStorage.getItem("token");
     jwtPayload.value = parseJwt(token);
     const currenTime = Date.now() / 1000;
-    return token.exp > currenTime;
+    if (token.exp < currenTime) {
+      console.log("Token is expired");
+      return false;
+    }
+    return true;
   } catch (error) {
+    console.log("Invalid token");
     return false;
   }
 }
