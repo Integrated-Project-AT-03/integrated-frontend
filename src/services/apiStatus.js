@@ -2,7 +2,12 @@ const uri = import.meta.env.VITE_SERVER_URI;
 
 export async function getStatusesByNanoIdBoard(boardNanoId) {
   try {
-    const res = await fetch(`${uri}/v3/boards/${boardNanoId}/statuses`);
+    const res = await fetch(`${uri}/v3/boards/${boardNanoId}/statuses`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        "Content-Type": "application/json",
+      },
+    });
     const data = await res.json();
     return { data, httpStatus: res.status };
   } catch (error) {
@@ -12,7 +17,12 @@ export async function getStatusesByNanoIdBoard(boardNanoId) {
 
 export async function getStatusById(id) {
   try {
-    const res = await fetch(`${uri}/v3/statuses/${id}`);
+    const res = await fetch(`${uri}/v3/statuses/${id}`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        "Content-Type": "application/json",
+      },
+    });
     const data = await res.json();
     return { data, httpStatus: res.status };
   } catch (error) {
@@ -25,7 +35,8 @@ export async function addStatus(newTask, boardNanoId) {
     const res = await fetch(`${uri}/v3/statuses`, {
       method: "POST",
       headers: {
-        "content-type": "application/json",
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         ...newTask,
@@ -43,6 +54,10 @@ export async function deleteStatusById(id, boardNanoId) {
   try {
     const res = await fetch(`${uri}/v3/statuses/${id}/board/${boardNanoId}`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        "Content-Type": "application/json",
+      },
     });
     const data = await res.json();
     return { data, httpStatus: res.status };
@@ -52,12 +67,12 @@ export async function deleteStatusById(id, boardNanoId) {
 }
 
 export async function editStatusById(id, editItem, boardNanoId) {
-  console.log(editItem);
   try {
     const res = await fetch(`${uri}/v3/statuses/${id}`, {
       method: "PUT",
       headers: {
-        "content-type": "application/json",
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         ...editItem,
@@ -81,6 +96,10 @@ export async function transferTasksToNewStatus(
       `${uri}/v3/statuses/${deletedId}/${changeId}/board/${nanoIdBoard}`,
       {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          "Content-Type": "application/json",
+        },
       },
     );
     const data = await res.json();

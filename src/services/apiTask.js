@@ -15,7 +15,12 @@ export async function getTasksByNanoidBoard(
         .join(",");
       params += `filterStatuses=${formatFilter}&`;
     }
-    const res = await fetch(`${uri}/v3/boards/${boardNanoId}/tasks${params}`);
+    const res = await fetch(`${uri}/v3/boards/${boardNanoId}/tasks${params}`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`, 
+        "Content-Type": "application/json", 
+      },
+    });
     const data = await res.json();
     return { data, httpStatus: res.status };
   } catch (error) {
@@ -25,7 +30,13 @@ export async function getTasksByNanoidBoard(
 
 export async function getTaskById(id) {
   try {
-    const res = await fetch(`${uri}/v3/tasks/${id}`);
+    const res = await fetch(`${uri}/v3/tasks/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`, 
+        "Content-Type": "application/json", 
+      },
+    });
     const data = await res.json();
     return { data, httpStatus: res.status };
   } catch (error) {
@@ -38,7 +49,8 @@ export async function addTask(newTask, boardNanoId) {
     const res = await fetch(`${uri}/v3/tasks`, {
       method: "POST",
       headers: {
-        "content-type": "application/json",
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`, 
+        "Content-Type": "application/json", 
       },
       body: JSON.stringify({
         ...newTask,
@@ -55,7 +67,10 @@ export async function addTask(newTask, boardNanoId) {
 export async function deleteTaskById(id) {
   try {
     const res = await fetch(`${uri}/v3/tasks/${id}`, {
-      method: "DELETE",
+      method: "DELETE",headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`, 
+        "Content-Type": "application/json", 
+      },
     });
     const data = await res.json();
     return { ...data, httpStatus: res.status };
@@ -69,7 +84,8 @@ export async function editTaskById(id, editItem, boardNanoId) {
     const res = await fetch(`${uri}/v3/tasks/${id}`, {
       method: "PUT",
       headers: {
-        "content-type": "application/json",
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`, 
+        "Content-Type": "application/json", 
       },
       body: JSON.stringify({
         ...editItem,

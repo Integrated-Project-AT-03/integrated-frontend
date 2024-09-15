@@ -1,8 +1,12 @@
 const uri = import.meta.env.VITE_SERVER_URI;
-
 export async function getBoardsByUserOid(oid) {
   try {
-    const res = await fetch(`${uri}/v3/user/${oid}/boards`);
+    const res = await fetch(`${uri}/v3/user/${oid}/boards`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        "Content-Type": "application/json",
+      },
+    });
     const data = await res.json();
     return { data, httpStatus: res.status };
   } catch (error) {
@@ -15,7 +19,8 @@ export async function createBoard(newBoard) {
     const res = await fetch(`${uri}/v3/boards`, {
       method: "POST",
       headers: {
-        "content-type": "application/json",
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ ...newBoard }),
     });
