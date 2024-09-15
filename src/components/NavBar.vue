@@ -28,7 +28,7 @@ function handleMenu(e) {
 
 const logout = () => {
   localStorage.removeItem("token");
-  router.push("Login");
+  router.push({ name: "login" });
 };
 
 onMounted(() => {
