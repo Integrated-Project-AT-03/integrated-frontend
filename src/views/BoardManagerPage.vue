@@ -31,7 +31,7 @@ onMounted(async () => {
           @click="$router.push({ name: 'AddBoard' })"
         />
     </div>
-        <ul class="flex flex-wrap gap-2 mt-3">
+        <ul class="flex flex-wrap gap-3 mt-3">
           <li
             v-for="board in boardStore.getBoards()"
             :key="board.nanoIdBoard"
@@ -39,7 +39,7 @@ onMounted(async () => {
               $router.push({ name: 'Task', params: { oid: board.nanoIdBoard } })
             "
           >
-            <div class="flex justify-center items-center h-[4rem] w-[10rem] rounded-xl hover:cursor-pointer hover:bg-[#666666] bg-[#777777] p-3">
+            <div class="flex justify-center items-center h-[4rem] w-[12rem] border-2 border-[#888888] rounded-2xl hover:cursor-pointer hover:bg-[#666666] bg-[#777777] p-3">
               {{ board.name }}
             </div>
           </li>

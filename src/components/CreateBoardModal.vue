@@ -58,7 +58,7 @@ async function onSubmit(){
         </form>
         <form method="dialog">
           <Button
-            class="itbkk-button-cancel btn-error text-slate-200"
+            class="itbkk-button-cancel text-slate-200"
             message="Cancel"
             @click="$router.push({name: 'Board'})"
           />

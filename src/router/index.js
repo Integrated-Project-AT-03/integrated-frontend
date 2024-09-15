@@ -104,7 +104,7 @@ function isTokenValid(token) {
     const token = localStorage.getItem("token");
     jwtPayload.value = parseJwt(token);
     const currenTime = Date.now() / 1000;
-    if (token.exp < currenTime) {
+    if (jwtPayload.value.exp < currenTime) {
       console.log("Token is expired");
       return false;
     }
