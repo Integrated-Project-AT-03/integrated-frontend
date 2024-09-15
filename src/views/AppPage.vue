@@ -3,11 +3,14 @@ import { onMounted, ref } from "vue";
 import Alert from "./../components/Alert.vue";
 import { parseJwt } from "./../utils/helper";
 import Navbar from "../components/NavBar.vue";
+import ChevronRight from "../assets/icons/ChevronRight.vue";
 const message = ref("");
 const status = ref();
 const messageModalOpenState = ref(false);
 const setting = ref();
 const payloadJwt = ref({});
+
+function clickOutSideNav(e) {}
 let timeout;
 import { useUserStore } from "../stores/useUserStore.js";
 
@@ -43,18 +46,45 @@ const handleMessage = async (e) => {
 </script>
 
 <template>
-  <div class="flex h-screen w-full flex-col items-center p-3">
+  <div
+    @click="clickOutSideNav"
+    class="flex h-screen w-full flex-col items-center p-3"
+  >
     <Navbar @message="handleMessage($event)" />
     <div
-      class="container relative flex h-full w-full flex-auto flex-col items-center justify-center gap-3"
+      class="container relative flex h-full w-full flex-auto flex-col justify-center gap-3"
     >
-      <div class="flex w-full justify-end"></div>
+      <div
+        class="flex items-center gap-4"
+        v-show="$route.name !== 'Boards' && $route.name !== 'AddBoard'"
+      >
+        <button
+          :disabled="$route.name === 'Boards'"
+          @click="$router.push({ name: 'Boards' })"
+          class="itbkk-button-home btn btn-ghost btn-sm text-xl font-bold"
+          :class="$route.name === 'Boards' && 'text-primary'"
+        >
+          Boards
+        </button>
+        <ChevronRight />
+        <button
+          :disabled="$route.name === 'Task'"
+          @click="$router.push({ name: 'Task' })"
+          class="itbkk-button-home btn btn-ghost btn-sm text-xl font-bold disabled:text-primary"
+        >
+          Tasks
+        </button>
+        |
+        <button
+          :disabled="$route.name === 'Status'"
+          @click="$router.push({ name: 'Status' })"
+          class="btn btn-ghost btn-sm text-xl font-bold disabled:text-primary"
+        >
+          Status
+        </button>
+      </div>
       <RouterView :setting="setting" @message="handleMessage($event)" />
     </div>
-    <!-- <BoardSetting
-      @loadSetting="(state) => (setting = state)"
-      @message="handleMessage($event)"
-    /> -->
     <transition
       v-show="messageModalOpenState"
       class="fixed bottom-2 right-2 z-50 grid w-fit place-items-center"

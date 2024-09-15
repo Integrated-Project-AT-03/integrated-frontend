@@ -1,53 +1,62 @@
 <script setup>
-import { ref } from 'vue';
-import Button from './ButtonModal.vue';
-import { createBoard } from '@/services/apiBoard.js'
-import {useUserStore} from '@/stores/useUserStore'
-import router from '@/router';
-import { useBoardStore } from '../stores/useBoardStore.js';
+import { ref } from "vue";
+import Button from "./ButtonModal.vue";
+import { createBoard } from "@/services/apiBoard.js";
+import { useUserStore } from "@/stores/useUserStore";
+import router from "@/router";
+import { useBoardStore } from "../stores/useBoardStore.js";
 
-const boardStore = useBoardStore()
-const userStore = useUserStore()
-const newBoard = ref({name: userStore.getUser().name, ownerOid: userStore.getUser().oid})
+const boardStore = useBoardStore();
+const userStore = useUserStore();
+const newBoard = ref({
+  name: userStore.getUser().name,
+  ownerOid: userStore.getUser().oid,
+});
 const errorMessage = ref();
 const emits = defineEmits(["message"]);
 
-async function onSubmit(){
-    if(!newBoard.value.name){
-        errorMessage.value = 'Did not enter a empty.'
-        return
-    }
-    const res = await createBoard(newBoard.value)
-    if(res.httpStatus === 201){
-        boardStore.addBoard(res)
-        console.log(boardStore.getBoards());
-        emits("message", {
-            description: `The board has been successfully added.`,
-            status: "success",
-        });
-    }
-    console.log(res.httpStatus);
-    return router.push({name: 'Board'})
+async function onSubmit() {
+  if (!newBoard.value.name) {
+    errorMessage.value = "Did not enter a empty.";
+    return;
+  }
+  const res = await createBoard(newBoard.value);
+  if (res.httpStatus === 201) {
+    boardStore.addBoard(res);
+    console.log(boardStore.getBoards());
+    emits("message", {
+      description: `The board has been successfully added.`,
+      status: "success",
+    });
+  }
+  return router.push({ name: "Boards" });
 }
 </script>
- 
+
 <template>
-<div class="flex absolute flex-col rounded-lg p-6 bg-base-100 border-2 border-[#666666] w-[27rem]">
+  <div
+    class="fixed flex w-screen flex-col items-center justify-center rounded-lg"
+  >
+    <div class="flex h-max w-[27rem] flex-col rounded-md bg-neutral p-6">
       <div class="text-2xl font-bold text-slate-300">New Board</div>
       <div class="divider"></div>
-      <div class="itbkk-message text-slate-300 flex flex-col gap-2">
-        <div class="">
-            Name
-        </div>
+      <div class="itbkk-message flex flex-col gap-2 text-slate-300">
+        <div class="">Name</div>
         <div>
-            <input v-model="newBoard.name" maxlength="120"type="text" placeholder="Your board name" class="input input-bordered w-full h-11" />
+          <input
+            v-model="newBoard.name"
+            maxlength="120"
+            type="text"
+            placeholder="Your board name"
+            class="input input-bordered h-11 w-full bg-secondary"
+          />
         </div>
         <div class="text-error">
-            {{ errorMessage }}
+          {{ errorMessage }}
         </div>
       </div>
       <div class="divider"></div>
-      <div class="flex justify-end mt-4 gap-3">
+      <div class="mt-4 flex justify-end gap-3">
         <form method="dialog">
           <Button
             class="itbkk-button-confirm btn-success text-slate-200"
@@ -60,13 +69,12 @@ async function onSubmit(){
           <Button
             class="itbkk-button-cancel text-slate-200"
             message="Cancel"
-            @click="$router.push({name: 'Board'})"
+            @click="$router.push({ name: 'Boards' })"
           />
         </form>
       </div>
     </div>
+  </div>
 </template>
- 
-<style scoped>
 
-</style>
+<style scoped></style>

@@ -42,12 +42,11 @@ const saveSetting = async () => {
     enableLimitsTask: setting.value.enableLimitsTask,
     limitsTask: setting.value.limitsTask,
   });
-  console.log("kuy");
+
   if (res.httpStatus === 200) {
     settingStore.setLimitTask(setting.value);
     compareSetting.value = { ...setting.value };
     if (setting.value.enableLimitsTask) {
-      console.log("kuy");
       const statuses = (await getStatusesByNanoIdBoard(route.params.oid)).data;
       statusesOverLimts.value = statuses.filter(
         ({ numOfTask, name }) =>
