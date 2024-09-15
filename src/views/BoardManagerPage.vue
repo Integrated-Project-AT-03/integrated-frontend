@@ -1,6 +1,7 @@
 <script setup>
 import ButtonModal from "@/components/ButtonModal.vue";
 import { onMounted, ref } from "vue";
+import router from "@/router";
 import { getBoardsByUserOid } from "../services/apiBoard";
 import { useUserStore } from "../stores/useUserStore.js";
 import { useBoardStore } from '../stores/useBoardStore.js';
@@ -13,13 +14,19 @@ const handleMessage = (e) => {
   emits("message", e);
 };
 
-const loadBoards = async () => {
+// const loadBoards = async () => {
+//   const res = await getBoardsByUserOid(userStore.getUser().oid);
+//   boards.value = res.data;
+//   boardStore.setBoards(res.data)
+// };
+onMounted(async () => {
+  // await loadBoards();
   const res = await getBoardsByUserOid(userStore.getUser().oid);
   boards.value = res.data;
   boardStore.setBoards(res.data)
-};
-onMounted(async () => {
-  await loadBoards();
+  if(res.httpStatus === 401){
+    return router.push({name: 'login'})
+  }
 });
 </script>
 
