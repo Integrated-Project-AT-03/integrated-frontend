@@ -93,10 +93,10 @@ async function updateStatus() {
 
 <template>
   <div
-    class="fixed top-0 z-10 flex h-screen w-screen items-center justify-center"
+    class="fixed right-0 top-0 z-10 flex h-screen w-full items-center justify-center"
   >
     <Loading :is-loading="isLoading" />
-    <div class="m-auto h-[30rem]  w-[65rem] rounded-2xl bg-neutral">
+    <div class="h-[30rem] w-[65rem] rounded-2xl bg-neutral">
       <div class="ml-6 mt-4 text-xl">Edit Status</div>
       <div class="divider"></div>
       <div class="itbkk-modal-status flex flex-col items-center gap-4">

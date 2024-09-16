@@ -53,7 +53,7 @@ async function addNewStatus() {
 
 <template>
   <div
-    class="fixed top-0 z-10 flex h-screen w-screen items-center justify-center"
+    class="fixed right-0 top-0 z-10 flex h-screen w-screen items-center justify-center"
   >
     <div
       class="relative h-[30rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"

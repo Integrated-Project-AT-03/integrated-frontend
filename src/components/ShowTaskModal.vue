@@ -108,7 +108,7 @@ const handleMessage = (e) => {
 onmou
 <template>
   <div
-    class="fixed top-0 z-10 flex h-screen w-full items-center justify-center"
+    class="fixed right-0 top-0 z-10 flex h-screen w-full items-center justify-center"
   >
     <RouterView @message="handleMessage($event)" />
     <div
