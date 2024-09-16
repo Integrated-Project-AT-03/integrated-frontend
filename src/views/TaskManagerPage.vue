@@ -55,8 +55,12 @@ onMounted(async function () {
   const settingLoad = (await getSettingByNanoIdBoard(route.params.oid)).data;
   settingStore.setLimitTask(settingLoad);
   await loadTasks();
-  const res = (await getStatusesByNanoIdBoard(route.params.oid)).data;
-  statusStore.setStatuses(res);
+  const res = (await getStatusesByNanoIdBoard(route.params.oid));
+  if(res.httpStatus === 401){
+    localStorage.removeItem('token');
+    return router.push({name: 'login'})
+  }
+  statusStore.setStatuses(res.data);
   isLoading.value = false;
 });
 

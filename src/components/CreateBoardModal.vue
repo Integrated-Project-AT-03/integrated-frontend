@@ -21,6 +21,10 @@ async function onSubmit() {
     return;
   }
   const res = await createBoard(newBoard.value);
+  if(res.httpStatus === 401){
+    localStorage.removeItem('token');
+    return router.push({name: 'login'})
+  }
   if (res.httpStatus === 201) {
     boardStore.addBoard(res);
     console.log(boardStore.getBoards());
