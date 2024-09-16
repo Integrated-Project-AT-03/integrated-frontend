@@ -6,9 +6,8 @@ import { useRouter } from "vue-router";
 import Logo from "../components/Logo.vue";
 
 const router = useRouter();
-const uri = import.meta.env.VITE_SERVER_URI;
 
-const user = ref({ userName: "itbkk.olarn", password: "ip23/OLA" });
+const user = ref({ userName: "", password: "" });
 const errorMessage = ref();
 
 async function onSubmit() {
