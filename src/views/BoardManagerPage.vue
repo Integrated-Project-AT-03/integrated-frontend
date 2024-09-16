@@ -33,13 +33,18 @@ onMounted(async () => {
 
 <template>
   <div class="flex w-full flex-col gap-3">
-    <div class="flex justify-end mt-[-6rem]">
+    <div class="flex justify-end mt-[-5rem]">
         <ButtonModal
           message="+ Create personal board"
           @click="$router.push({ name: 'AddBoard' })"
         />
     </div>
-        <ul class="flex flex-wrap gap-3 mt-4">
+        <div class="w-full flex  mt-3 justify-center" v-show="boardStore.getBoards().length === 0">
+          <div class="flex font-bold justify-center items-center w-[50rem] h-[4rem] bg-[#777777] rounded-xl">
+            No board
+          </div>
+        </div>
+        <ul class="flex flex-wrap gap-3 mt-4 h-auto">
           <li
             v-for="board in boardStore.getBoards()"
             :key="board.nanoIdBoard"
