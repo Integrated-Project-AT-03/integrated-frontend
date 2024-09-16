@@ -15,9 +15,9 @@ export async function getStatusesByNanoIdBoard(boardNanoId) {
   }
 }
 
-export async function getStatusById(id) {
+export async function getStatusById(id, boardNanoId) {
   try {
-    const res = await fetch(`${uri}/v3/statuses/${id}`, {
+    const res = await fetch(`${uri}/v3/boards/${boardNanoId}/statuses/${id}`, {
       headers: {
         Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
         "Content-Type": "application/json",
@@ -32,16 +32,13 @@ export async function getStatusById(id) {
 
 export async function addStatus(newTask, boardNanoId) {
   try {
-    const res = await fetch(`${uri}/v3/statuses`, {
+    const res = await fetch(`${uri}/v3/boards/${boardNanoId}/statuses`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        ...newTask,
-        boardNanoId,
-      }),
+      body: JSON.stringify(newTask),
     });
     const data = await res.json();
     return { data, httpStatus: res.status };
@@ -68,16 +65,13 @@ export async function deleteStatusById(id, boardNanoId) {
 
 export async function editStatusById(id, editItem, boardNanoId) {
   try {
-    const res = await fetch(`${uri}/v3/statuses/${id}`, {
+    const res = await fetch(`${uri}/v3/boards/${boardNanoId}/statuses/${id}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        ...editItem,
-        boardNanoId,
-      }),
+      body: JSON.stringify(editItem),
     });
     const data = await res.json();
     return { data, httpStatus: res.status };

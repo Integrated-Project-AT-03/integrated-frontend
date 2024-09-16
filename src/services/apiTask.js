@@ -6,7 +6,6 @@ export async function getTasksByNanoidBoard(
   filterStatuses = [],
 ) {
   try {
-    // http://localhost:8080/v3/boards/1111111111/tasks?filterStatuses=no_status&sortDirection=asc&sortBy=status.name
     let params = "?";
     if (sort) params += `sortDirection=${sort}&sortBy=status.name&`;
     if (filterStatuses.length) {
@@ -17,8 +16,8 @@ export async function getTasksByNanoidBoard(
     }
     const res = await fetch(`${uri}/v3/boards/${boardNanoId}/tasks${params}`, {
       headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`, 
-        "Content-Type": "application/json", 
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        "Content-Type": "application/json",
       },
     });
     const data = await res.json();
@@ -28,13 +27,13 @@ export async function getTasksByNanoidBoard(
   }
 }
 
-export async function getTaskById(id) {
+export async function getTaskById(id, boardNanoId) {
   try {
-    const res = await fetch(`${uri}/v3/tasks/${id}`, {
+    const res = await fetch(`${uri}/v3/boards/${boardNanoId}/tasks/${id}`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`, 
-        "Content-Type": "application/json", 
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        "Content-Type": "application/json",
       },
     });
     const data = await res.json();
@@ -46,16 +45,13 @@ export async function getTaskById(id) {
 
 export async function addTask(newTask, boardNanoId) {
   try {
-    const res = await fetch(`${uri}/v3/tasks`, {
+    const res = await fetch(`${uri}/v3/boards/${boardNanoId}/tasks`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`, 
-        "Content-Type": "application/json", 
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        ...newTask,
-        boardNanoId,
-      }),
+      body: JSON.stringify(newTask),
     });
     const data = await res.json();
     return { ...data, httpStatus: res.status };
@@ -64,12 +60,13 @@ export async function addTask(newTask, boardNanoId) {
   }
 }
 
-export async function deleteTaskById(id) {
+export async function deleteTaskById(id, boardNanoId) {
   try {
-    const res = await fetch(`${uri}/v3/tasks/${id}`, {
-      method: "DELETE",headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`, 
-        "Content-Type": "application/json", 
+    const res = await fetch(`${uri}/v3/boards/${boardNanoId}/tasks/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        "Content-Type": "application/json",
       },
     });
     const data = await res.json();
@@ -81,16 +78,13 @@ export async function deleteTaskById(id) {
 
 export async function editTaskById(id, editItem, boardNanoId) {
   try {
-    const res = await fetch(`${uri}/v3/tasks/${id}`, {
+    const res = await fetch(`${uri}/v3/boards/${boardNanoId}/tasks/${id}`, {
       method: "PUT",
       headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`, 
-        "Content-Type": "application/json", 
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        ...editItem,
-        boardNanoId,
-      }),
+      body: JSON.stringify(editItem),
     });
     const data = await res.json();
     return { ...data, httpStatus: res.status };
