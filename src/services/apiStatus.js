@@ -49,7 +49,7 @@ export async function addStatus(newTask, boardNanoId) {
 
 export async function deleteStatusById(id, boardNanoId) {
   try {
-    const res = await fetch(`${uri}/v3/statuses/${id}/board/${boardNanoId}`, {
+    const res = await fetch(`${uri}/v3/boards/${boardNanoId}/statuses/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
@@ -87,7 +87,7 @@ export async function transferTasksToNewStatus(
 ) {
   try {
     const res = await fetch(
-      `${uri}/v3/statuses/${deletedId}/${changeId}/board/${nanoIdBoard}`,
+      `${uri}/v3/boards/${nanoIdBoard}/statuses/${deletedId}/${changeId}`,
       {
         method: "DELETE",
         headers: {

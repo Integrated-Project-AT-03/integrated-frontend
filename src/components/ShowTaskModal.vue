@@ -107,166 +107,170 @@ const handleMessage = (e) => {
 </script>
 onmou
 <template>
-  <div
-    class="fixed right-0 top-0 z-10 flex h-screen w-full items-center justify-center"
-  >
-    <RouterView @message="handleMessage($event)" />
+  <Teleport to="body">
     <div
-      class="relative h-[30rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
+      class="fixed top-0 z-[1000] flex h-screen w-full items-center justify-center backdrop-blur-sm transition-all duration-500"
     >
-      <Loading :is-loading="isLoading" />
+      <RouterView @message="handleMessage($event)" />
       <div
-        class="ml-6 mt-2 flex items-center justify-between pr-5 pt-2 text-xl font-bold text-slate-200"
+        class="relative h-[30rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
       >
-        <div class="flex flex-col items-center gap-2">
-          <div class="text-sm text-error">
-            {{ validateInput.title ? "Max 100 characters" : "" }}
-          </div>
-          <input
-            :disabled="!isEditMode"
-            class="itbkk-title w-[50rem]"
-            :class="
-              isEditMode
-                ? 'h-11 w-[40rem] rounded-2xl border-base-100 bg-secondary p-2'
-                : 'bg-neutral hover:border-neutral'
-            "
-            type="text"
-            v-model.trim="dataTask.title"
-          />
-        </div>
-
-        <div class="flex items-center gap-4">
-          <button
-            @click="
-              [
-                $router.push({
-                  name: `${!isEditMode ? 'TaskEdit' : 'TaskDetail'}`,
-                  [`${!isEditMode ? 'params' : '_'}`]: { mode: 'edit' },
-                }),
-                isEditMode && loadTask(),
-              ]
-            "
-            class="itbkk-button-edit w-30 btn border-0 hover:border-base-100 hover:bg-base-100"
-            :class="!isEditMode ? 'bg-edit' : 'btn-error text-white'"
-          >
-            {{ route.params.mode !== "edit" ? "Edit mode" : "Reset" }}
-          </button>
-          <Trash
-            onclick="deletetask.showModal()"
-            class="cursor-pointer text-error"
-          />
-        </div>
-      </div>
-      <div class="divider m-1"></div>
-      <div class="m-4 flex justify-around">
-        <div class="flex flex-col gap-2 text-slate-200">
-          <div class="flex gap-4">
-            <div>Description</div>
+        <Loading :is-loading="isLoading" />
+        <div
+          class="ml-6 mt-2 flex items-center justify-between pr-5 pt-2 text-xl font-bold text-slate-200"
+        >
+          <div class="flex flex-col items-center gap-2">
             <div class="text-sm text-error">
-              {{ validateInput.description ? "(Max 500 characters)" : "" }}
-            </div>
-          </div>
-          <textarea
-            :disabled="!isEditMode"
-            v-model.trim="dataTask.description"
-            :placeholder="dataTask.description ?? 'No Description Provided'"
-            class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
-          ></textarea>
-        </div>
-        <div class="flex flex-col gap-2">
-          <div class="flex flex-col gap-2 text-slate-200">
-            <div class="flex gap-4">
-              <div>Assignees</div>
-              <div class="text-sm text-error">
-                {{ validateInput.assignees ? "(Max 30 characters" : "" }}
-              </div>
+              {{ validateInput.title ? "Max 100 characters" : "" }}
             </div>
             <input
               :disabled="!isEditMode"
-              :placeholder="dataTask.assignees ?? 'Unassigned'"
-              v-model.trim="dataTask.assignees"
-              class="itbkk-assignees input w-[20rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
+              class="itbkk-title w-[50rem]"
+              :class="
+                isEditMode
+                  ? 'h-11 w-[40rem] rounded-2xl border-base-100 bg-secondary p-2'
+                  : 'bg-neutral hover:border-neutral'
+              "
+              type="text"
+              v-model.trim="dataTask.title"
             />
           </div>
 
-          <div class="flex flex-col gap-2 text-slate-200">
-            <div>Status</div>
-            <select
-              :disabled="!isEditMode"
-              v-model="dataTask.status"
-              class="itbkk-status select w-full max-w-xs bg-base-100"
+          <div class="flex items-center gap-4">
+            <button
+              @click="
+                [
+                  $router.push({
+                    name: `${!isEditMode ? 'TaskEdit' : 'TaskDetail'}`,
+                    [`${!isEditMode ? 'params' : '_'}`]: { mode: 'edit' },
+                  }),
+                  isEditMode && loadTask(),
+                ]
+              "
+              class="itbkk-button-edit w-30 btn border-0 hover:border-base-100 hover:bg-base-100"
+              :class="!isEditMode ? 'bg-edit' : 'btn-error text-white'"
             >
-              <option v-for="status in statuses" :value="status.id">
-                {{ status.name }}
-              </option>
-            </select>
-            <div>
-              The limit status :
-              <span
-                :class="
-                  settingStore.getLimitTask().enable
-                    ? 'text-success'
-                    : 'text-error'
-                "
-              >
-                {{ settingStore.getLimitTask().enable ? "enable" : "disable" }}
-                state
-              </span>
-            </div>
+              {{ route.params.mode !== "edit" ? "Edit mode" : "Reset" }}
+            </button>
+            <Trash
+              onclick="deletetask.showModal()"
+              class="cursor-pointer text-error"
+            />
           </div>
-          <div
-            class="flex flex-auto flex-col justify-between gap-3 pb-3 text-xs text-slate-200"
-          >
-            <div class="flex gap-2">
-              TimeZone:
-              <div class="itbkk-timezone">
-                {{ localZone }}
+        </div>
+        <div class="divider m-1"></div>
+        <div class="m-4 flex justify-around">
+          <div class="flex flex-col gap-2 text-slate-200">
+            <div class="flex gap-4">
+              <div>Description</div>
+              <div class="text-sm text-error">
+                {{ validateInput.description ? "(Max 500 characters)" : "" }}
               </div>
             </div>
-            <div class="flex gap-2">
-              Created On:
-              <div class="itbkk-created-on">
-                {{ formattDate(dataTask.createdOn) }}
+            <textarea
+              :disabled="!isEditMode"
+              v-model.trim="dataTask.description"
+              :placeholder="dataTask.description ?? 'No Description Provided'"
+              class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
+            ></textarea>
+          </div>
+          <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-2 text-slate-200">
+              <div class="flex gap-4">
+                <div>Assignees</div>
+                <div class="text-sm text-error">
+                  {{ validateInput.assignees ? "(Max 30 characters" : "" }}
+                </div>
+              </div>
+              <input
+                :disabled="!isEditMode"
+                :placeholder="dataTask.assignees ?? 'Unassigned'"
+                v-model.trim="dataTask.assignees"
+                class="itbkk-assignees input w-[20rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
+              />
+            </div>
+
+            <div class="flex flex-col gap-2 text-slate-200">
+              <div>Status</div>
+              <select
+                :disabled="!isEditMode"
+                v-model="dataTask.status"
+                class="itbkk-status select w-full max-w-xs bg-base-100"
+              >
+                <option v-for="status in statuses" :value="status.id">
+                  {{ status.name }}
+                </option>
+              </select>
+              <div>
+                The limit status :
+                <span
+                  :class="
+                    settingStore.getLimitTask().enable
+                      ? 'text-success'
+                      : 'text-error'
+                  "
+                >
+                  {{
+                    settingStore.getLimitTask().enable ? "enable" : "disable"
+                  }}
+                  state
+                </span>
               </div>
             </div>
-            <div class="flex gap-2">
-              Updated On:
-              <div class="itbkk-updated-on">
-                {{ formattDate(dataTask.updatedOn) }}
+            <div
+              class="flex flex-auto flex-col justify-between gap-3 pb-3 text-xs text-slate-200"
+            >
+              <div class="flex gap-2">
+                TimeZone:
+                <div class="itbkk-timezone">
+                  {{ localZone }}
+                </div>
+              </div>
+              <div class="flex gap-2">
+                Created On:
+                <div class="itbkk-created-on">
+                  {{ formattDate(dataTask.createdOn) }}
+                </div>
+              </div>
+              <div class="flex gap-2">
+                Updated On:
+                <div class="itbkk-updated-on">
+                  {{ formattDate(dataTask.updatedOn) }}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="m-4 flex justify-end gap-3">
-        <Button
-          class="itbkk-button-confirm btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
-          v-show="isEditMode"
-          @click="handleEditTask()"
-          :disabled="
-            dataTask.title === '' ||
-            validateInput.assignees ||
-            validateInput.description ||
-            validateInput.title ||
-            ((dataTask.assignees ?? '') === (compareTask?.assignees ?? '') &&
-              (dataTask.description ?? '') ===
-                (compareTask?.description ?? '') &&
-              dataTask?.status === compareTask?.status &&
-              (dataTask.title ?? '') === (compareTask?.title ?? ''))
-          "
-          message="Save"
-          bgcolor=""
-        />
-        <Button
-          class="itbkk-button-cancel"
-          message="Close"
-          @click="router.push({ name: 'Task' })"
-        />
+        <div class="m-4 flex justify-end gap-3">
+          <Button
+            class="itbkk-button-confirm btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
+            v-show="isEditMode"
+            @click="handleEditTask()"
+            :disabled="
+              dataTask.title === '' ||
+              validateInput.assignees ||
+              validateInput.description ||
+              validateInput.title ||
+              ((dataTask.assignees ?? '') === (compareTask?.assignees ?? '') &&
+                (dataTask.description ?? '') ===
+                  (compareTask?.description ?? '') &&
+                dataTask?.status === compareTask?.status &&
+                (dataTask.title ?? '') === (compareTask?.title ?? ''))
+            "
+            message="Save"
+            bgcolor=""
+          />
+          <Button
+            class="itbkk-button-cancel"
+            message="Close"
+            @click="router.push({ name: 'Task' })"
+          />
+        </div>
       </div>
     </div>
-  </div>
-  <DeleteTaskModal :index-value="indexValue" @message="handleMessage" />
+    <DeleteTaskModal :index-value="indexValue" @message="handleMessage" />
+  </Teleport>
 </template>
 
 <style scoped></style>

@@ -1,6 +1,6 @@
-import { acceptHMRUpdate, defineStore } from 'pinia';
+import { acceptHMRUpdate, defineStore } from "pinia";
 
-export const useTaskStore = defineStore('taskStore', {
+export const useTaskStore = defineStore("taskStore", {
   state: () => ({
     tasks: [],
   }),
@@ -33,10 +33,15 @@ export const useTaskStore = defineStore('taskStore', {
     findTask(id) {
       return this.tasks.find((task) => +task.id === +id);
     },
+    changeIdStatusOfTask(oldStatusName, newStatusName) {
+      this.tasks.map((task) => {
+        if (task.status === oldStatusName) task.status = newStatusName;
+        return task;
+      });
+    },
   },
 });
 
 if (import.meta.hot) {
-    import.meta.hot.accept(acceptHMRUpdate(useTaskStore, import.meta.hot));
-  }
-  
+  import.meta.hot.accept(acceptHMRUpdate(useTaskStore, import.meta.hot));
+}

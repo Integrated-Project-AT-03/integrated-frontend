@@ -83,7 +83,7 @@ const handleMessage = async (e) => {
           Status
         </button>
       </div>
-      <RouterView :setting="setting" @message="handleMessage($event)" />
+      <RouterView @message="handleMessage($event)" />
     </div>
     <transition
       v-show="messageModalOpenState"

@@ -93,7 +93,7 @@ async function updateStatus() {
 
 <template>
   <div
-    class="fixed right-0 top-0 z-10 flex h-screen w-full items-center justify-center"
+    class="fixed right-0 top-0 z-[1000] flex h-screen w-full items-center justify-center backdrop-blur-sm transition-all duration-500"
   >
     <Loading :is-loading="isLoading" />
     <div class="h-[30rem] w-[65rem] rounded-2xl bg-neutral">

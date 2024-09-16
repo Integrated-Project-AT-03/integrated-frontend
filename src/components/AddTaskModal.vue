@@ -65,95 +65,99 @@ async function addNewTask(newItem) {
 </script>
 
 <template>
-  <div
-    class="fixed right-0 top-0 z-10 flex h-screen w-full items-center justify-center"
-  >
+  <Teleport to="body">
     <div
-      class="relative h-[30rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
+      class="fixed top-0 z-[1000] flex h-screen w-full items-center justify-center backdrop-blur-sm transition-all duration-500"
     >
-      <div class="mt-4 flex items-center justify-between px-5">
-        <div class="text-xl font-bold">New Task</div>
-      </div>
-      <div class="divider m-1"></div>
-      <div class="flex flex-col gap-3">
-        <div class="flex gap-4">
-          <div class="ml-9">Title</div>
-          <div class="text-error">
-            {{ validateInput.title ? "(Max 100 characters)" : "" }}
-          </div>
+      <div
+        class="relative h-[30rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
+      >
+        <div class="mt-4 flex items-center justify-between px-5">
+          <div class="text-xl font-bold">New Task</div>
         </div>
-        <div class="flex justify-center">
-          <input
-            v-model="taskForm.title"
-            class="itbkk-title h-11 w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
-          />
-        </div>
-        <div class="flex justify-around">
-          <div class="flex flex-col gap-3">
-            <div class="flex gap-4">
-              <div>Description</div>
-              <div class="text-error">
-                {{ validateInput.description ? "(Max 500 characters)" : "" }}
-              </div>
+        <div class="divider m-1"></div>
+        <div class="flex flex-col gap-3">
+          <div class="flex gap-4">
+            <div class="ml-9">Title</div>
+            <div class="text-error">
+              {{ validateInput.title ? "(Max 100 characters)" : "" }}
             </div>
-            <textarea
-              v-model="taskForm.description"
-              class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
-            ></textarea>
           </div>
-          <div class="flex flex-col justify-between gap-3">
+          <div class="flex justify-center">
+            <input
+              v-model="taskForm.title"
+              class="itbkk-title h-11 w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
+            />
+          </div>
+          <div class="flex justify-around">
             <div class="flex flex-col gap-3">
               <div class="flex gap-4">
-                <div>Assignees</div>
+                <div>Description</div>
                 <div class="text-error">
-                  {{ validateInput.assignees ? "(Max 30 characters)" : "" }}
+                  {{ validateInput.description ? "(Max 500 characters)" : "" }}
                 </div>
               </div>
-              <input
-                v-model="taskForm.assignees"
-                class="itbkk-assignees input w-[20rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
-              />
+              <textarea
+                v-model="taskForm.description"
+                class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
+              ></textarea>
             </div>
-            <div class="flex flex-col gap-3">
-              <div>Status</div>
-              <select
-                v-model="taskForm.status"
-                class="itbkk-status select w-full max-w-xs bg-base-100"
-              >
-                <option v-for="status in statuses" :value="status">
-                  {{ status.name }}
-                </option>
-              </select>
-              <div>
-                The limit status :
-                <span :class="setting?.enable ? 'text-success' : 'text-error'">
-                  {{ setting?.enable ? "enable" : "disable" }} state
-                </span>
+            <div class="flex flex-col justify-between gap-3">
+              <div class="flex flex-col gap-3">
+                <div class="flex gap-4">
+                  <div>Assignees</div>
+                  <div class="text-error">
+                    {{ validateInput.assignees ? "(Max 30 characters)" : "" }}
+                  </div>
+                </div>
+                <input
+                  v-model="taskForm.assignees"
+                  class="itbkk-assignees input w-[20rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
+                />
               </div>
-            </div>
-            <div class="mr-4 flex justify-end gap-3">
-              <Button
-                class="itbkk-button-confirm btn-success"
-                message="Save"
-                @click="addNewTask(taskForm)"
-                :disabled="
-                  taskForm.title === '' ||
-                  validateInput.assignees ||
-                  validateInput.description ||
-                  validateInput.title
-                "
-              />
-              <Button
-                class="itbkk-button-cancle"
-                message="Cancel"
-                @click="router.push({ name: 'Task' })"
-              />
+              <div class="flex flex-col gap-3">
+                <div>Status</div>
+                <select
+                  v-model="taskForm.status"
+                  class="itbkk-status select w-full max-w-xs bg-base-100"
+                >
+                  <option v-for="status in statuses" :value="status">
+                    {{ status.name }}
+                  </option>
+                </select>
+                <div>
+                  The limit status :
+                  <span
+                    :class="setting?.enable ? 'text-success' : 'text-error'"
+                  >
+                    {{ setting?.enable ? "enable" : "disable" }} state
+                  </span>
+                </div>
+              </div>
+              <div class="mr-4 flex justify-end gap-3">
+                <Button
+                  class="itbkk-button-confirm btn-success"
+                  message="Save"
+                  @click="addNewTask(taskForm)"
+                  :disabled="
+                    taskForm.title === '' ||
+                    validateInput.assignees ||
+                    validateInput.description ||
+                    validateInput.title
+                  "
+                />
+                <Button
+                  class="itbkk-button-cancle"
+                  message="Cancel"
+                  @click="router.push({ name: 'Task' })"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <style scoped></style>

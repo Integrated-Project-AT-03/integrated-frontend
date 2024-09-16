@@ -52,90 +52,92 @@ async function addNewStatus() {
 </script>
 
 <template>
-  <div
-    class="fixed right-0 top-0 z-10 flex h-screen w-screen items-center justify-center"
-  >
+  <Teleport to="body">
     <div
-      class="relative h-[30rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
+      class="backdrop-blur-sm z-[1000] transition-all duration-500 fixed top-0 flex h-screen w-screen items-center justify-center"
     >
-      <br />
-      <div class="ml-6 text-xl">Add Status</div>
-      <div class="itbkk-modal-status">
-        <div class="divider"></div>
+      <div
+        class="relative h-[30rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
+      >
+        <br />
+        <div class="ml-6 text-xl">Add Status</div>
+        <div class="itbkk-modal-status">
+          <div class="divider"></div>
 
-        <div class="flex flex-col gap-3">
-          <div class="flex gap-4">
-            <div class="itbkk-status-name ml-12">Name</div>
-            <div class="text-error">
-              {{ validateInput.name ? "(Max 50 characters)" : "" }}
-            </div>
-          </div>
-          <div class="flex justify-center">
-            <input
-              v-model="newData.name"
-              class="itbkk-title h-[3rem] w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
-              placeholder="Please Write Name"
-            />
-          </div>
-
-          <div class="flex gap-4">
-            <div class="itbkk-status-description ml-12">Description</div>
-            <div class="text-error">
-              {{ validateInput.description ? "(Max 200 characters)" : "" }}
-            </div>
-          </div>
-          <div class="flex justify-center">
-            <textarea
-              v-model="newData.description"
-              class="itbkk-title h-[6rem] w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
-              placeholder="Please Write Description"
-            ></textarea>
-          </div>
-
-          <div class="itbkk-status-color ml-10">Color</div>
-          <div class="flex w-full items-center justify-between px-10">
-            <div
-              class="color-picker-container flex flex-wrap items-center gap-6"
-            >
-              <div
-                v-for="color in colorStore.getColors()"
-                :key="color.id"
-                class="color-picker-item relative flex cursor-pointer items-center justify-center"
-                @click="() => (newData.colorId = color.id)"
-              >
-                <div
-                  :style="{ backgroundColor: color.hex }"
-                  :class="
-                    newData.colorId === color.id &&
-                    'border-[4px] border-purple-500'
-                  "
-                  class="color-box h-8 w-8 rounded-full border border-gray-300"
-                ></div>
+          <div class="flex flex-col gap-3">
+            <div class="flex gap-4">
+              <div class="itbkk-status-name ml-12">Name</div>
+              <div class="text-error">
+                {{ validateInput.name ? "(Max 50 characters)" : "" }}
               </div>
             </div>
-            <div class="flex justify-end gap-3">
-              <Button
-                class="itbkk-button-comfirm btn btn-success w-16 hover:border-base-100 hover:bg-base-100"
-                message="Save"
-                :disabled="
-                  newData.name === '' ||
-                  validateInput.description ||
-                  validateInput.name
-                "
-                @click="addNewStatus"
-              />
-              <Button
-                class="itbkk-button-cancle"
-                message="Cancel"
-                @click="router.push({ name: 'Status' })"
+            <div class="flex justify-center">
+              <input
+                v-model="newData.name"
+                class="itbkk-title h-[3rem] w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
+                placeholder="Please Write Name"
               />
             </div>
-          </div>
-        </div>
 
-        <Loading :is-loading="isLoading" />
+            <div class="flex gap-4">
+              <div class="itbkk-status-description ml-12">Description</div>
+              <div class="text-error">
+                {{ validateInput.description ? "(Max 200 characters)" : "" }}
+              </div>
+            </div>
+            <div class="flex justify-center">
+              <textarea
+                v-model="newData.description"
+                class="itbkk-title h-[6rem] w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
+                placeholder="Please Write Description"
+              ></textarea>
+            </div>
+
+            <div class="itbkk-status-color ml-10">Color</div>
+            <div class="flex w-full items-center justify-between px-10">
+              <div
+                class="color-picker-container flex flex-wrap items-center gap-6"
+              >
+                <div
+                  v-for="color in colorStore.getColors()"
+                  :key="color.id"
+                  class="color-picker-item relative flex cursor-pointer items-center justify-center"
+                  @click="() => (newData.colorId = color.id)"
+                >
+                  <div
+                    :style="{ backgroundColor: color.hex }"
+                    :class="
+                      newData.colorId === color.id &&
+                      'border-[4px] border-purple-500'
+                    "
+                    class="color-box h-8 w-8 rounded-full border border-gray-300"
+                  ></div>
+                </div>
+              </div>
+              <div class="flex justify-end gap-3">
+                <Button
+                  class="itbkk-button-comfirm btn btn-success w-16 hover:border-base-100 hover:bg-base-100"
+                  message="Save"
+                  :disabled="
+                    newData.name === '' ||
+                    validateInput.description ||
+                    validateInput.name
+                  "
+                  @click="addNewStatus"
+                />
+                <Button
+                  class="itbkk-button-cancle"
+                  message="Cancel"
+                  @click="router.push({ name: 'Status' })"
+                />
+              </div>
+            </div>
+          </div>
+
+          <Loading :is-loading="isLoading" />
+        </div>
       </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 ../lib/fetch.js @/lib/StatusManagement.js

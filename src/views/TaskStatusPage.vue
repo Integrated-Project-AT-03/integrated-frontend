@@ -31,8 +31,6 @@ const numTask = computed(() =>
   }, new Map()),
 );
 
-console.log(numTask);
-
 onMounted(async function () {
   const settingLoad = (await getSettingByNanoIdBoard(route.params.oid)).data;
   settingStore.setLimitTask(settingLoad);
