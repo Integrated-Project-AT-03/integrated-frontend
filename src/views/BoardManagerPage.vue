@@ -25,6 +25,7 @@ onMounted(async () => {
   boards.value = res.data;
   boardStore.setBoards(res.data)
   if(res.httpStatus === 401){
+    localStorage.removeItem('token');
     return router.push({name: 'login'})
   }
 });
