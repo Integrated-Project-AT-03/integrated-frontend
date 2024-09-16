@@ -9,7 +9,7 @@ import { useBoardStore } from "../stores/useBoardStore.js";
 const boardStore = useBoardStore();
 const userStore = useUserStore();
 const newBoard = ref({
-  name: userStore.getUser().name,
+  name: userStore.getUser().name + ' ' +'personal board',
   ownerOid: userStore.getUser().oid,
 });
 const errorMessage = ref();
