@@ -54,7 +54,7 @@ async function addNewStatus() {
 <template>
   <Teleport to="body">
     <div
-      class="backdrop-blur-sm z-[1000] transition-all duration-500 fixed top-0 flex h-screen w-screen items-center justify-center"
+      class="fixed top-0 z-[1000] flex h-screen w-screen items-center justify-center backdrop-blur-sm transition-all duration-500"
     >
       <div
         class="relative h-[30rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
