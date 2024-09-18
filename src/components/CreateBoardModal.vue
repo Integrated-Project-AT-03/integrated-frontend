@@ -43,7 +43,7 @@ async function onSubmit() {
       class="itbkk-modal-new fixed right-0 top-0 z-[1000] flex h-screen w-screen flex-col items-center justify-center rounded-lg backdrop-blur-sm transition-all duration-500"
     >
       <div class="flex h-max w-[27rem] flex-col rounded-md bg-neutral p-6">
-        <div class="itbkk-title text-2xl font-bold text-slate-300">New Board</div>
+        <div class="text-2xl font-bold text-slate-300">New Board</div>
         <div class="divider"></div>
         <div class="itbkk-message flex flex-col gap-2 text-slate-300">
           <div class="">Name</div>

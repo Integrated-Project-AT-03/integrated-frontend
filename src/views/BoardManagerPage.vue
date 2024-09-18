@@ -41,7 +41,7 @@ onMounted(async () => {
         />
     </div>
         <div class="w-full flex  mt-5 justify-center" v-show="boardStore.getBoards().length === 0">
-          <div class="flex font-bold justify-center items-center w-[70vw] h-[7rem] bg-[#777777] rounded-xl">
+          <div class="itbkk-title flex font-bold justify-center items-center w-[70vw] h-[7rem] bg-[#777777] rounded-xl">
             No board
           </div>
         </div>

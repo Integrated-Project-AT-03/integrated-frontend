@@ -131,7 +131,7 @@ const openTask = (index, id) => {
     <div class="flex items-center justify-between">
       <!-- <div class="itbkk-fullname">{{  }}</div> -->
 
-      <div class="containe">
+      <div class="container">
         <div class="flex items-center gap-2">
           <label class="relative flex flex-col gap-2">
             <input
