@@ -36,6 +36,7 @@ onMounted(async () => {
     <div class="flex justify-end mt-[-5rem]">
         <ButtonModal
           message="+ Create personal board"
+          class="itbkk-button-create"
           @click="$router.push({ name: 'AddBoard' })"
         />
     </div>
@@ -44,7 +45,7 @@ onMounted(async () => {
             No board
           </div>
         </div>
-        <ul class="flex flex-wrap gap-3 mt-4 h-auto">
+        <ul class="itbkk-button-add flex flex-wrap gap-3 mt-4 h-auto">
           <li
             v-for="board in boardStore.getBoards()"
             :key="board.nanoIdBoard"

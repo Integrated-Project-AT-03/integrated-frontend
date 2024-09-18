@@ -58,7 +58,7 @@ onUnmounted(() => {
         >
           <img class="mt-5 scale-125" :src="exmpleAccount" />
         </div>
-        <p class="text-sm">Welcome | {{ payloadJwt?.name }}</p>
+        <p class="itbkk-fullname text-sm">Welcome | {{ payloadJwt?.name }}</p>
       </li>
       <button
         @click="handleMenu"

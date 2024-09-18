@@ -126,7 +126,7 @@ const openTask = (index, id) => {
 
 <template>
   <Loading class="w-screen" :is-loading="isLoading" />
-  <div class="flex w-full flex-col gap-2">
+  <div class="itbkk-modal-task flex w-full flex-col gap-2">
     <!-- :class="$route.fullPath.split('/').length > 3 ? 'blur-sm' : ''" -->
     <div class="flex items-center justify-between">
       <!-- <div class="itbkk-fullname">{{  }}</div> -->
@@ -242,8 +242,8 @@ const openTask = (index, id) => {
           <td class="px-6 py-4">
             <div class="text-gray-900">{{ index + 1 }}</div>
           </td>
-          <td class="itbkk-title w-full whitespace-nowrap px-6 py-4">
-            <div class="text-sm text-gray-900">{{ task.title }}</div>
+          <td class="w-full whitespace-nowrap px-6 py-4">
+            <div class="itbkk-title text-sm text-gray-900">{{ task.title }}</div>
           </td>
           <td class="whitespace-nowrap px-6 py-4">
             <div

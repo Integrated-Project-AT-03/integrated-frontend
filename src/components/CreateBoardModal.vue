@@ -40,10 +40,10 @@ async function onSubmit() {
 <template>
   <Teleport to="body">
     <div
-      class="fixed right-0 top-0 z-[1000] flex h-screen w-screen flex-col items-center justify-center rounded-lg backdrop-blur-sm transition-all duration-500"
+      class="itbkk-modal-new fixed right-0 top-0 z-[1000] flex h-screen w-screen flex-col items-center justify-center rounded-lg backdrop-blur-sm transition-all duration-500"
     >
       <div class="flex h-max w-[27rem] flex-col rounded-md bg-neutral p-6">
-        <div class="text-2xl font-bold text-slate-300">New Board</div>
+        <div class="itbkk-title text-2xl font-bold text-slate-300">New Board</div>
         <div class="divider"></div>
         <div class="itbkk-message flex flex-col gap-2 text-slate-300">
           <div class="">Name</div>
@@ -53,7 +53,7 @@ async function onSubmit() {
               maxlength="120"
               type="text"
               placeholder="Your board name"
-              class="input input-bordered h-11 w-full bg-secondary"
+              class="itbkk-board-name input input-bordered h-11 w-full bg-secondary"
             />
           </div>
           <div class="text-error">
@@ -64,7 +64,7 @@ async function onSubmit() {
         <div class="mt-4 flex justify-end gap-3">
           <form method="dialog">
             <Button
-              class="itbkk-button-confirm btn-success text-slate-200"
+              class="itbkk-button-ok btn-success text-slate-200"
               message="Save"
               @click="onSubmit"
               :disabled="newBoard.name.length === 0"
