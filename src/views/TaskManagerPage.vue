@@ -13,10 +13,12 @@ import { useRoute, useRouter } from "vue-router";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 import { useTaskStore } from "./../stores/useTaskStore";
 import { useSettingStore } from "./../stores/useSettingStore";
+import { useBoardStore } from './../stores/useBoardStore.js'
 
 const settingStore = useSettingStore();
 const taskStore = useTaskStore();
 const statusStore = useTaskStatusStore();
+const boardStore = useBoardStore()
 const selectIndex = ref(5);
 const newItem = ref("");
 const items = ref([]);
@@ -62,6 +64,8 @@ onMounted(async function () {
   }
   statusStore.setStatuses(res.data);
   isLoading.value = false;
+
+  console.log(boardStore.getBoards());
 });
 
 const searchStatus = computed(() =>

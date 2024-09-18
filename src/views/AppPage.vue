@@ -4,6 +4,7 @@ import Alert from "./../components/Alert.vue";
 import { parseJwt } from "./../utils/helper";
 import Navbar from "../components/NavBar.vue";
 import ChevronRight from "../assets/icons/ChevronRight.vue";
+
 const message = ref("");
 const status = ref();
 const messageModalOpenState = ref(false);

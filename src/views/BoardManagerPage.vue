@@ -31,10 +31,10 @@ onMounted(async () => {
   console.log(boardStore.getBoards()[0].nanoIdBoard);
 
 //For Cypress test
-  if(boardStore.getBoards().length === 1){
-    console.log('Hello world');
-    return router.push({ name: 'Task', params: { oid: boardStore.getBoards()[0].nanoIdBoard } })
-  }
+  // if(boardStore.getBoards().length === 1){
+  //   console.log('Hello world');
+  //   return router.push({ name: 'Task', params: { oid: boardStore.getBoards()[0].nanoIdBoard } })
+  // }
 });
 </script>
 
