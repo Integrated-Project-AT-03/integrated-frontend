@@ -15,6 +15,9 @@ export const useBoardStore = defineStore("boardStore", {
     getBoards() {
       return this.boards;
     },
+    getBoardByNanoId(nanoId) {
+      return this.boards.find((board) => board.nanoIdBoard === nanoId);
+    },
     findBoardsIndex(id) {
       return this.boards.findIndex((board) => +board.id === +id);
     },

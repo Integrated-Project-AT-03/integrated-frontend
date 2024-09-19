@@ -64,7 +64,6 @@ onMounted(async function () {
   }
   statusStore.setStatuses(res.data);
   isLoading.value = false;
-  console.log(boardStore.getBoards());
 });
 
 const searchStatus = computed(() =>
@@ -128,7 +127,7 @@ const openTask = (index, id) => {
 </script>
 
 <template>
-  {{ boardStore.getBoards().name }}
+  {{ boardStore.getBoardByNanoId($route.params.oid).name }}
   <Loading class="w-screen" :is-loading="isLoading" />
   <div class="itbkk-modal-task flex w-full flex-col gap-2">
     <!-- :class="$route.fullPath.split('/').length > 3 ? 'blur-sm' : ''" -->
