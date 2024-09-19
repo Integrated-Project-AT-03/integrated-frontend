@@ -104,7 +104,7 @@ onUnmounted(() => {
           @click="logout"
           class="btn btn-ghost flex w-full justify-between"
         >
-          <p>Login Out</p>
+          <p class="itbkk-sign-out">Login Out</p>
           <i class="pi pi-sign-in text-[1rem] text-error" />
         </button>
       </ul>
