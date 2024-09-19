@@ -56,7 +56,7 @@ const handleMessage = async (e) => {
   >
     <Navbar @message="handleMessage($event)" />
     <div
-      class="container relative flex h-full w-full flex-auto flex-col justify-center"
+      class="container relative flex h-full w-full flex-auto flex-col justify-center gap-2"
     >
     <div v-show="$route.name !== 'Boards'" class="itbkk-board-name flex justify-center text-3xl font-bold">
       {{ boardStore.getCurrentBoard()?.name }}
