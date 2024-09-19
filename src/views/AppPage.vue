@@ -4,6 +4,8 @@ import Alert from "./../components/Alert.vue";
 import { parseJwt } from "./../utils/helper";
 import Navbar from "../components/NavBar.vue";
 import ChevronRight from "../assets/icons/ChevronRight.vue";
+import { useBoardStore } from '../stores/useBoardStore.js'
+
 
 const message = ref("");
 const status = ref();
@@ -16,11 +18,13 @@ let timeout;
 import { useUserStore } from "../stores/useUserStore.js";
 
 const userStore = useUserStore();
+const boardStore = useBoardStore()
 userStore.setUser();
 
 onMounted(async () => {
   const token = localStorage.getItem("token");
   payloadJwt.value = await parseJwt(token);
+  // console.log(boardStore.getBoards());
 });
 
 const handleMessage = async (e) => {
@@ -55,6 +59,7 @@ const handleMessage = async (e) => {
     <div
       class="container relative flex h-full w-full flex-auto flex-col justify-center gap-3"
     >
+    <!-- <div v-show="$route.name !== 'Boards'" class="flex justify-center">{{ boardStore.getBoardByNanoId($route.params.oid).name }}</div> -->
       <div
         class="flex items-center gap-4"
         v-show="$route.name !== 'Boards' && $route.name !== 'AddBoard'"
