@@ -24,7 +24,6 @@ userStore.setUser();
 onMounted(async () => {
   const token = localStorage.getItem("token");
   payloadJwt.value = await parseJwt(token);
-  // console.log(boardStore.getBoards());
 });
 
 const handleMessage = async (e) => {
@@ -57,11 +56,13 @@ const handleMessage = async (e) => {
   >
     <Navbar @message="handleMessage($event)" />
     <div
-      class="container relative flex h-full w-full flex-auto flex-col justify-center gap-3"
+      class="container relative flex h-full w-full flex-auto flex-col justify-center"
     >
-    <!-- <div v-show="$route.name !== 'Boards'" class="flex justify-center">{{ boardStore.getBoardByNanoId($route.params.oid).name }}</div> -->
+    <div v-show="$route.name !== 'Boards'" class="flex justify-center text-3xl font-bold">
+      {{ boardStore.getCurrentBoard()?.name }}
+    </div>
       <div
-        class="flex items-center gap-4"
+        class="flex items-center gap-4 mt-6"
         v-show="$route.name !== 'Boards' && $route.name !== 'AddBoard'"
       >
         <button

@@ -3,6 +3,7 @@ import { acceptHMRUpdate, defineStore } from "pinia";
 export const useBoardStore = defineStore("boardStore", {
   state: () => ({
     boards: [],
+    currentBoard: null,
   }),
 
   actions: {
@@ -35,6 +36,12 @@ export const useBoardStore = defineStore("boardStore", {
     },
     findBoard(id) {
       return this.boards.find((board) => +board.id === +id);
+    },
+    setCurrentBoard(board) {
+      this.currentBoard = board;
+    },
+    getCurrentBoard() {
+      return this.currentBoard;
     },
   },
 });

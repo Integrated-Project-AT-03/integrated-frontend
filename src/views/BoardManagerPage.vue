@@ -35,6 +35,10 @@ onMounted(async () => {
   //   return router.push({ name: 'Task', params: { oid: boardStore.getBoards()[0].nanoIdBoard } })
   // }
 });
+
+const handleClick = (board) => {
+  router.push({ name: 'Task', params: { oid: board.nanoIdBoard } })
+}
 </script>
 
 <template>
@@ -55,9 +59,7 @@ onMounted(async () => {
           <li
             v-for="board in boardStore.getBoards()"
             :key="board.nanoIdBoard"
-            @click="
-              $router.push({ name: 'Task', params: { oid: board.nanoIdBoard } })
-            "
+            @click="handleClick(board)"
           >
             <div class="flex justify-center items-center h-auto w-auto border-2 border-[#888888] rounded-2xl hover:cursor-pointer hover:bg-[#666666] bg-[#777777] p-5">
               {{ board.name }}

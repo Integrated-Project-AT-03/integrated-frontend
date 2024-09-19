@@ -31,3 +31,18 @@ export async function createBoard(newBoard) {
     console.error(`error: ${error}`);
   }
 }
+
+export async function getBoardByUserNanoId(nanoId) {
+  try {
+    const res = await fetch(`${uri}/v3/boards/${nanoId}`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    return { data, httpStatus: res.status };
+  } catch (error) {
+    console.error(`error: ${error}`);
+  }
+}

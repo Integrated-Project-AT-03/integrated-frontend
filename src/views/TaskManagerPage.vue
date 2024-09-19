@@ -14,6 +14,7 @@ import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 import { useTaskStore } from "./../stores/useTaskStore";
 import { useSettingStore } from "./../stores/useSettingStore";
 import { useBoardStore } from './../stores/useBoardStore.js'
+import {getBoardByUserNanoId} from '../services/apiBoard.js'
 
 const settingStore = useSettingStore();
 const taskStore = useTaskStore();
@@ -64,6 +65,8 @@ onMounted(async function () {
   }
   statusStore.setStatuses(res.data);
   isLoading.value = false;
+  const resBoard = await getBoardByUserNanoId(route.params.oid)
+  boardStore.setCurrentBoard(resBoard.data)
 });
 
 const searchStatus = computed(() =>
@@ -127,7 +130,7 @@ const openTask = (index, id) => {
 </script>
 
 <template>
-  {{ boardStore.getBoardByNanoId($route.params.oid).name }}
+  <!-- {{ boardStore.getBoardByNanoId($route.params.oid).name }} -->
   <Loading class="w-screen" :is-loading="isLoading" />
   <div class="itbkk-modal-task flex w-full flex-col gap-2">
     <!-- :class="$route.fullPath.split('/').length > 3 ? 'blur-sm' : ''" -->
