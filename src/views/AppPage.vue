@@ -58,7 +58,7 @@ const handleMessage = async (e) => {
     <div
       class="container relative flex h-full w-full flex-auto flex-col justify-center"
     >
-    <div v-show="$route.name !== 'Boards'" class="flex justify-center text-3xl font-bold">
+    <div v-show="$route.name !== 'Boards'" class="itbkk-title flex justify-center text-3xl font-bold">
       {{ boardStore.getCurrentBoard()?.name }}
     </div>
       <div
