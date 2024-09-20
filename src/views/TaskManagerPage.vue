@@ -289,8 +289,7 @@ const openTask = (index, id) => {
         <span>{{ item }}</span>
       </div>
     </div>
-    <BoardVisibilityModal :message="isToggle ? 'In private, only board owner can access/control board. Do you want to change the visibility to Private' : 
-    'In public, any one can view the board, task lst and task detail of tasks in the board, Do you want to change the visibility to Public?'"/>
+    <BoardVisibilityModal :bool="isToggle"/>
   </div>
 
   <router-view :index-value="selectIndex" @message="handleMessage($event)" />

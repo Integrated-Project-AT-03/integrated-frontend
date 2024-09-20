@@ -21,7 +21,8 @@ const props = defineProps({
             <div class="text-2xl font-bold text-slate-300">Bord visibility changed!</div>
             <div class="divider"></div>
             <div class="itbkk-message text-slate-300">
-                {{ message }}
+                {{ bool ? 'In private, only board owner can access/control board. Do you want to change the visibility to Private' 
+                : 'In public, any one can view the board, task lst and task detail of tasks in the board, Do you want to change the visibility to Public?'}}
             </div>
             <div class="divider"></div>
             <div class="mt-4 flex justify-end gap-3">
