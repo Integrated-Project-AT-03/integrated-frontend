@@ -15,6 +15,7 @@ import { useTaskStore } from "./../stores/useTaskStore";
 import { useSettingStore } from "./../stores/useSettingStore";
 import { useBoardStore } from './../stores/useBoardStore.js'
 import {getBoardByUserNanoId} from '../services/apiBoard.js'
+import BoardVisibilityModal from '../components/BoardVisibilityModal.vue'
 
 const settingStore = useSettingStore();
 const taskStore = useTaskStore();
@@ -181,7 +182,7 @@ const openTask = (index, id) => {
       </div>
       <div class="flex justify-end items-center gap-4">
         <div class="flex gap-3">
-          <input type="checkbox" class="itbkk-board-visibility toggle" v-model="isToggle"/>
+          <input type="checkbox" class="itbkk-board-visibility toggle" v-model="isToggle" onclick="visibilityModal.showModal()"/>
           <div>{{ isToggle ? 'Public' : 'Private' }}</div>
         </div>
         <Button
@@ -288,6 +289,8 @@ const openTask = (index, id) => {
         <span>{{ item }}</span>
       </div>
     </div>
+    <BoardVisibilityModal :message="isToggle ? 'In private, only board owner can access/control board. Do you want to change the visibility to Private' : 
+    'In public, any one can view the board, task lst and task detail of tasks in the board, Do you want to change the visibility to Public?'"/>
   </div>
 
   <router-view :index-value="selectIndex" @message="handleMessage($event)" />
