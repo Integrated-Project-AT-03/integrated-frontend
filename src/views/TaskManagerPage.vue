@@ -30,6 +30,8 @@ const sortOrder = ref("default");
 const openSearch = ref(false);
 const router = useRouter();
 const route = useRoute();
+const isToggle = ref(false)
+
 let timeoutBlur = null;
 defineProps({
   setting: Object,
@@ -127,6 +129,8 @@ const openTask = (index, id) => {
   router.push({ name: "TaskDetail", params: { id } }),
     (selectIndex.value = index);
 };
+
+
 </script>
 
 <template>
@@ -175,7 +179,11 @@ const openTask = (index, id) => {
           />
         </div>
       </div>
-      <div class="flex justify-end gap-4">
+      <div class="flex justify-end items-center gap-4">
+        <div class="flex gap-3">
+          <input type="checkbox" class="toggle toggle-success" v-model="isToggle"/>
+          <div>{{ isToggle ? 'Public' : 'Private' }}</div>
+        </div>
         <Button
           class="itbkk-manage-status"
           bgcolor="#666666"
