@@ -181,7 +181,7 @@ const openTask = (index, id) => {
       </div>
       <div class="flex justify-end items-center gap-4">
         <div class="flex gap-3">
-          <input type="checkbox" class="toggle toggle-success" v-model="isToggle"/>
+          <input type="checkbox" class="itbkk-board-visibility toggle" v-model="isToggle"/>
           <div>{{ isToggle ? 'Public' : 'Private' }}</div>
         </div>
         <Button
