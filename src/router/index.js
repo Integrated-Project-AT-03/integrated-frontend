@@ -102,10 +102,10 @@ router.beforeEach(async (to, from, next) => {
       const isTokenValid = tokenValidationResponse.data;
 
       if (isTokenValid) {
-        const useStore = useUserStore();
+        // const useStore = useUserStore();
 
-        const userInfoResponse = await getUserInfo();
-        useStore.setUser(userInfoResponse.data);
+        // const userInfoResponse = await getUserInfo();
+        // useStore.setUser(userInfoResponse.data);
 
         next();
       } else {

@@ -17,6 +17,18 @@ export async function login(user) {
   }
 }
 
+export async function logout() {
+  try {
+    const res = await fetch(`${uri}/clear-cookie`, {
+      credentials: "include",
+    });
+
+    return { data: res, httpStatus: res.status };
+  } catch (error) {
+    console.error(`error: ${error}`);
+  }
+}
+
 export async function validateToken() {
   try {
     const res = await fetch(`${uri}/validate-token`, {

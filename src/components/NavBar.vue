@@ -4,6 +4,7 @@ import Arrow from "./../assets/icons/Arrow.vue";
 import exmpleAccount from "/images/exmpleAcciont.png";
 import BoardSetting from "./BoardSetting.vue";
 import { useUserStore } from "./../stores/useUserStore";
+import { logout as logoutApi } from "./../services/apiAuth";
 import { onMounted, onUnmounted, ref } from "vue";
 import router from "@/router";
 const selectBarEle = ref();
@@ -26,8 +27,8 @@ function handleMenu(e) {
   e.stopPropagation();
 }
 
-const logout = () => {
-  localStorage.removeItem("token");
+const logout = async () => {
+  await logoutApi();
   router.push({ name: "login" });
 };
 
