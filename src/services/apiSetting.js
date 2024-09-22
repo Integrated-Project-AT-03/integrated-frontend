@@ -23,7 +23,7 @@ export async function editSettingByNanoIdBoard(boardNanoId, editSetting) {
       body: JSON.stringify(editSetting),
     });
     const data = await res.json();
-    return { ...data, httpStatus: res.status };
+    return { data, httpStatus: res.status };
   } catch (error) {
     console.error(`error: ${error}`);
   }

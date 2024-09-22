@@ -9,7 +9,6 @@ import DeleteTaskModal from "./DeleteTaskModal.vue";
 import Button from "./ButtonModal.vue";
 import { useTaskStore } from "./../stores/useTaskStore";
 import { useSettingStore } from "./../stores/useSettingStore";
-
 const settingStore = useSettingStore();
 const taskStore = useTaskStore();
 defineProps({ indexValue: Number });
@@ -205,13 +204,15 @@ onmou
                 The limit status :
                 <span
                   :class="
-                    settingStore.getLimitTask().enable
+                    settingStore.getLimitTask().enableLimitsTask
                       ? 'text-success'
                       : 'text-error'
                   "
                 >
                   {{
-                    settingStore.getLimitTask().enable ? "enable" : "disable"
+                    settingStore.getLimitTask().enableLimitsTask
+                      ? "enable"
+                      : "disable"
                   }}
                   state
                 </span>

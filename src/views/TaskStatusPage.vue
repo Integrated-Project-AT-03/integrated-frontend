@@ -12,12 +12,12 @@ import StatusModal from "@/components/StatusModal.vue";
 import { useSettingStore } from "./../stores/useSettingStore";
 import { useRoute } from "vue-router";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
-import {getBoardByUserNanoId} from '../services/apiBoard.js'
-import {useBoardStore} from '../stores/useBoardStore.js'
+import { getBoardByUserNanoId } from "../services/apiBoard.js";
+import { useBoardStore } from "../stores/useBoardStore.js";
 
 import { useTaskStore } from "./../stores/useTaskStore";
 const settingStore = useSettingStore();
-const boardStore = useBoardStore()
+const boardStore = useBoardStore();
 const route = useRoute();
 const emits = defineEmits(["message"]);
 const statusStore = useTaskStatusStore();
@@ -42,8 +42,8 @@ onMounted(async function () {
   const res = await getStatusesByNanoIdBoard(route.params.oid);
   isLoading.value = false;
   statusStore.setStatuses(res.data);
-  const resBoard = await getBoardByUserNanoId(route.params.oid)
-  boardStore.setCurrentBoard(resBoard.data)
+  const resBoard = await getBoardByUserNanoId(route.params.oid);
+  boardStore.setCurrentBoard(resBoard.data);
 });
 
 const handleMessage = (e) => {
