@@ -4,6 +4,7 @@ export async function login(user) {
   try {
     const res = await fetch(`${uri}/login`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "content-type": "application/json",
       },
@@ -16,3 +17,85 @@ export async function login(user) {
   }
 }
 
+export async function logout() {
+  try {
+    const res = await fetch(`${uri}/clear-cookie`, {
+      credentials: "include",
+    });
+
+    return { data: res, httpStatus: res.status };
+  } catch (error) {
+    console.error(`error: ${error}`);
+  }
+}
+
+export async function validateToken() {
+  const options = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  const result = await fetchWithRefresh(`${uri}/validate-token`, options);
+  return { data: Boolean(result.data), httpStatus: result.httpStatus };
+}
+
+export async function getUserInfo() {
+  const options = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  const result = await fetchWithRefresh(`${uri}/user-info`, options);
+  return { data: result.data, httpStatus: result.httpStatus };
+}
+
+export async function refreshToken() {
+  try {
+    const res = await fetch(`${uri}/token`, {
+      credentials: "include",
+    });
+    const data = await res.json();
+    return { data, httpStatus: res.status };
+  } catch (error) {
+    console.error(`error: ${error}`);
+  }
+}
+
+export async function fetchWithRefresh(url, options) {
+  try {
+    let res = await fetch(url, {
+      ...options,
+      credentials: "include",
+    });
+
+    if (res.status === 401) {
+      console.log("Token expired, trying to refresh...");
+
+      const refreshResponse = await refreshToken();
+
+      if (refreshResponse.httpStatus === 200) {
+        res = await fetch(url, {
+          ...options,
+          credentials: "include",
+        });
+      }
+    }
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(
+        `Error: ${res.status} - ${errorData.message || "Failed to process request"}`,
+      );
+    }
+
+    const data = await res.json();
+    return { data, httpStatus: res.status };
+  } catch (error) {
+    console.error(`error: ${error.message}`);
+    return { error: error.message };
+  }
+}

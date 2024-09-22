@@ -1,16 +1,14 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import Alert from "./../components/Alert.vue";
-import { parseJwt } from "./../utils/helper";
 import Navbar from "../components/NavBar.vue";
 import ChevronRight from "../assets/icons/ChevronRight.vue";
-import { useBoardStore } from '../stores/useBoardStore.js'
-
+import { useBoardStore } from "../stores/useBoardStore.js";
+import { getUserInfo } from "../services/apiAuth";
 
 const message = ref("");
 const status = ref();
 const messageModalOpenState = ref(false);
-const setting = ref();
 const payloadJwt = ref({});
 
 function clickOutSideNav(e) {}
@@ -18,12 +16,12 @@ let timeout;
 import { useUserStore } from "../stores/useUserStore.js";
 
 const userStore = useUserStore();
-const boardStore = useBoardStore()
+const boardStore = useBoardStore();
 userStore.setUser();
 
 onMounted(async () => {
-  const token = localStorage.getItem("token");
-  payloadJwt.value = await parseJwt(token);
+  const res = await getUserInfo();
+  userStore.setUser(res.data);
 });
 
 const handleMessage = async (e) => {
@@ -58,11 +56,14 @@ const handleMessage = async (e) => {
     <div
       class="container relative flex h-full w-full flex-auto flex-col justify-center gap-2"
     >
-    <div v-show="$route.name !== 'Boards'" class="itbkk-board-name flex justify-center text-3xl font-bold">
-      {{ boardStore.getCurrentBoard()?.name }}
-    </div>
       <div
-        class="flex items-center gap-4 mt-6"
+        v-show="$route.name !== 'Boards'"
+        class="itbkk-board-name flex justify-center text-3xl font-bold"
+      >
+        {{ boardStore.getCurrentBoard()?.name }}
+      </div>
+      <div
+        class="mt-6 flex items-center gap-4"
         v-show="$route.name !== 'Boards' && $route.name !== 'AddBoard'"
       >
         <button

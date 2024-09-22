@@ -4,10 +4,11 @@ import Button from "../components/ButtonModal.vue";
 import { login } from "@/services/apiAuth";
 import { useRouter } from "vue-router";
 import Logo from "../components/Logo.vue";
+import { useUserStore } from "../stores/useUserStore";
 
 const router = useRouter();
-
-const user = ref({ userName: "", password: "" });
+const userStore = useUserStore();
+const user = ref({ userName: "itbkk.olarn", password: "ip23/OLA" });
 const errorMessage = ref();
 
 async function onSubmit() {
@@ -20,8 +21,7 @@ async function onSubmit() {
 
   const res = await login(user.value);
   if (res.httpStatus === 200) {
-    const parseJson = JSON.stringify(res.data.access_token);
-    localStorage.setItem("token", parseJson);
+    userStore.setUser(res.data);
     router.push({ name: "Boards" });
   } else {
     errorMessage.value = "Username or Password is incorrect";

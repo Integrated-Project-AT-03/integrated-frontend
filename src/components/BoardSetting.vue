@@ -1,7 +1,10 @@
 <script setup>
 import { computed, ref, watch } from "vue";
 import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
-import { editSettingByNanoIdBoard } from "./../services/apiSetting";
+import {
+  editSettingByNanoIdBoard,
+  getSettingByNanoIdBoard,
+} from "./../services/apiSetting";
 import { useRoute } from "vue-router";
 import Button from "./ButtonModal.vue";
 import { useSettingStore } from "./../stores/useSettingStore";
@@ -13,7 +16,7 @@ watch(
     setting.value = { ...settingStore.getLimitTask() };
   },
   () => settingStore.getLimitTask(),
-  { deep: false },
+  { deep: true },
 );
 
 const compareSetting = ref({ ...setting.value });
@@ -39,12 +42,13 @@ const saveSetting = async () => {
     setting.value.limitsTask = 10;
   }
   const res = await editSettingByNanoIdBoard(route.params.oid, {
-    enableLimitsTask: setting.value.enableLimitsTask,
+    enableLimitsTask: !setting.value.enableLimitsTask,
     limitsTask: setting.value.limitsTask,
   });
 
   if (res.httpStatus === 200) {
-    settingStore.setLimitTask(setting.value);
+    settingStore.setLimitTask(res.data);
+
     compareSetting.value = { ...setting.value };
     if (setting.value.enableLimitsTask) {
       const statuses = (await getStatusesByNanoIdBoard(route.params.oid)).data;

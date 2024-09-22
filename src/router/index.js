@@ -10,8 +10,8 @@ import LoginPage from "../views/LoginPage.vue";
 import AppPage from "@/views/AppPage.vue";
 import CreateBoardModal from "../components/CreateBoardModal.vue";
 import BoardManagerPage from "../views/BoardManagerPage.vue";
-import { parseJwt } from "@/utils/helper";
-import { ref } from "vue";
+import { getUserInfo, validateToken } from "../services/apiAuth";
+import { useUserStore } from "../stores/useUserStore";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -95,38 +95,22 @@ const router = createRouter({
   ],
 });
 
-const jwtPayload = ref();
-
-function isTokenValid(token) {
-  if (!token) {
-    return false;
-  }
+router.beforeEach(async (to, from, next) => {
   try {
-    const token = localStorage.getItem("token");
-    jwtPayload.value = parseJwt(token);
-    const currenTime = Date.now() / 1000;
-    if (jwtPayload.value.exp < currenTime) {
-      console.log("Token is expired");
-      return false;
-    }
-    return true;
-  } catch (error) {
-    console.log("Invalid token");
-    return false;
-  }
-}
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
+      const tokenValidationResponse = await validateToken();
 
-router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem("token");
-
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (isTokenValid(token)) {
-      next();
+      if (tokenValidationResponse.httpStatus === 200) {
+        next();
+      } else {
+        next("/login");
+      }
     } else {
-      next("/login");
+      next();
     }
-  } else {
-    next();
+  } catch (error) {
+    console.error("Error during authentication:", error);
+    next("/login");
   }
 });
 

@@ -1,18 +1,17 @@
 <script setup>
 import { useRouter, useRoute } from "vue-router";
-import { editSettingByNanoIdBoard } from "../services/apiSetting";
 import { getStatusesByNanoIdBoard } from "../services/apiStatus";
 import { addTask } from "../services/apiTask";
 import { computed, onMounted, ref } from "vue";
 import Button from "./ButtonModal.vue";
 import { useTaskStore } from "./../stores/useTaskStore";
+import { useSettingStore } from "./../stores/useSettingStore";
+const settingStore = useSettingStore();
 const taskStore = useTaskStore();
 const statuses = ref();
 const emits = defineEmits(["message"]);
-const uri = import.meta.env.VITE_SERVER_URI;
 const router = useRouter();
 const route = useRoute();
-const setting = ref();
 const taskForm = ref({
   title: "",
   description: "",
@@ -31,7 +30,6 @@ const validateInput = computed(() => {
 onMounted(async () => {
   statuses.value = (await getStatusesByNanoIdBoard(route.params.oid)).data;
   taskForm.value.status = statuses.value[0];
-  setting.value = (await editSettingByNanoIdBoard(route.params.oid)).data;
 });
 
 async function addNewTask(newItem) {
@@ -128,9 +126,18 @@ async function addNewTask(newItem) {
                 <div>
                   The limit status :
                   <span
-                    :class="setting?.enable ? 'text-success' : 'text-error'"
+                    :class="
+                      settingStore.getLimitTask()?.enableLimitsTask
+                        ? 'text-success'
+                        : 'text-error'
+                    "
                   >
-                    {{ setting?.enable ? "enable" : "disable" }} state
+                    {{
+                      settingStore.getLimitTask()?.enableLimitsTask
+                        ? "enable"
+                        : "disable"
+                    }}
+                    state
                   </span>
                 </div>
               </div>
