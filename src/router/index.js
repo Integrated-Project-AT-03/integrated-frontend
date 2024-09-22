@@ -99,14 +99,8 @@ router.beforeEach(async (to, from, next) => {
   try {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       const tokenValidationResponse = await validateToken();
-      const isTokenValid = tokenValidationResponse.data;
 
-      if (isTokenValid) {
-        // const useStore = useUserStore();
-
-        // const userInfoResponse = await getUserInfo();
-        // useStore.setUser(userInfoResponse.data);
-
+      if (tokenValidationResponse.httpStatus === 200) {
         next();
       } else {
         next("/login");
