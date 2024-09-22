@@ -16,17 +16,8 @@ export const useUserStore = defineStore("userStore", {
   }),
 
   actions: {
-    setUser() {
-      const token = localStorage.getItem("token");
-      const payload = parseJwt(token);
-      this.user.role = payload.role;
-      this.user.name = payload.name;
-      this.user.oid = payload.oid;
-      this.user.email = payload.email;
-      this.user.sub = payload.sub;
-      this.user.iss = payload.iss;
-      this.user.iat = payload.iat;
-      this.user.exp = payload.exp;
+    setUser(user) {
+    this.user = user
     },
     getUser() {
       return this.user;

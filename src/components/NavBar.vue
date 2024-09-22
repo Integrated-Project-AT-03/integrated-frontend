@@ -3,13 +3,13 @@ import TaskIcon from "./../assets/icons/TaskIcon.vue";
 import Arrow from "./../assets/icons/Arrow.vue";
 import exmpleAccount from "/images/exmpleAcciont.png";
 import BoardSetting from "./BoardSetting.vue";
-import { parseJwt } from "./../utils/helper";
+import { useUserStore } from "./../stores/useUserStore";
 import { onMounted, onUnmounted, ref } from "vue";
 import router from "@/router";
-const payloadJwt = ref();
 const selectBarEle = ref();
 const showSelectBar = ref(false);
 const currentMenu = ref("Menu");
+const userStore = useUserStore();
 const emits = defineEmits(["message"]);
 const handleMessage = (e) => {
   emits("message", e);
@@ -33,8 +33,6 @@ const logout = () => {
 
 onMounted(() => {
   document.body.addEventListener("click", clickOutSideMenu);
-  const token = localStorage.getItem("token");
-  payloadJwt.value = parseJwt(token);
 });
 
 onUnmounted(() => {
@@ -58,7 +56,9 @@ onUnmounted(() => {
         >
           <img class="mt-5 scale-125" :src="exmpleAccount" />
         </div>
-        <p class="itbkk-fullname text-sm">Welcome | {{ payloadJwt?.name }}</p>
+        <p class="itbkk-fullname text-sm">
+          Welcome | {{ userStore?.getUser()?.name }}
+        </p>
       </li>
       <button
         @click="handleMenu"

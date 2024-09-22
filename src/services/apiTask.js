@@ -15,10 +15,7 @@ export async function getTasksByNanoidBoard(
       params += `filterStatuses=${formatFilter}&`;
     }
     const res = await fetch(`${uri}/v3/boards/${boardNanoId}/tasks${params}`, {
-      headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
-        "Content-Type": "application/json",
-      },
+      credentials: "include",
     });
     const data = await res.json();
     return { data, httpStatus: res.status };
@@ -31,10 +28,7 @@ export async function getTaskById(id, boardNanoId) {
   try {
     const res = await fetch(`${uri}/v3/boards/${boardNanoId}/tasks/${id}`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
-        "Content-Type": "application/json",
-      },
+      credentials: "include",
     });
     const data = await res.json();
     return { data, httpStatus: res.status };
@@ -47,8 +41,8 @@ export async function addTask(newTask, boardNanoId) {
   try {
     const res = await fetch(`${uri}/v3/boards/${boardNanoId}/tasks`, {
       method: "POST",
+      credentials: "include",
       headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newTask),
@@ -64,10 +58,7 @@ export async function deleteTaskById(id, boardNanoId) {
   try {
     const res = await fetch(`${uri}/v3/boards/${boardNanoId}/tasks/${id}`, {
       method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
-        "Content-Type": "application/json",
-      },
+      credentials: "include",
     });
     const data = await res.json();
     return { ...data, httpStatus: res.status };
@@ -80,8 +71,8 @@ export async function editTaskById(id, editItem, boardNanoId) {
   try {
     const res = await fetch(`${uri}/v3/boards/${boardNanoId}/tasks/${id}`, {
       method: "PUT",
-      headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+      credentials: "include",
+      headers:{
         "Content-Type": "application/json",
       },
       body: JSON.stringify(editItem),

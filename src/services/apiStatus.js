@@ -3,10 +3,7 @@ const uri = import.meta.env.VITE_SERVER_URI;
 export async function getStatusesByNanoIdBoard(boardNanoId) {
   try {
     const res = await fetch(`${uri}/v3/boards/${boardNanoId}/statuses`, {
-      headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
-        "Content-Type": "application/json",
-      },
+      credentials: "include",
     });
     const data = await res.json();
     return { data, httpStatus: res.status };
@@ -18,10 +15,7 @@ export async function getStatusesByNanoIdBoard(boardNanoId) {
 export async function getStatusById(id, boardNanoId) {
   try {
     const res = await fetch(`${uri}/v3/boards/${boardNanoId}/statuses/${id}`, {
-      headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
-        "Content-Type": "application/json",
-      },
+      credentials: "include",
     });
     const data = await res.json();
     return { data, httpStatus: res.status };
@@ -34,8 +28,8 @@ export async function addStatus(newTask, boardNanoId) {
   try {
     const res = await fetch(`${uri}/v3/boards/${boardNanoId}/statuses`, {
       method: "POST",
+      credentials: "include",
       headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newTask),
@@ -51,10 +45,7 @@ export async function deleteStatusById(id, boardNanoId) {
   try {
     const res = await fetch(`${uri}/v3/boards/${boardNanoId}/statuses/${id}`, {
       method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
-        "Content-Type": "application/json",
-      },
+      credentials: "include",
     });
     const data = await res.json();
     return { data, httpStatus: res.status };
@@ -67,8 +58,8 @@ export async function editStatusById(id, editItem, boardNanoId) {
   try {
     const res = await fetch(`${uri}/v3/boards/${boardNanoId}/statuses/${id}`, {
       method: "PUT",
+      credentials: "include",
       headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(editItem),
@@ -90,10 +81,7 @@ export async function transferTasksToNewStatus(
       `${uri}/v3/boards/${nanoIdBoard}/statuses/${deletedId}/${changeId}`,
       {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
-          "Content-Type": "application/json",
-        },
+        credentials: "include",
       },
     );
     const data = await res.json();
