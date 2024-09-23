@@ -42,7 +42,7 @@ const validateInput = computed(() => {
 });
 
 const loadTask = async () => {
-  const response = await getTaskById(route.params.id);
+  const response = await getTaskById(route.params.id, route.params.oid);
   if (response.httpStatus === 404) {
     emits("message", {
       description: "The requested task does not exist",
@@ -70,7 +70,7 @@ const handleEditTask = async () => {
   );
   isLoading.value = false;
   if (res.httpStatus === 200) {
-    taskStore.updateTask(route.params.id, res);
+    taskStore.updateTask(route.params.id, res.data);
     emits("message", {
       description: "The task has been updated",
       status: "success",

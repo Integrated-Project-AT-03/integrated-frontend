@@ -27,7 +27,7 @@ const formattDate = (date) =>
   new Date(date).toLocaleString("en-GB", localZone).replace(",", "");
 
 onMounted(async function () {
-  const res = await getStatusById(route.params.id);
+  const res = await getStatusById(route.params.id, route.params.oid);
   if (res.status === 404) {
     emits("message", {
       description: `An error has occurred, the status does not exist.`,
@@ -35,9 +35,9 @@ onMounted(async function () {
     });
     statusStore.deleteStatus(route.params.id);
     router.push({ name: "Status" });
-  } else if (res.data.name === "No Status" || res.data.id === "Done") {
+  } else if (res.data.id === 1 || res.data.id === 4) {
     emits("message", {
-      description: `The ${res.name} is not allow to editing`,
+      description: `The ${res.data.name} is not allow to editing`,
       status: "error",
     });
     router.push({ name: "Status" });
@@ -63,20 +63,20 @@ async function updateStatus() {
       status: "success",
     });
     router.push({ name: "Status" });
-  } else if (res.status === 404) {
+  } else if (res.httpStatus === 404) {
     emits("message", {
       description: `An error has occurred, the status does not exist.`,
       status: "error",
     });
     router.push({ name: "Status" });
     statusStore.deleteStatus(route.params.id);
-  } else if (res.status === 422) {
+  } else if (res.httpStatus === 422) {
     emits("message", {
       description: `${res.message}`,
       status: "error",
     });
     router.push({ name: "Status" });
-  } else if (res.status === 400) {
+  } else if (res.httpStatus === 400) {
     emits("message", {
       description: `Status name must be uniques, please choose another name.`,
       status: "error",

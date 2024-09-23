@@ -73,8 +73,6 @@ export async function fetchWithRefresh(url, options) {
     });
 
     if (res.status === 401) {
-      console.log("Token expired, trying to refresh...");
-
       const refreshResponse = await refreshToken();
 
       if (refreshResponse.httpStatus === 200) {
@@ -84,15 +82,12 @@ export async function fetchWithRefresh(url, options) {
         });
       }
     }
-
+    const data = await res.json();
     if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(
-        `Error: ${res.status} - ${errorData.message || "Failed to process request"}`,
+      console.error(
+        `Error: ${res.status} - ${data.message || "Failed to process request"}`,
       );
     }
-
-    const data = await res.json();
     return { data, httpStatus: res.status };
   } catch (error) {
     console.error(`error: ${error.message}`);

@@ -18,6 +18,7 @@ async function deleteStatus(id) {
   const res = await deleteStatusById(id, route.params.oid);
 
   emits("update:modelValue", false);
+  console.log(res);
   if (res.httpStatus === 200) {
     statusStore.deleteStatus(id);
     emits("message", {
@@ -30,6 +31,7 @@ async function deleteStatus(id) {
       status: "error",
     });
   } else if (res.httpStatus === 400) {
+    console.log("kuy");
     emits("conflict");
   } else if (res.httpStatus === 404) {
     statusStore.deleteStatus(id);

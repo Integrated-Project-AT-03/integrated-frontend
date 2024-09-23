@@ -178,7 +178,7 @@ const handleMessage = (e) => {
           </td>
           <td class="itbkk-status flex whitespace-nowrap py-4">
             <div
-              v-if="name !== 'No Status' && name !== 'Done'"
+              v-if="id !== 1 && id !== 4"
               class="flex items-center justify-center gap-2"
             >
               <Button

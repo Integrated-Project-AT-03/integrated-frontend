@@ -20,9 +20,11 @@ export const useTaskStore = defineStore("taskStore", {
     },
     updateTask(id, newTask) {
       const taskIndex = this.findTaskIndex(id);
+
       if (taskIndex !== -1) {
         this.tasks[taskIndex] = newTask;
       }
+  
     },
     deleteTask(id) {
       const taskIndex = this.findTaskIndex(id);
