@@ -33,11 +33,9 @@ const openSearch = ref(false);
 const router = useRouter();
 const route = useRoute();
 const setBool = ref(false)
-console.log(setBool.value);
 
 const handleBool = (e) => {
       setBool.value = e;
-      console.log(setBool.value);
     };
 
 let timeoutBlur = null;
