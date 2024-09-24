@@ -10,12 +10,10 @@ const props = defineProps({
 });
 
 const emits = defineEmits(["setBool"]);
-const receiptBool = ref(true)
+const receiptBool = ref(false)
 
 const handleConfirm = () => {
-    // if(receiptBool.value){
-    //     receiptBool.value = !receiptBool.value
-    // }   
+    receiptBool.value = !receiptBool.value
     emits("setBool", receiptBool.value)
 }
 
