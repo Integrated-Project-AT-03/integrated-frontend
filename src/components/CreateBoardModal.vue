@@ -21,12 +21,12 @@ async function onSubmit() {
     return;
   }
   const res = await createBoard(newBoard.value);
-  if(res.httpStatus === 401){
-    localStorage.removeItem('token');
-    return router.push({name: 'login'})
+  if (res.httpStatus === 401) {
+    localStorage.removeItem("token");
+    return router.push({ name: "login" });
   }
   if (res.httpStatus === 201) {
-    boardStore.addBoard(res);
+    boardStore.addBoard(res.data);
     console.log(boardStore.getBoards());
     emits("message", {
       description: `The board has been successfully added.`,

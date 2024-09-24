@@ -22,13 +22,13 @@ const handleMessage = (e) => {
 watchEffect(async () => {
   if (userStore.getUser()?.oid) {
     const res = await getBoardsByUserOid(userStore.getUser()?.oid);
+   
     boardStore.setBoards(res.data);
     if (res.httpStatus === 401) {
       localStorage.removeItem("token");
       return router.push({ name: "login" });
     }
     if (boardStore.getBoards().length === 1) {
-      console.log("Hello world");
       return router.push({
         name: "Task",
         params: { oid: boardStore.getBoards()[0].nanoIdBoard },

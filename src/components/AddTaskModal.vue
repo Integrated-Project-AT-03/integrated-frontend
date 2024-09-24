@@ -46,7 +46,7 @@ async function addNewTask(newItem) {
       description: `The task has been successfully added.`,
       status: "success",
     });
-    taskStore.addTask(res);
+    taskStore.addTask(res.data);
   } else if (res.status === 400) {
     emits("message", {
       description: `The status ${newItem.status.name}  will have too many tasks.  Please make progress and update status of existing tasks first.`,
