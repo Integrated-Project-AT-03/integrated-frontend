@@ -16,6 +16,7 @@ import { useSettingStore } from "./../stores/useSettingStore";
 import { useBoardStore } from './../stores/useBoardStore.js'
 import {getBoardByUserNanoId} from '../services/apiBoard.js'
 import BoardVisibilityModal from '../components/BoardVisibilityModal.vue'
+import EmptyElement from '../components/EmptyElement.vue'
 
 const settingStore = useSettingStore();
 const taskStore = useTaskStore();
@@ -31,7 +32,13 @@ const sortOrder = ref("default");
 const openSearch = ref(false);
 const router = useRouter();
 const route = useRoute();
-const isToggle = ref(false)
+const setBool = ref(false)
+console.log(setBool.value);
+
+const handleBool = (e) => {
+      setBool.value = e;
+      console.log(setBool.value);
+    };
 
 let timeoutBlur = null;
 defineProps({
@@ -181,8 +188,9 @@ const openTask = (index, id) => {
       </div>
       <div class="flex justify-end items-center gap-4">
         <div class="flex gap-3">
-          <input type="checkbox" class="itbkk-board-visibility toggle" v-model="isToggle" onclick="visibilityModal.showModal()"/>
-          <div>{{ isToggle ? 'Public' : 'Private' }}</div>
+          <EmptyElement onclick="visibilityModal.showModal()"/>
+          <input type="checkbox" class="itbkk-board-visibility toggle" v-model="setBool"/>
+          <div>{{ setBool ? 'Public' : 'Private' }}</div>
         </div>
         <Button
           class="itbkk-manage-status"
@@ -288,7 +296,7 @@ const openTask = (index, id) => {
         <span>{{ item }}</span>
       </div>
     </div>
-    <BoardVisibilityModal :bool="isToggle"/>
+    <BoardVisibilityModal :bool="setBool" @setBool="handleBool"/>
   </div>
 
   <router-view :index-value="selectIndex" @message="handleMessage($event)" />

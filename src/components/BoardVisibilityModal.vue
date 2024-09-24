@@ -1,28 +1,34 @@
 <script setup>
 import Button from '../components/ButtonModal.vue'
-import { defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
 
 const props = defineProps({
-  message: {
-    type: String,
-    required: true,
-  },
   bool: {
     type: Boolean,
     required: true,
   },
 });
 
+const emits = defineEmits(["setBool"]);
+const receiptBool = ref(true)
+
+const handleConfirm = () => {
+    // if(receiptBool.value){
+    //     receiptBool.value = !receiptBool.value
+    // }   
+    emits("setBool", receiptBool.value)
+}
+
 </script>
  
 <template>
     <dialog id="visibilityModal" class="modal">
         <div class="itbkk-modal-alert flex h-auto w-[34rem] flex-col rounded-lg bg-neutral p-6">
-            <div class="text-2xl font-bold text-slate-300">Bord visibility changed!</div>
+            <div class="text-2xl font-bold text-slate-300">Board visibility changed!</div>
             <div class="divider"></div>
             <div class="itbkk-message text-slate-300">
                 {{ bool ? 'In private, only board owner can access/control board. Do you want to change the visibility to Private' 
-                : 'In public, any one can view the board, task lst and task detail of tasks in the board, Do you want to change the visibility to Public?'}}
+                : 'In public, any one can view the board, task list and task detail of tasks in the board, Do you want to change the visibility to Public?'}}
             </div>
             <div class="divider"></div>
             <div class="mt-4 flex justify-end gap-3">
@@ -30,6 +36,7 @@ const props = defineProps({
                 <Button
                     class="itbkk-button-confirm btn-success"
                     message="Confirm"
+                    @click="handleConfirm"
                 />
                 </form>
                 <form method="dialog">
