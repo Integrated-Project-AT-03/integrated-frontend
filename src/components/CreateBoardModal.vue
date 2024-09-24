@@ -10,7 +10,6 @@ const boardStore = useBoardStore();
 const userStore = useUserStore();
 const newBoard = ref({
   name: userStore.getUser().name + " " + "personal board",
-  ownerOid: userStore.getUser().oid,
 });
 const errorMessage = ref();
 const emits = defineEmits(["message"]);
@@ -27,7 +26,7 @@ async function onSubmit() {
   }
   if (res.httpStatus === 201) {
     boardStore.addBoard(res.data);
-    console.log(boardStore.getBoards());
+
     emits("message", {
       description: `The board has been successfully added.`,
       status: "success",
