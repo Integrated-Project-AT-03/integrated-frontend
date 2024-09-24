@@ -25,7 +25,6 @@ watchEffect(async () => {
    
     boardStore.setBoards(res.data);
     if (res.httpStatus === 401) {
-      localStorage.removeItem("token");
       return router.push({ name: "login" });
     }
     if (boardStore.getBoards().length === 1) {

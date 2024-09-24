@@ -63,7 +63,6 @@ onMounted(async function () {
   await loadTasks();
   const res = (await getStatusesByNanoIdBoard(route.params.oid));
   if(res.httpStatus === 401){
-    localStorage.removeItem('token');
     return router.push({name: 'login'})
   }
   statusStore.setStatuses(res.data);

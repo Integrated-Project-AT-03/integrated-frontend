@@ -28,7 +28,7 @@ const router = createRouter({
     {
       path: "/board",
       component: AppPage,
-      meta: { requiresAuth: true },
+      // meta: { requiresAuth: true },
       children: [
         {
           path: "",
