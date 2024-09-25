@@ -3,7 +3,7 @@ import { acceptHMRUpdate, defineStore } from "pinia";
 export const useSettingStore = defineStore("settingStore", {
   state: () => ({
     limitTask: { enableLimitsTask: false, limitsTask: 20 },
-    visibility: "PRIVATE",
+    visibility: "",
   }),
 
   actions: {
