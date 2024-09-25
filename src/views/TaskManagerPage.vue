@@ -17,6 +17,7 @@ import { useBoardStore } from './../stores/useBoardStore.js'
 import {getBoardByUserNanoId} from '../services/apiBoard.js'
 import BoardVisibilityModal from '../components/BoardVisibilityModal.vue'
 import EmptyElement from '../components/EmptyElement.vue'
+import {getVisibilityByOid} from '../services/apiVisibility'
 
 const settingStore = useSettingStore();
 const taskStore = useTaskStore();
@@ -74,6 +75,14 @@ onMounted(async function () {
   isLoading.value = false;
   const resBoard = await getBoardByUserNanoId(route.params.oid)
   boardStore.setCurrentBoard(resBoard.data)
+
+  const visibilityLoad = await getVisibilityByOid(route.params.oid)
+  settingStore.setVisibility(visibilityLoad.data.visibility)
+  if(settingStore.getVisibility() === "PRIVATE"){
+    setBool.value = false
+  } else{
+    setBool.value = true
+  }
 });
 
 const searchStatus = computed(() =>

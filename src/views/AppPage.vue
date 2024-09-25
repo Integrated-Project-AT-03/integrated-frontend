@@ -9,7 +9,6 @@ import { getUserInfo } from "../services/apiAuth";
 const message = ref("");
 const status = ref();
 const messageModalOpenState = ref(false);
-const payloadJwt = ref({});
 
 function clickOutSideNav(e) {}
 let timeout;

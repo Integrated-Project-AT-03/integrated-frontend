@@ -1,6 +1,9 @@
 <script setup>
 import Button from '../components/ButtonModal.vue'
 import { defineProps, ref } from 'vue';
+import {updateVisibility} from '../services/apiVisibility'
+import { useRoute } from 'vue-router';
+import {useSettingStore} from '../stores/useSettingStore'
 
 const props = defineProps({
   bool: {
@@ -9,10 +12,24 @@ const props = defineProps({
   },
 });
 
+const settingStore = useSettingStore()
 const emits = defineEmits(["setBool"]);
 const receiptBool = ref(false)
+const route = useRoute();
+const valueVisibility = ref({visibility: settingStore.getVisibility()})
 
-const handleConfirm = () => {
+const handleConfirm = async () => {
+    if(valueVisibility.value.visibility === "PUBLIC"){
+        valueVisibility.value.visibility = "PRIVATE"
+        const setVisibility = await updateVisibility(valueVisibility.value, route.params.oid)
+        settingStore.setVisibility(setVisibility.data.visibility)
+        console.log(setVisibility);
+    } else{
+        valueVisibility.value.visibility = "PUBLIC"
+        const setVisibility = await updateVisibility(valueVisibility.value, route.params.oid)
+        settingStore.setVisibility(setVisibility.data.visibility)
+        console.log(setVisibility);
+    }
     receiptBool.value = !receiptBool.value
     emits("setBool", receiptBool.value)
 }
