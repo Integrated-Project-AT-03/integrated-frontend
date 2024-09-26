@@ -18,8 +18,11 @@ import { getBoardByUserNanoId } from "../services/apiBoard.js";
 import BoardVisibilityModal from "../components/BoardVisibilityModal.vue";
 import EmptyElement from "../components/EmptyElement.vue";
 import { getVisibilityByOid } from "../services/apiVisibility";
+import {useUserStore} from '../stores/useUserStore'
+import Tooltip from '../components/Tooltip.vue'
 
 const settingStore = useSettingStore();
+const userStore = useUserStore()
 const taskStore = useTaskStore();
 const statusStore = useTaskStatusStore();
 const boardStore = useBoardStore();
@@ -33,7 +36,8 @@ const sortOrder = ref("default");
 const openSearch = ref(false);
 const router = useRouter();
 const route = useRoute();
-const setBool = ref(settingStore.getVisibility === "PUBLIC");
+const setBool = ref();
+const showOwnerButton = ref()
 
 const handleBool = (e) => {
   setBool.value = e;
@@ -83,6 +87,12 @@ onMounted(async function () {
     setBool.value = false;
   } else {
     setBool.value = true;
+  }
+
+  if(userStore.getUser().oid === visibilityLoad.data.owner.oid){
+      showOwnerButton.value = true
+  } else{
+    showOwnerButton.value = false
   }
 });
 
@@ -193,27 +203,36 @@ const openTask = (index, id) => {
         </div>
       </div>
       <div class="flex items-center justify-end gap-4">
+        <Tooltip>
         <div class="flex gap-3">
-          <EmptyElement onclick="visibilityModal.showModal()" />
-          <input
+          <EmptyElement onclick="visibilityModal.showModal()" v-show="showOwnerButton"/>
+            <input
             type="checkbox"
             class="itbkk-board-visibility toggle"
             v-model="setBool"
+            :disabled="!showOwnerButton"
           />
           <div>{{ setBool ? "Public" : "Private" }}</div>
         </div>
-        <Button
+      </Tooltip>
+        <Tooltip>
+          <Button 
+          :disabled="!showOwnerButton"
           class="itbkk-manage-status"
           bgcolor="#666666"
           message="Manage Status"
           @click="$router.push({ name: 'Status' })"
         />
-        <Button
-          class="itbkk-button-add"
-          bgcolor="#06b6d4"
-          message="Add task"
-          @click="$router.push({ name: 'AddTask' })"
-        />
+        </Tooltip>
+        <Tooltip>
+          <Button
+            :disabled="!showOwnerButton"
+            class="itbkk-button-add"
+            bgcolor="#06b6d4"
+            message="Add task"
+            @click="$router.push({ name: 'AddTask' })"
+          />
+      </Tooltip>
       </div>
     </div>
     <table class="m-0 block divide-gray-200 overflow-hidden rounded-sm p-0">
@@ -314,5 +333,6 @@ const openTask = (index, id) => {
   <router-view :index-value="selectIndex" @message="handleMessage($event)" />
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>
 ../lib/fetch.js ../lib/StatusManagement.js
