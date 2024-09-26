@@ -14,16 +14,21 @@ const props = defineProps({
 
 const settingStore = useSettingStore();
 const emits = defineEmits(["setBool"]);
-const receiptBool = ref(false);
+const receiptBool = ref();
 const route = useRoute();
 
 const handleConfirm = async () => {
   const visibility =
-    settingStore.getVisibility() === "PUBLIC" ? "PRIVATE" : "PUBLIC";
+    settingStore?.getVisibility() === "PUBLIC" ? "PRIVATE" : "PUBLIC";
 
   const res = await updateVisibility({ visibility }, route.params.oid);
   settingStore.setVisibility(visibility);
   console.log(res);
+  if (settingStore.getVisibility() === "PRIVATE") {
+    receiptBool.value = false;
+  } else {
+    receiptBool.value = true;
+  }
 
   // if(isPublic){
   //     valueVisibility.value.visibility = "PRIVATE"
