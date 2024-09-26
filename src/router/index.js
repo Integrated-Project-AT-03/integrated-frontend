@@ -10,6 +10,7 @@ import LoginPage from "../views/LoginPage.vue";
 import AppPage from "@/views/AppPage.vue";
 import CreateBoardModal from "../components/CreateBoardModal.vue";
 import BoardManagerPage from "../views/BoardManagerPage.vue";
+import ErrorResponse from "../components/ErrorResponse.vue";
 import { getUserInfo, validateToken } from "../services/apiAuth";
 import { useUserStore } from "../stores/useUserStore";
 
@@ -28,13 +29,11 @@ const router = createRouter({
     {
       path: "/board",
       component: AppPage,
-      // meta: { requiresAuth: true },
       children: [
         {
           path: "",
           name: "Boards",
           component: BoardManagerPage,
-
           children: [
             {
               path: "add",
@@ -64,7 +63,6 @@ const router = createRouter({
                 },
               ],
             },
-
             {
               path: "add",
               name: "AddTask",
@@ -72,7 +70,6 @@ const router = createRouter({
             },
           ],
         },
-
         {
           path: ":oid/status",
           name: "Status",
@@ -92,6 +89,11 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "NotFound",
+      component: ErrorResponse,
+    },
   ],
 });
 
@@ -99,7 +101,6 @@ router.beforeEach(async (to, from, next) => {
   try {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       const tokenValidationResponse = await validateToken();
-
       if (tokenValidationResponse.httpStatus === 200) {
         next();
       } else {
