@@ -33,7 +33,7 @@ const sortOrder = ref("default");
 const openSearch = ref(false);
 const router = useRouter();
 const route = useRoute();
-const setBool = ref(false);
+const setBool = ref(settingStore.getVisibility === "PUBLIC");
 
 const handleBool = (e) => {
   setBool.value = e;
