@@ -41,8 +41,8 @@ const hideTooltip = () => {
     <div @mouseover="showTooltip" @mouseleave="hideTooltip">
         <slot></slot>
     </div>
-    <div v-if="isTooltipVisible" class="tooltip-content">
-      You need to be board owner to perform this action.
+    <div v-if="isTooltipVisible" class="tooltip-content bg-[#555555]">
+      <div class="text-gray-200 m-[0.1rem]">You need to be board owner to perform this action.</div>
     </div>
   </div>
 </template>
