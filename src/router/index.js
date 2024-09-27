@@ -12,14 +12,15 @@ import CreateBoardModal from "../components/CreateBoardModal.vue";
 import BoardManagerPage from "../views/BoardManagerPage.vue";
 import { getUserInfo, validateToken } from "../services/apiAuth";
 import { useUserStore } from "../stores/useUserStore";
+import NotfoundPage from "@/components/NotfoundPage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    {
-      path: "/",
-      redirect: { name: "Boards" },
-    },
+    // {
+    //   path: "/",
+    //   redirect: { name: "Boards" },
+    // },
     {
       path: "/login",
       name: "login",
@@ -28,13 +29,12 @@ const router = createRouter({
     {
       path: "/board",
       component: AppPage,
-      // meta: { requiresAuth: true },
       children: [
         {
           path: "",
           name: "Boards",
           component: BoardManagerPage,
-
+          meta: { requiresAuth: true },
           children: [
             {
               path: "add",
@@ -91,6 +91,11 @@ const router = createRouter({
           ],
         },
       ],
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "NotFound",
+      component: NotfoundPage,
     },
   ],
 });

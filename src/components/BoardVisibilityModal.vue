@@ -23,7 +23,6 @@ const handleConfirm = async () => {
 
   const res = await updateVisibility({ visibility }, route.params.oid);
   settingStore.setVisibility(visibility);
-  console.log(res);
   if (settingStore.getVisibility() === "PRIVATE") {
     receiptBool.value = false;
   } else {
