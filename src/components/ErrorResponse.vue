@@ -8,7 +8,7 @@ function back() {
 </script>
 
 <template>
-    <div class="w-screen h-screen fixed top-0 left-0 bg-black z-50 flex justify-center items-center">
+    <div class="w-screen h-screen fixed top-0 left-0 bg-grey z-50 flex justify-center items-center">
         <div class="text-center space-y-10">
 
             <div class="space-y-4">
@@ -20,12 +20,12 @@ function back() {
                 </div>
             </div>
 
-            <div class="text-gray-500">
+            <div class="text-white-500">
                 It seems the page you're looking for doesn't exist. Perhaps it was moved or the URL is incorrect.
             </div>
 
             <button @click="back"
-                class="transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 bg-gradient-to-r from-pink-500 to-red-500 w-[200px] h-[55px] rounded-lg text-white text-lg font-semibold shadow-lg hover:shadow-2xl">
+                class="transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 bg-gradient-to-r from-purple-500 to-pink-500 w-[200px] h-[55px] rounded-lg text-white text-lg font-semibold shadow-lg hover:shadow-2xl">
                 Back to Home
             </button>
         </div>
