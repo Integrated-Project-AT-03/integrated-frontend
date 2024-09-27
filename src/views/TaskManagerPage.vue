@@ -13,14 +13,14 @@ import { useRoute, useRouter } from "vue-router";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 import { useTaskStore } from "./../stores/useTaskStore";
 import { useSettingStore } from "./../stores/useSettingStore";
-import { useBoardStore } from './../stores/useBoardStore.js'
-import {getBoardByUserNanoId} from '../services/apiBoard.js'
-import BoardVisibilityModal from '../components/BoardVisibilityModal.vue'
+import { useBoardStore } from "./../stores/useBoardStore.js";
+import { getBoardByUserNanoId } from "../services/apiBoard.js";
+import BoardVisibilityModal from "../components/BoardVisibilityModal.vue";
 
 const settingStore = useSettingStore();
 const taskStore = useTaskStore();
 const statusStore = useTaskStatusStore();
-const boardStore = useBoardStore()
+const boardStore = useBoardStore();
 const selectIndex = ref(5);
 const newItem = ref("");
 const items = ref([]);
@@ -31,7 +31,7 @@ const sortOrder = ref("default");
 const openSearch = ref(false);
 const router = useRouter();
 const route = useRoute();
-const isToggle = ref(false)
+const isToggle = ref(false);
 
 let timeoutBlur = null;
 defineProps({
@@ -61,14 +61,18 @@ onMounted(async function () {
   const settingLoad = (await getSettingByNanoIdBoard(route.params.oid)).data;
   settingStore.setLimitTask(settingLoad);
   await loadTasks();
-  const res = (await getStatusesByNanoIdBoard(route.params.oid));
-  if(res.httpStatus === 401){
-    return router.push({name: 'login'})
+  const res = await getStatusesByNanoIdBoard(route.params.oid);
+  console.log(res);
+  if (res.httpStatus === 401) {
+    return router.push({ name: "login" });
+  }
+  if (res.httpStatus === 404) {
+    return router.push({ name: "NotFound" });
   }
   statusStore.setStatuses(res.data);
   isLoading.value = false;
-  const resBoard = await getBoardByUserNanoId(route.params.oid)
-  boardStore.setCurrentBoard(resBoard.data)
+  const resBoard = await getBoardByUserNanoId(route.params.oid);
+  boardStore.setCurrentBoard(resBoard.data);
 });
 
 const searchStatus = computed(() =>
@@ -129,8 +133,6 @@ const openTask = (index, id) => {
   router.push({ name: "TaskDetail", params: { id } }),
     (selectIndex.value = index);
 };
-
-
 </script>
 
 <template>
@@ -179,10 +181,15 @@ const openTask = (index, id) => {
           />
         </div>
       </div>
-      <div class="flex justify-end items-center gap-4">
+      <div class="flex items-center justify-end gap-4">
         <div class="flex gap-3">
-          <input type="checkbox" class="itbkk-board-visibility toggle" v-model="isToggle" onclick="visibilityModal.showModal()"/>
-          <div>{{ isToggle ? 'Public' : 'Private' }}</div>
+          <input
+            type="checkbox"
+            class="itbkk-board-visibility toggle"
+            v-model="isToggle"
+            onclick="visibilityModal.showModal()"
+          />
+          <div>{{ isToggle ? "Public" : "Private" }}</div>
         </div>
         <Button
           class="itbkk-manage-status"
@@ -257,7 +264,9 @@ const openTask = (index, id) => {
             <div class="text-gray-900">{{ index + 1 }}</div>
           </td>
           <td class="w-full whitespace-nowrap px-6 py-4">
-            <div class="itbkk-title text-sm text-gray-900">{{ task.title }}</div>
+            <div class="itbkk-title text-sm text-gray-900">
+              {{ task.title }}
+            </div>
           </td>
           <td class="whitespace-nowrap px-6 py-4">
             <div
@@ -288,7 +297,7 @@ const openTask = (index, id) => {
         <span>{{ item }}</span>
       </div>
     </div>
-    <BoardVisibilityModal :bool="isToggle"/>
+    <BoardVisibilityModal :bool="isToggle" />
   </div>
 
   <router-view :index-value="selectIndex" @message="handleMessage($event)" />
