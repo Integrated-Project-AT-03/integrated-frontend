@@ -8,24 +8,32 @@ function back() {
 </script>
 
 <template>
-    <div class="w-screen h-screen fixed top-0 left-0 bg-black-50 z-50 flex justify-center items-center">
-        <div class="p-10 bg-white rounded-lg shadow-xl text-center space-y-9">
+    <div class="w-screen h-screen fixed top-0 left-0 bg-black z-50 flex justify-center items-center">
+        <div class="text-center space-y-10">
 
-            <div class="text-5xl font-bold text-pink-600 drop-shadow-lg">
-                404 PAGE NOT FOUND
+            <div class="space-y-4">
+                <div class="text-7xl font-extrabold text-gray-200 drop-shadow-xl">
+                    404
+                </div>
+                <div class="text-2xl font-semibold text-gray-400">
+                    Page Not Found
+                </div>
             </div>
 
+            <div class="text-gray-500">
+                It seems the page you're looking for doesn't exist. Perhaps it was moved or the URL is incorrect.
+            </div>
 
             <button @click="back"
-                class="transition border bg-pink-500 w-[180px] h-[50px] rounded-md text-white font-semibold hover:bg-red-700 shadow-lg hover:shadow-xl">
-                BACK TO HOME PAGE
+                class="transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 bg-gradient-to-r from-pink-500 to-red-500 w-[200px] h-[55px] rounded-lg text-white text-lg font-semibold shadow-lg hover:shadow-2xl">
+                Back to Home
             </button>
         </div>
     </div>
 </template>
 
 <style scoped>
-.drop-shadow-lg {
-    text-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+.drop-shadow-xl {
+    text-shadow: 2px 5px 8px rgba(0, 0, 0, 0.5);
 }
 </style>
