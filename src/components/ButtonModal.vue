@@ -1,22 +1,21 @@
 <script setup>
-
-import { defineProps } from 'vue';
+import { defineProps } from "vue";
 
 const props = defineProps({
   bgcolor: {
-    type: String
+    type: String,
   },
   message: {
-    type: String
-  }
-})
-
+    type: String,
+  },
+});
 </script>
 
 <template>
-
-  <button class="btn border-0 text-slate-200 p-2 w-[9vw]" :style="{ backgroundColor: props.bgcolor }">
+  <button
+    class="btn min-w-max border-0 p-2 px-2 text-slate-200"
+    :style="{ backgroundColor: props.bgcolor }"
+  >
     {{ props.message }}
   </button>
-
 </template>
