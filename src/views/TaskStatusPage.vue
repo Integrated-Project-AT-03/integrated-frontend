@@ -7,7 +7,7 @@ import { getStatusesByNanoIdBoard } from "../services/apiStatus";
 import { getTasksByNanoidBoard } from "../services/apiTask";
 import Loading from "../components/Loading.vue";
 import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
-import Button from "../components/ButtonModal.vue";
+import Button from "../components/Button.vue";
 import StatusModal from "@/components/StatusModal.vue";
 import { useSettingStore } from "./../stores/useSettingStore";
 import { useRoute } from "vue-router";

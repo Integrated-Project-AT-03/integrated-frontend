@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import Button from "./ButtonModal.vue";
+import Button from "./Button.vue";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 import { useTaskStore } from "./../stores/useTaskStore";
 import { useRoute } from "vue-router";

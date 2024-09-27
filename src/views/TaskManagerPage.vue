@@ -4,7 +4,7 @@ import { getTasksByNanoidBoard } from "./../services/apiTask";
 import { getSettingByNanoIdBoard } from "./../services/apiSetting";
 import Loading from "./../components/Loading.vue";
 import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
-import Button from "@/components/ButtonModal.vue";
+import Button from "@/components/Button.vue";
 import StatusModal from "@/components/StatusModal.vue";
 import SortAsc from "./../assets/icons/SortAsc.vue";
 import SortDesc from "./../assets/icons/SortDesc.vue";
@@ -18,11 +18,11 @@ import { getBoardByUserNanoId } from "../services/apiBoard.js";
 import BoardVisibilityModal from "../components/BoardVisibilityModal.vue";
 import EmptyElement from "../components/EmptyElement.vue";
 import { getVisibilityByOid } from "../services/apiVisibility";
-import {useUserStore} from '../stores/useUserStore'
-import Tooltip from '../components/Tooltip.vue'
+import { useUserStore } from "../stores/useUserStore";
+import Tooltip from "../components/Tooltip.vue";
 
 const settingStore = useSettingStore();
-const userStore = useUserStore()
+const userStore = useUserStore();
 const taskStore = useTaskStore();
 const statusStore = useTaskStatusStore();
 const boardStore = useBoardStore();
@@ -37,7 +37,7 @@ const openSearch = ref(false);
 const router = useRouter();
 const route = useRoute();
 const setBool = ref();
-const showOwnerButton = ref()
+const showOwnerButton = ref();
 
 const handleBool = (e) => {
   setBool.value = e;
@@ -89,10 +89,10 @@ onMounted(async function () {
     setBool.value = true;
   }
 
-  if(userStore.getUser().oid === visibilityLoad.data.owner.oid){
-      showOwnerButton.value = true
-  } else{
-    showOwnerButton.value = false
+  if (userStore.getUser().oid === visibilityLoad.data.owner.oid) {
+    showOwnerButton.value = true;
+  } else {
+    showOwnerButton.value = false;
   }
 });
 
@@ -204,25 +204,28 @@ const openTask = (index, id) => {
       </div>
       <div class="flex items-center justify-end gap-4">
         <Tooltip>
-        <div class="flex gap-3">
-          <EmptyElement onclick="visibilityModal.showModal()" v-show="showOwnerButton"/>
+          <div class="flex gap-3">
+            <EmptyElement
+              onclick="visibilityModal.showModal()"
+              v-show="showOwnerButton"
+            />
             <input
-            type="checkbox"
-            class="itbkk-board-visibility toggle"
-            v-model="setBool"
-            :disabled="!showOwnerButton"
-          />
-          <div>{{ setBool ? "Public" : "Private" }}</div>
-        </div>
-      </Tooltip>
+              type="checkbox"
+              class="itbkk-board-visibility toggle"
+              v-model="setBool"
+              :disabled="!showOwnerButton"
+            />
+            <div>{{ setBool ? "Public" : "Private" }}</div>
+          </div>
+        </Tooltip>
         <Tooltip>
-          <Button 
-          :disabled="!showOwnerButton"
-          class="itbkk-manage-status"
-          bgcolor="#666666"
-          message="Manage Status"
-          @click="$router.push({ name: 'Status' })"
-        />
+          <Button
+            :disabled="!showOwnerButton"
+            class="itbkk-manage-status"
+            bgcolor="#666666"
+            message="Manage Status"
+            @click="$router.push({ name: 'Status' })"
+          />
         </Tooltip>
         <Tooltip>
           <Button
@@ -232,7 +235,7 @@ const openTask = (index, id) => {
             message="Add task"
             @click="$router.push({ name: 'AddTask' })"
           />
-      </Tooltip>
+        </Tooltip>
       </div>
     </div>
     <table class="m-0 block divide-gray-200 overflow-hidden rounded-sm p-0">
@@ -333,6 +336,5 @@ const openTask = (index, id) => {
   <router-view :index-value="selectIndex" @message="handleMessage($event)" />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
 ../lib/fetch.js ../lib/StatusManagement.js

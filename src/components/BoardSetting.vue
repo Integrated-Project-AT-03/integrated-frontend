@@ -6,7 +6,7 @@ import {
   getSettingByNanoIdBoard,
 } from "./../services/apiSetting";
 import { useRoute } from "vue-router";
-import Button from "./ButtonModal.vue";
+import Button from "./Button.vue";
 import { useSettingStore } from "./../stores/useSettingStore";
 const settingStore = useSettingStore();
 const route = useRoute();

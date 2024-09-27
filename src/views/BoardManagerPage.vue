@@ -1,5 +1,5 @@
 <script setup>
-import ButtonModal from "@/components/ButtonModal.vue";
+import ButtonModal from "@/components/Button.vue";
 import { watchEffect } from "vue";
 import router from "@/router";
 import { getBoardsByUserOid } from "../services/apiBoard";

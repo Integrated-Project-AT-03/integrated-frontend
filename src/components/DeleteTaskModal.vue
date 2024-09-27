@@ -1,7 +1,7 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
 import { deleteTaskById } from "../services/apiTask";
-import Button from "./ButtonModal.vue";
+import Button from "./Button.vue";
 import { useTaskStore } from "./../stores/useTaskStore";
 const taskStore = useTaskStore();
 const router = useRouter();

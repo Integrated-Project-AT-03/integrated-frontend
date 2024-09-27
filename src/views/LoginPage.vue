@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
-import Button from "../components/ButtonModal.vue";
+import Button from "../components/Button.vue";
 import { login } from "@/services/apiAuth";
 import { useRouter } from "vue-router";
 import Logo from "../components/Logo.vue";

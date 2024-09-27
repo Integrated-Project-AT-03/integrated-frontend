@@ -1,5 +1,5 @@
 <script setup>
-import Button from "../components/ButtonModal.vue";
+import Button from "../components/Button.vue";
 import { defineProps, ref, computed } from "vue";
 import { updateVisibility } from "../services/apiVisibility";
 import { useRoute } from "vue-router";
