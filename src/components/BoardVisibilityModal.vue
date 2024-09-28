@@ -9,12 +9,10 @@ const boardStore = useBoardStore();
 const route = useRoute();
 
 const handleConfirm = async () => {
-  const visibility =
-    boardStore.getCurrentBoard().visibility === "PUBLIC" ? "PRIVATE" : "PUBLIC";
+  const curBoard = boardStore.getCurrentBoard();
+  const visibility = curBoard.visibility === "PUBLIC" ? "PRIVATE" : "PUBLIC";
   await updateVisibility({ visibility }, route.params.oid);
-  const cur = boardStore.getCurrentBoard();
-  // settingStore.setVisibility(visibility);
-  boardStore.setCurrentBoard({ ...cur, visibility });
+  boardStore.setCurrentBoard({ ...curBoard, visibility });
 
   // receiptBool.value = settingStore.getVisibility() === "PRIVATE") {
   //   receiptBool.value = false;
