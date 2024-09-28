@@ -22,8 +22,6 @@ onMounted(async () => {
   userStore.setUser(res.data);
 });
 
-
-
 const handleMessage = async (e) => {
   if (messageModalOpenState.value) {
     clearTimeout(timeout);
@@ -50,7 +48,7 @@ const handleMessage = async (e) => {
 <template>
   <div
     @click="clickOutSideNav"
-    class="flex h-screen w-full flex-col items-center p-3"
+    class="flex h-screen w-full flex-col items-center overflow-hidden p-3"
   >
     <Navbar @message="handleMessage($event)" />
     <div

@@ -34,6 +34,14 @@ const isLoading = ref(true);
 const compareTask = ref();
 const statuses = ref();
 
+const handleEdit = () => {
+  router.push({
+    name: `${!isEditMode.value ? "TaskEdit" : "TaskDetail"}`,
+    [`${!isEditMode.value ? "params" : "_"}`]: { mode: "edit" },
+  });
+  if (isEditMode.value) loadTask();
+};
+
 const validateInput = computed(() => {
   return {
     title: dataTask.value.title?.length > 100,
@@ -113,7 +121,7 @@ onmou
     >
       <RouterView @message="handleMessage($event)" />
       <div
-        class="relative h-[30rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
+        class="relative h-[30rem] w-[65rem] rounded-2xl bg-neutral drop-shadow-2xl"
       >
         <Loading :is-loading="isLoading" />
         <div
@@ -137,23 +145,14 @@ onmou
           </div>
 
           <div class="flex items-center gap-4">
-            <Tooltip>
-              <button
-                @click="
-                  [
-                    $router.push({
-                      name: `${!isEditMode ? 'TaskEdit' : 'TaskDetail'}`,
-                      [`${!isEditMode ? 'params' : '_'}`]: { mode: 'edit' },
-                    }),
-                    isEditMode && loadTask(),
-                  ]
-                "
-                class="itbkk-button-edit w-30 btn border-0 hover:border-base-100 hover:bg-base-100"
-                :class="!isEditMode ? 'bg-edit' : 'btn-error text-white'"
-              >
-                {{ route.params.mode !== "edit" ? "Edit mode" : "Reset" }}
-              </button>
-            </Tooltip>
+            <Button
+              class="tooltip-left"
+              :bgcolor="!isEditMode ? '#A020F0' : '#ef4444'"
+              :message="route.params.mode !== 'edit' ? 'Edit mode' : 'Reset'"
+              :action="() => handleEdit()"
+              access="OWNER"
+            />
+
             <Trash
               onclick="deletetask.showModal()"
               class="cursor-pointer text-error"

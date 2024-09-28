@@ -1,5 +1,7 @@
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, computed } from "vue";
+import { useBoardStore } from "./../stores/useBoardStore";
+const BoardStore = useBoardStore();
 
 const props = defineProps({
   bgcolor: {
@@ -8,14 +10,33 @@ const props = defineProps({
   message: {
     type: String,
   },
+  access: {
+    type: String,
+    default: "GUEST",
+  },
+  action: {
+    type: Function,
+  },
 });
+const access = computed(
+  () =>
+    BoardStore.getCurrentBoard()?.access === "OWNER" ||
+    BoardStore.getCurrentBoard()?.access === props.access,
+);
 </script>
 
 <template>
-  <button
-    class="btn min-w-max border-0 p-2 px-2 text-slate-200"
-    :style="{ backgroundColor: props.bgcolor }"
+  <div
+    :class="[!access && 'tooltip cursor-not-allowed']"
+    data-tip="You need to be board owner to perform this action."
   >
-    {{ props.message }}
-  </button>
+    <button
+      @click="() => action()"
+      :disabled="!access"
+      class="dis btn min-w-max border-0 p-2 px-2 text-slate-200"
+      :style="{ backgroundColor: props.bgcolor }"
+    >
+      {{ props.message }}
+    </button>
+  </div>
 </template>

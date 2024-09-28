@@ -77,10 +77,11 @@ const handleMessage = (e) => {
       </div>
       <div class="flex justify-end gap-4">
         <Button
-          class="itbkk-button-add"
+          access="OWNER"
+          class="itbkk-button-add tooltip-left"
           bgcolor="#06b6d4"
           message="Add Status"
-          @click="$router.push({ name: 'AddStatus' })"
+          :action="() => $router.push({ name: 'AddStatus' })"
         />
       </div>
     </div>
@@ -182,7 +183,8 @@ const handleMessage = (e) => {
               class="flex items-center justify-center gap-2"
             >
               <Button
-                class="itbkk-button-edit"
+                access="OWNER"
+                class="itbkk-button-edit tooltip-left"
                 bgcolor="#A020F0"
                 message="Edit"
                 @click="
@@ -193,7 +195,8 @@ const handleMessage = (e) => {
                 "
               />
               <Button
-                class="itbkk-button-delete"
+                access="OWNER"
+                class="itbkk-button-delete tooltip-left"
                 bgcolor="#ef4444"
                 message="Delete"
                 @click="() => (sourceStatus = { name, id, index })"

@@ -199,39 +199,34 @@ const openTask = (index, id) => {
         </div>
       </div>
       <div class="flex items-center justify-end gap-4">
-        <Tooltip>
-          <div class="flex gap-3">
-            <EmptyElement
-              onclick="visibilityModal.showModal()"
-              v-show="showOwnerButton"
-            />
-            <input
-              type="checkbox"
-              class="itbkk-board-visibility toggle"
-              :checked="isPublic"
-              :disabled="!showOwnerButton"
-            />
-            <div>{{ isPublic ? "Public" : "Private" }}</div>
-          </div>
-        </Tooltip>
-        <Tooltip>
-          <Button
-            :disabled="!showOwnerButton"
-            class="itbkk-manage-status"
-            bgcolor="#666666"
-            message="Manage Status"
-            @click="$router.push({ name: 'Status' })"
+        <div class="flex gap-3">
+          <EmptyElement
+            onclick="visibilityModal.showModal()"
+            v-show="showOwnerButton"
           />
-        </Tooltip>
-        <Tooltip>
-          <Button
+          <input
+            type="checkbox"
+            class="itbkk-board-visibility toggle"
+            :checked="isPublic"
             :disabled="!showOwnerButton"
-            class="itbkk-button-add"
-            bgcolor="#06b6d4"
-            message="Add task"
-            @click="$router.push({ name: 'AddTask' })"
           />
-        </Tooltip>
+          <div>{{ isPublic ? "Public" : "Private" }}</div>
+        </div>
+
+        <Button
+          class="itbkk-manage-status"
+          bgcolor="#666666"
+          message="Manage Status"
+          :action="() => $router.push({ name: 'Status' })"
+        />
+
+        <Button
+          access="OWNER"
+          class="itbkk-button-add tooltip-left"
+          bgcolor="#06b6d4"
+          message="Add task"
+          :action="() => $router.push({ name: 'AddTask' })"
+        />
       </div>
     </div>
     <table class="m-0 block divide-gray-200 overflow-hidden rounded-sm p-0">

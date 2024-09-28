@@ -12,7 +12,7 @@ import BoardManagerPage from "../views/BoardManagerPage.vue";
 import LoginPage from "../views/LoginPage.vue";
 import TaskManagerPage from "./../views/TaskManagerPage.vue";
 import StatusManagerPage from "./../views/TaskStatusPage.vue";
-
+import { useBoardStore } from "./../stores/useBoardStore";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -56,6 +56,7 @@ const router = createRouter({
                   path: ":mode",
                   name: "TaskEdit",
                   component: EmptyModal,
+                  meta: { ownerAccess: true },
                 },
               ],
             },
@@ -63,6 +64,7 @@ const router = createRouter({
               path: "add",
               name: "AddTask",
               component: AddTaskModal,
+              meta: { ownerAccess: true },
             },
           ],
         },
@@ -75,11 +77,13 @@ const router = createRouter({
               path: ":id/edit",
               name: "EditStatus",
               component: EditStatusModal,
+              meta: { ownerAccess: true },
             },
             {
               path: "add",
               name: "AddStatus",
               component: AddStatusModal,
+              meta: { ownerAccess: true },
             },
           ],
         },
@@ -95,16 +99,16 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   try {
+    if (to.matched.some((record) => record.meta.ownerAccess)) {
+      const boardStore = useBoardStore();
+      boardStore.getCurrentBoard().access === "OWNER" ? next() : next("/board");
+    }
+
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       const tokenValidationResponse = await validateToken();
-      if (tokenValidationResponse.httpStatus === 200) {
-        next();
-      } else {
-        next("/login");
-      }
-    } else {
-      next();
+      tokenValidationResponse.httpStatus === 200 ? next() : next("/login");
     }
+    next();
   } catch (error) {
     console.error("Error during authentication:", error);
     next("/login");

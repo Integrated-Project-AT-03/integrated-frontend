@@ -1,5 +1,5 @@
 <script setup>
-import ButtonModal from "@/components/Button.vue";
+import Button from "@/components/Button.vue";
 import { watchEffect } from "vue";
 import router from "@/router";
 import { getBoardsByUserOid } from "../services/apiBoard";
@@ -44,7 +44,7 @@ const handleClick = (board) => {
 <template>
   <div class="flex w-full flex-col gap-3">
     <div class="mt-[-5rem] flex justify-end">
-      <ButtonModal
+      <Button
         message="+ Create personal board"
         class="itbkk-button-create"
         @click="$router.push({ name: 'AddBoard' })"
