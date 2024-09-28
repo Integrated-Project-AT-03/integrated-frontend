@@ -3,7 +3,7 @@ import { useRouter, useRoute } from "vue-router";
 import { getStatusesByNanoIdBoard } from "../services/apiStatus";
 import { addTask } from "../services/apiTask";
 import { computed, onMounted, ref } from "vue";
-import Button from "./ButtonModal.vue";
+import Button from "./Button.vue";
 import { useTaskStore } from "./../stores/useTaskStore";
 import { useSettingStore } from "./../stores/useSettingStore";
 const settingStore = useSettingStore();

@@ -4,7 +4,7 @@ import { getStatusById, editStatusById } from "../services/apiStatus";
 import { computed, onMounted, ref } from "vue";
 import Loading from "../components/Loading.vue";
 import colorStore from "../stores/ColorsStore";
-import Button from "./ButtonModal.vue";
+import Button from "./Button.vue";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 const statusStore = useTaskStatusStore();
 const emits = defineEmits(["message"]);

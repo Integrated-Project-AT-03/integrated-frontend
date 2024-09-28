@@ -1,7 +1,7 @@
 <script setup>
 import { useRouter, useRoute } from "vue-router";
 import { deleteStatusById } from "../services/apiStatus";
-import Button from "./ButtonModal.vue";
+import Button from "./Button.vue";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 const statusStore = useTaskStatusStore();
 const props = defineProps({

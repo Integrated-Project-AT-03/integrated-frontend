@@ -24,7 +24,7 @@ export async function createBoard(newBoard) {
   return await fetchWithRefresh(`${uri}/v3/boards`, options);
 }
 
-export async function getBoardByUserNanoId(nanoId) {
+export async function getBoardByNanoId(nanoId) {
   const options = {
     method: "GET",
     headers: {

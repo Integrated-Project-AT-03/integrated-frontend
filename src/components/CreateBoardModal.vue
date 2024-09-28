@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import Button from "./ButtonModal.vue";
+import Button from "./Button.vue";
 import { createBoard } from "@/services/apiBoard.js";
 import { useUserStore } from "@/stores/useUserStore";
 import router from "@/router";

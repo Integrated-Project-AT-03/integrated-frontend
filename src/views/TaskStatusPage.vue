@@ -7,12 +7,12 @@ import { getStatusesByNanoIdBoard } from "../services/apiStatus";
 import { getTasksByNanoidBoard } from "../services/apiTask";
 import Loading from "../components/Loading.vue";
 import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
-import Button from "../components/ButtonModal.vue";
+import Button from "../components/Button.vue";
 import StatusModal from "@/components/StatusModal.vue";
 import { useSettingStore } from "./../stores/useSettingStore";
 import { useRoute } from "vue-router";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
-import { getBoardByUserNanoId } from "../services/apiBoard.js";
+import { getBoardByNanoId } from "../services/apiBoard.js";
 import { useBoardStore } from "../stores/useBoardStore.js";
 
 import { useTaskStore } from "./../stores/useTaskStore";
@@ -42,7 +42,7 @@ onMounted(async function () {
   const res = await getStatusesByNanoIdBoard(route.params.oid);
   isLoading.value = false;
   statusStore.setStatuses(res.data);
-  const resBoard = await getBoardByUserNanoId(route.params.oid);
+  const resBoard = await getBoardByNanoId(route.params.oid);
   boardStore.setCurrentBoard(resBoard.data);
 });
 

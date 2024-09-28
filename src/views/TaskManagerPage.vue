@@ -1,10 +1,10 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { getTasksByNanoidBoard } from "./../services/apiTask";
+
 import { getSettingByNanoIdBoard } from "./../services/apiSetting";
 import Loading from "./../components/Loading.vue";
 import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
-import Button from "@/components/ButtonModal.vue";
+import Button from "@/components/Button.vue";
 import StatusModal from "@/components/StatusModal.vue";
 import SortAsc from "./../assets/icons/SortAsc.vue";
 import SortDesc from "./../assets/icons/SortDesc.vue";
@@ -14,10 +14,16 @@ import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 import { useTaskStore } from "./../stores/useTaskStore";
 import { useSettingStore } from "./../stores/useSettingStore";
 import { useBoardStore } from "./../stores/useBoardStore.js";
-import { getBoardByUserNanoId } from "../services/apiBoard.js";
+import { getBoardByNanoId } from "../services/apiBoard.js";
+import { getTasksByNanoidBoard } from "../services/apiTask";
 import BoardVisibilityModal from "../components/BoardVisibilityModal.vue";
+import EmptyElement from "../components/EmptyElement.vue";
+import { getVisibilityByOid } from "../services/apiVisibility";
+import { useUserStore } from "../stores/useUserStore";
+import Tooltip from "../components/Tooltip.vue";
 
 const settingStore = useSettingStore();
+const userStore = useUserStore();
 const taskStore = useTaskStore();
 const statusStore = useTaskStatusStore();
 const boardStore = useBoardStore();
@@ -31,7 +37,15 @@ const sortOrder = ref("default");
 const openSearch = ref(false);
 const router = useRouter();
 const route = useRoute();
-const isToggle = ref(false);
+// const isToggle = ref(false);
+const isPublic = computed(
+  () => boardStore.getCurrentBoard()?.visibility === "PUBLIC",
+);
+const showOwnerButton = ref();
+
+// const handleBool = (e) => {
+//   isPublic = e;
+// };
 
 let timeoutBlur = null;
 defineProps({
@@ -58,11 +72,13 @@ const loadTasks = async () => {
 };
 
 onMounted(async function () {
+  const curBoard = (await getBoardByNanoId(route.params.oid)).data;
+  boardStore.setCurrentBoard(curBoard);
   const settingLoad = (await getSettingByNanoIdBoard(route.params.oid)).data;
   settingStore.setLimitTask(settingLoad);
   await loadTasks();
   const res = await getStatusesByNanoIdBoard(route.params.oid);
-  console.log(res);
+
   if (res.httpStatus === 401) {
     return router.push({ name: "login" });
   }
@@ -71,8 +87,13 @@ onMounted(async function () {
   }
   statusStore.setStatuses(res.data);
   isLoading.value = false;
-  const resBoard = await getBoardByUserNanoId(route.params.oid);
-  boardStore.setCurrentBoard(resBoard.data);
+  // const resBoard = await getBoardByUserNanoId(route.params.oid);
+  // boardStore.setCurrentBoard(resBoard.data);
+
+  // const visibilityLoad = await getVisibilityByOid(route.params.oid);
+  // settingStore.setVisibility(visibilityLoad.data.visibility);
+
+  showOwnerButton.value = boardStore.getCurrentBoard()?.access === "OWNER";
 });
 
 const searchStatus = computed(() =>
@@ -136,13 +157,9 @@ const openTask = (index, id) => {
 </script>
 
 <template>
-  <!-- {{ boardStore.getBoardByNanoId($route.params.oid).name }} -->
   <Loading class="w-screen" :is-loading="isLoading" />
   <div class="itbkk-modal-task flex w-full flex-col gap-2">
-    <!-- :class="$route.fullPath.split('/').length > 3 ? 'blur-sm' : ''" -->
     <div class="flex items-center justify-between">
-      <!-- <div class="itbkk-fullname">{{  }}</div> -->
-
       <div class="container">
         <div class="flex items-center gap-2">
           <label class="relative flex flex-col gap-2">
@@ -182,27 +199,39 @@ const openTask = (index, id) => {
         </div>
       </div>
       <div class="flex items-center justify-end gap-4">
-        <div class="flex gap-3">
-          <input
-            type="checkbox"
-            class="itbkk-board-visibility toggle"
-            v-model="isToggle"
-            onclick="visibilityModal.showModal()"
+        <Tooltip>
+          <div class="flex gap-3">
+            <EmptyElement
+              onclick="visibilityModal.showModal()"
+              v-show="showOwnerButton"
+            />
+            <input
+              type="checkbox"
+              class="itbkk-board-visibility toggle"
+              :checked="isPublic"
+              :disabled="!showOwnerButton"
+            />
+            <div>{{ isPublic ? "Public" : "Private" }}</div>
+          </div>
+        </Tooltip>
+        <Tooltip>
+          <Button
+            :disabled="!showOwnerButton"
+            class="itbkk-manage-status"
+            bgcolor="#666666"
+            message="Manage Status"
+            @click="$router.push({ name: 'Status' })"
           />
-          <div>{{ isToggle ? "Public" : "Private" }}</div>
-        </div>
-        <Button
-          class="itbkk-manage-status"
-          bgcolor="#666666"
-          message="Manage Status"
-          @click="$router.push({ name: 'Status' })"
-        />
-        <Button
-          class="itbkk-button-add"
-          bgcolor="#06b6d4"
-          message="Add task"
-          @click="$router.push({ name: 'AddTask' })"
-        />
+        </Tooltip>
+        <Tooltip>
+          <Button
+            :disabled="!showOwnerButton"
+            class="itbkk-button-add"
+            bgcolor="#06b6d4"
+            message="Add task"
+            @click="$router.push({ name: 'AddTask' })"
+          />
+        </Tooltip>
       </div>
     </div>
     <table class="m-0 block divide-gray-200 overflow-hidden rounded-sm p-0">
@@ -297,7 +326,7 @@ const openTask = (index, id) => {
         <span>{{ item }}</span>
       </div>
     </div>
-    <BoardVisibilityModal :bool="isToggle" />
+    <BoardVisibilityModal />
   </div>
 
   <router-view :index-value="selectIndex" @message="handleMessage($event)" />

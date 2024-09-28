@@ -6,7 +6,8 @@ import { getTaskById, editTaskById } from "./../services/apiTask";
 import Loading from "./Loading.vue";
 import Trash from "../assets/icons/Trash.vue";
 import DeleteTaskModal from "./DeleteTaskModal.vue";
-import Button from "./ButtonModal.vue";
+import Tooltip from "./Tooltip.vue";
+import Button from "./Button.vue";
 import { useTaskStore } from "./../stores/useTaskStore";
 import { useSettingStore } from "./../stores/useSettingStore";
 const settingStore = useSettingStore();
@@ -136,21 +137,23 @@ onmou
           </div>
 
           <div class="flex items-center gap-4">
-            <button
-              @click="
-                [
-                  $router.push({
-                    name: `${!isEditMode ? 'TaskEdit' : 'TaskDetail'}`,
-                    [`${!isEditMode ? 'params' : '_'}`]: { mode: 'edit' },
-                  }),
-                  isEditMode && loadTask(),
-                ]
-              "
-              class="itbkk-button-edit w-30 btn border-0 hover:border-base-100 hover:bg-base-100"
-              :class="!isEditMode ? 'bg-edit' : 'btn-error text-white'"
-            >
-              {{ route.params.mode !== "edit" ? "Edit mode" : "Reset" }}
-            </button>
+            <Tooltip>
+              <button
+                @click="
+                  [
+                    $router.push({
+                      name: `${!isEditMode ? 'TaskEdit' : 'TaskDetail'}`,
+                      [`${!isEditMode ? 'params' : '_'}`]: { mode: 'edit' },
+                    }),
+                    isEditMode && loadTask(),
+                  ]
+                "
+                class="itbkk-button-edit w-30 btn border-0 hover:border-base-100 hover:bg-base-100"
+                :class="!isEditMode ? 'bg-edit' : 'btn-error text-white'"
+              >
+                {{ route.params.mode !== "edit" ? "Edit mode" : "Reset" }}
+              </button>
+            </Tooltip>
             <Trash
               onclick="deletetask.showModal()"
               class="cursor-pointer text-error"

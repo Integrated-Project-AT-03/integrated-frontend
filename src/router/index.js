@@ -1,26 +1,21 @@
-import { createRouter, createWebHistory } from "vue-router";
-import EmptyModal from "@/components/EmptyModal.vue";
-import AddTaskModal from "@/components/AddTaskModal.vue";
-import ShowTaskModal from "@/components/ShowTaskModal.vue";
-import StatusManagerPage from "./../views/TaskStatusPage.vue";
-import TaskManagerPage from "./../views/TaskManagerPage.vue";
-import EditStatusModal from "@/components/EditStatusModal.vue";
 import AddStatusModal from "@/components/AddStatusModal.vue";
-import LoginPage from "../views/LoginPage.vue";
+import AddTaskModal from "@/components/AddTaskModal.vue";
+import EditStatusModal from "@/components/EditStatusModal.vue";
+import EmptyModal from "@/components/EmptyModal.vue";
+import ShowTaskModal from "@/components/ShowTaskModal.vue";
 import AppPage from "@/views/AppPage.vue";
+import { createRouter, createWebHistory } from "vue-router";
 import CreateBoardModal from "../components/CreateBoardModal.vue";
-import BoardManagerPage from "../views/BoardManagerPage.vue";
 import ErrorResponse from "../components/ErrorResponse.vue";
-import { getUserInfo, validateToken } from "../services/apiAuth";
-import { useUserStore } from "../stores/useUserStore";
+import { validateToken } from "../services/apiAuth";
+import BoardManagerPage from "../views/BoardManagerPage.vue";
+import LoginPage from "../views/LoginPage.vue";
+import TaskManagerPage from "./../views/TaskManagerPage.vue";
+import StatusManagerPage from "./../views/TaskStatusPage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    {
-      path: "/",
-      redirect: { name: "Boards" },
-    },
     {
       path: "/login",
       name: "login",
@@ -38,7 +33,6 @@ const router = createRouter({
           children: [
             {
               path: "add",
-
               name: "AddBoard",
               component: CreateBoardModal,
             },

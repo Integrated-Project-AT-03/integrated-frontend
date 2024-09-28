@@ -9,7 +9,6 @@ import { getUserInfo } from "../services/apiAuth";
 const message = ref("");
 const status = ref();
 const messageModalOpenState = ref(false);
-const payloadJwt = ref({});
 
 function clickOutSideNav(e) {}
 let timeout;
@@ -17,12 +16,13 @@ import { useUserStore } from "../stores/useUserStore.js";
 
 const userStore = useUserStore();
 const boardStore = useBoardStore();
-userStore.setUser();
 
 onMounted(async () => {
   const res = await getUserInfo();
   userStore.setUser(res.data);
 });
+
+
 
 const handleMessage = async (e) => {
   if (messageModalOpenState.value) {
