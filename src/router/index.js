@@ -90,6 +90,10 @@ const router = createRouter({
       ],
     },
     {
+      path: "/",
+      redirect: { name: "Boards" },
+    },
+    {
       path: "/:pathMatch(.*)*",
       name: "NotFound",
       component: ErrorResponse,

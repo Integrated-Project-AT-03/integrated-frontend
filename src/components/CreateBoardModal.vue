@@ -62,19 +62,22 @@ async function onSubmit() {
         <div class="divider"></div>
         <div class="mt-4 flex justify-end gap-3">
           <form method="dialog">
-            <Button
-              class="itbkk-button-ok btn-success text-slate-200"
+            <button
+              class="itbkk-button-ok btn btn-success text-slate-200"
               message="Save"
               @click="onSubmit"
               :disabled="newBoard.name.length === 0"
-            />
+            >
+              Cancel
+            </button>
           </form>
           <form method="dialog">
-            <Button
-              class="itbkk-button-cancel text-slate-200"
-              message="Cancel"
+            <button
+              class="itbkk-button-cancel btn text-slate-200"
               @click="$router.push({ name: 'Boards' })"
-            />
+            >
+              Cancel
+            </button>
           </form>
         </div>
       </div>

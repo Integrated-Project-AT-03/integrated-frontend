@@ -44,11 +44,12 @@ const handleClick = (board) => {
 <template>
   <div class="flex w-full flex-col gap-3">
     <div class="mt-[-5rem] flex justify-end">
-      <Button
-        message="+ Create personal board"
-        class="itbkk-button-create"
+      <button
+        class="itbkk-button-create btn"
         @click="$router.push({ name: 'AddBoard' })"
-      />
+      >
+        + Create personal board
+      </button>
     </div>
     <div
       class="mt-5 flex w-full justify-center"
