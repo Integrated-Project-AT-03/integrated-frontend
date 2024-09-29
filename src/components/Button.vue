@@ -16,6 +16,7 @@ const props = defineProps({
   },
   action: {
     type: Function,
+    default: () => {},
   },
 });
 const access = computed(

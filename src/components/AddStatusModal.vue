@@ -115,21 +115,23 @@ async function addNewStatus() {
                 </div>
               </div>
               <div class="flex justify-end gap-3">
-                <Button
+                <button
                   class="itbkk-button-comfirm btn btn-success w-16 hover:border-base-100 hover:bg-base-100"
-                  message="Save"
                   :disabled="
                     newData.name === '' ||
                     validateInput.description ||
                     validateInput.name
                   "
                   @click="addNewStatus"
-                />
-                <Button
-                  class="itbkk-button-cancle"
-                  message="Cancel"
+                >
+                  Save
+                </button>
+                <button
+                  class="itbkk-button-cancle btn btn-error text-white"
                   @click="router.push({ name: 'Status' })"
-                />
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>

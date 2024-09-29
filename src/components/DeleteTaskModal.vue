@@ -7,11 +7,11 @@ const taskStore = useTaskStore();
 const router = useRouter();
 const route = useRoute();
 const emits = defineEmits(["message"]);
-const taskSeleted = taskStore.findTask(route.params.id);
+const taskSeleted = taskStore.findTask(route.params.id, route.params.oid);
 
 defineProps({ indexValue: Number });
 async function deleteTask(id) {
-  const res = await deleteTaskById(route.params.id);
+  const res = await deleteTaskById(route.params.id, route.params.oid);
   if (res.httpStatus === 200) {
     taskStore.deleteTask(id);
     emits("message", {

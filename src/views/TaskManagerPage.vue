@@ -204,12 +204,17 @@ const openTask = (index, id) => {
             onclick="visibilityModal.showModal()"
             v-show="showOwnerButton"
           />
-          <input
-            type="checkbox"
-            class="itbkk-board-visibility toggle"
-            :checked="isPublic"
-            :disabled="!showOwnerButton"
-          />
+          <div
+            :class="!showOwnerButton && 'tooltip'"
+            data-tip="You need to be board owner to perform this action."
+          >
+            <input
+              type="checkbox"
+              class="itbkk-board-visibility toggle"
+              :checked="isPublic"
+              :disabled="!showOwnerButton"
+            />
+          </div>
           <div>{{ isPublic ? "Public" : "Private" }}</div>
         </div>
 

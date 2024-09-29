@@ -13,6 +13,7 @@ import LoginPage from "../views/LoginPage.vue";
 import TaskManagerPage from "./../views/TaskManagerPage.vue";
 import StatusManagerPage from "./../views/TaskStatusPage.vue";
 import { useBoardStore } from "./../stores/useBoardStore";
+import { getBoardByNanoId } from "./../services/apiBoard";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -104,13 +105,18 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   try {
     if (to.matched.some((record) => record.meta.ownerAccess)) {
+      const res = await getBoardByNanoId(to.params.oid);
       const boardStore = useBoardStore();
+      boardStore.setCurrentBoard(res.data);
+
       boardStore.getCurrentBoard().access === "OWNER" ? next() : next("/board");
+      return;
     }
 
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       const tokenValidationResponse = await validateToken();
       tokenValidationResponse.httpStatus === 200 ? next() : next("/login");
+      return;
     }
     next();
   } catch (error) {

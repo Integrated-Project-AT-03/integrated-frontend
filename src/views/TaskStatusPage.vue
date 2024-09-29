@@ -25,6 +25,9 @@ const taskStore = useTaskStore();
 const isLoading = ref(true);
 const sourceStatus = ref({});
 const showTranferStauts = ref(false);
+const isOwner = computed(
+  () => boardStore.getCurrentBoard()?.access === "OWNER",
+);
 
 const numTask = computed(() =>
   taskStore.getTasks().reduce((accu, cur) => {
@@ -187,21 +190,27 @@ const handleMessage = (e) => {
                 class="itbkk-button-edit tooltip-left"
                 bgcolor="#A020F0"
                 message="Edit"
-                @click="
-                  $router.push({
-                    name: 'EditStatus',
-                    params: { id: id },
-                  })
+                :action="
+                  () =>
+                    $router.push({
+                      name: 'EditStatus',
+                      params: { id: id },
+                    })
                 "
               />
-              <Button
-                access="OWNER"
-                class="itbkk-button-delete tooltip-left"
-                bgcolor="#ef4444"
-                message="Delete"
-                @click="() => (sourceStatus = { name, id, index })"
-                onclick="deleteModal.showModal()"
-              />
+              <div
+                :class="!isOwner && 'tooltip tooltip-left'"
+                data-tip="You need to be board owner to perform this action."
+              >
+                <button
+                  :disabled="!isOwner"
+                  class="itbkk-button-delete btn btn-error tooltip-left p-1 text-white disabled:bg-error"
+                  @click="() => (sourceStatus = { name, id, index })"
+                  onclick="deleteModal.showModal()"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </td>
         </tr>

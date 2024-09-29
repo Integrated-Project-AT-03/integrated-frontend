@@ -10,6 +10,8 @@ import Tooltip from "./Tooltip.vue";
 import Button from "./Button.vue";
 import { useTaskStore } from "./../stores/useTaskStore";
 import { useSettingStore } from "./../stores/useSettingStore";
+import { useBoardStore } from "./../stores/useBoardStore";
+const boardStore = useBoardStore();
 const settingStore = useSettingStore();
 const taskStore = useTaskStore();
 defineProps({ indexValue: Number });
@@ -153,10 +155,13 @@ onmou
               access="OWNER"
             />
 
-            <Trash
+            <button
+              :disabled="boardStore.getCurrentBoard()?.access !== 'OWNER'"
               onclick="deletetask.showModal()"
-              class="cursor-pointer text-error"
-            />
+              class="btn btn-ghost btn-xs h-max w-max p-2 text-error"
+            >
+              <Trash />
+            </button>
           </div>
         </div>
         <div class="divider m-1"></div>

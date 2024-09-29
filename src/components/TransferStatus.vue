@@ -19,7 +19,6 @@ const props = defineProps({
 const destinationStatus = ref(null);
 const emits = defineEmits(["close", "message", "update:modelValue"]);
 
-
 onMounted(async () => {
   emits("update:modelValue", true);
   selectStatus.value = (await getStatusesByNanoIdBoard(route.params.oid)).data;
@@ -109,7 +108,7 @@ const submit = async () => {
               @click="$emit('close')"
             />
             <Button
-              class="itbkk-button-comfirm btn-success ml-1 w-16 hover:border-base-100 hover:bg-base-100"
+              class="itbkk-button-comfirm btn-success hover:border-base-100 hover:bg-base-100"
               message="Transfer and Delete"
               :disabled="!destinationStatus"
               @click="submit"
