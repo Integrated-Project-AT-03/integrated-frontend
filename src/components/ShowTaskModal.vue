@@ -1,16 +1,15 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
-import { getTaskById, editTaskById } from "./../services/apiTask";
-import Loading from "./Loading.vue";
 import Trash from "../assets/icons/Trash.vue";
-import DeleteTaskModal from "./DeleteTaskModal.vue";
-import Tooltip from "./Tooltip.vue";
-import Button from "./Button.vue";
-import { useTaskStore } from "./../stores/useTaskStore";
-import { useSettingStore } from "./../stores/useSettingStore";
+import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
+import { editTaskById, getTaskById } from "./../services/apiTask";
 import { useBoardStore } from "./../stores/useBoardStore";
+import { useSettingStore } from "./../stores/useSettingStore";
+import { useTaskStore } from "./../stores/useTaskStore";
+import Button from "./Button.vue";
+import DeleteTaskModal from "./DeleteTaskModal.vue";
+import Loading from "./Loading.vue";
 const boardStore = useBoardStore();
 const settingStore = useSettingStore();
 const taskStore = useTaskStore();

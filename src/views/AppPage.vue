@@ -10,7 +10,6 @@ const message = ref("");
 const status = ref();
 const messageModalOpenState = ref(false);
 
-function clickOutSideNav(e) {}
 let timeout;
 import { useUserStore } from "../stores/useUserStore.js";
 
@@ -91,11 +90,7 @@ const handleMessage = async (e) => {
       </div>
       <RouterView @message="handleMessage($event)" />
     </div>
-    <transition
-      v-show="messageModalOpenState"
-      class="fixed bottom-2 right-2 z-50 grid w-fit place-items-center"
-      name="toast"
-    >
+    <transition v-show="messageModalOpenState" name="toast">
       <Alert :status="status" :message="message" />
     </transition>
   </div>

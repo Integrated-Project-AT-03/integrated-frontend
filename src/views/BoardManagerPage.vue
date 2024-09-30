@@ -37,7 +37,7 @@ watchEffect(async () => {
 });
 
 const handleClick = (board) => {
-  router.push({ name: "Task", params: { oid: board.nanoIdBoard } });
+  router.push({ name: "Task", params: { oid: board.id } });
 };
 </script>
 

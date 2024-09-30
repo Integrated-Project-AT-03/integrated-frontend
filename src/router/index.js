@@ -6,14 +6,16 @@ import ShowTaskModal from "@/components/ShowTaskModal.vue";
 import AppPage from "@/views/AppPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import CreateBoardModal from "../components/CreateBoardModal.vue";
-import ErrorResponse from "../components/ErrorResponse.vue";
+import NotFoundPage from "../views/NotFoundPage.vue";
 import { validateToken } from "../services/apiAuth";
 import BoardManagerPage from "../views/BoardManagerPage.vue";
 import LoginPage from "../views/LoginPage.vue";
+import NotAllowPage from "../views/NotAllowPage.vue";
 import TaskManagerPage from "./../views/TaskManagerPage.vue";
 import StatusManagerPage from "./../views/TaskStatusPage.vue";
 import { useBoardStore } from "./../stores/useBoardStore";
 import { getBoardByNanoId } from "./../services/apiBoard";
+import { useToast } from "vue-toastification";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -21,6 +23,11 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: LoginPage,
+    },
+    {
+      path: "/not-allow-page",
+      name: "NotAllowPage",
+      component: NotAllowPage,
     },
     {
       path: "/board",
@@ -96,26 +103,31 @@ const router = createRouter({
     },
     {
       path: "/:pathMatch(.*)*",
-      name: "NotFound",
-      component: ErrorResponse,
+      name: "NotFoundPage",
+      component: NotFoundPage,
     },
   ],
 });
 
 router.beforeEach(async (to, from, next) => {
+  const toast = useToast();
   try {
     if (to.matched.some((record) => record.meta.ownerAccess)) {
       const res = await getBoardByNanoId(to.params.oid);
       const boardStore = useBoardStore();
       boardStore.setCurrentBoard(res.data);
 
-      boardStore.getCurrentBoard().access === "OWNER" ? next() : next("/board");
+      if (boardStore.getCurrentBoard().access === "OWNER") next();
+      else {
+        next({ name: "NotAllowPage" });
+      }
       return;
     }
 
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       const tokenValidationResponse = await validateToken();
       tokenValidationResponse.httpStatus === 200 ? next() : next("/login");
+
       return;
     }
     next();

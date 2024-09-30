@@ -56,6 +56,7 @@ export async function getUserInfo() {
 export async function refreshToken() {
   try {
     const res = await fetch(`${uri}/token`, {
+      method: "POST",
       credentials: "include",
     });
     const data = await res.json();

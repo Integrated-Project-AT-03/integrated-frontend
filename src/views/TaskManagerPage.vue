@@ -1,26 +1,24 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 
-import { getSettingByNanoIdBoard } from "./../services/apiSetting";
-import Loading from "./../components/Loading.vue";
-import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
 import Button from "@/components/Button.vue";
 import StatusModal from "@/components/StatusModal.vue";
+import { useRoute, useRouter } from "vue-router";
+import BoardVisibilityModal from "../components/BoardVisibilityModal.vue";
+import EmptyElement from "../components/EmptyElement.vue";
+import { getBoardByNanoId } from "../services/apiBoard.js";
+import { getTasksByNanoidBoard } from "../services/apiTask";
+import { useUserStore } from "../stores/useUserStore";
 import SortAsc from "./../assets/icons/SortAsc.vue";
 import SortDesc from "./../assets/icons/SortDesc.vue";
 import SortDisable from "./../assets/icons/SortDisable.vue";
-import { useRoute, useRouter } from "vue-router";
+import Loading from "./../components/Loading.vue";
+import { getSettingByNanoIdBoard } from "./../services/apiSetting";
+import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
+import { useBoardStore } from "./../stores/useBoardStore.js";
+import { useSettingStore } from "./../stores/useSettingStore";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 import { useTaskStore } from "./../stores/useTaskStore";
-import { useSettingStore } from "./../stores/useSettingStore";
-import { useBoardStore } from "./../stores/useBoardStore.js";
-import { getBoardByNanoId } from "../services/apiBoard.js";
-import { getTasksByNanoidBoard } from "../services/apiTask";
-import BoardVisibilityModal from "../components/BoardVisibilityModal.vue";
-import EmptyElement from "../components/EmptyElement.vue";
-import { getVisibilityByOid } from "../services/apiVisibility";
-import { useUserStore } from "../stores/useUserStore";
-import Tooltip from "../components/Tooltip.vue";
 
 const settingStore = useSettingStore();
 const userStore = useUserStore();
@@ -81,6 +79,9 @@ onMounted(async function () {
 
   if (res.httpStatus === 401) {
     return router.push({ name: "login" });
+  }
+  if (res.httpStatus === 403) {
+    return router.push({ name: "NotAllowPage" });
   }
   if (res.httpStatus === 404) {
     return router.push({ name: "NotFound" });

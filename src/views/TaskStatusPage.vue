@@ -10,12 +10,12 @@ import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
 import Button from "../components/Button.vue";
 import StatusModal from "@/components/StatusModal.vue";
 import { useSettingStore } from "./../stores/useSettingStore";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
 import { getBoardByNanoId } from "../services/apiBoard.js";
 import { useBoardStore } from "../stores/useBoardStore.js";
-
 import { useTaskStore } from "./../stores/useTaskStore";
+const router = useRouter();
 const settingStore = useSettingStore();
 const boardStore = useBoardStore();
 const route = useRoute();
@@ -38,14 +38,19 @@ const numTask = computed(() =>
 );
 
 onMounted(async function () {
+  const res = await getStatusesByNanoIdBoard(route.params.oid);
+  if (res.httpStatus === 403) {
+    return router.push({ name: "NotAllowPage" });
+  } else if (res.httpStatus === 404) {
+    return router.push({ name: "NotFoundPage" });
+  }
+  statusStore.setStatuses(res.data);
+  const resBoard = await getBoardByNanoId(route.params.oid);
   const settingLoad = (await getSettingByNanoIdBoard(route.params.oid)).data;
   settingStore.setLimitTask(settingLoad);
   const resTask = await getTasksByNanoidBoard(route.params.oid);
   taskStore.setTasks(resTask.data);
-  const res = await getStatusesByNanoIdBoard(route.params.oid);
   isLoading.value = false;
-  statusStore.setStatuses(res.data);
-  const resBoard = await getBoardByNanoId(route.params.oid);
   boardStore.setCurrentBoard(resBoard.data);
 });
 

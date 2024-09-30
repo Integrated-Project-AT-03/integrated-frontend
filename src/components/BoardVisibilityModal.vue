@@ -48,9 +48,9 @@ const handleConfirm = async () => {
       <div class="divider"></div>
       <div class="itbkk-message text-slate-300">
         {{
-          true
-            ? "In private, only board owner can access/control board. Do you want to change the visibility to Private"
-            : "In public, any one can view the board, task list and task detail of tasks in the board, Do you want to change the visibility to Public?"
+          boardStore.getCurrentBoard()?.visibility !== "PUBLIC"
+            ? "Do you want to change board visibility to public?"
+            : "Do you want to change board visibility to private?"
         }}
       </div>
       <div class="divider"></div>

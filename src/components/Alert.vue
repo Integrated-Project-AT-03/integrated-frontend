@@ -12,13 +12,15 @@ const props = defineProps({
 });
 </script>
 <template>
+  <!-- <Teleport to="body"> -->
   <div
     :role="status"
-    class="alert"
+    class="alert fixed bottom-2 right-2 z-[10000] grid w-fit place-items-center"
     :class="status === 'success' ? 'alert-success' : 'alert-error'"
   >
     <CorrectIcon v-show="status === 'success'" />
     <ErrorIcon v-show="status === 'error'" />
     <span class="tbkk-message">{{ message }}</span>
   </div>
+  <!-- </Teleport> -->
 </template>
