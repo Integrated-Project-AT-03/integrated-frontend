@@ -105,7 +105,7 @@ const handleMessage = (e) => {
           </th>
           <th
             scope="col"
-            class="px-6 py-3 text-left text-center text-sm font-bold uppercase tracking-wider text-base-100"
+            class="px-6 py-3 text-center text-sm font-bold uppercase tracking-wider text-base-100"
           >
             Name
           </th>
@@ -117,7 +117,7 @@ const handleMessage = (e) => {
           </th>
           <th
             scope="col"
-            class="w- px-6 py-3 text-center text-sm font-bold uppercase tracking-wider text-base-100"
+            class="px-6 py-3 text-center text-sm font-bold uppercase tracking-wider text-base-100"
           >
             Tasks
           </th>

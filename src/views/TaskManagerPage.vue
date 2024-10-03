@@ -220,6 +220,13 @@ const openTask = (index, id) => {
         </div>
 
         <Button
+          class="itbkk-manage-collaborator"
+          bgcolor="#666666"
+          message="Manage collaborator"
+          :action="() => $router.push({name: 'Collab'})"
+        />
+
+        <Button
           class="itbkk-manage-status"
           bgcolor="#666666"
           message="Manage Status"

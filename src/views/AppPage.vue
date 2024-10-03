@@ -54,11 +54,19 @@ const handleMessage = async (e) => {
       class="container relative flex h-full w-full flex-auto flex-col justify-center gap-2"
     >
       <div
-        v-show="$route.name !== 'Boards'"
+        v-show="$route.name !== 'Boards' && $route.name !== 'Collab'"
         class="itbkk-board-name flex justify-center text-3xl font-bold"
       >
         {{ boardStore.getCurrentBoard()?.name }}
       </div>
+
+      <div
+        v-show="$route.name == 'Collab'"
+        class="itbkk-board-name flex justify-center text-3xl font-bold"
+      >
+        Collaborator Management
+      </div>
+
       <div
         class="mt-6 flex items-center gap-4"
         v-show="$route.name !== 'Boards' && $route.name !== 'AddBoard'"
@@ -86,6 +94,13 @@ const handleMessage = async (e) => {
           class="btn btn-ghost btn-sm text-xl font-bold disabled:text-primary"
         >
           Status
+        </button>
+        <button
+          :disabled="$route.name === 'Collab'"
+          @click="$router.push({ name: 'Collab' })"
+          class="btn btn-ghost btn-sm text-xl font-bold disabled:text-primary"
+        >
+          Collaborator
         </button>
       </div>
       <RouterView @message="handleMessage($event)" />

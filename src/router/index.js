@@ -16,6 +16,7 @@ import StatusManagerPage from "./../views/TaskStatusPage.vue";
 import { useBoardStore } from "./../stores/useBoardStore";
 import { getBoardByNanoId } from "./../services/apiBoard";
 import { useToast } from "vue-toastification";
+import CollaboratorManagerPage from "@/views/CollaboratorManagerPage.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -75,6 +76,11 @@ const router = createRouter({
               meta: { ownerAccess: true },
             },
           ],
+        },
+        {
+          path: ":oid/collab",
+          name: "Collab",
+          component: CollaboratorManagerPage,
         },
         {
           path: ":oid/status",
