@@ -1,5 +1,10 @@
 <script setup>
+import { ref } from 'vue';
 import Button from './Button.vue';
+const collabForm = ref({
+    email:'',
+    access: ''
+})
 </script>
  
 <template>
@@ -10,11 +15,11 @@ import Button from './Button.vue';
       <div class="flex gap-3">
         <div class="flex flex-col gap-2">
             Collaborator e-mail
-            <input type="text" placeholder="Type here" class="itbkk-collaborator-email input input-bordered w-[25rem]" />
+            <input type="text" v-model="collabForm.email" placeholder="Type here" class="itbkk-collaborator-email input input-bordered w-[25rem]" />
         </div>
         <div class="flex flex-col gap-2">
             Access Right
-            <select
+            <select v-model="collabForm.access"
                   class="itbkk-access-right select select-ghost w-full max-w-xs bg-base-100"
                 >
                   <option>Read</option>
