@@ -2,7 +2,7 @@
 import Button from "@/components/Button.vue";
 import { watchEffect } from "vue";
 import router from "@/router";
-import { getBoardsByUserOid } from "../services/apiBoard";
+import { getBoards } from "../services/apiBoard";
 import { useUserStore } from "../stores/useUserStore.js";
 import { useBoardStore } from "../stores/useBoardStore.js";
 
@@ -14,14 +14,14 @@ const handleMessage = (e) => {
 };
 
 // const loadBoards = async () => {
-//   const res = await getBoardsByUserOid(userStore.getUser().oid);
+//   const res = await getBoards(userStore.getUser().oid);
 //   boards.value = res.data;
 //   boardStore.setBoards(res.data)
 // };
 
 watchEffect(async () => {
   if (userStore.getUser()?.oid) {
-    const res = await getBoardsByUserOid(userStore.getUser()?.oid);
+    const res = await getBoards();
 
     boardStore.setBoards(res.data);
     if (res.httpStatus === 401) {
