@@ -20,9 +20,13 @@ const props = defineProps({
   },
 });
 const access = computed(
+  // สำหรับคำนวณ access role ใน current boards เป็น owner ก็ผ่านหมด แต่ถ้าเป็น Reader, Writer ก็สามารถใช้งานได้
+
   () =>
     BoardStore.getCurrentBoard()?.access === "OWNER" ||
-    BoardStore.getCurrentBoard()?.access === props.access,
+    BoardStore.getCurrentBoard()?.access === props.access ||
+    (props.access === "READER" &&
+      BoardStore.getCurrentBoard()?.access === "WRITER"),
 );
 </script>
 
