@@ -9,7 +9,7 @@ export async function getBoardsByUserOid(oid) {
     },
   };
 
-  return await fetchWithRefresh(`${uri}/v3/user/${oid}/boards`, options);
+  return await fetchWithRefresh(`${uri}/v3/boards`, options);
 }
 
 export async function createBoard(newBoard) {
