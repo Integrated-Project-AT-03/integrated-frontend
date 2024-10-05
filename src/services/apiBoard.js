@@ -1,7 +1,7 @@
 import { fetchWithRefresh } from "./apiAuth";
 
 const uri = import.meta.env.VITE_SERVER_URI;
-export async function getBoardsByUserOid(oid) {
+export async function getBoards() {
   const options = {
     method: "GET",
     headers: {
