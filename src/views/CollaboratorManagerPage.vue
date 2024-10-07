@@ -90,7 +90,6 @@ function onModalOpen(collab){
                 >
                   <option value="READ">Read</option>
                   <option value="WRITE">Write</option>
-                  <option value="OWNER">Owner</option>
             </select>
           </td>
           <td class="whitespace-nowrap px-4 py-2">
