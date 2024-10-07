@@ -12,10 +12,7 @@ const props = defineProps({
 const route = useRoute();
 
 const handleConfirm = async () => {
-    const res = await deleteCollabBoard(props.collab?.oid, route.params.oid)
-    console.log(route.params.oid);
-    console.log(res);
-    console.log(props.collab.oid);
+    await deleteCollabBoard(props.collab.oid, route.params.oid)
 }
 </script>
  
