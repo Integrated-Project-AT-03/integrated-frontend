@@ -1,12 +1,20 @@
 <script setup>
 import Button from './Button.vue'
+import {deleteCollabBoard} from '../services/apiCollabBoard.js'
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
   collab: {
     type: Object,
   },
 });
-const handleConfirm = () => {
+
+const route = useRoute();
+
+const handleConfirm = async () => {
+    const res = await deleteCollabBoard(props.collab?.oid, route.params.oid)
+    console.log(route.params.oid);
+    console.log(res);
     console.log(props.collab.oid);
 }
 </script>

@@ -21,3 +21,16 @@ export async function addCollabBoard(newCollab, oid) {
   };
   return await fetchWithRefresh(`${uri}/v3/boards/${oid}/collabs`, options);
 }
+
+export async function deleteCollabBoard(oid, boardNanoId) {
+  const options = {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  return await fetchWithRefresh(
+    `${uri}/v3/boards/${boardNanoId}/collabs/${oid}`,
+    options,
+  );
+}
