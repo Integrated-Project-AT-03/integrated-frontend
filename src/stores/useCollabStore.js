@@ -18,8 +18,8 @@ export const useCollabStore = defineStore("collabStore", {
     getCollabByNanoId(nanoId) {
       return this.collabs.find((collab) => collab.oid === nanoId);
     },
-    findCollabsIndex(id) {
-      return this.collabs.findIndex((collab) => +collab.id === +id);
+    findCollabsIndex(oid) {
+      return this.collabs.findIndex((collab) => collab.oid === oid);
     },
     deleteCollab(id) {
       const collabIndex = this.findCollabsIndex(id);

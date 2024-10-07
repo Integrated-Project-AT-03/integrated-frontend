@@ -16,7 +16,7 @@ const route = useRoute();
 
 const handleConfirm = async () => {
     await deleteCollabBoard(props.collab.oid, route.params.oid)
-    // collabStore.deleteCollab(route.params.oid)
+    collabStore.deleteCollab(props.collab.oid)
 }
 </script>
  
