@@ -7,18 +7,20 @@ import {getCollabBoard} from '../services/apiCollabBoard.js'
 import { getBoardByNanoId } from "../services/apiBoard.js";
 import { onMounted } from "vue";
 import { useBoardStore } from "@/stores/useBoardStore";
+import {useCollabStore} from '../stores/useCollabStore.js'
 import { ref } from "vue";
 const router = useRouter();
 const route = useRoute();
 const boardStore = useBoardStore();
-const collaboratorBoard = ref()
+const collabStore = useCollabStore()
 const curCollab = ref({oid: '', name:''})
 
 onMounted(async() => {
     const curBoard = (await getBoardByNanoId(route.params.oid)).data;
     boardStore.setCurrentBoard(curBoard);
     const res = await getCollabBoard(route.params.oid)
-    collaboratorBoard.value = res.data
+    collabStore.setCollabs(res.data)
+    console.log(collabStore.getCollabs());
 })
 
 function onModalOpen(collab){
@@ -73,7 +75,7 @@ function onModalOpen(collab){
             Action
           </th>
         </tr>
-        <tr v-for="(collab, index) in collaboratorBoard"
+        <tr v-for="(collab, index) in collabStore?.getCollabs()"
           :key="collab.oid" class="itbkk-item itbkk-button-action hover:bg-slate-200">
           <td class="px-6 py-4">
             <div class="text-gray-900">{{ index + 1 }}</div>

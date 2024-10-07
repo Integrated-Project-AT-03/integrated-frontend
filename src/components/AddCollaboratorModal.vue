@@ -3,7 +3,9 @@ import { ref } from 'vue';
 import Button from './Button.vue';
 import {addCollabBoard} from '../services/apiCollabBoard.js'
 import { useRoute } from 'vue-router';
+import {useCollabStore} from '../stores/useCollabStore.js'
 
+const collabStore = useCollabStore()
 const route = useRoute();
 const collabForm = ref({
     email:'',
@@ -12,7 +14,7 @@ const collabForm = ref({
 
 const handleSubmit = async () => {
   const res = await addCollabBoard(collabForm.value, route.params.oid)
-  console.log(res);
+  console.log(res.data);
 }
 </script>
  
