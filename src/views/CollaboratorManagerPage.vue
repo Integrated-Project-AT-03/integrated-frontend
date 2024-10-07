@@ -2,6 +2,7 @@
 import Button from "@/components/Button.vue";
 import { useRouter } from "vue-router";
 import AddCollaboratorModal from "../components/AddCollaboratorModal.vue";
+import RemoveCollabModal from '../components/RemoveCollabModal.vue'
 const router = useRouter();
 </script>
 
@@ -12,7 +13,7 @@ const router = useRouter();
       <Button
         class="itbkk-collaborato-add"
         bgcolor="#666666"
-        message="Add collaborator"
+        message="Add Collaborator"
         onclick="addcollaborator.showModal()"
       />
     </div>
@@ -55,18 +56,21 @@ const router = useRouter();
             <div class="text-gray-900">{{ 1 }}</div>
           </td>
           <td class="whitespace-nowrap px-6 py-4">
-            <div class="itbkk-title text-sm text-gray-900">5555</div>
+            <div class="itbkk-title text-sm text-gray-900">name</div>
           </td>
           <td class="w-full whitespace-nowrap px-6 py-4">
-            <div class="itbkk-assignees w- text-sm text-gray-900">5</div>
+            <div class="itbkk-assignees w- text-sm text-gray-900">email</div>
           </td>
-          <td class="whitespace-nowrap px-6 py-4">55</td>
-          <td class="whitespace-nowrap px-6 py-4">55</td>
+          <td class="whitespace-nowrap px-6 py-4">Acess right</td>
+          <td class="whitespace-nowrap px-6 py-4">
+            <Button class="itbkk-button-cancel text-slate-200" onclick="removeCollabModal.showModal()" message="Remove" />
+          </td>
         </tr>
         <tr></tr>
       </tbody>
     </table>
   </div>
+  <RemoveCollabModal />
 </template>
 
 <style scoped></style>
