@@ -14,13 +14,13 @@ const route = useRoute();
 const boardStore = useBoardStore();
 const collabStore = useCollabStore()
 const curCollab = ref({oid: '', name:''})
+const collabs = ref()
 
 onMounted(async() => {
     const curBoard = (await getBoardByNanoId(route.params.oid)).data;
     boardStore.setCurrentBoard(curBoard);
     const res = await getCollabBoard(route.params.oid)
     collabStore.setCollabs(res.data)
-    console.log(collabStore.getCollabs());
 })
 
 function onModalOpen(collab){
@@ -75,7 +75,7 @@ function onModalOpen(collab){
             Action
           </th>
         </tr>
-        <tr v-for="(collab, index) in collabStore?.getCollabs()"
+        <tr v-for="(collab, index) in collabStore.getCollabs()"
           :key="collab.oid" class="itbkk-item itbkk-button-action hover:bg-slate-200">
           <td class="px-6 py-4">
             <div class="text-gray-900">{{ index + 1 }}</div>

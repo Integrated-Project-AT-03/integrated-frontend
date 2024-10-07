@@ -14,8 +14,7 @@ const collabForm = ref({
 
 const handleSubmit = async () => {
   const res = await addCollabBoard(collabForm.value, route.params.oid)
-  console.log(res.data);
-  // collabStore.addCollab(res.data) I can't cuz property in collabStore and res.data is not equal property
+  collabStore.addCollab(res.data)
 }
 </script>
  

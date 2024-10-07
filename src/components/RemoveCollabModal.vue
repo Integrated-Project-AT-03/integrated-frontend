@@ -2,6 +2,7 @@
 import Button from './Button.vue'
 import {deleteCollabBoard} from '../services/apiCollabBoard.js'
 import { useRoute } from 'vue-router';
+import {useCollabStore} from '../stores/useCollabStore'
 
 const props = defineProps({
   collab: {
@@ -9,10 +10,13 @@ const props = defineProps({
   },
 });
 
+const collabStore = useCollabStore()
+
 const route = useRoute();
 
 const handleConfirm = async () => {
     await deleteCollabBoard(props.collab.oid, route.params.oid)
+    collabStore.deleteCollab(route.params.oid)
 }
 </script>
  

@@ -7,6 +7,7 @@ export async function getCollabBoard(oid) {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
   };
   return await fetchWithRefresh(`${uri}/v3/boards/${oid}/collabs`, options);
 }
@@ -17,6 +18,7 @@ export async function addCollabBoard(newCollab, oid) {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify({ ...newCollab }),
   };
   return await fetchWithRefresh(`${uri}/v3/boards/${oid}/collabs`, options);
@@ -28,6 +30,7 @@ export async function deleteCollabBoard(oid, boardNanoId) {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
   };
   return await fetchWithRefresh(
     `${uri}/v3/boards/${boardNanoId}/collabs/${oid}`,

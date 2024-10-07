@@ -21,6 +21,12 @@ export const useCollabStore = defineStore("collabStore", {
     findCollabsIndex(id) {
       return this.collabs.findIndex((collab) => +collab.id === +id);
     },
+    deleteCollab(id) {
+      const collabIndex = this.findCollabsIndex(id);
+      if (collabIndex !== -1) {
+        this.collabs.splice(collabIndex, 1);
+      }
+    },
     updateCollab(id, newCollab) {
       const collabIndex = this.findCollabsIndex(id);
       if (collabIndex !== -1) {
