@@ -30,11 +30,6 @@ const handleConfirm = async () => {
       </div>
       <div class="divider"></div>
       <div class="itbkk-message text-slate-300">
-        <!-- {{
-          boardStore.getCurrentBoard()?.visibility !== "PUBLIC"
-            ? "Do you want to change board visibility to public?"
-            : "Do you want to change board visibility to private?"
-        }} -->
         Do you want to remove "{{ collab?.name }}" from the board
       </div>
       <div class="divider"></div>
