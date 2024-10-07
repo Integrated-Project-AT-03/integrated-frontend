@@ -1,9 +1,17 @@
 <script setup>
 import Button from "@/components/Button.vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import AddCollaboratorModal from "../components/AddCollaboratorModal.vue";
 import RemoveCollabModal from '../components/RemoveCollabModal.vue'
+import {getCollabBoard} from '../services/apiCollabBoard.js'
+import { onMounted } from "vue";
 const router = useRouter();
+const route = useRoute();
+
+// onMounted(async() => {
+//     const res = await getCollabBoard(route.params.oid)
+//     console.log(res);
+// })
 </script>
 
 <template>
