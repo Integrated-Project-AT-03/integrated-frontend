@@ -24,7 +24,7 @@ const handleSubmit = async () => {
       <div class="flex gap-3">
         <div class="flex flex-col gap-2">
             Collaborator e-mail
-            <input type="text" v-model="collabForm.email" placeholder="Type here" class="itbkk-collaborator-email input input-bordered w-[25rem]" />
+            <input type="text" maxlength="50" v-model="collabForm.email" placeholder="Type here" class="itbkk-collaborator-email input input-bordered w-[25rem]" />
         </div>
         <div class="flex flex-col gap-2">
             Access Right
