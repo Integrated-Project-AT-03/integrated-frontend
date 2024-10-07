@@ -1,10 +1,19 @@
 <script setup>
 import { ref } from 'vue';
 import Button from './Button.vue';
+import {addCollabBoard} from '../services/apiCollabBoard.js'
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
 const collabForm = ref({
     email:'',
-    access: ''
+    accessRight: 'READ'
 })
+
+const handleSubmit = async () => {
+  const res = await addCollabBoard(collabForm.value, route.params.oid)
+  console.log(res);
+}
 </script>
  
 <template>
@@ -19,12 +28,12 @@ const collabForm = ref({
         </div>
         <div class="flex flex-col gap-2">
             Access Right
-            <select v-model="collabForm.access"
+            <select v-model="collabForm.accessRight"
                   class="itbkk-access-right select select-ghost w-full max-w-xs bg-base-100"
                 >
-                  <option>Read</option>
-                  <option>Write</option>
-                </select>
+                  <option value="READ">Read</option>
+                  <option value="WRITE">Write</option>
+            </select>
         </div>
       </div>
       <div class="divider"></div>
@@ -33,6 +42,7 @@ const collabForm = ref({
           <Button
             class="itbkk-button-confirm btn-success text-slate-200"
             message="Confirm"
+            :action="() => handleSubmit()"
           />
         </form>
         <form method="dialog">

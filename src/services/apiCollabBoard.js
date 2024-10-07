@@ -10,3 +10,14 @@ export async function getCollabBoard(oid) {
   };
   return await fetchWithRefresh(`${uri}/v3/boards/${oid}/collabs`, options);
 }
+
+export async function addCollabBoard(newCollab, oid) {
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ ...newCollab }),
+  };
+  return await fetchWithRefresh(`${uri}/v3/boards/${oid}/collabs`, options);
+}
