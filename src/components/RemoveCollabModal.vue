@@ -1,7 +1,13 @@
 <script setup>
 import Button from './Button.vue'
-const handleConfirm = () => {
 
+const props = defineProps({
+  collab: {
+    type: Object,
+  },
+});
+const handleConfirm = () => {
+    console.log(props.collab.oid);
 }
 </script>
  
@@ -20,7 +26,7 @@ const handleConfirm = () => {
             ? "Do you want to change board visibility to public?"
             : "Do you want to change board visibility to private?"
         }} -->
-        Do you want to remove "ITBKK XXX" from the board
+        Do you want to remove "{{ collab?.name }}" from the board
       </div>
       <div class="divider"></div>
       <div class="mt-4 flex justify-end gap-3">

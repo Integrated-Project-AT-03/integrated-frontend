@@ -8,5 +8,5 @@ export async function getCollabBoard(oid) {
       "Content-Type": "application/json",
     },
   };
-  return await fetchWithRefresh(`${uri}/v3/${oid}/collabs`, options);
+  return await fetchWithRefresh(`${uri}/v3/boards/${oid}/collabs`, options);
 }
