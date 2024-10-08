@@ -17,6 +17,7 @@ const route = useRoute();
 const handleConfirm = async () => {
     //It have bug for delete.
     const res = await deleteCollabBoard(props.collab?.oid, route.params.oid)
+    console.log(res);
     if(res.httpStatus === 200){
       collabStore.deleteCollab(props.collab.oid)
     }
