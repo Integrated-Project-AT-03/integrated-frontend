@@ -12,7 +12,6 @@ import { useUserStore } from "../stores/useUserStore";
 import SortAsc from "./../assets/icons/SortAsc.vue";
 import SortDesc from "./../assets/icons/SortDesc.vue";
 import SortDisable from "./../assets/icons/SortDisable.vue";
-import Loading from "./../components/Loading.vue";
 import { getSettingByNanoIdBoard } from "./../services/apiSetting";
 import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
 import { useBoardStore } from "./../stores/useBoardStore.js";
@@ -29,7 +28,6 @@ const selectIndex = ref(5);
 const newItem = ref("");
 const items = ref([]);
 const uri = import.meta.env.VITE_SERVER_URI;
-const isLoading = ref(true);
 const sort = ref("");
 const sortOrder = ref("default");
 const openSearch = ref(false);
@@ -69,6 +67,8 @@ const loadTasks = async () => {
   taskStore.setTasks(res.data);
 };
 
+const emits = defineEmits(["message, loading"]);
+
 onMounted(async function () {
   const curBoard = (await getBoardByNanoId(route.params.oid)).data;
   boardStore.setCurrentBoard(curBoard);
@@ -87,15 +87,16 @@ onMounted(async function () {
     return router.push({ name: "NotFound" });
   }
   statusStore.setStatuses(res.data);
-  isLoading.value = false;
-  // const resBoard = await getBoardByUserNanoId(route.params.oid);
-  // boardStore.setCurrentBoard(resBoard.data);
+  emits("loading", false)
 
-  // const visibilityLoad = await getVisibilityByOid(route.params.oid);
-  // settingStore.setVisibility(visibilityLoad.data.visibility);
 
   showOwnerButton.value = boardStore.getCurrentBoard()?.access === "OWNER";
 });
+
+const handleMessage = (e) => {
+  emits("message", e);
+};
+
 
 const searchStatus = computed(() =>
   statusStore
@@ -137,11 +138,6 @@ const addItem = async () => {
   loadTasks();
 };
 
-const emits = defineEmits(["message"]);
-
-const handleMessage = (e) => {
-  emits("message", e);
-};
 const handleBlur = () => {
   timeoutBlur = setTimeout(() => (openSearch.value = false), 200);
 };
@@ -158,7 +154,6 @@ const openTask = (index, id) => {
 </script>
 
 <template>
-  <Loading class="w-screen" :is-loading="isLoading" />
   <div class="itbkk-modal-task flex w-full flex-col gap-2">
     <div class="flex items-center justify-between">
       <div class="container">

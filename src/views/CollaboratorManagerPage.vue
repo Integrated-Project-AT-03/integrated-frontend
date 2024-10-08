@@ -16,12 +16,14 @@ const route = useRoute();
 const boardStore = useBoardStore();
 const collabStore = useCollabStore()
 const curCollab = ref({oid: '', name:'', access:''})
+const emits = defineEmits(["message, loading"]);
 
 onMounted(async() => {
     const curBoard = (await getBoardByNanoId(route.params.oid)).data;
     boardStore.setCurrentBoard(curBoard);
     const res = await getCollabBoard(route.params.oid)
     collabStore.setCollabs(res.data)
+    emits("loading", false)
 })
 
 function onModalOpen(collab){
