@@ -9,12 +9,13 @@ import { onMounted } from "vue";
 import { useBoardStore } from "@/stores/useBoardStore";
 import {useCollabStore} from '../stores/useCollabStore.js'
 import { ref } from "vue";
-const router = useRouter();
+import EmptyElementSelect from '../components/EmptyElementSelect.vue'
+import ChangeAccessModal from '../components/ChangeAccessModal.vue'
+
 const route = useRoute();
 const boardStore = useBoardStore();
 const collabStore = useCollabStore()
-const curCollab = ref({oid: '', name:''})
-const collabs = ref()
+const curCollab = ref({oid: '', name:'', access:''})
 
 onMounted(async() => {
     const curBoard = (await getBoardByNanoId(route.params.oid)).data;
@@ -26,6 +27,11 @@ onMounted(async() => {
 function onModalOpen(collab){
     document.getElementById('removeCollabModal').showModal()
     curCollab.value = collab
+}
+
+function onChangeAccessModalOpen(collab){
+  document.getElementById('changeAccessModal').showModal()
+  curCollab.value = collab
 }
 
 </script>
@@ -87,6 +93,7 @@ function onModalOpen(collab){
             <div class="itbkk-assignees w- text-sm text-gray-900">{{ collab.email }}</div>
           </td>
           <td class="whitespace-nowrap ">
+            <EmptyElementSelect @click="onChangeAccessModalOpen({oid: collab.oid, name: collab.name, access: collab.accessRight})"/>
             <select :value="collab.accessRight"
                   class="itbkk-access-right select select-ghost w-full max-w-xs bg-base-100"
                 >
@@ -103,6 +110,7 @@ function onModalOpen(collab){
     </table>
   </div>
   <RemoveCollabModal :collab="curCollab"/>
+  <ChangeAccessModal :collab="curCollab" />
 </template>
 
 <style scoped></style>
