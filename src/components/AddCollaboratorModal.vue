@@ -13,8 +13,14 @@ const collabForm = ref({
 })
 
 const handleSubmit = async () => {
+  // It have bug for add collaborate.
   const res = await addCollabBoard(collabForm.value, route.params.oid)
-  collabStore.addCollab(res.data)
+  console.log(res);
+  console.log(res.data);
+  if(res.httpStatus === 201){
+    collabStore.addCollab(res.data)
+  }
+
 }
 </script>
  
