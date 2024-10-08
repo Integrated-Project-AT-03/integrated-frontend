@@ -1,5 +1,8 @@
 <script setup>
+import { useRoute } from 'vue-router';
 import Button from './Button.vue';
+
+const route = useRoute();
 
 const props = defineProps({
   collab: {
@@ -10,6 +13,8 @@ const props = defineProps({
 const handleConfirm = async () => {
     //Code for update access here
 }
+console.log(props.collab.oid); //oid
+console.log(route.params.oid); //nanoid
 </script>
  
 <template>
