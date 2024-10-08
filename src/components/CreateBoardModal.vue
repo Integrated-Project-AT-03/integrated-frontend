@@ -68,7 +68,7 @@ async function onSubmit() {
               @click="onSubmit"
               :disabled="newBoard.name.length === 0"
             >
-              Cancel
+              Confirm
             </button>
           </form>
           <form method="dialog">

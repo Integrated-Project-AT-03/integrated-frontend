@@ -1,10 +1,21 @@
 <script setup>
 import { ref } from 'vue';
 import Button from './Button.vue';
+import {addCollabBoard} from '../services/apiCollabBoard.js'
+import { useRoute } from 'vue-router';
+import {useCollabStore} from '../stores/useCollabStore.js'
+
+const collabStore = useCollabStore()
+const route = useRoute();
 const collabForm = ref({
     email:'',
-    access: ''
+    accessRight: 'READ'
 })
+
+const handleSubmit = async () => {
+  const res = await addCollabBoard(collabForm.value, route.params.oid)
+  collabStore.addCollab(res.data)
+}
 </script>
  
 <template>
@@ -15,16 +26,16 @@ const collabForm = ref({
       <div class="flex gap-3">
         <div class="flex flex-col gap-2">
             Collaborator e-mail
-            <input type="text" v-model="collabForm.email" placeholder="Type here" class="itbkk-collaborator-email input input-bordered w-[25rem]" />
+            <input type="text" maxlength="50" v-model="collabForm.email" placeholder="Type here" class="itbkk-collaborator-email input input-bordered w-[25rem]" />
         </div>
         <div class="flex flex-col gap-2">
             Access Right
-            <select v-model="collabForm.access"
+            <select v-model="collabForm.accessRight"
                   class="itbkk-access-right select select-ghost w-full max-w-xs bg-base-100"
                 >
-                  <option>Read</option>
-                  <option>Write</option>
-                </select>
+                  <option value="READ">Read</option>
+                  <option value="WRITE">Write</option>
+            </select>
         </div>
       </div>
       <div class="divider"></div>
@@ -33,6 +44,7 @@ const collabForm = ref({
           <Button
             class="itbkk-button-confirm btn-success text-slate-200"
             message="Confirm"
+            :action="() => handleSubmit()"
           />
         </form>
         <form method="dialog">
