@@ -1,7 +1,7 @@
 <script setup>
 import { defineProps, computed } from "vue";
 import { useBoardStore } from "./../stores/useBoardStore";
-const BoardStore = useBoardStore();
+const boardStore = useBoardStore();
 
 const props = defineProps({
   bgcolor: {
@@ -23,10 +23,10 @@ const access = computed(
   // สำหรับคำนวณ access role ใน current boards เป็น owner ก็ผ่านหมด แต่ถ้าเป็น Reader, Writer ก็สามารถใช้งานได้
 
   () =>
-    BoardStore.getCurrentBoard()?.access === "OWNER" ||
-    BoardStore.getCurrentBoard()?.access === props.access ||
+  boardStore.getCurrentBoard()?.access === "OWNER" ||
+  boardStore.getCurrentBoard()?.access === props.access ||
     (props.access === "READER" &&
-      BoardStore.getCurrentBoard()?.access === "WRITER"),
+    boardStore.getCurrentBoard()?.access === "WRITER"),
 );
 </script>
 

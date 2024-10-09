@@ -13,6 +13,7 @@ import EmptyElementSelect from '../components/EmptyElementSelect.vue'
 import ChangeAccessModal from '../components/ChangeAccessModal.vue'
 
 const route = useRoute();
+const router = useRouter()
 const boardStore = useBoardStore();
 const collabStore = useCollabStore()
 const curCollab = ref({oid: '', name:'', access:''})
@@ -22,8 +23,15 @@ onMounted(async() => {
     const curBoard = (await getBoardByNanoId(route.params.oid)).data;
     boardStore.setCurrentBoard(curBoard);
     const res = await getCollabBoard(route.params.oid)
+
+    if (res.httpStatus === 403) {
+    return router.push({ name: "NotAllowPage" });
+  } else if (res.httpStatus === 404) {
+    return router.push({ name: "NotFoundPage" });
+  }
     collabStore.setCollabs(res.data)
     emits("loading", false)
+
 })
 
 const handleMessage = (e) => {
@@ -100,14 +108,14 @@ function onChangeAccessModalOpen(collab){
           <td class="whitespace-nowrap ">
             <EmptyElementSelect @click="onChangeAccessModalOpen({oid: collab.oid, name: collab.name, access: collab.accessRight})"/>
             <select :value="collab.accessRight"
-                  class="itbkk-access-right select select-ghost w-full max-w-xs bg-base-100"
+                  class="itbkk-access-right select select-ghost w-full max-w-xs bg-[#444444]"
                 >
                   <option value="READ">Read</option>
                   <option value="WRITE">Write</option>
             </select>
           </td>
           <td class="whitespace-nowrap px-4 py-2">
-            <Button class="itbkk-button-cancel text-slate-200" :action="() => onModalOpen({oid: collab.oid, name: collab.name})" message="Remove" />
+            <Button class="itbkk-button-cancel" bgcolor="#444444" :action="() => onModalOpen({oid: collab.oid, name: collab.name})" message="Remove" />
           </td>
         </tr>
         <tr></tr>
