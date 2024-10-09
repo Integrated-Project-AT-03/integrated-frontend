@@ -37,3 +37,18 @@ export async function deleteCollabBoard(oid, boardNanoId) {
     options,
   );
 }
+
+export async function updateAccessCollabBoard(boardNanoId, oid, access) {
+  const options = {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ ...access }),
+  };
+  return await fetchWithRefresh(
+    `${uri}/v3/boards/${boardNanoId}/collabs/${oid}`,
+    options,
+  );
+}

@@ -1,8 +1,13 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import Button from './Button.vue';
+import {updateAccessCollabBoard} from '../services/apiCollabBoard'
+import {useCollabStore} from '../stores/useCollabStore'
+import { ref } from 'vue';
 
+const collabStore = useCollabStore()
 const route = useRoute();
+const accessForsend = ref({accessRight: ""})
 
 const props = defineProps({
   collab: {
@@ -11,10 +16,22 @@ const props = defineProps({
 });
 
 const handleConfirm = async () => {
-    //Code for update access here
+    try {
+      if(props.collab.access === 'READ'){
+      accessForsend.value.accessRight = 'WRITE'
+    } else {
+      accessForsend.value.accessRight = 'READ'
+    }
+    const res = await updateAccessCollabBoard(route.params.oid, props.collab.oid, accessForsend.value)
+    if(res.httpStatus === 201){
+      collabStore.updateCollab(props.collab.oid, res.data.accessRight)
+    }
+    } catch (error) {
+      console.log(error);
+    }
 }
-console.log(props.collab.oid); //oid
-console.log(route.params.oid); //nanoid
+
+console.log(collabStore.getCollabs());
 </script>
  
 <template>
