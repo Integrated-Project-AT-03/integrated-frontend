@@ -8,10 +8,11 @@ import { useBoardStore } from "../stores/useBoardStore.js";
 
 const boardStore = useBoardStore();
 const userStore = useUserStore();
-const emits = defineEmits(["message"]);
+const emits = defineEmits(["message, loading"]);
 const handleMessage = (e) => {
   emits("message", e);
 };
+emits("loading", false)
 
 // const loadBoards = async () => {
 //   const res = await getBoards(userStore.getUser().oid);
