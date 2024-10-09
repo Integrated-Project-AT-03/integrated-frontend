@@ -8,6 +8,7 @@ import { ref } from 'vue';
 const collabStore = useCollabStore()
 const route = useRoute();
 const accessForsend = ref({accessRight: ""})
+const emits = defineEmits(["message"]);
 
 const props = defineProps({
   collab: {
@@ -25,13 +26,20 @@ const handleConfirm = async () => {
     const res = await updateAccessCollabBoard(route.params.oid, props.collab.oid, accessForsend.value)
     if(res.httpStatus === 201){
       collabStore.updateCollab(props.collab.oid, res.data.accessRight)
+      emits("message", {
+      description: `The collaborator has been successfully updated.`,
+      status: "success",
+    });
     }
     } catch (error) {
       console.log(error);
+      emits("message", {
+      description: `${error}`,
+      status: "error",
+    });
     }
 }
 
-console.log(collabStore.getCollabs());
 </script>
  
 <template>

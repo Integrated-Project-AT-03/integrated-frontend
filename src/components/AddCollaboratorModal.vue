@@ -6,6 +6,7 @@ import { useRoute } from 'vue-router';
 import {useCollabStore} from '../stores/useCollabStore.js'
 
 const collabStore = useCollabStore()
+const emits = defineEmits(["message"])
 const route = useRoute();
 const collabForm = ref({
     email:'',
@@ -13,14 +14,23 @@ const collabForm = ref({
 })
 
 const handleSubmit = async () => {
-  // It have bug for add collaborate.
-  const res = await addCollabBoard(collabForm.value, route.params.oid)
-  console.log(res);
-  console.log(res.data);
+  try {
+    const res = await addCollabBoard(collabForm.value, route.params.oid)
   if(res.httpStatus === 201){
     collabStore.addCollab(res.data)
     collabForm.value.email = ''
     collabForm.value.accessRight = 'READ'
+    emits("message", {
+      description: 'The collaborator has been successfully added.',
+      status: 'success'
+    })
+  }
+  } catch (error) {
+    console.log(error);
+    emits("message", {
+      description: `${error}`,
+      status: "error"
+    })
   }
 
 }

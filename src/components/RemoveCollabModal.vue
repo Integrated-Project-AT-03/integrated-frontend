@@ -10,16 +10,27 @@ const props = defineProps({
   },
 });
 
+const emits = defineEmits(["message"]);
 const collabStore = useCollabStore()
-
 const route = useRoute();
 
 const handleConfirm = async () => {
     //It have bug for delete.
-    const res = await deleteCollabBoard(props.collab?.oid, route.params.oid)
-    console.log(res);
+    try {
+      const res = await deleteCollabBoard(props.collab?.oid, route.params.oid)
     if(res.httpStatus === 200){
       collabStore.deleteCollab(props.collab.oid)
+      emits("message", {
+      description: `The collaborator has been successfully deleted.`,
+      status: "success",
+    });
+    }
+    } catch (error) {
+      console.log(error);
+      emits("message", {
+      description: `${error}`,
+      status: "error",
+    });
     }
 }
 </script>

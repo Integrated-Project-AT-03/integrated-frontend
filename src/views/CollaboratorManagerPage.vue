@@ -26,6 +26,10 @@ onMounted(async() => {
     emits("loading", false)
 })
 
+const handleMessage = (e) => {
+  emits("message", e);
+};
+
 function onModalOpen(collab){
     document.getElementById('removeCollabModal').showModal()
     curCollab.value = collab
@@ -40,7 +44,6 @@ function onChangeAccessModalOpen(collab){
 
 <template>
   <div class="flex w-full flex-col gap-3">
-    <AddCollaboratorModal />
     <div class="flex justify-end">
       <Button
         class="itbkk-collaborato-add"
@@ -111,8 +114,9 @@ function onChangeAccessModalOpen(collab){
       </tbody>
     </table>
   </div>
-  <RemoveCollabModal :collab="curCollab"/>
-  <ChangeAccessModal :collab="curCollab" />
+  <RemoveCollabModal :collab="curCollab" @message="handleMessage($event)"/>
+  <ChangeAccessModal :collab="curCollab" @message="handleMessage($event)"/>
+  <AddCollaboratorModal @message="handleMessage($event)" />
 </template>
 
 <style scoped></style>
