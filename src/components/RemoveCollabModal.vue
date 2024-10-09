@@ -8,6 +8,9 @@ const props = defineProps({
   collab: {
     type: Object,
   },
+  message: {
+    type: String,
+  }
 });
 
 const collabStore = useCollabStore()
@@ -16,7 +19,7 @@ const route = useRoute();
 
 const handleConfirm = async () => {
     await deleteCollabBoard(props.collab.oid, route.params.oid)
-    collabStore.deleteCollab(props.collab.oid)
+    collabStore?.deleteCollab(props.collab.oid)
 }
 </script>
  
@@ -30,19 +33,20 @@ const handleConfirm = async () => {
       </div>
       <div class="divider"></div>
       <div class="itbkk-message text-slate-300">
-        Do you want to remove "{{ collab?.name }}" from the board
+        <!-- Do you want to remove "{{ collab?.name }}" from the board -->
+         {{ message }}
       </div>
       <div class="divider"></div>
       <div class="mt-4 flex justify-end gap-3">
         <form method="dialog">
-          <Button
-            class="itbkk-button-confirm btn-success"
+          <button
+            class="itbkk-button-confirm btn  btn-success"
             message="Confirm"
             @click="handleConfirm"
-          />
+          >Confirm</button>
         </form>
         <form method="dialog">
-          <Button class="itbkk-button-cancel text-slate-200" message="Cancel" />
+          <button class="itbkk-button-cancel btn btn-error text-slate-200" >Cancel</button>
         </form>
       </div>
     </div>
