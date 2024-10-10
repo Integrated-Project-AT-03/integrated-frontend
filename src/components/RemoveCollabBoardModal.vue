@@ -10,13 +10,10 @@ const route = useRoute();
 const emits = defineEmits(["message"]);
 //const taskSelected = taskStore.findTask(route.params.id, route.params.oid);
 
-
-
 defineProps({ indexValue: Number });
 
 async function handleDeleteCollabBoard() {
   const { id, oid } = route.params;
-
 
   const res = await deleteCollabBoardAPI(oid, id);
 
@@ -43,9 +40,9 @@ async function handleDeleteCollabBoard() {
 }
 
 const handleConfirm = async () => {
-  await deleteCollabBoard(props.collab.oid, route.params.oid)
-  emits("deleteBoard", props.oid)
-}
+  // await deleteCollabBoard(props.collab.oid, route.params.oid)
+  // emits("deleteBoard", props.oid)
+};
 </script>
 
 <template>
@@ -55,18 +52,26 @@ const handleConfirm = async () => {
       <div class="text-2xl font-bold text-slate-300">Leave Board</div>
       <div class="divider"></div>
       <div class="itbkk-message text-slate-300">
-        Do you want to leave this <span class="font-semibold">{{ boardName }}</span> board?
+        Do you want to leave this
+        <span class="font-semibold">{{ boardName }}</span> board?
       </div>
       <div class="divider"></div>
       <div class="mt-4 flex justify-end gap-3">
         <form method="dialog">
-
-          <Button class="itbkk-button-confirm btn-success text-slate-200" message="Confirm" @click="handleConfirm">
+          <Button
+            class="itbkk-button-confirm btn-success text-slate-200"
+            message="Confirm"
+            @click="handleConfirm"
+          >
             Confirm
           </Button>
         </form>
         <form method="dialog">
-          <Button class="itbkk-button-cancel btn-error text-slate-200" message="Cancel">Cancel</Button>
+          <Button
+            class="itbkk-button-cancel btn-error text-slate-200"
+            message="Cancel"
+            >Cancel</Button
+          >
         </form>
       </div>
     </div>
