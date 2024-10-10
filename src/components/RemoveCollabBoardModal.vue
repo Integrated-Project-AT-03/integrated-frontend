@@ -1,77 +1,69 @@
 <script setup>
-import { useRoute, useRouter } from "vue-router";
-import { deleteCollabBoard as deleteCollabBoardAPI } from "../services/apiCollabBoard";
-import Button from "./Button.vue";
-import { useCollabStore } from "./../stores/useCollabStore";
+import { useRoute } from "vue-router";
+import { useCollabStore } from "../stores/useCollabStore";
+import { deleteCollab } from "@/services/apiCollab";
 
-const taskStore = useCollabStore();
-const router = useRouter();
+const props = defineProps({
+  collab: {
+    type: Object,
+  },
+});
+
 const route = useRoute();
-const emits = defineEmits(["message"]);
-//const taskSelected = taskStore.findTask(route.params.id, route.params.oid);
 
-defineProps({ indexValue: Number });
-
-async function handleDeleteCollabBoard() {
-  const { id, oid } = route.params;
-
-  const res = await deleteCollabBoardAPI(oid, id);
-
-  if (res.httpStatus === 200) {
-    taskStore.deleteTask(id); // Use task store to delete task locally
-    emits("message", {
-      description: "The task has been deleted.",
-      status: "success",
-    });
-    router.push({ name: "Task" }); // Redirect to Task page
-  } else if (res.httpStatus === 404) {
-    emits("message", {
-      description: "The task does not exist.",
-      status: "error",
-    });
-    taskStore.deleteTask(id); // Remove task from local store
-    router.push({ name: "Task" });
-  } else {
-    emits("message", {
-      description: "Something went wrong.",
-      status: "error",
-    });
+const handleDeleteCollab = async () => {
+  try {
+    //Oid from users and Board nano id from router
+    const res = await deleteCollab(props.collab.oid,props.collab.nanoId);
+    console.log(res);
+    
+    // if (res.httpStatus === 200) {
+    //   emits("message", {
+    //     description: `The collaborator has been successfully deleted.`,
+    //     status: "success",
+    //   });
+    // }
+  } catch (error) {
+    console.log(error);
+    
+    // emits("message", {
+    //   description: `Error: ${error.message}`,
+    //   status: "error",
+    // });
   }
-}
-
-const handleConfirm = async () => {
-  // await deleteCollabBoard(props.collab.oid, route.params.oid)
-  // emits("deleteBoard", props.oid)
 };
+
+const emits = defineEmits(["message"]);
+
+
+// const handleConfirm = () => {
+//   handleDeleteCollab(props.boardName, route.params.oid, collabStore, emits);
+// };
 </script>
 
 <template>
-  <!-- Leave Collab Modal -->
-  <dialog id="collabBoardRemoveModal" class="modal">
-    <div class="flex h-auto w-fit flex-col rounded-lg bg-base-100 p-6">
+  <dialog id="removeCollabBoardModal" class="modal">
+    <div class="itbkk-modal-alert flex h-auto w-[34rem] flex-col rounded-lg bg-neutral p-6">
       <div class="text-2xl font-bold text-slate-300">Leave Board</div>
       <div class="divider"></div>
       <div class="itbkk-message text-slate-300">
-        Do you want to leave this
-        <span class="font-semibold">{{ boardName }}</span> board?
+        Do you want to leave "{{ collab.name }}" board?
       </div>
       <div class="divider"></div>
       <div class="mt-4 flex justify-end gap-3">
         <form method="dialog">
-          <Button
-            class="itbkk-button-confirm btn-success text-slate-200"
+          <button
+            class="itbkk-button-confirm btn btn-success"
             message="Confirm"
-            @click="handleConfirm"
+            @click="handleDeleteCollab"
           >
             Confirm
-          </Button>
+          </button>
         </form>
         <form method="dialog">
-          <Button
-            class="itbkk-button-cancel btn-error text-slate-200"
-            message="Cancel"
-            >Cancel</Button
-          >
+          <button class="itbkk-button-cancel btn btn-error text-slate-200">
+            Cancel
+          </button>
         </form>
       </div>
     </div>
