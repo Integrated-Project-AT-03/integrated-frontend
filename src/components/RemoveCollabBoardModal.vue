@@ -2,6 +2,7 @@
 import { useRoute } from "vue-router";
 import { useCollabStore } from "../stores/useCollabStore";
 import { deleteCollab } from "@/services/apiCollab";
+import { useCollabBoardStore } from '../stores/useCollabBoardStore'
 
 const props = defineProps({
   collab: {
@@ -10,30 +11,29 @@ const props = defineProps({
 });
 
 const route = useRoute();
-
+const collabBoardStore = useCollabBoardStore()
 const handleDeleteCollab = async () => {
   try {
     //Oid from users and Board nano id from router
-    const res = await deleteCollab(props.collab.oid,props.collab.nanoId);
+    const res = await deleteCollab(props.collab.oid, props.collab.nanoId);
     console.log(res);
-    
-    // if (res.httpStatus === 200) {
-    //   emits("message", {
-    //     description: `The collaborator has been successfully deleted.`,
-    //     status: "success",
-    //   });
-    // }
+    if (res.httpStatus === 200) {
+      collabBoardStore.deleteCollabBoard(props.collab.nanoId)
+      emits("message", {
+        description: `The collaborator has been successfully deleted.`,
+        status: "success",
+      });
+    }
   } catch (error) {
     console.log(error);
-    
-    // emits("message", {
-    //   description: `Error: ${error.message}`,
-    //   status: "error",
-    // });
+    emits("message", {
+      description: `${error}`,
+      status: "error",
+    });
   }
-};
+}
 
-const emits = defineEmits(["message"]);
+  const emits = defineEmits(["message"]);
 
 
 // const handleConfirm = () => {
@@ -52,11 +52,7 @@ const emits = defineEmits(["message"]);
       <div class="divider"></div>
       <div class="mt-4 flex justify-end gap-3">
         <form method="dialog">
-          <button
-            class="itbkk-button-confirm btn btn-success"
-            message="Confirm"
-            @click="handleDeleteCollab"
-          >
+          <button class="itbkk-button-confirm btn btn-success" message="Confirm" @click="handleDeleteCollab">
             Confirm
           </button>
         </form>

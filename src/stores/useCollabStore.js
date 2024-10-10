@@ -7,7 +7,7 @@ export const useCollabStore = defineStore("collabStore", {
 
   actions: {
     setCollabs(collabs) {
-      this.collabs = collabs;
+      this.collabs = collabs; 
     },
     addCollab(collab) {
       this.collabs.push(collab);

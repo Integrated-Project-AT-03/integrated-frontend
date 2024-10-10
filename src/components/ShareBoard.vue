@@ -5,12 +5,12 @@ import {
   getCollabBoard,
   leaveCollabBoard,
 } from "../services/apiMakeCollabBoard";
-import { useCollabStore } from "../stores/useCollabStore";
+import { useCollabBoardStore } from "../stores/useCollabBoardStore";
 import RemoveCollabModal from "./RemoveCollabModal.vue";
 import Button from "./Button.vue";
 import RemoveCollabBoardModal from "./RemoveCollabBoardModal.vue";
 
-const collabStore = useCollabStore();
+const collabBoardStore =  useCollabBoardStore()
 const router = useRouter();
 const collabBoards = ref([]);
 const boardName = ref(""); // For displaying the board name in the modal
@@ -25,17 +25,10 @@ const curOid = ref()
 onMounted(async () => {
   // const curBoard = (await getBoardByNanoId(route.params.oid)).data;
   // boardStore.setCurrentBoard(curBoard);
-  const res = await getCollabBoard(route.params.oid);
-  console.log(res.data);
-  
-  curOid.value = res.data.oid
-  console.log(curOid.value);
-  
-  collabStore.setCollabs(res.data);
-
   try {
     const res = await getCollabBoard();
     collabBoards.value = res.data; // Store fetched collaboration boards
+    collabBoardStore.setCollabsBoard(res.data)
   } catch (error) {
     console.error("Failed to fetch collab boards", error);
   }
@@ -100,7 +93,7 @@ function onModalOpen(collab) {
 
         <tbody>
           <tr
-            v-for="(board, index) in collabBoards"
+            v-for="(board, index) in collabBoardStore.getCollabsBoard()"
             :key="board.oid"
             class="cursor-pointer hover:bg-gray-100"
           >
