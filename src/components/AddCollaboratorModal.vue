@@ -1,11 +1,12 @@
 <script setup>
 import { ref } from 'vue';
 import Button from './Button.vue';
-import {addCollabBoard} from '../services/apiCollabBoard.js'
+import {addCollab} from '../services/apiCollab.js'
 import { useRoute } from 'vue-router';
 import {useCollabStore} from '../stores/useCollabStore.js'
 
 const collabStore = useCollabStore()
+const emits = defineEmits(["message"])
 const route = useRoute();
 const collabForm = ref({
     email:'',
@@ -13,8 +14,25 @@ const collabForm = ref({
 })
 
 const handleSubmit = async () => {
-  const res = await addCollabBoard(collabForm.value, route.params.oid)
-  collabStore.addCollab(res.data)
+  try {
+    const res = await addCollab(collabForm.value, route.params.oid)
+  if(res.httpStatus === 201){
+    collabStore.addCollab(res.data)
+    collabForm.value.email = ''
+    collabForm.value.accessRight = 'READ'
+    emits("message", {
+      description: 'The collaborator has been successfully added.',
+      status: 'success'
+    })
+  }
+  } catch (error) {
+    console.log(error);
+    emits("message", {
+      description: `${error}`,
+      status: "error"
+    })
+  }
+
 }
 </script>
  
@@ -26,7 +44,7 @@ const handleSubmit = async () => {
       <div class="flex gap-3">
         <div class="flex flex-col gap-2">
             Collaborator e-mail
-            <input type="text" maxlength="50" v-model="collabForm.email" placeholder="Type here" class="itbkk-collaborator-email input input-bordered w-[25rem]" />
+            <input type="text" maxlength="50" v-model.trim="collabForm.email" placeholder="Type here" class="itbkk-collaborator-email input input-bordered w-[25rem]" />
         </div>
         <div class="flex flex-col gap-2">
             Access Right

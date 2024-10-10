@@ -4,7 +4,7 @@ defineProps({ isLoading: { type: Boolean, require: true } });
 <template>
   <div
     v-show="isLoading"
-    class="absolute top-0 flex h-full w-full items-center justify-center bg-gray-950 opacity-60"
+    class="absolute z-[100] top-0 flex h-full w-full items-center justify-center bg-gray-950 opacity-60"
   >
     <span class="loading loading-spinner loading-lg"></span>
   </div>

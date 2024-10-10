@@ -1,11 +1,10 @@
 <script setup>
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, defineEmits } from "vue";
 
 import TransferStatus from "../components/TransferStatus.vue";
 import { getSettingByNanoIdBoard } from "../services/apiSetting";
 import { getStatusesByNanoIdBoard } from "../services/apiStatus";
 import { getTasksByNanoidBoard } from "../services/apiTask";
-import Loading from "../components/Loading.vue";
 import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
 import Button from "../components/Button.vue";
 import StatusModal from "@/components/StatusModal.vue";
@@ -19,10 +18,9 @@ const router = useRouter();
 const settingStore = useSettingStore();
 const boardStore = useBoardStore();
 const route = useRoute();
-const emits = defineEmits(["message"]);
+const emits = defineEmits(["message, loading"]);
 const statusStore = useTaskStatusStore();
 const taskStore = useTaskStore();
-const isLoading = ref(true);
 const sourceStatus = ref({});
 const showTranferStauts = ref(false);
 const isOwner = computed(
@@ -50,7 +48,7 @@ onMounted(async function () {
   settingStore.setLimitTask(settingLoad);
   const resTask = await getTasksByNanoidBoard(route.params.oid);
   taskStore.setTasks(resTask.data);
-  isLoading.value = false;
+  emits("loading", false)
   boardStore.setCurrentBoard(resBoard.data);
 });
 
@@ -60,7 +58,6 @@ const handleMessage = (e) => {
 </script>
 
 <template>
-  <Loading class="w-screen" :is-loading="isLoading" />
   <div class="flex w-full flex-col gap-2">
     <!-- :class="$route.fullPath.split('/').length > 3 ? 'blur-sm' : ''" -->
     <div class="flex w-full items-center justify-between">

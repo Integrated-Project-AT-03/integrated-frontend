@@ -2,7 +2,8 @@
 import { useRouter } from "vue-router";
 const router = useRouter();
 function back() {
-  router.back();
+  // router.back();
+  router.push({name: "login"});
 }
 </script>
 

@@ -1,8 +1,8 @@
 <script setup>
-import Button from "./Button.vue";
-import { deleteCollabBoard } from "../services/apiCollabBoard.js";
-import { useRoute } from "vue-router";
-import { useCollabStore } from "../stores/useCollabStore";
+import Button from './Button.vue'
+import {deleteCollab} from '../services/apiCollab.js'
+import { useRoute } from 'vue-router';
+import {useCollabStore} from '../stores/useCollabStore'
 
 const props = defineProps({
   collab: {
@@ -10,14 +10,29 @@ const props = defineProps({
   },
 });
 
-const collabStore = useCollabStore();
-
+const emits = defineEmits(["message"]);
+const collabStore = useCollabStore()
 const route = useRoute();
 
 const handleConfirm = async () => {
-  await deleteCollabBoard(props.collab.oid, route.params.oid);
-  collabStore?.deleteCollab(props.collab.oid);
-};
+    //It have bug for delete.
+    try {
+      const res = await deleteCollab(props.collab?.oid, route.params.oid)
+    if(res.httpStatus === 200){
+      collabStore.deleteCollab(props.collab.oid)
+      emits("message", {
+      description: `The collaborator has been successfully deleted.`,
+      status: "success",
+    });
+    }
+    } catch (error) {
+      console.log(error);
+      emits("message", {
+      description: `${error}`,
+      status: "error",
+    });
+    }
+}
 </script>
 
 <template>

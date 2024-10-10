@@ -5,6 +5,7 @@ import Navbar from "../components/NavBar.vue";
 import ChevronRight from "../assets/icons/ChevronRight.vue";
 import { useBoardStore } from "../stores/useBoardStore.js";
 import { getUserInfo } from "../services/apiAuth";
+import Loading from "@/components/Loading.vue";
 
 const message = ref("");
 const status = ref();
@@ -42,6 +43,12 @@ const handleMessage = async (e) => {
     }, 5000);
   }
 };
+
+const isLoading = ref(true);
+
+    const handleLoading = (loadingStatus) => {
+      isLoading.value = loadingStatus;
+    };
 </script>
 
 <template>
@@ -49,6 +56,7 @@ const handleMessage = async (e) => {
     @click="clickOutSideNav"
     class="flex h-screen w-full flex-col items-center overflow-hidden p-3"
   >
+  <Loading :is-loading="isLoading" />
     <Navbar @message="handleMessage($event)" />
     <div
       class="container relative flex h-full w-full flex-auto flex-col justify-center gap-2"
@@ -103,7 +111,7 @@ const handleMessage = async (e) => {
           Collaborator
         </button>
       </div>
-      <RouterView @message="handleMessage($event)" />
+      <RouterView @message="handleMessage($event)" @loading="handleLoading"/>
     </div>
     <transition v-show="messageModalOpenState" name="toast">
       <Alert :status="status" :message="message" />

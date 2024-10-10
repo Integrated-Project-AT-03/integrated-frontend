@@ -27,10 +27,10 @@ export const useCollabStore = defineStore("collabStore", {
         this.collabs.splice(collabIndex, 1);
       }
     },
-    updateCollab(id, newCollab) {
-      const collabIndex = this.findCollabsIndex(id);
+    updateCollab(oid, newAccessRight) {
+      const collabIndex = this.findCollabsIndex(oid);
       if (collabIndex !== -1) {
-        this.collabs[collabIndex] = newCollab;
+        this.collabs[collabIndex].accessRight = newAccessRight;
       }
     },
     findCollab(id) {

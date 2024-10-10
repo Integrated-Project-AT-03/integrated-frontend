@@ -83,7 +83,14 @@ export async function fetchWithRefresh(url, options) {
         });
       }
     }
-    const data = await res.json();
+
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      data = { message: res };
+    }
+
     if (!res.ok) {
       console.error(
         `Error: ${res.status} - ${data.message || "Failed to process request"}`,
