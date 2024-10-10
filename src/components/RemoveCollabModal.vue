@@ -1,6 +1,6 @@
 <script setup>
 import Button from './Button.vue'
-import {deleteCollabBoard} from '../services/apiCollabBoard.js'
+import {deleteCollab} from '../services/apiCollab.js'
 import { useRoute } from 'vue-router';
 import {useCollabStore} from '../stores/useCollabStore'
 
@@ -17,7 +17,7 @@ const route = useRoute();
 const handleConfirm = async () => {
     //It have bug for delete.
     try {
-      const res = await deleteCollabBoard(props.collab?.oid, route.params.oid)
+      const res = await deleteCollab(props.collab?.oid, route.params.oid)
     if(res.httpStatus === 200){
       collabStore.deleteCollab(props.collab.oid)
       emits("message", {

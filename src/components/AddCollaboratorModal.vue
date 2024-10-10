@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import Button from './Button.vue';
-import {addCollabBoard} from '../services/apiCollabBoard.js'
+import {addCollab} from '../services/apiCollab.js'
 import { useRoute } from 'vue-router';
 import {useCollabStore} from '../stores/useCollabStore.js'
 
@@ -15,7 +15,7 @@ const collabForm = ref({
 
 const handleSubmit = async () => {
   try {
-    const res = await addCollabBoard(collabForm.value, route.params.oid)
+    const res = await addCollab(collabForm.value, route.params.oid)
   if(res.httpStatus === 201){
     collabStore.addCollab(res.data)
     collabForm.value.email = ''

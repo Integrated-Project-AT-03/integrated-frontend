@@ -1,7 +1,7 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import Button from './Button.vue';
-import {updateAccessCollabBoard} from '../services/apiCollabBoard'
+import {updateAccessCollab} from '../services/apiCollab'
 import {useCollabStore} from '../stores/useCollabStore'
 import { ref } from 'vue';
 
@@ -23,7 +23,7 @@ const handleConfirm = async () => {
     } else {
       accessForsend.value.accessRight = 'READ'
     }
-    const res = await updateAccessCollabBoard(route.params.oid, props.collab.oid, accessForsend.value)
+    const res = await updateAccessCollab(route.params.oid, props.collab.oid, accessForsend.value)
     if(res.httpStatus === 201){
       collabStore.updateCollab(props.collab.oid, res.data.accessRight)
       emits("message", {

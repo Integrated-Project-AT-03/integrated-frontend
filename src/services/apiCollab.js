@@ -1,7 +1,7 @@
 import { fetchWithRefresh } from "./apiAuth";
 
 const uri = import.meta.env.VITE_SERVER_URI;
-export async function getCollabBoard(oid) {
+export async function getCollab(oid) {
   const options = {
     method: "GET",
     headers: {
@@ -12,7 +12,7 @@ export async function getCollabBoard(oid) {
   return await fetchWithRefresh(`${uri}/v3/boards/${oid}/collabs`, options);
 }
 
-export async function addCollabBoard(newCollab, oid) {
+export async function addCollab(newCollab, oid) {
   const options = {
     method: "POST",
     headers: {
@@ -24,7 +24,7 @@ export async function addCollabBoard(newCollab, oid) {
   return await fetchWithRefresh(`${uri}/v3/boards/${oid}/collabs`, options);
 }
 
-export async function deleteCollabBoard(oid, boardNanoId) {
+export async function deleteCollab(oid, boardNanoId) {
   const options = {
     method: "DELETE",
     headers: {
@@ -38,7 +38,7 @@ export async function deleteCollabBoard(oid, boardNanoId) {
   );
 }
 
-export async function updateAccessCollabBoard(boardNanoId, oid, access) {
+export async function updateAccessCollab(boardNanoId, oid, access) {
   const options = {
     method: "PATCH",
     headers: {

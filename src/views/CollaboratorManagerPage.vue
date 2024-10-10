@@ -3,7 +3,7 @@ import Button from "@/components/Button.vue";
 import { useRoute, useRouter } from "vue-router";
 import AddCollaboratorModal from "../components/AddCollaboratorModal.vue";
 import RemoveCollabModal from '../components/RemoveCollabModal.vue'
-import {getCollabBoard} from '../services/apiCollabBoard.js'
+import {getCollab} from '../services/apiCollab.js'
 import { getBoardByNanoId } from "../services/apiBoard.js";
 import { onMounted } from "vue";
 import { useBoardStore } from "@/stores/useBoardStore";
@@ -22,7 +22,7 @@ const emits = defineEmits(["message, loading"]);
 onMounted(async() => {
     const curBoard = (await getBoardByNanoId(route.params.oid)).data;
     boardStore.setCurrentBoard(curBoard);
-    const res = await getCollabBoard(route.params.oid)
+    const res = await getCollab(route.params.oid)
 
     if (res.httpStatus === 403) {
     return router.push({ name: "NotAllowPage" });
