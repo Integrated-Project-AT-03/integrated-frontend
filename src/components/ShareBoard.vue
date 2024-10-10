@@ -8,6 +8,7 @@ import {
 import { useCollabStore } from "../stores/useCollabStore";
 import RemoveCollabModal from "./RemoveCollabModal.vue";
 import Button from "./Button.vue";
+import RemoveCollabBoardModal from "./RemoveCollabBoardModal.vue";
 
 const collabStore = useCollabStore();
 const router = useRouter();
@@ -16,24 +17,20 @@ const boardName = ref(""); // For displaying the board name in the modal
 const showLeaveModal = ref(false); // Control modal visibility
 const boardToLeave = ref(null); // Track which board is being left
 
-const props = defineProps({
-  show: {
-    type: Boolean,
-    required: true,
-  },
-  boardName: {
-    type: String,
-    required: true,
-  },
-});
 
 const curCollab = ref({ oid: "", name: "" });
 const route = useRoute();
+const curOid = ref()
 
 onMounted(async () => {
   // const curBoard = (await getBoardByNanoId(route.params.oid)).data;
   // boardStore.setCurrentBoard(curBoard);
   const res = await getCollabBoard(route.params.oid);
+  console.log(res.data);
+  
+  curOid.value = res.data.oid
+  console.log(curOid.value);
+  
   collabStore.setCollabs(res.data);
 
   try {
@@ -45,7 +42,7 @@ onMounted(async () => {
 });
 
 function onModalOpen(collab) {
-  document.getElementById("removeCollabModal").showModal();
+  document.getElementById("removeCollabBoardModal").showModal();
   curCollab.value = collab;
 }
 
@@ -118,7 +115,7 @@ function onModalOpen(collab) {
               <button
                 class="itbkk-button-cancel btn text-slate-200"
                 access="guests"
-                @click="() => onModalOpen({ oid: board.oid, name: board.name })"
+                @click="() => onModalOpen({ oid: board.oid, name: board.name, nanoId: board.boardNanoId })"
               >
                 leave
               </button>
@@ -127,6 +124,6 @@ function onModalOpen(collab) {
         </tbody>
       </table>
     </div>
-    <RemoveCollabModal :collab="curCollab" />
+    <RemoveCollabBoardModal :collab="curCollab" />
   </div>
 </template>

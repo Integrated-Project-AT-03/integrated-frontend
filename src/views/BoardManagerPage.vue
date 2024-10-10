@@ -1,34 +1,25 @@
 <script setup>
 import Button from "@/components/Button.vue";
-import { watchEffect } from "vue";
+import { watchEffect, ref, onMounted } from "vue";
 import router from "@/router";
 import { getBoards } from "../services/apiBoard";
 import { useUserStore } from "../stores/useUserStore.js";
 import { useBoardStore } from "../stores/useBoardStore.js";
-import { onMounted } from "vue";
-import { ref } from "vue";
-import { getCollabBoard } from "../services/apiMakeCollabBoard";
-import { leaveCollabBoard } from "../services/apiMakeCollabBoard";
-import colorsStore from "@/stores/ColorsStore";
-import CollabBoardModal from "../components/ShareBoard.vue";
+import { getCollabBoard, leaveCollabBoard } from "../services/apiMakeCollabBoard";
+import ShareBoard from "../components/ShareBoard.vue";
+import RemoveCollabModal from "../components/RemoveCollabModal.vue"; // Add this import
 
 const boardStore = useBoardStore();
 const userStore = useUserStore();
 const collabBoards = ref([]);
-const boardName = ref(""); // For displaying the board name in the modal
 const showLeaveModal = ref(false); // Control modal visibility
-const boardToLeave = ref(null); // Track which board is being left
-const emits = defineEmits(["message, loading"]);
+const curCollab = ref(null); // Track the selected collaboration board to remove
+const emits = defineEmits(["message", "loading"]); // Corrected event names
+emits("loading", false)
+
 const handleMessage = (e) => {
   emits("message", e);
 };
-emits("loading", false);
-
-// const loadBoards = async () => {
-//   const res = await getBoards(userStore.getUser().oid);
-//   boards.value = res.data;
-//   boardStore.setBoards(res.data)
-// };
 
 watchEffect(async () => {
   if (userStore.getUser()?.oid) {
@@ -37,21 +28,13 @@ watchEffect(async () => {
     if (res.httpStatus === 401) {
       return router.push({ name: "login" });
     }
-    // if (boardStore.getBoards().length === 1) {
-    //   return router.push({
-    //     name: "Task",
-    //     params: { oid: boardStore.getBoards()[0].nanoIdBoard },
-    //   });
-    // }
   }
 });
 
 onMounted(async () => {
   try {
     const res = await getCollabBoard();
-    console.log(res);
-
-    collabBoards.value = res.data; // Assuming you are using ref for reactive data
+    collabBoards.value = res.data;
   } catch (error) {
     console.error("Failed to fetch collab boards", error);
   }
@@ -61,35 +44,9 @@ const handleClick = (board) => {
   router.push({ name: "Task", params: { oid: board.id } });
 };
 
-// Define the leaveBoard function
-// const leaveBoard = async () => {
-//   try {
-//     const res = await leaveCollabBoard(boardToLeave.value);
-//     if (res.status === 200) {
-//       // Remove the board from the list after successfully leaving
-//       collabBoards.value = collabBoards.value.filter(board => board.oid !== boardToLeave.value);
-//       alert('Successfully left the board.');
-//     } else {
-//       alert('Failed to leave the board.');
-//     }
-//   } catch (error) {
 
-//     console.error("Error while leaving the board:", error);
-//     alert('Error occurred while leaving the board.');
-//   } finally {
-//     closeModal(); // Close the modal after leaving
-//   }
-// };
 
-// // Function to open the modal
-// const confirmLeaveModal = () => {
-//   showLeaveModal.value = true
-// };
 
-// // Function to close the modal
-// const closeModal = () => {
-//   showLeaveModal.value = false;
-// };
 </script>
 
 <template>
@@ -141,7 +98,12 @@ const handleClick = (board) => {
 
   <!-- Collab Boards Section -->
   <div class="flex w-full flex-col gap-3 rounded-lg">
-    <CollabBoardModal />
+    <ShareBoard />
+    <RemoveCollabModal
+      v-if="showLeaveModal"
+      :collab="curCollab"
+      @message="handleMessage($event)"
+    />
   </div>
 
   <RouterView @message="handleMessage($event)" />
