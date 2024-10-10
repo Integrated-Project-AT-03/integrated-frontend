@@ -98,9 +98,9 @@ function onModalOpen(collab) {
             class="cursor-pointer hover:bg-gray-100"
           >
             <td class="border-b px-4 py-2">{{ index + 1 }}</td>
-            <td class="border-b px-4 py-2">{{ board.name }}</td>
+            <td class="border-b px-4 py-2">{{ board.boardName }}</td>
             <td class="border-b px-4 py-2">
-              {{ board.owner?.name || "Unknown Owner" }}
+              {{ board.name }}
             </td>
             <td class="border-b px-4 py-2">{{ board.accessRight || "N/A" }}</td>
             <td class="border-b px-4 py-2">

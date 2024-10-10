@@ -9,6 +9,7 @@ export async function getCollabBoard() {
     },
     credentials: "include",
   };
+  
   return await fetchWithRefresh(`${uri}/v3/collabs`, options);
 }
 
