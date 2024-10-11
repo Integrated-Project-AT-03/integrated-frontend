@@ -5,7 +5,10 @@ import router from "@/router";
 import { getBoards } from "../services/apiBoard";
 import { useUserStore } from "../stores/useUserStore.js";
 import { useBoardStore } from "../stores/useBoardStore.js";
-import { getCollabBoard, leaveCollabBoard } from "../services/apiMakeCollabBoard";
+import {
+  getCollabBoard,
+  leaveCollabBoard,
+} from "../services/apiMakeCollabBoard";
 import ShareBoard from "../components/ShareBoard.vue";
 import RemoveCollabModal from "../components/RemoveCollabModal.vue"; // Add this import
 
@@ -15,7 +18,7 @@ const collabBoards = ref([]);
 const showLeaveModal = ref(false); // Control modal visibility
 const curCollab = ref(null); // Track the selected collaboration board to remove
 const emits = defineEmits(["message", "loading"]); // Corrected event names
-emits("loading", false)
+emits("loading", false);
 
 const handleMessage = (e) => {
   emits("message", e);
@@ -43,10 +46,6 @@ onMounted(async () => {
 const handleClick = (board) => {
   router.push({ name: "Task", params: { oid: board.id } });
 };
-
-
-
-
 </script>
 
 <template>
@@ -65,36 +64,44 @@ const handleClick = (board) => {
   >
     Personal Boards
   </h1>
-  <div v-if="boardStore.getBoards().length === 0" class="flex justify-center">
+
+  <div>
+    <table
+      class="m-0 min-w-full border border-gray-300 bg-white p-0 text-black"
+    >
+      <thead>
+        <tr class="bg-gray-200 text-gray-700">
+          <th class="border-b px-4 py-2 text-start">No</th>
+          <th class="border-b px-4 py-2 text-start">Name</th>
+          <th class="border-b px-4 py-2 text-start">Visibility</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="(board, index) in boardStore.getBoards()"
+          :key="board.nanoIdBoard"
+          @click="handleClick(board)"
+          class="cursor-pointer hover:bg-gray-100"
+        >
+          <td class="itbkk-personal-item border-b px-4 py-2">
+            {{ index + 1 }}
+          </td>
+          <td class="itbkk-personal-name border-b px-4 py-2">
+            {{ board.name }}
+          </td>
+          <td class="itbkk-personal-visibility border-b px-4 py-2">
+            {{ board.visibility }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <div
-      class="flex h-16 w-64 items-center justify-center rounded-lg bg-gray-300 font-bold text-gray-600"
+      v-if="boardStore.getBoards().length === 0"
+      class="m-0 bg-white py-3 text-center font-bold text-gray-600"
     >
       No boards available
     </div>
   </div>
-  <table class="min-w-full border border-gray-300 bg-white">
-    <thead>
-      <tr class="bg-gray-200 text-gray-700">
-        <th class="border-b px-4 py-2">No</th>
-        <th class="border-b px-4 py-2">Name</th>
-        <th class="border-b px-4 py-2">Visibility</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="(board, index) in boardStore.getBoards()"
-        :key="board.nanoIdBoard"
-        @click="handleClick(board)"
-        class="cursor-pointer hover:bg-gray-100"
-      >
-        <td class="itbkk-personal-item border-b px-4 py-2">{{ index + 1 }}</td>
-        <td class="itbkk-personal-name border-b px-4 py-2">{{ board.name }}</td>
-        <td class="itbkk-personal-visibility border-b px-4 py-2">
-          {{ board.visibility }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
 
   <!-- Collab Boards Section -->
   <div class="flex w-full flex-col gap-3 rounded-lg">

@@ -69,13 +69,13 @@ const handleSubmit = async () => {
       </div>
       <div class="divider"></div>
       <div class="mt-4 flex justify-end gap-3">
-        <form method="dialog">
-          <Button
-            class="itbkk-button-confirm btn-success text-slate-200"
-            message="Confirm"
-            :action="() => handleSubmit()"
-          />
-        </form>
+        <Button
+          class="itbkk-button-confirm btn-success text-slate-200"
+          message="Confirm"
+          :disabled="true"
+          :action="() => false && handleSubmit()"
+        />
+
         <form method="dialog">
           <Button class="itbkk-button-cancel text-slate-200" message="Cancel" />
         </form>

@@ -18,15 +18,18 @@ const props = defineProps({
     type: Function,
     default: () => {},
   },
+  disabled: {
+    default: false,
+  },
 });
 const access = computed(
   // สำหรับคำนวณ access role ใน current boards เป็น owner ก็ผ่านหมด แต่ถ้าเป็น Reader, Writer ก็สามารถใช้งานได้
 
   () =>
-  boardStore.getCurrentBoard()?.access === "OWNER" ||
-  boardStore.getCurrentBoard()?.access === props.access ||
+    boardStore.getCurrentBoard()?.access === "OWNER" ||
+    boardStore.getCurrentBoard()?.access === props.access ||
     (props.access === "READER" &&
-    boardStore.getCurrentBoard()?.access === "WRITER"),
+      boardStore.getCurrentBoard()?.access === "WRITER"),
 );
 </script>
 
@@ -37,7 +40,7 @@ const access = computed(
   >
     <button
       @click="() => action()"
-      :disabled="!access"
+      :disabled="!access || disabled"
       class="dis btn min-w-max border-0 p-2 px-2 text-slate-200"
       :style="{ backgroundColor: props.bgcolor }"
     >
