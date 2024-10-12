@@ -127,7 +127,7 @@ async function addNewStatus() {
                   Save
                 </button>
                 <button
-                  class="itbkk-button-cancle btn btn-error text-white"
+                  class="itbkk-button-cancle btn text-white"
                   @click="router.push({ name: 'Status' })"
                 >
                   Cancel

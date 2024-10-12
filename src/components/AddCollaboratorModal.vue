@@ -53,7 +53,7 @@ const handleSubmit = async (e) => {
   >
     <div class="absolute inset-0 z-[998] h-full w-full backdrop-blur-sm"></div>
     <div
-      class="z-[1000] flex h-auto w-fit flex-col rounded-lg border-[1px] border-slate-700 bg-base-100 p-6"
+      class="z-[1000] flex h-auto w-fit flex-col rounded-2xl bg-neutral p-6"
     >
       <div class="text-2xl font-bold text-slate-300">Add Collaborator</div>
       <div class="divider"></div>
@@ -65,14 +65,14 @@ const handleSubmit = async (e) => {
             maxlength="50"
             v-model.trim="collabForm.email"
             placeholder="Type here"
-            class="itbkk-collaborator-email input input-bordered w-[25rem]"
+            class="itbkk-collaborator-email bg-neutral input input-bordered w-[25rem]"
           />
         </div>
         <div class="flex flex-col gap-2">
           Access Right
           <select
             v-model="collabForm.accessRight"
-            class="itbkk-access-right select select-ghost w-full max-w-xs bg-base-100"
+            class="itbkk-access-right select select-ghost w-full max-w-xs bg-neutral"
           >
             <option value="READ">Read</option>
             <option value="WRITE">Write</option>
