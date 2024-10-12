@@ -47,11 +47,14 @@ const handleSubmit = async (e) => {
 
 <template>
   <!-- <teleport to="body"> -->
+
   <div
-    class="itbkk-modal-alert fixed top-0 z-[999] flex h-screen w-screen items-center justify-center"
+    class="itbkk-modal-alert fixed inset-0 z-[999] flex h-screen w-screen items-center justify-center"
   >
-    <div class="absolute z-[998] h-full w-full blur-md backdrop-blur-sm"></div>
-    <div class="z-[1000] flex h-auto w-fit flex-col rounded-lg bg-base-100 p-6">
+    <div class="absolute inset-0 z-[998] h-full w-full backdrop-blur-sm"></div>
+    <div
+      class="z-[1000] flex h-auto w-fit flex-col rounded-lg border-[1px] border-slate-700 bg-base-100 p-6"
+    >
       <div class="text-2xl font-bold text-slate-300">Add Collaborator</div>
       <div class="divider"></div>
       <div class="flex gap-3">
