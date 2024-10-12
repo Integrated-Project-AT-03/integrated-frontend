@@ -13,7 +13,7 @@ const collabForm = ref({
   accessRight: "READ",
 });
 
-const handleSubmit = async () => {
+const handleSubmit = async (e) => {
   try {
     const res = await addCollab(collabForm.value, route.params.oid);
     if (res.httpStatus === 201) {
@@ -23,6 +23,12 @@ const handleSubmit = async () => {
       emits("message", {
         description: "The collaborator has been successfully added.",
         status: "success",
+      });
+    } else if (res.httpStatus === 404) {
+      document.getElementById("addcollaborator").showModal();
+      emits("message", {
+        description: "The user does not exists.",
+        status: "error",
       });
     } else if (res.httpStatus === 409) {
       emits("message", {
@@ -41,47 +47,57 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <dialog id="addcollaborator" class="itbkk-modal-alert modal">
-    <div class="flex h-auto w-fit flex-col rounded-lg bg-base-100 p-6">
-      <div class="text-2xl font-bold text-slate-300">Add Collaborator</div>
-      <div class="divider"></div>
-      <div class="flex gap-3">
-        <div class="flex flex-col gap-2">
-          Collaborator e-mail
-          <input
-            type="text"
-            maxlength="50"
-            v-model.trim="collabForm.email"
-            placeholder="Type here"
-            class="itbkk-collaborator-email input input-bordered w-[25rem]"
-          />
+  <teleport to="body">
+    <div id="addcollaborator" class="itbkk-modal-alert fixed z-[1000]">
+      <div
+        class="bg cola fixed inset-0 h-screen w-screen opacity-35 blur-lg"
+      ></div>
+      <div class="flex h-auto w-fit flex-col rounded-lg bg-base-100 p-6">
+        <div class="text-2xl font-bold text-slate-300">Add Collaborator</div>
+        <div class="divider"></div>
+        <div class="flex gap-3">
+          <div class="flex flex-col gap-2">
+            Collaborator e-mail
+            <input
+              type="text"
+              maxlength="50"
+              v-model.trim="collabForm.email"
+              placeholder="Type here"
+              class="itbkk-collaborator-email input input-bordered w-[25rem]"
+            />
+          </div>
+          <div class="flex flex-col gap-2">
+            Access Right
+            <select
+              v-model="collabForm.accessRight"
+              class="itbkk-access-right select select-ghost w-full max-w-xs bg-base-100"
+            >
+              <option value="READ">Read</option>
+              <option value="WRITE">Write</option>
+            </select>
+          </div>
         </div>
-        <div class="flex flex-col gap-2">
-          Access Right
-          <select
-            v-model="collabForm.accessRight"
-            class="itbkk-access-right select select-ghost w-full max-w-xs bg-base-100"
-          >
-            <option value="READ">Read</option>
-            <option value="WRITE">Write</option>
-          </select>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <div class="mt-4 flex justify-end gap-3">
-        <Button
-          class="itbkk-button-confirm btn-success text-slate-200"
-          message="Confirm"
-          :disabled="true"
-          :action="() => false && handleSubmit()"
-        />
+        <div class="divider"></div>
+        <div class="mt-4 flex justify-end gap-3">
+          <form method="dialog">
+            <Button
+              class="itbkk-button-confirm btn-success text-slate-200"
+              message="Add"
+              :action="handleSubmit"
+            />
+          </form>
+          <!-- :disabled="!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(collabForm.email)" -->
 
-        <form method="dialog">
-          <Button class="itbkk-button-cancel text-slate-200" message="Cancel" />
-        </form>
+          <form method="dialog">
+            <Button
+              class="itbkk-button-cancel text-slate-200"
+              message="Cancel"
+            />
+          </form>
+        </div>
       </div>
     </div>
-  </dialog>
+  </teleport>
 </template>
 
 <style scoped></style>
