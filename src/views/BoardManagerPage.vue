@@ -52,7 +52,9 @@ const handleClick = (board) => {
   <!-- Personal Boards Section -->
   <div class="mb-3 flex items-center justify-between">
     <div class="flex justify-end opacity-0">
-      <div class="itbkk-button-create btn">+ Create personal board</div>
+      <div class="itbkk-button-create btn cursor-default">
+        + Create personal board
+      </div>
     </div>
 
     <h1
