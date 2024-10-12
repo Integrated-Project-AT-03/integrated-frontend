@@ -62,7 +62,7 @@ const handleLoading = (loadingStatus) => {
       class="container relative mt-[8%] flex h-full w-full flex-auto flex-col gap-2"
     >
       <div
-        v-show="$route.name !== 'Boards' && $route.name !== 'Collab'"
+        v-show="$route.name !== 'Boards' && $route.name !== 'Collab' && $route.name !== 'AddBoard'"
         class="itbkk-board-name flex justify-center text-3xl font-bold"
       >
         {{ boardStore.getCurrentBoard()?.name }}
