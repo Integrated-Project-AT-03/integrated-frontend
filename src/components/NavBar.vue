@@ -44,7 +44,7 @@ onUnmounted(() => {
 <template>
   <nav
     @click="clickOutSideMenu"
-    class="relative z-[99] flex h-[75px] w-full items-center justify-between rounded-md bg-gradient-to-r from-pink-500 to-violet-500 px-5 text-white"
+    class="fixed z-[99] flex h-[55px] w-full items-center justify-between rounded-md bg-gradient-to-r from-pink-500 to-violet-500 px-5 text-white"
   >
     <ul class="flex items-center gap-2">
       <TaskIcon />
@@ -53,12 +53,20 @@ onUnmounted(() => {
     <ul class="item-center flex gap-2">
       <li class="flex items-center gap-3">
         <div
-          class="flex h-[38px] w-[38px] items-center overflow-hidden rounded-full bg-slate-600 drop-shadow-2xl"
+          class="flex h-[38px] w-[38px] items-center justify-center overflow-hidden rounded-full bg-slate-600 drop-shadow-2xl"
         >
-          <img class="mt-5 scale-125" :src="exmpleAccount" />
+          <p>
+            {{
+              userStore
+                ?.getUser()
+                ?.name.split(" ")
+                .map((word) => word[0])
+                .join("") || "GT"
+            }}
+          </p>
         </div>
         <p class="itbkk-fullname text-sm">
-          Welcome | {{ userStore?.getUser()?.name }}
+          Welcome | {{ userStore?.getUser()?.name || "GUEST" }}
         </p>
       </li>
       <button

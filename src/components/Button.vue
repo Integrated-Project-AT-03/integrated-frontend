@@ -11,9 +11,10 @@ const props = defineProps({
     type: String,
   },
   access: {
-    type: String,
-    default: "GUEST",
+    type: Array,
+    default: ["GUEST", "READER", "WRITER"],
   },
+  // ถ้าไม่มีการใส่ access แปลว่าทุกคนมีสิทธิ์กดปุ่มนี้
   action: {
     type: Function,
     default: () => {},
@@ -23,13 +24,9 @@ const props = defineProps({
   },
 });
 const access = computed(
-  // สำหรับคำนวณ access role ใน current boards เป็น owner ก็ผ่านหมด แต่ถ้าเป็น Reader, Writer ก็สามารถใช้งานได้
-
   () =>
     boardStore.getCurrentBoard()?.access === "OWNER" ||
-    boardStore.getCurrentBoard()?.access === props.access ||
-    (props.access === "READER" &&
-      boardStore.getCurrentBoard()?.access === "WRITER"),
+    props.access.includes(boardStore.getCurrentBoard()?.access),
 );
 </script>
 

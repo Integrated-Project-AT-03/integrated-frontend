@@ -49,21 +49,26 @@ const handleClick = (board) => {
 </script>
 
 <template>
-  <div class="mt-[-5rem] flex justify-end">
-    <button
-      class="itbkk-button-create btn"
-      @click="$router.push({ name: 'AddBoard' })"
-    >
-      + Create personal board
-    </button>
-  </div>
-
   <!-- Personal Boards Section -->
-  <h1
-    class="itbkk-personal-board text-white-800 mb-4 text-center text-2xl font-semibold"
-  >
-    Personal Boards
-  </h1>
+  <div class="mb-3 flex items-center justify-between">
+    <div class="flex justify-end opacity-0">
+      <div class="itbkk-button-create btn">+ Create personal board</div>
+    </div>
+
+    <h1
+      class="itbkk-personal-board text-white-800 mb-4text-center text-2xl font-semibold"
+    >
+      Personal Boards
+    </h1>
+    <div class="flex justify-end">
+      <button
+        class="itbkk-button-create btn"
+        @click="$router.push({ name: 'AddBoard' })"
+      >
+        + Create personal board
+      </button>
+    </div>
+  </div>
 
   <div>
     <table
@@ -96,7 +101,7 @@ const handleClick = (board) => {
       </tbody>
     </table>
     <div
-      v-if="boardStore.getBoards().length === 0"
+      v-show="boardStore.getBoards().length === 0"
       class="m-0 bg-white py-3 text-center font-bold text-gray-600"
     >
       No boards available
@@ -104,7 +109,7 @@ const handleClick = (board) => {
   </div>
 
   <!-- Collab Boards Section -->
-  <div class="flex w-full flex-col gap-3 rounded-lg">
+  <div class="flex w-full flex-col rounded-lg">
     <ShareBoard />
     <RemoveCollabModal
       v-if="showLeaveModal"

@@ -18,7 +18,7 @@ const boardStore = useBoardStore();
 const collabStore = useCollabStore();
 const curCollab = ref({ oid: "", name: "", access: "" });
 const emits = defineEmits(["message, loading"]);
-const openAddModal = ref();
+const openAddModal = ref(false);
 
 onMounted(async () => {
   const curBoard = (await getBoardByNanoId(route.params.oid)).data;
@@ -56,7 +56,8 @@ function onChangeAccessModalOpen(collab) {
         class="itbkk-collaborato-add"
         bgcolor="#666666"
         message="Add Collaborator"
-        onclick="addcollaborator.showModal()"
+        :access="['OWNER']"
+        :action="() => (openAddModal = true)"
       />
     </div>
     <table class="block max-h-[500px] divide-y divide-gray-200 overflow-scroll">
@@ -114,14 +115,19 @@ function onChangeAccessModalOpen(collab) {
           <td class="whitespace-nowrap">
             <EmptyElementSelect
               @click="
-                onChangeAccessModalOpen({
-                  oid: collab.oid,
-                  name: collab.name,
-                  access: collab.accessRight,
-                })
+                ['OWNER'].includes(boardStore.getCurrentBoard().access) &&
+                  onChangeAccessModalOpen({
+                    oid: collab.oid,
+                    name: collab.name,
+                    access: collab.accessRight,
+                  })
               "
             />
+
             <select
+              :disabled="
+                !['OWNER'].includes(boardStore.getCurrentBoard().access)
+              "
               :value="collab.accessRight"
               class="itbkk-access-right select select-ghost w-full max-w-xs bg-[#444444]"
             >
@@ -131,6 +137,7 @@ function onChangeAccessModalOpen(collab) {
           </td>
           <td class="whitespace-nowrap px-4 py-2">
             <Button
+              :access="['OWNER']"
               class="itbkk-button-cancel"
               bgcolor="#444444"
               :action="
@@ -142,11 +149,21 @@ function onChangeAccessModalOpen(collab) {
         </tr>
         <tr></tr>
       </tbody>
+      <div
+        v-show="collabStore.getCollabs().length === 0"
+        class="m-0 bg-white py-3 text-center font-bold text-gray-600"
+      >
+        No Collaborator
+      </div>
     </table>
   </div>
   <RemoveCollabModal :collab="curCollab" @message="handleMessage($event)" />
   <ChangeAccessModal :collab="curCollab" @message="handleMessage($event)" />
-  <AddCollaboratorModal @message="handleMessage($event)" />
+  <AddCollaboratorModal
+    v-show="openAddModal"
+    @closeModal="openAddModal = false"
+    @message="handleMessage($event)"
+  />
 </template>
 
 <style scoped></style>

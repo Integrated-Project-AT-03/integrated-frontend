@@ -151,7 +151,7 @@ onmou
               :bgcolor="!isEditMode ? '#A020F0' : '#ef4444'"
               :message="route.params.mode !== 'edit' ? 'Edit mode' : 'Reset'"
               :action="() => handleEdit()"
-              access="OWNER"
+              :access="['OWNER', 'WRITER']"
             />
 
             <button

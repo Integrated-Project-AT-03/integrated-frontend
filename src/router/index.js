@@ -123,7 +123,8 @@ router.beforeEach(async (to, from, next) => {
       const boardStore = useBoardStore();
       boardStore.setCurrentBoard(res.data);
 
-      if (boardStore.getCurrentBoard().access === "OWNER") next();
+      if (["OWNER", "WRITER"].includes(boardStore.getCurrentBoard().access))
+        next();
       else {
         next({ name: "NotAllowPage" });
       }

@@ -23,8 +23,8 @@ const statusStore = useTaskStatusStore();
 const taskStore = useTaskStore();
 const sourceStatus = ref({});
 const showTranferStauts = ref(false);
-const isOwner = computed(
-  () => boardStore.getCurrentBoard()?.access === "OWNER",
+const access = computed(() =>
+  ["WRITER", "OWNER"].includes(boardStore.getCurrentBoard()?.access),
 );
 
 const numTask = computed(() =>
@@ -48,7 +48,7 @@ onMounted(async function () {
   settingStore.setLimitTask(settingLoad);
   const resTask = await getTasksByNanoidBoard(route.params.oid);
   taskStore.setTasks(resTask.data);
-  emits("loading", false)
+  emits("loading", false);
   boardStore.setCurrentBoard(resBoard.data);
 });
 
@@ -82,7 +82,7 @@ const handleMessage = (e) => {
       </div>
       <div class="flex justify-end gap-4">
         <Button
-          access="OWNER"
+          :access="['OWNER', 'WRITER']"
           class="itbkk-button-add tooltip-left"
           bgcolor="#06b6d4"
           message="Add Status"
@@ -188,7 +188,7 @@ const handleMessage = (e) => {
               class="flex items-center justify-center gap-2"
             >
               <Button
-                access="OWNER"
+                :access="['WRITER']"
                 class="itbkk-button-edit tooltip-left"
                 bgcolor="#A020F0"
                 message="Edit"
@@ -201,11 +201,11 @@ const handleMessage = (e) => {
                 "
               />
               <div
-                :class="!isOwner && 'tooltip tooltip-left'"
+                :class="!access && 'tooltip tooltip-left'"
                 data-tip="You need to be board owner to perform this action."
               >
                 <button
-                  :disabled="!isOwner"
+                  :disabled="!access"
                   class="itbkk-button-delete btn btn-error tooltip-left p-1 text-white disabled:bg-error"
                   @click="() => (sourceStatus = { name, id, index })"
                   onclick="deleteModal.showModal()"

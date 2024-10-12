@@ -3,7 +3,7 @@ import { acceptHMRUpdate, defineStore } from "pinia";
 export const useBoardStore = defineStore("boardStore", {
   state: () => ({
     boards: [],
-    currentBoard: null,
+    currentBoard: { access: "GUEST" },
   }),
 
   actions: {

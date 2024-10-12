@@ -46,20 +46,20 @@ const handleMessage = async (e) => {
 
 const isLoading = ref(true);
 
-    const handleLoading = (loadingStatus) => {
-      isLoading.value = loadingStatus;
-    };
+const handleLoading = (loadingStatus) => {
+  isLoading.value = loadingStatus;
+};
 </script>
 
 <template>
   <div
     @click="clickOutSideNav"
-    class="flex h-screen w-full flex-col items-center overflow-hidden p-3"
+    class="flex max-h-max min-h-screen w-full flex-col items-center pb-6"
   >
-  <Loading :is-loading="isLoading" />
+    <Loading :is-loading="isLoading" />
     <Navbar @message="handleMessage($event)" />
     <div
-      class="container relative flex h-full w-full flex-auto flex-col justify-center gap-2"
+      class="container relative mt-[8%] flex h-full w-full flex-auto flex-col gap-2"
     >
       <div
         v-show="$route.name !== 'Boards' && $route.name !== 'Collab'"
@@ -111,7 +111,7 @@ const isLoading = ref(true);
           Collaborator
         </button>
       </div>
-      <RouterView @message="handleMessage($event)" @loading="handleLoading"/>
+      <RouterView @message="handleMessage($event)" @loading="handleLoading" />
     </div>
     <transition v-show="messageModalOpenState" name="toast">
       <Alert :status="status" :message="message" />

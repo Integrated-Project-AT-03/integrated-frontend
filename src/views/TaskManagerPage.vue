@@ -87,8 +87,7 @@ onMounted(async function () {
     return router.push({ name: "NotFound" });
   }
   statusStore.setStatuses(res.data);
-  emits("loading", false)
-
+  emits("loading", false);
 
   showOwnerButton.value = boardStore.getCurrentBoard()?.access === "OWNER";
 });
@@ -96,7 +95,6 @@ onMounted(async function () {
 const handleMessage = (e) => {
   emits("message", e);
 };
-
 
 const searchStatus = computed(() =>
   statusStore
@@ -218,7 +216,7 @@ const openTask = (index, id) => {
           class="itbkk-manage-collaborator"
           bgcolor="#666666"
           message="Manage collaborator"
-          :action="() => $router.push({name: 'Collab'})"
+          :action="() => $router.push({ name: 'Collab' })"
         />
 
         <Button
@@ -229,7 +227,7 @@ const openTask = (index, id) => {
         />
 
         <Button
-          access="OWNER"
+          :access="['WRITER']"
           class="itbkk-button-add tooltip-left"
           bgcolor="#06b6d4"
           message="Add task"
@@ -281,9 +279,9 @@ const openTask = (index, id) => {
         <tr v-show="taskStore.getTasks().length === 0">
           <td
             colspan="4"
-            class="w-screen px-6 py-4 text-center text-sm text-gray-900"
+            class="m-0 w-screen bg-white py-3 text-center font-bold text-gray-600"
           >
-            No task
+            No Task
           </td>
         </tr>
         <tr

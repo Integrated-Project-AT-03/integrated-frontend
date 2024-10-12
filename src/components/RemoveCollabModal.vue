@@ -1,8 +1,8 @@
 <script setup>
-import Button from './Button.vue'
-import {deleteCollab} from '../services/apiCollab.js'
-import { useRoute } from 'vue-router';
-import {useCollabStore} from '../stores/useCollabStore'
+import Button from "./Button.vue";
+import { deleteCollab } from "../services/apiCollab.js";
+import { useRoute } from "vue-router";
+import { useCollabStore } from "../stores/useCollabStore";
 
 const props = defineProps({
   collab: {
@@ -11,28 +11,28 @@ const props = defineProps({
 });
 
 const emits = defineEmits(["message"]);
-const collabStore = useCollabStore()
+const collabStore = useCollabStore();
 const route = useRoute();
 
 const handleConfirm = async () => {
-    //It have bug for delete.
-    try {
-      const res = await deleteCollab(props.collab?.oid, route.params.oid)
-    if(res.httpStatus === 200){
-      collabStore.deleteCollab(props.collab.oid)
+  //It have bug for delete.
+  try {
+    const res = await deleteCollab(props.collab?.oid, route.params.oid);
+    if (res.httpStatus === 200) {
+      collabStore.deleteCollab(props.collab.oid);
       emits("message", {
-      description: `The collaborator has been successfully deleted.`,
-      status: "success",
-    });
+        description: `The collaborator has been successfully deleted.`,
+        status: "success",
+      });
     }
-    } catch (error) {
-      console.log(error);
-      emits("message", {
+  } catch (error) {
+    console.log(error);
+    emits("message", {
       description: `${error}`,
       status: "error",
     });
-    }
-}
+  }
+};
 </script>
 
 <template>
@@ -44,7 +44,6 @@ const handleConfirm = async () => {
       <div class="divider"></div>
       <div class="itbkk-message text-slate-300">
         Do you want to remove "{{ collab?.name }}" from the board
-        {{ message }}
       </div>
       <div class="divider"></div>
       <div class="mt-4 flex justify-end gap-3">
