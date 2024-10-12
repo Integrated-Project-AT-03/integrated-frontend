@@ -55,7 +55,7 @@ async function deleteTask(id) {
         </form>
         <form method="dialog">
           <Button
-            class="itbkk-button-cancel btn-error text-slate-200"
+            class="itbkk-button-cancel text-slate-200"
             message="Cancel"
           />
         </form>

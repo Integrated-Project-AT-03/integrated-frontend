@@ -12,6 +12,12 @@ const collabBoards = ref([]);
 
 const curCollab = ref({ oid: "", name: "" });
 
+const emits = defineEmits(["message"])
+
+function handleMessage(e){
+  emits("message", e)
+}
+
 onMounted(async () => {
   // const curBoard = (await getBoardByNanoId(route.params.oid)).data;
   // boardStore.setCurrentBoard(curBoard);
@@ -99,6 +105,6 @@ function onModalOpen(collab) {
         </div>
       </div>
     </div>
-    <RemoveCollabBoardModal :collab="curCollab" />
+    <RemoveCollabBoardModal :collab="curCollab" @message="handleMessage($event)"/>
   </div>
 </template>

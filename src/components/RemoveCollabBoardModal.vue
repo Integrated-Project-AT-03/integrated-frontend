@@ -10,6 +10,7 @@ const props = defineProps({
 });
 const route = useRoute();
 const collabBoardStore = useCollabBoardStore();
+const emits = defineEmits(["message"]);
 const handleDeleteCollab = async () => {
   try {
     //Oid from users and Board nano id from router
@@ -29,8 +30,6 @@ const handleDeleteCollab = async () => {
     });
   }
 };
-
-const emits = defineEmits(["message"]);
 
 // const handleConfirm = () => {
 //   handleDeleteCollab(props.boardName, route.params.oid, collabStore, emits);

@@ -112,12 +112,7 @@ const handleClick = (board) => {
 
   <!-- Collab Boards Section -->
   <div class="flex w-full flex-col rounded-lg">
-    <ShareBoard />
-    <RemoveCollabModal
-      v-if="showLeaveModal"
-      :collab="curCollab"
-      @message="handleMessage($event)"
-    />
+    <ShareBoard @message="handleMessage($event)"/>
   </div>
 
   <RouterView @message="handleMessage($event)" />

@@ -66,7 +66,6 @@ async function deleteStatus(id) {
         <form method="dialog">
           <Button
             class="itbkk-button-cancel"
-            bgcolor="#ef4444"
             message="Cancel"
           />
         </form>
