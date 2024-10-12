@@ -59,7 +59,7 @@ const emits = defineEmits(["message"]);
           </button>
         </form>
         <form method="dialog">
-          <button class="itbkk-button-cancel btn btn-error text-slate-200">
+          <button class="itbkk-button-cancel btn text-slate-200">
             Cancel
           </button>
         </form>
