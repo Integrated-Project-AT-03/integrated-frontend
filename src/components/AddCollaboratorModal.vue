@@ -17,13 +17,13 @@ const handleSubmit = async (e) => {
   try {
     const res = await addCollab(collabForm.value, route.params.oid);
     if (res.httpStatus === 201) {
-      collabStore.addCollab(res.data);
-      collabForm.value.email = "";
-      collabForm.value.accessRight = "READ";
+      collabStore.addCollab(res.data); //save line code
+      collabForm.value = { email: "", accessRight: "READ" };
       emits("message", {
         description: "The collaborator has been successfully added.",
         status: "success",
       });
+
       emits("closeModal");
     } else if (res.httpStatus === 404) {
       emits("message", {
@@ -94,7 +94,12 @@ const handleSubmit = async (e) => {
           />
         </form>
         <Button
-          :action="() => $emit('closeModal')"
+          :action="
+            () => {
+              collabForm = { email: '', accessRight: 'READ' };
+              $emit('closeModal');
+            }
+          "
           class="itbkk-button-cancel text-slate-200"
           message="Cancel"
         />
