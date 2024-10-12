@@ -151,11 +151,15 @@ onmou
               :bgcolor="!isEditMode ? '#A020F0' : '#ef4444'"
               :message="route.params.mode !== 'edit' ? 'Edit mode' : 'Reset'"
               :action="() => handleEdit()"
-              :access="['OWNER', 'WRITER']"
+              :access="['WRITER']"
             />
 
             <button
-              :disabled="boardStore.getCurrentBoard()?.access !== 'OWNER'"
+              :disabled="
+                !['WRITER', 'OWNER'].includes(
+                  boardStore.getCurrentBoard()?.access,
+                )
+              "
               onclick="deletetask.showModal()"
               class="btn btn-ghost btn-xs h-max w-max p-2 text-error"
             >

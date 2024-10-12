@@ -33,7 +33,11 @@ const access = computed(
 <template>
   <div
     :class="[!access && 'tooltip cursor-not-allowed']"
-    data-tip="You need to be board owner to perform this action."
+    :data-tip="
+      props.access.includes('WRITER')
+        ? 'You need to be board owner or has write access to perform this action.'
+        : 'You need to be board owner to perform this action.'
+    "
   >
     <button
       @click="() => action()"

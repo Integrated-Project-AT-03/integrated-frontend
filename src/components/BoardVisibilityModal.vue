@@ -13,27 +13,6 @@ const handleConfirm = async () => {
   const visibility = curBoard.visibility === "PUBLIC" ? "PRIVATE" : "PUBLIC";
   await updateVisibility({ visibility }, route.params.oid);
   boardStore.setCurrentBoard({ ...curBoard, visibility });
-
-  // receiptBool.value = settingStore.getVisibility() === "PRIVATE") {
-  //   receiptBool.value = false;
-  // } else {
-  //   receiptBool.value = true;
-  // }
-
-  // console.log(boardStore.getCurrentBoard());
-  // if(isPublic){
-  //     valueVisibility.value.visibility = "PRIVATE"
-  //     const setVisibility = await updateVisibility(valueVisibility.value, route.params.oid)
-  //     settingStore.setVisibility(setVisibility.data.visibility)
-  //     console.log(setVisibility);
-  // } else{
-  //     valueVisibility.value.visibility = "PUBLIC"
-  //     const setVisibility = await updateVisibility(valueVisibility.value, route.params.oid)
-  //     settingStore.setVisibility(setVisibility.data.visibility)
-  //     console.log(setVisibility);
-  // }
-  // receiptBool.value = !receiptBool.value;
-  // emits("setBool", !receiptBool.value);
 };
 </script>
 

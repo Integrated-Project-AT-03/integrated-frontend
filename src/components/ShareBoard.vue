@@ -1,25 +1,16 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import {
-  getCollabBoard,
-  leaveCollabBoard,
-} from "../services/apiMakeCollabBoard";
+import { getCollabBoard } from "../services/apiMakeCollabBoard";
 import { useCollabBoardStore } from "../stores/useCollabBoardStore";
-import RemoveCollabModal from "./RemoveCollabModal.vue";
 import Button from "./Button.vue";
 import RemoveCollabBoardModal from "./RemoveCollabBoardModal.vue";
 
 const collabBoardStore = useCollabBoardStore();
-const router = useRouter();
+
 const collabBoards = ref([]);
-const boardName = ref(""); // For displaying the board name in the modal
-const showLeaveModal = ref(false); // Control modal visibility
-const boardToLeave = ref(null); // Track which board is being left
 
 const curCollab = ref({ oid: "", name: "" });
-const route = useRoute();
-const curOid = ref();
 
 onMounted(async () => {
   // const curBoard = (await getBoardByNanoId(route.params.oid)).data;
@@ -88,7 +79,7 @@ function onModalOpen(collab) {
                       e.stopPropagation();
                       onModalOpen({
                         oid: board.oid,
-                        name: board.name,
+                        name: board.boardName,
                         nanoId: board.boardNanoId,
                       });
                     }
