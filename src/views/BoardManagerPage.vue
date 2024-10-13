@@ -5,20 +5,24 @@ import router from "@/router";
 import { getBoards } from "../services/apiBoard";
 import { useUserStore } from "../stores/useUserStore.js";
 import { useBoardStore } from "../stores/useBoardStore.js";
+import { useTaskStore } from "../stores/useTaskStore";
+import { useTaskStatusStore } from "../stores/useTaskStatusStore";
+import { useCollabBoardStore } from "../stores/useCollabBoardStore";
+
 import {
   getCollabBoard,
   leaveCollabBoard,
 } from "../services/apiMakeCollabBoard";
 import ShareBoard from "../components/ShareBoard.vue";
-import RemoveCollabModal from "../components/RemoveCollabModal.vue"; // Add this import
 
 const boardStore = useBoardStore();
 const userStore = useUserStore();
 const collabBoards = ref([]);
-const showLeaveModal = ref(false); // Control modal visibility
-const curCollab = ref(null); // Track the selected collaboration board to remove
+const taskStore = useTaskStore();
+const taskStatusStore = useTaskStatusStore();
+const collabBoardStore = useCollabBoardStore();
+
 const emits = defineEmits(["message", "loading"]); // Corrected event names
-emits("loading", false);
 
 const handleMessage = (e) => {
   emits("message", e);
@@ -35,12 +39,19 @@ watchEffect(async () => {
 });
 
 onMounted(async () => {
+  emits("loading", true);
+  taskStore.setTasks([]);
+  taskStatusStore.setStatuses([]);
+  collabBoardStore.setCollabsBoard([]);
+  boardStore.setCurrentBoard({});
+
   try {
     const res = await getCollabBoard();
     collabBoards.value = res.data;
   } catch (error) {
     console.error("Failed to fetch collab boards", error);
   }
+  emits("loading", false);
 });
 
 const handleClick = (board) => {
@@ -112,7 +123,7 @@ const handleClick = (board) => {
 
   <!-- Collab Boards Section -->
   <div class="flex w-full flex-col rounded-lg">
-    <ShareBoard @message="handleMessage($event)"/>
+    <ShareBoard @message="handleMessage($event)" />
   </div>
 
   <RouterView @message="handleMessage($event)" />

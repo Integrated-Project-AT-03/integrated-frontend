@@ -36,19 +36,20 @@ const numTask = computed(() =>
 );
 
 onMounted(async function () {
+  emits("loading", true);
   const res = await getStatusesByNanoIdBoard(route.params.oid);
   if (res.httpStatus === 403) {
     return router.push({ name: "NotAllowPage" });
   } else if (res.httpStatus === 404) {
     return router.push({ name: "NotFoundPage" });
   }
-  statusStore.setStatuses(res.data);
   const resBoard = await getBoardByNanoId(route.params.oid);
   const settingLoad = (await getSettingByNanoIdBoard(route.params.oid)).data;
-  settingStore.setLimitTask(settingLoad);
   const resTask = await getTasksByNanoidBoard(route.params.oid);
-  taskStore.setTasks(resTask.data);
   emits("loading", false);
+  statusStore.setStatuses(res.data);
+  settingStore.setLimitTask(settingLoad);
+  taskStore.setTasks(resTask.data);
   boardStore.setCurrentBoard(resBoard.data);
 });
 

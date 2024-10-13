@@ -13,7 +13,6 @@ const collabBoardStore = useCollabBoardStore();
 const emits = defineEmits(["message"]);
 const handleDeleteCollab = async () => {
   try {
-    //Oid from users and Board nano id from router
     const res = await deleteCollab(props.collab.oid, props.collab.nanoId);
     if (res.httpStatus === 200) {
       collabBoardStore.deleteCollabBoard(props.collab.nanoId);
@@ -58,9 +57,7 @@ const handleDeleteCollab = async () => {
           </button>
         </form>
         <form method="dialog">
-          <button class="itbkk-button-cancel btn text-slate-200">
-            Cancel
-          </button>
+          <button class="itbkk-button-cancel btn text-slate-200">Cancel</button>
         </form>
       </div>
     </div>

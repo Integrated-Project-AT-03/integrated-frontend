@@ -9,7 +9,7 @@ import { onMounted } from "vue";
 import { useBoardStore } from "@/stores/useBoardStore";
 import { useCollabStore } from "../stores/useCollabStore.js";
 import { ref } from "vue";
-import EmptyElementSelect from "../components/EmptyElementSelect.vue";
+import SelectCollabRole from "../components/SelectCollabRole.vue";
 import ChangeAccessModal from "../components/ChangeAccessModal.vue";
 
 const route = useRoute();
@@ -21,6 +21,7 @@ const emits = defineEmits(["message, loading"]);
 const openAddModal = ref(false);
 
 onMounted(async () => {
+  emits("loading", true);
   const curBoard = (await getBoardByNanoId(route.params.oid)).data;
   boardStore.setCurrentBoard(curBoard);
   const res = await getCollab(route.params.oid);
@@ -46,6 +47,19 @@ function onModalOpen(collab) {
 function onChangeAccessModalOpen(collab) {
   document.getElementById("changeAccessModal").showModal();
   curCollab.value = collab;
+  console.log(collab);
+}
+
+function revert() {
+  collabStore.updateCollab(
+    curCollab.value.oid,
+    curCollab.value.accessRight === "WRITE" ? "READ" : "WRITE",
+  );
+
+  console.log(
+    curCollab.value.oid,
+    curCollab.value.accessRight === "WRITE" ? "READ" : "WIRTE",
+  );
 }
 </script>
 
@@ -113,27 +127,10 @@ function onChangeAccessModalOpen(collab) {
             </div>
           </td>
           <td class="whitespace-nowrap">
-            <EmptyElementSelect
-              @click="
-                ['OWNER'].includes(boardStore.getCurrentBoard().access) &&
-                  onChangeAccessModalOpen({
-                    oid: collab.oid,
-                    name: collab.name,
-                    access: collab.accessRight,
-                  })
-              "
+            <SelectCollabRole
+              @openConfirmModal="onChangeAccessModalOpen"
+              :collab="collab"
             />
-
-            <select
-              :disabled="
-                !['OWNER'].includes(boardStore.getCurrentBoard().access)
-              "
-              :value="collab.accessRight"
-              class="itbkk-access-right select select-ghost w-full max-w-xs bg-[#444444]"
-            >
-              <option value="READ">Read</option>
-              <option value="WRITE">Write</option>
-            </select>
           </td>
           <td class="whitespace-nowrap px-4 py-2">
             <Button
@@ -158,7 +155,11 @@ function onChangeAccessModalOpen(collab) {
     </table>
   </div>
   <RemoveCollabModal :collab="curCollab" @message="handleMessage($event)" />
-  <ChangeAccessModal :collab="curCollab" @message="handleMessage($event)" />
+  <ChangeAccessModal
+    @revert="revert"
+    :collab="curCollab"
+    @message="handleMessage($event)"
+  />
   <AddCollaboratorModal
     v-show="openAddModal"
     @closeModal="openAddModal = false"

@@ -70,6 +70,7 @@ const loadTasks = async () => {
 const emits = defineEmits(["message, loading"]);
 
 onMounted(async function () {
+  emits("loading", true);
   const curBoard = (await getBoardByNanoId(route.params.oid)).data;
   boardStore.setCurrentBoard(curBoard);
   const settingLoad = (await getSettingByNanoIdBoard(route.params.oid)).data;

@@ -45,7 +45,7 @@ export async function updateAccessCollab(boardNanoId, oid, access) {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify({ ...access }),
+    body: JSON.stringify({ accessRight: access }),
   };
   return await fetchWithRefresh(
     `${uri}/v3/boards/${boardNanoId}/collabs/${oid}`,
