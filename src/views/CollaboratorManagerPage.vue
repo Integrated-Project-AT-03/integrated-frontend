@@ -135,7 +135,7 @@ function revert() {
           <td class="whitespace-nowrap px-4 py-2">
             <Button
               :access="['OWNER']"
-              class="itbkk-button-cancel"
+              class="itbkk-button-cancel tooltip-left"
               bgcolor="#444444"
               :action="
                 () => onModalOpen({ oid: collab.oid, name: collab.name })

@@ -6,20 +6,28 @@ const emits = defineEmits(["openConfirmModal"]);
 </script>
 
 <template>
-  <select
-    :disabled="!['OWNER'].includes(boardStore.getCurrentBoard().access)"
-    v-model="collab.accessRight"
-    @change="
-      ({ target }) =>
-        $emit('openConfirmModal', {
-          oid: collab.oid,
-          name: collab.name,
-          accessRight: target.value,
-        })
+  <div
+    data-tip="You need to be board owner to perform this action."
+    :class="
+      !['OWNER'].includes(boardStore.getCurrentBoard().access) &&
+      'tooltip tooltip-left'
     "
-    class="itbkk-access-right select select-ghost w-full max-w-xs bg-[#444444]"
   >
-    <option value="READ">Read</option>
-    <option value="WRITE">Write</option>
-  </select>
+    <select
+      :disabled="!['OWNER'].includes(boardStore.getCurrentBoard().access)"
+      v-model="collab.accessRight"
+      @change="
+        ({ target }) =>
+          $emit('openConfirmModal', {
+            oid: collab.oid,
+            name: collab.name,
+            accessRight: target.value,
+          })
+      "
+      class="itbkk-access-right select select-ghost w-full max-w-xs bg-[#444444]"
+    >
+      <option value="READ">Read</option>
+      <option value="WRITE">Write</option>
+    </select>
+  </div>
 </template>

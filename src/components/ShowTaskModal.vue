@@ -147,24 +147,33 @@ onmou
 
           <div class="flex items-center gap-4">
             <Button
-              class="tooltip-left"
+              class="tooltip"
               :bgcolor="!isEditMode ? '#A020F0' : '#ef4444'"
               :message="route.params.mode !== 'edit' ? 'Edit mode' : 'Reset'"
               :action="() => handleEdit()"
               :access="['WRITER']"
             />
 
-            <button
-              :disabled="
+            <div
+              data-tip="You need to be board owner or has write access to perform this action."
+              :class="
                 !['WRITER', 'OWNER'].includes(
                   boardStore.getCurrentBoard()?.access,
-                )
+                ) && 'tooltip'
               "
-              onclick="deletetask.showModal()"
-              class="btn btn-ghost btn-xs h-max w-max p-2 text-error"
             >
-              <Trash />
-            </button>
+              <button
+                :disabled="
+                  !['WRITER', 'OWNER'].includes(
+                    boardStore.getCurrentBoard()?.access,
+                  )
+                "
+                onclick="deletetask.showModal()"
+                class="btn btn-ghost btn-xs h-max w-max p-2 text-error"
+              >
+                <Trash />
+              </button>
+            </div>
           </div>
         </div>
         <div class="divider m-1"></div>

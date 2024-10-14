@@ -203,7 +203,7 @@ const handleMessage = (e) => {
               />
               <div
                 :class="!access && 'tooltip tooltip-left'"
-                data-tip="You need to be board owner to perform this action."
+                data-tip="You need to be board owner or has write access to perform this action."
               >
                 <button
                   :disabled="!access"
