@@ -281,11 +281,11 @@ onmou
             message="Save"
             bgcolor=""
           />
-          <Button
-            class="itbkk-button-cancel"
-            message="Close"
-            @click="router.push({ name: 'Task' })"
-          />
+            <Button
+              class="itbkk-button-cancel"
+              message="Close"
+              @click="router.push({ name: 'Task' })"
+            />
         </div>
       </div>
     </div>
