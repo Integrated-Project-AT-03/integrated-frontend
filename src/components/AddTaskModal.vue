@@ -65,9 +65,10 @@ const selectedFile = ref(null)
 
 //choose file
 const handleFileChange = (e) => {
-  const files = e.targer.files
+  const files = e.target.files
   if(files && files[0]){
     selectedFile.value = files[0]
+    console.log(selectedFile.value);
   }
 }
 
@@ -134,9 +135,10 @@ const submitFile = async () => {
                 class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
               ></textarea>
               <div class="flex gap-3">
-                <input type="file" class="file-input file-input-bordered file-input-error h-10 w-full max-w-xs" />
+                <input type="file" class="file-input file-input-bordered file-input-error h-10 w-full max-w-xs" @change="handleFileChange"/>
                 <button @click="submitFile">Upload</button>
               </div>
+              {{ selectedFile?.name }}
             </div>
             <div class="flex flex-col justify-between gap-3">
               <div class="flex flex-col gap-3">
