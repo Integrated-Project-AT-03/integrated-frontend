@@ -7,7 +7,7 @@ import Button from "./Button.vue";
 import RemoveCollabBoardModal from "./RemoveCollabBoardModal.vue";
 
 const collabBoardStore = useCollabBoardStore();
-
+console.log(collabBoardStore.getCollabsBoard());
 const collabBoards = ref([]);
 
 const curCollab = ref({ oid: "", name: "" });
