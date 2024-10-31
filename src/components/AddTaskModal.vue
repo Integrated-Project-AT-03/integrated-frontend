@@ -135,7 +135,7 @@ const submitFile = async () => {
                 class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
               ></textarea>
               <div class="flex gap-3">
-                <input type="file" class="file-input file-input-bordered file-input-error h-10 w-full max-w-xs" @change="handleFileChange"/>
+                <input type="file" class="file-input file-input-bordered h-10 w-full max-w-xs" @change="handleFileChange"/>
                 <button @click="submitFile">Upload</button>
               </div>
               {{ selectedFile?.name }}
