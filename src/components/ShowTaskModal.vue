@@ -4,6 +4,8 @@ import { useRoute, useRouter } from "vue-router";
 import Trash from "../assets/icons/Trash.vue";
 import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
 import { editTaskById, getTaskById } from "./../services/apiTask";
+import {uploadFiles} from '../services/apiFileAttachment'
+
 import { useBoardStore } from "./../stores/useBoardStore";
 import { useSettingStore } from "./../stores/useSettingStore";
 import { useTaskStore } from "./../stores/useTaskStore";
@@ -115,15 +117,45 @@ const handleMessage = (e) => {
 };
 
 const selectedFile = ref([])
+const errorMessage = ref('')
 
-//choose file
-const handleFileChange = (e) => {
-  const files = e.target.files
-  if(files){
-    selectedFile.value = [...selectedFile.value, ...files]
-    console.log(selectedFile.value);
-  }
-}
+ // Handle file selection
+ const handleFileChange = (e) => {
+      const files = Array.from(e.target.files);
+      const maxFileSizeMB = 20;
+      const maxTotalSizeMB = 20;
+      const maxFileCount = 10;
+
+      // Check each file's size
+      for (const file of files) {
+        if (file.size / (1024 * 1024) > maxFileSizeMB) {
+          errorMessage.value = `แต่ละไฟล์ต้องไม่เกิน ${maxFileSizeMB} MB`;
+          return;
+        }
+      }
+
+      // Check total file count after adding new files
+      if (selectedFile.value.length + files.length > maxFileCount) {
+        errorMessage.value = `ไม่สามารถเลือกไฟล์เกิน ${maxFileCount} ไฟล์ได้`;
+        return;
+      }
+
+      // Calculate the total size of all selected files after adding new files
+      const totalSize = selectedFile.value.reduce((acc, file) => acc + file.size, 0) +
+                        files.reduce((acc, file) => acc + file.size, 0);
+
+      if (totalSize / (1024 * 1024) > maxTotalSizeMB) {
+        errorMessage.value = `ขนาดรวมของไฟล์ต้องไม่เกิน ${maxTotalSizeMB} MB`;
+        return;
+      }
+
+      // Clear any previous error and add files to selectedFile if all checks pass
+      errorMessage.value = '';
+      selectedFile.value = [...selectedFile.value, ...files];
+  };
+
+
+
 
 //submit files attachment
 const submitFile = async () => {
@@ -135,18 +167,12 @@ const submitFile = async () => {
   // Create FormData to send as the file payload
   const formData = new FormData();
   formData.append('file', selectedFile.value);
-
-  // Replace with your API endpoint or handling logic
-  // try {
-  //   const response = await fetch('YOUR_API_ENDPOINT', {
-  //     method: 'POST',
-  //     body: formData,
-  //   });
-  //   const data = await response.json();
-  //   console.log('File upload successful:', data);
-  // } catch (error) {
-  //   console.error('File upload failed:', error);
-  // }
+  try {
+    const res = await uploadFiles(route.params.oid, route.params.id, formData)// Provide
+    console.log('File upload seccessful');
+  } catch (error) {
+    console.error('File upload failed:', error);
+  }
 };
 </script>
 <template>
@@ -231,8 +257,9 @@ const submitFile = async () => {
             </div>
               <!-- {{ selectedFile?.name }} -->
               <div v-for="(file, index) in selectedFile" :key="index">
-                {{ file.name }} ({{ Math.round(file.size / (1024 * 1024)) }} MB)
+                {{ file.name }} ({{ (file.size / (1024 * 1024)).toFixed(2) }} MB)
               </div>
+              {{  errorMessage }}
           </div>
           <div class="flex flex-col gap-2">
             <div class="flex flex-col gap-2 text-slate-200">
@@ -261,7 +288,7 @@ const submitFile = async () => {
                   {{ status.name }}
                 </option>
               </select>
-              <div>
+              <div class="mt-2">
                 The limit status :
                 <span
                   :class="
@@ -280,7 +307,7 @@ const submitFile = async () => {
               </div>
             </div>
             <div
-              class="flex flex-auto flex-col justify-between gap-3 pb-3 text-xs text-slate-200"
+              class="flex flex-col justify-between mt-3 gap-3 pb-3 text-xs text-slate-200"
             >
               <div class="flex gap-2">
                 TimeZone:
