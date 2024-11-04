@@ -16,7 +16,7 @@ const collabForm = ref({
 const handleSubmit = async (e) => {
   try {
     const res = await addCollab(collabForm.value, route.params.oid);
-    if (res.httpStatus === 201) {
+    if (res.httpStatus === 200) {
       collabStore.addCollab(res.data); //save line code
       collabForm.value = { email: "", accessRight: "READ" };
       emits("message", {

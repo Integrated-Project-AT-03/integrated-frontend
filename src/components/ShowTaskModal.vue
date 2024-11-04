@@ -27,6 +27,7 @@ const dataTask = ref({
   status: {},
   boardNanoId: route.params.oid,
 });
+
 watch(
   () => route.params.mode,
   () => (isEditMode.value = route.params?.mode === "edit"),
@@ -166,12 +167,19 @@ const submitFile = async () => {
 
   // Create FormData to send as the file payload
   const formData = new FormData();
-  formData.append('files', selectedFile.value);
+
+  // Append each file individually to the FormData
+  selectedFile.value.forEach(file => {
+    formData.append('files', file);
+  });
+
   try {
     const res = await uploadFiles(route.params.oid, route.params.id, formData)// Provide
     console.log(res);
     if(res.httpStatus === 200){
       console.log('File upload seccessful');
+      selectedFile.value = ''
+
     }
   } catch (error) {
     console.error('File upload failed:', error);
@@ -263,6 +271,11 @@ const submitFile = async () => {
                 <div>{{ file.name }} ({{ (file.size / (1024 * 1024)).toFixed(2) }} MB)</div>
               </div>
               <div class="text-red-400">{{  errorMessage }}</div>
+
+              <!-- <div v-for="taskAttachment in dataTask.tasksAttachment">
+                {{ taskAttachment.name }}
+                {{ dataTask }}
+              </div> -->
           </div>
           <div class="flex flex-col gap-2">
             <div class="flex flex-col gap-2 text-slate-200">
