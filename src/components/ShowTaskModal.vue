@@ -129,14 +129,14 @@ const errorMessage = ref('')
       // Check each file's size
       for (const file of files) {
         if (file.size / (1024 * 1024) > maxFileSizeMB) {
-          errorMessage.value = `แต่ละไฟล์ต้องไม่เกิน ${maxFileSizeMB} MB`;
+          errorMessage.value = `In each file must not be ${maxFileSizeMB} MB`;
           return;
         }
       }
 
       // Check total file count after adding new files
       if (selectedFile.value.length + files.length > maxFileCount) {
-        errorMessage.value = `ไม่สามารถเลือกไฟล์เกิน ${maxFileCount} ไฟล์ได้`;
+        errorMessage.value = `You can not choose files more than ${maxFileCount} ไฟล์ได้`;
         return;
       }
 
@@ -145,7 +145,7 @@ const errorMessage = ref('')
                         files.reduce((acc, file) => acc + file.size, 0);
 
       if (totalSize / (1024 * 1024) > maxTotalSizeMB) {
-        errorMessage.value = `ขนาดรวมของไฟล์ต้องไม่เกิน ${maxTotalSizeMB} MB`;
+        errorMessage.value = `Total files size must not be ${maxTotalSizeMB} MB`;
         return;
       }
 
@@ -166,10 +166,13 @@ const submitFile = async () => {
 
   // Create FormData to send as the file payload
   const formData = new FormData();
-  formData.append('file', selectedFile.value);
+  formData.append('files', selectedFile.value);
   try {
     const res = await uploadFiles(route.params.oid, route.params.id, formData)// Provide
-    console.log('File upload seccessful');
+    console.log(res);
+    if(res.httpStatus === 200){
+      console.log('File upload seccessful');
+    }
   } catch (error) {
     console.error('File upload failed:', error);
   }
@@ -251,15 +254,15 @@ const submitFile = async () => {
               :placeholder="dataTask.description ?? 'No Description Provided'"
               class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
             ></textarea>
-            <div v-show="isEditMode" class="flex mt-3 gap-3">
+            <div v-show="isEditMode" class="flex mt-3 gap-3 items-center">
                 <input type="file" class="file-input file-input-bordered h-10 w-full max-w-xs" @change="handleFileChange" multiple />
-                <button @click="submitFile">Upload</button>
+                <Button message="Upload" @click="submitFile" />
             </div>
               <!-- {{ selectedFile?.name }} -->
               <div v-for="(file, index) in selectedFile" :key="index">
-                {{ file.name }} ({{ (file.size / (1024 * 1024)).toFixed(2) }} MB)
+                <div>{{ file.name }} ({{ (file.size / (1024 * 1024)).toFixed(2) }} MB)</div>
               </div>
-              {{  errorMessage }}
+              <div class="text-red-400">{{  errorMessage }}</div>
           </div>
           <div class="flex flex-col gap-2">
             <div class="flex flex-col gap-2 text-slate-200">
