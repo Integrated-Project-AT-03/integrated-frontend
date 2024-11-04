@@ -113,8 +113,42 @@ const formattDate = (date) =>
 const handleMessage = (e) => {
   emits("message", e);
 };
+
+const selectedFile = ref([])
+
+//choose file
+const handleFileChange = (e) => {
+  const files = e.target.files
+  if(files){
+    selectedFile.value = [...selectedFile.value, ...files]
+    console.log(selectedFile.value);
+  }
+}
+
+//submit files attachment
+const submitFile = async () => {
+  if (!selectedFile.value) {
+    console.log('No file selected');
+    return;
+  }
+
+  // Create FormData to send as the file payload
+  const formData = new FormData();
+  formData.append('file', selectedFile.value);
+
+  // Replace with your API endpoint or handling logic
+  // try {
+  //   const response = await fetch('YOUR_API_ENDPOINT', {
+  //     method: 'POST',
+  //     body: formData,
+  //   });
+  //   const data = await response.json();
+  //   console.log('File upload successful:', data);
+  // } catch (error) {
+  //   console.error('File upload failed:', error);
+  // }
+};
 </script>
-onmou
 <template>
   <Teleport to="body">
     <div
@@ -122,7 +156,7 @@ onmou
     >
       <RouterView @message="handleMessage($event)" />
       <div
-        class="relative h-[30rem] w-[65rem] rounded-2xl bg-neutral drop-shadow-2xl"
+        class="relative h-auto w-[65rem] rounded-2xl bg-neutral drop-shadow-2xl"
       >
         <Loading :is-loading="isLoading" />
         <div
@@ -191,6 +225,14 @@ onmou
               :placeholder="dataTask.description ?? 'No Description Provided'"
               class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
             ></textarea>
+            <div v-show="isEditMode" class="flex mt-3 gap-3">
+                <input type="file" class="file-input file-input-bordered h-10 w-full max-w-xs" @change="handleFileChange" multiple />
+                <button @click="submitFile">Upload</button>
+            </div>
+              <!-- {{ selectedFile?.name }} -->
+              <div v-for="(file, index) in selectedFile" :key="index">
+                {{ file.name }} ({{ Math.round(file.size / (1024 * 1024)) }} MB)
+              </div>
           </div>
           <div class="flex flex-col gap-2">
             <div class="flex flex-col gap-2 text-slate-200">

@@ -61,40 +61,7 @@ async function addNewTask(newItem) {
   return router.push({ name: "Task" });
 }
 
-const selectedFile = ref(null)
 
-//choose file
-const handleFileChange = (e) => {
-  const files = e.target.files
-  if(files && files[0]){
-    selectedFile.value = files[0]
-    console.log(selectedFile.value);
-  }
-}
-
-//submit files attachment
-const submitFile = async () => {
-  if (!selectedFile.value) {
-    console.log('No file selected');
-    return;
-  }
-
-  // Create FormData to send as the file payload
-  const formData = new FormData();
-  formData.append('file', selectedFile.value);
-
-  // Replace with your API endpoint or handling logic
-  // try {
-  //   const response = await fetch('YOUR_API_ENDPOINT', {
-  //     method: 'POST',
-  //     body: formData,
-  //   });
-  //   const data = await response.json();
-  //   console.log('File upload successful:', data);
-  // } catch (error) {
-  //   console.error('File upload failed:', error);
-  // }
-};
 </script>
 
 <template>
@@ -103,7 +70,7 @@ const submitFile = async () => {
       class="fixed top-0 z-[1000] flex h-screen w-full items-center justify-center backdrop-blur-sm transition-all duration-500"
     >
       <div
-        class="relative h-[34rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
+        class="relative h-[30rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
       >
         <div class="mt-4 flex items-center justify-between px-5">
           <div class="text-xl font-bold">New Task</div>
@@ -134,11 +101,6 @@ const submitFile = async () => {
                 v-model="taskForm.description"
                 class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
               ></textarea>
-              <div class="flex gap-3">
-                <input type="file" class="file-input file-input-bordered h-10 w-full max-w-xs" @change="handleFileChange" multiple />
-                <button @click="submitFile">Upload</button>
-              </div>
-              {{ selectedFile?.name }}
             </div>
             <div class="flex flex-col justify-between gap-3">
               <div class="flex flex-col gap-3">
