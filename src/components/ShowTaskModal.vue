@@ -64,6 +64,7 @@ const loadTask = async () => {
     taskStore.deleteTask(route.params.id);
     return router.push({ name: "Task" });
   }
+  console.log(response);
   dataTask.value = { ...response.data, status: response.data.status.id };
   compareTask.value = { ...response.data, status: response.data.status.id };
 };
