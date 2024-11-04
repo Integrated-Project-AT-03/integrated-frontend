@@ -154,12 +154,12 @@ const openTask = (index, id) => {
 
 <template>
   <div class="itbkk-modal-task flex w-full flex-col gap-2">
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col gap-3 sm:flex-row items-center justify-between">
       <div class="container">
         <div class="flex items-center gap-2">
           <label class="relative flex flex-col gap-2">
             <input
-              class="itbkk-status-filter w-[300px] rounded-md border p-2 text-gray-900"
+              class="itbkk-status-filter w-[200px] sm:w-[300px] rounded-md border p-2 text-gray-900"
               type="text"
               v-model="newItem"
               @keyup.enter="addItem"
