@@ -195,11 +195,20 @@ const dowloadFile = async (fileId) => {
   try {
     const res = await downloadFile(route.params.oid, route.params.id, fileId)
     const fileUrl = res.data.message.url;
+    console.log(res);
+    console.log(res.data.message.url);
+
+    // Extract the filename from the URL
+    const filenameMatch = fileUrl.match(/\/([^\/]+)$/);
+    const filename = filenameMatch ? filenameMatch[1] : 'downloaded-file.png'; // Default filename if no match
+    //Wait backend fix fileName//
+    // const filename = res.data.message.filename || 'downloaded-file.png'; // Use the filename from the response
+    console.log('Extracted filename:', filename); // Log the extracted filename
 
   // Create a temporary <a> element
     const link = document.createElement('a');
     link.href = fileUrl;
-    link.download = '';  // Optional: specify a filename if you want, e.g., 'file.pdf'
+    link.download = filename;  // Optional: specify a filename if you want, e.g., 'file.pdf'
 
     document.body.appendChild(link);
 
@@ -213,6 +222,8 @@ const dowloadFile = async (fileId) => {
   }
   
 }
+
+
 </script>
 <template>
   <Teleport to="body">
