@@ -70,7 +70,6 @@ const loadTask = async () => {
   }
   dataTask.value = { ...response.data, status: response.data.status.id };
   compareTask.value = { ...response.data, status: response.data.status.id };
-  console.log(dataTask.value);
 };
 
 onMounted(async () => {
