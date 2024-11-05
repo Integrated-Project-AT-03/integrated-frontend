@@ -31,74 +31,53 @@ function onModalOpen(collab) {
 </script>
 
 <template>
-  <div>
-    <div class="mt-3 flex w-full flex-col gap-2 rounded-lg">
-      <h1
-        class="itbkk-collab-board text-white-800 mb-5 text-center text-2xl font-semibold"
-      >
-        Collab Boards
-      </h1>
-      <div class="flex flex-col">
-        <table class="min-w-full border border-gray-300 bg-white text-black">
-          <thead>
-            <tr class="bg-gray-200 text-gray-700">
-              <th class="border-b px-4 py-2 text-start">No</th>
-              <th class="border-b px-4 py-2 text-start">Name</th>
-              <th class="border-b px-4 py-2 text-center">Owner</th>
-              <th class="border-b px-4 py-2 text-center">Access Right</th>
-              <th class="border-b px-4 py-2 text-center">Action</th>
-            </tr>
-          </thead>
+  <div class="mt-3 flex flex-col gap-6 rounded-lg">
 
-          <tbody>
-            <tr
-              v-for="(board, index) in collabBoardStore.getCollabsBoard()"
-              :key="board.oid"
-              class="cursor-pointer hover:bg-gray-100"
-              @click="
-                $router.push({
-                  name: 'Task',
-                  params: { oid: board.boardNanoId },
-                })
-              "
-            >
-              <td class="border-b px-4 py-2">{{ index + 1 }}</td>
-              <td class="border-b px-4 py-2">{{ board.boardName }}</td>
-              <td class="border-b px-4 py-2 text-center">
-                {{ board.name }}
-              </td>
-              <td class="border-b px-4 py-2 text-center">
-                {{ board.accessRight || "N/A" }}
-              </td>
-              <td class="flex justify-center border-b px-4 py-2">
-                <button
-                  class="itbkk-button-cancel btn text-slate-200"
-                  access="guests"
-                  @click="
-                    (e) => {
-                      e.stopPropagation();
-                      onModalOpen({
-                        oid: board.oid,
-                        name: board.boardName,
-                        nanoId: board.boardNanoId,
-                      });
-                    }
-                  "
-                >
-                  leave
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div
-          v-if="collabBoardStore.getCollabsBoard().length === 0"
-          class="m-0 bg-white py-3 text-center font-bold text-gray-600"
-        >
-          No collab boards available
+
+    <!-- No Collaboration Boards Message -->
+    <div v-if="collabBoardStore.getCollabsBoard().length === 0" 
+         class="p-5 rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 text-gray-500 shadow-lg 
+                cursor-pointer transform transition duration-300 hover:scale-105 flex items-center justify-center"
+         style="height: 150px;">
+      No collaboration boards available
+    </div>
+
+    <!-- Collaboration Boards List -->
+    <div v-for="(board, index) in collabBoardStore.getCollabsBoard()" :key="board.oid"
+         class="flex flex-col justify-between p-6 rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 shadow-lg 
+                transition-transform transform hover:scale-105 w-90 h-70">
+      <div class="flex-grow">
+        <!-- Flex container for PUBLIC badge and board name -->
+        <div class="flex items-center justify-between mb-3">
+          <span class="bg-gray-300 text-xs font-semibold rounded px-2 py-1 text-gray-700">PUBLIC</span>
+          <h3 class="text-lg font-bold ml-2 text-gray-800">{{ board.boardName }}</h3>
         </div>
+        <p class="text-sm text-gray-600">Owner: {{ board.name }}</p>
+        <p class="text-sm text-gray-600">Access Right: {{ board.accessRight || "N/A" }}</p>
+      </div>
+
+      <!-- Actions Section -->
+      <div class="mt-4 flex justify-between items-center">
+        <span class="text-sm underline cursor-pointer text-blue-600 hover:text-blue-800"
+              @click="$router.push({ name: 'Task', params: { oid: board.boardNanoId } })">
+          View board
+        </span>
+        <button
+          class="bg-red-500 text-white rounded px-3 py-1 border-none cursor-pointer transition-colors duration-200 hover:bg-red-600"
+          @click="(e) => {
+            e.stopPropagation();
+            onModalOpen({
+              oid: board.oid,
+              name: board.boardName,
+              nanoId: board.boardNanoId,
+            });
+          }">
+          Leave
+        </button>
       </div>
     </div>
+
+    <!-- Remove Collaboration Board Modal -->
     <RemoveCollabBoardModal :collab="curCollab" />
   </div>
 </template>
