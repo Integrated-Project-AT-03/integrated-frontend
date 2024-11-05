@@ -13,3 +13,14 @@ export async function uploadFiles(nanoId, id, formData) {
     option,
   );
 }
+
+export async function downloadFile(nanoId, tasksId, fileId) {
+  const option = {
+    method: "GET",
+    credentials: "include",
+  };
+  return await fetchWithRefresh(
+    `${uri}/v3/boards/${nanoId}/tasks/${tasksId}/attachment/${fileId}`,
+    option,
+  );
+}

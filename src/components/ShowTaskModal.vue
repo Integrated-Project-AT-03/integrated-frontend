@@ -4,7 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import Trash from "../assets/icons/Trash.vue";
 import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
 import { editTaskById, getTaskById } from "./../services/apiTask";
-import {uploadFiles} from '../services/apiFileAttachment'
+import {uploadFiles, downloadFile} from '../services/apiFileAttachment.js'
 
 import { useBoardStore } from "./../stores/useBoardStore";
 import { useSettingStore } from "./../stores/useSettingStore";
@@ -190,6 +190,11 @@ const submitFile = async () => {
     console.error('File upload failed:', error);
   }
 };
+
+const dowloadFile = async (fileId) => {
+  const res = await downloadFile(route.params.oid, route.params.id, fileId)
+  console.log(res);
+}
 </script>
 <template>
   <Teleport to="body">
@@ -278,7 +283,7 @@ const submitFile = async () => {
               <div class="text-red-400">{{  errorMessage }}</div>
 
               <div v-show="!isEditMode" v-for="taskAttachment in dataTask?.tasksAttachment">
-                {{ `${taskAttachment.name}.${taskAttachment.type}` }}
+                <div class="cursor-pointer text-blue-500 hover:text-blue-600 active:text-blue-700 underline w-fit" @click="dowloadFile(taskAttachment.id)">{{ `${taskAttachment.name}.${taskAttachment.type}` }}</div>
               </div>
           </div>
           <div class="flex flex-col gap-2">
