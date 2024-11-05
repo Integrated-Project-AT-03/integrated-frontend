@@ -64,9 +64,9 @@ const loadTask = async () => {
     taskStore.deleteTask(route.params.id);
     return router.push({ name: "Task" });
   }
-  console.log(response);
   dataTask.value = { ...response.data, status: response.data.status.id };
   compareTask.value = { ...response.data, status: response.data.status.id };
+  console.log(dataTask.value);
 };
 
 onMounted(async () => {
@@ -273,10 +273,9 @@ const submitFile = async () => {
               </div>
               <div class="text-red-400">{{  errorMessage }}</div>
 
-              <!-- <div v-for="taskAttachment in dataTask.tasksAttachment">
-                {{ taskAttachment.name }}
-                {{ dataTask }}
-              </div> -->
+              <div v-for="taskAttachment in dataTask?.tasksAttachment">
+                {{ `${taskAttachment.name}.${taskAttachment.type}` }}
+              </div>
           </div>
           <div class="flex flex-col gap-2">
             <div class="flex flex-col gap-2 text-slate-200">
