@@ -195,16 +195,11 @@ const dowloadFile = async (fileId) => {
   try {
     const res = await downloadFile(route.params.oid, route.params.id, fileId)
     const fileUrl = res.data.message.url;
-    console.log(res);
-    console.log(res.data.message.url);
-
-    //Wait backend fix fileName//
-    const filename = res.data.message.filename || 'downloaded-file.png'; // Use the filename from the response
 
   // Create a temporary <a> element
     const link = document.createElement('a');
     link.href = fileUrl;
-    link.download = filename;  // Optional: specify a filename if you want, e.g., 'file.pdf'
+    link.download = '';  // Optional: specify a filename if you want, e.g., 'file.pdf'
 
     document.body.appendChild(link);
 
