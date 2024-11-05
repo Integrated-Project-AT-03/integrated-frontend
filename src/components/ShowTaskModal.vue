@@ -192,8 +192,26 @@ const submitFile = async () => {
 };
 
 const dowloadFile = async (fileId) => {
-  const res = await downloadFile(route.params.oid, route.params.id, fileId)
-  console.log(res);
+  try {
+    const res = await downloadFile(route.params.oid, route.params.id, fileId)
+    const fileUrl = res.data.message.url;
+
+  // Create a temporary <a> element
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    link.download = '';  // Optional: specify a filename if you want, e.g., 'file.pdf'
+
+    document.body.appendChild(link);
+
+    // Programmatically click the link to trigger download
+    link.click();
+
+    // Remove the link from the document
+    document.body.removeChild(link);
+  } catch (error) {
+    console.error('File download failed:', error);
+  }
+  
 }
 </script>
 <template>
