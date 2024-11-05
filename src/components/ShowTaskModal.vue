@@ -198,12 +198,8 @@ const dowloadFile = async (fileId) => {
     console.log(res);
     console.log(res.data.message.url);
 
-    // Extract the filename from the URL
-    const filenameMatch = fileUrl.match(/\/([^\/]+)$/);
-    const filename = filenameMatch ? filenameMatch[1] : 'downloaded-file.png'; // Default filename if no match
     //Wait backend fix fileName//
-    // const filename = res.data.message.filename || 'downloaded-file.png'; // Use the filename from the response
-    console.log('Extracted filename:', filename); // Log the extracted filename
+    const filename = res.data.message.filename || 'downloaded-file.png'; // Use the filename from the response
 
   // Create a temporary <a> element
     const link = document.createElement('a');
