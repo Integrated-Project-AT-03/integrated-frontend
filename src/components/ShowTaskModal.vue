@@ -43,7 +43,11 @@ const handleEdit = () => {
     name: `${!isEditMode.value ? "TaskEdit" : "TaskDetail"}`,
     [`${!isEditMode.value ? "params" : "_"}`]: { mode: "edit" },
   });
-  if (isEditMode.value) loadTask();
+  if (isEditMode.value){
+    loadTask();
+  } else{
+    selectedFile.value = []
+  }
 };
 
 const validateInput = computed(() => {
@@ -267,13 +271,13 @@ const submitFile = async () => {
                 <input type="file" class="file-input file-input-bordered h-10 w-full max-w-xs" @change="handleFileChange" multiple />
                 <Button message="Upload" @click="submitFile" />
             </div>
-              <!-- {{ selectedFile?.name }} -->
-              <div v-for="(file, index) in selectedFile" :key="index">
+
+              <div v-show="isEditMode" v-for="(file, index) in selectedFile" :key="index">
                 <div>{{ file.name }} ({{ (file.size / (1024 * 1024)).toFixed(2) }} MB)</div>
               </div>
               <div class="text-red-400">{{  errorMessage }}</div>
 
-              <div v-for="taskAttachment in dataTask?.tasksAttachment">
+              <div v-show="!isEditMode" v-for="taskAttachment in dataTask?.tasksAttachment">
                 {{ `${taskAttachment.name}.${taskAttachment.type}` }}
               </div>
           </div>
