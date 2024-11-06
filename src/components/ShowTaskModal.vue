@@ -215,7 +215,7 @@ const dowloadFile = async (fileId) => {
   }
   
 }
-
+console.log('--------------------------------------------');
 
 </script>
 <template>
@@ -294,16 +294,6 @@ const dowloadFile = async (fileId) => {
               :placeholder="dataTask.description ?? 'No Description Provided'"
               class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-stone-600 p-4 placeholder:italic placeholder:text-gray-400"
             ></textarea>
-            <div v-show="isEditMode" class="flex mt-3 gap-3 items-center">
-                <input type="file" class="file-input file-input-bordered h-10 w-full max-w-xs" @change="handleFileChange" multiple />
-                <Button message="Upload" @click="submitFile" />
-            </div>
-
-              <div v-show="isEditMode" v-for="(file, index) in selectedFile" :key="index">
-                <div>{{ file.name }} ({{ (file.size / (1024 * 1024)).toFixed(2) }} MB)</div>
-              </div>
-              <div class="text-red-400">{{  errorMessage }}</div>
-
               
           </div>
           <div class="flex flex-col gap-2">
@@ -386,7 +376,25 @@ const dowloadFile = async (fileId) => {
           <div v-show="!isEditMode && dataTask?.tasksAttachment?.length === 0" class="bg-stone-600 w-[59rem] h-[10rem] flex gap-3 justify-center items-center rounded-3xl">
             <div>No files</div>
           </div>
+
+          <div v-show="isEditMode" class="flex mt-3 gap-3 items-center">
+            <div v-show="isEditMode" class="border-2 border-dashed w-[59rem] h-[10rem] flex gap-3 justify-center items-center rounded-3xl" id="upload-area">
+              <div class="w-[18rem] p-3 flex flex-col items-center justify-center">
+                  <div><span class="underline cursor-pointer text-stone-300200 hover:text-blue-400" id="upload-text">Click to upload </span>or drag and drop</div>
+                  <div>Maximum file size 20 MB.</div>
+                  <input type="file" id="file-input" multiple class="hidden">
+              </div>
+            </div>
+                <!-- <input type="file" class="file-input file-input-bordered h-10 w-full max-w-xs" @change="handleFileChange" multiple /> -->
+                <!-- <Button message="Upload" @click="submitFile" /> -->
+            </div>
+
+              <div v-show="isEditMode" v-for="(file, index) in selectedFile" :key="index">
+                <div>{{ file.name }} ({{ (file.size / (1024 * 1024)).toFixed(2) }} MB)</div>
+              </div>
+              <div class="text-red-400">{{  errorMessage }}</div>
         </div>
+
 
         <div class="m-4 flex justify-end gap-3">
           <Button
