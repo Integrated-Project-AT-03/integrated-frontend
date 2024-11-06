@@ -194,7 +194,7 @@ const openTask = (index, id) => {
         </div>
       </div>
       <div class="flex items-center justify-end gap-4">
-        <div class="flex gap-3">
+        <div class="flex cursor-pointer gap-3">
           <EmptyElement
             onclick="visibilityModal.showModal()"
             v-show="showOwnerButton"
