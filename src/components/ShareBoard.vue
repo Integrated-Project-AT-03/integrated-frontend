@@ -32,46 +32,64 @@ function onModalOpen(collab) {
 
 <template>
   <div class="mt-3 flex flex-col gap-6 rounded-lg">
-
-
     <!-- No Collaboration Boards Message -->
-    <div v-if="collabBoardStore.getCollabsBoard().length === 0" 
-         class="p-5 rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 text-gray-500 shadow-lg 
-                cursor-pointer transform transition duration-300 hover:scale-105 flex items-center justify-center"
-         style="height: 150px;">
+    <div
+      v-if="collabBoardStore.getCollabsBoard().length === 0"
+      class="flex transform cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 p-5 text-gray-500 shadow-lg transition duration-300 hover:scale-105"
+      style="height: 150px"
+    >
       No collaboration boards available
     </div>
 
     <!-- Collaboration Boards List -->
-    <div v-for="(board, index) in collabBoardStore.getCollabsBoard()" :key="board.oid"
-         class="flex flex-col justify-between p-6 rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 shadow-lg 
-                transition-transform transform hover:scale-105 w-90 h-70">
+    <div
+      v-for="(board, index) in collabBoardStore.getCollabsBoard()"
+      :key="board.oid"
+      class="w-90 h-70 flex transform flex-col justify-between rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 p-6 text-gray-700 shadow-lg transition-transform hover:scale-105"
+    >
       <div class="flex-grow">
         <!-- Flex container for PUBLIC badge and board name -->
-        <div class="flex items-center justify-between mb-3">
-          <span class="bg-gray-300 text-xs font-semibold rounded px-2 py-1 text-gray-700">PUBLIC</span>
-          <h3 class="text-lg font-bold ml-2 text-gray-800">{{ board.boardName }}</h3>
+        <div class="mb-3 flex items-center justify-between">
+          <span
+            class="rounded px-2 py-1 text-xs font-semibold text-white"
+            :class="
+              board.visibility === 'PRIVATE' ? 'bg-purple-500' : 'bg-green-700'
+            "
+            >{{ board.visibility }}</span
+          >
+          <h3 class="ml-2 text-lg font-bold text-gray-800">
+            {{ board.boardName }}
+          </h3>
         </div>
         <p class="text-sm text-gray-600">Owner: {{ board.name }}</p>
-        <p class="text-sm text-gray-600">Access Right: {{ board.accessRight || "N/A" }}</p>
+        <p class="text-sm text-gray-600">
+          Access Right: {{ board.accessRight || "N/A" }}
+        </p>
       </div>
 
       <!-- Actions Section -->
-      <div class="mt-4 flex justify-between items-center">
-        <span class="text-sm underline cursor-pointer text-blue-600 hover:text-blue-800"
-              @click="$router.push({ name: 'Task', params: { oid: board.boardNanoId } })">
+      <div class="mt-4 flex items-center justify-between">
+        <span
+          class="cursor-pointer text-sm text-blue-600 underline hover:text-blue-800"
+          @click="
+            $router.push({ name: 'Task', params: { oid: board.boardNanoId } })
+          "
+        >
           View board
         </span>
         <button
-          class="bg-red-500 text-white rounded px-3 py-1 border-none cursor-pointer transition-colors duration-200 hover:bg-red-600"
-          @click="(e) => {
-            e.stopPropagation();
-            onModalOpen({
-              oid: board.oid,
-              name: board.boardName,
-              nanoId: board.boardNanoId,
-            });
-          }">
+          class="cursor-pointer rounded border-none bg-red-500 px-3 py-1 text-white transition-colors duration-200 hover:bg-red-600"
+          @click="
+            (e) => {
+              e.stopPropagation();
+              onModalOpen({
+                oid: board.oid,
+                name: board.boardName,
+                nanoId: board.boardNanoId,
+              });
+            }
+          "
+        >
           Leave
         </button>
       </div>

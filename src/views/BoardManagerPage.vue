@@ -60,7 +60,9 @@ const leaveBoard = async (boardId) => {
   try {
     const response = await leaveCollabBoard(boardId);
     if (response.httpStatus === 200) {
-      collabBoards.value = collabBoards.value.filter(board => board.id !== boardId);
+      collabBoards.value = collabBoards.value.filter(
+        (board) => board.id !== boardId,
+      );
       emits("message", "Successfully left the board.");
     } else {
       emits("message", "Failed to leave the board.");
@@ -73,64 +75,92 @@ const leaveBoard = async (boardId) => {
 </script>
 
 <template>
- 
   <div class="mb-3 flex items-center justify-between">
-    <h1 class="itbkk-personal-board text-white-800 mb-4 text-center text-2xl font-semibold">
+    <h1
+      class="itbkk-personal-board text-white-800 mb-4 text-center text-2xl font-semibold"
+    >
       Boards
     </h1>
     <div class="flex justify-end">
-      <button class="itbkk-button-create btn" @click="$router.push({ name: 'AddBoard' })">
+      <button
+        class="itbkk-button-create btn"
+        @click="$router.push({ name: 'AddBoard' })"
+      >
         + Create personal board
       </button>
     </div>
   </div>
 
   <!-- Toggle Buttons for Personal and Collaboration Boards -->
-  <div class="flex items-center mb-4 space-x-2">
+  <div class="mb-4 flex items-center space-x-2">
     <button
-      class="itbkk-button-create btn"
-      :class="{ 'bg-black-400': !showCollabBoards, 'bg-gray-500': showCollabBoards }"
-      @click="showCollabBoards = false">
+      class="itbkk-button-create hover:bg-black-500 btn"
+      :class="{
+        'bg-gray-500': !showCollabBoards,
+        'bg-black-400': showCollabBoards,
+      }"
+      @click="showCollabBoards = false"
+    >
       Personal Boards
     </button>
     <button
-      class="itbkk-button-create btn"
-      :class="{ 'bg-black-400': showCollabBoards, 'bg-gray-500': !showCollabBoards }"
-      @click="showCollabBoards = true">
+      class="itbkk-button-create hover:bg-black-500 btn"
+      :class="{
+        'bg-gray-500': showCollabBoards,
+        'bg-black-400': !showCollabBoards,
+      }"
+      @click="showCollabBoards = true"
+    >
       Collaboration Boards
     </button>
   </div>
 
   <!-- Personal Boards Section -->
-<div v-if="!showCollabBoards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-  <div v-for="(board, index) in boardStore.getBoards()" :key="board.nanoIdBoard"
-       class="p-5 rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 shadow-lg 
-              cursor-pointer transform transition duration-300 hover:scale-105"
-       @click="handleClick(board)">
-    <div class="flex items-center justify-between">
-      <span class="bg-gray-300 text-xs font-semibold rounded px-2 py-1 text-gray-800">PUBLIC</span>
+  <div
+    v-if="!showCollabBoards"
+    class="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+  >
+    <div
+      v-for="(board, index) in boardStore.getBoards()"
+      :key="board.nanoIdBoard"
+      class="transform cursor-pointer rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 p-5 text-gray-700 shadow-lg transition duration-300 hover:scale-105"
+      @click="handleClick(board)"
+    >
+      <div class="flex items-center justify-between">
+        <span
+          class="rounded px-2 py-1 text-xs font-semibold text-white"
+          :class="
+            board.visibility === 'PRIVATE' ? 'bg-purple-500' : 'bg-green-700'
+          "
+          >{{ board.visibility }}</span
+        >
+      </div>
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold">{{ board.name }}</h3>
+        <!-- <p class="text-sm">Created by: {{ userStore.getUser()?.name }}</p> -->
+      </div>
+      <div class="mt-2 text-right">
+        <span class="text-sm text-gray-600 underline">View board</span>
+      </div>
     </div>
-    <div class="mt-4">
-      <h3 class="text-lg font-semibold">{{ board.name }}</h3>
-      <p class="text-sm">Created by: {{ userStore.getUser()?.name }}</p>
-    </div>
-    <div class="mt-2 text-right">
-      <span class="text-sm underline text-gray-600">View board</span>
-    </div>
-  </div>
 
-  <div v-if="boardStore.getBoards().length === 0"
-       class="p-5 rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 shadow-lg 
-              cursor-pointer transform transition duration-300 hover:scale-105 flex items-center justify-center"
-       style="height: 150px;">
-    No personal boards available
+    <div
+      v-if="boardStore.getBoards().length === 0"
+      class="flex transform cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 p-5 text-gray-700 shadow-lg transition duration-300 hover:scale-105"
+      style="height: 150px"
+    >
+      No personal boards available
+    </div>
   </div>
-</div>
 
   <!-- Collaboration Boards Section -->
-  <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+  <div v-else class="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
     <ShareBoard />
-    <RemoveCollabModal v-if="showLeaveModal" :collab="curCollab" @message="handleMessage($event)" />
+    <RemoveCollabModal
+      v-show="showLeaveModal"
+      :collab="curCollab"
+      @message="handleMessage($event)"
+    />
   </div>
 
   <RouterView @message="handleMessage($event)" />
