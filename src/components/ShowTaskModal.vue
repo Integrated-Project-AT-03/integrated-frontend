@@ -121,46 +121,109 @@ const handleMessage = (e) => {
   emits("message", e);
 };
 
-const selectedFile = ref([])
-const errorMessage = ref('')
+// const selectedFile = ref([])
+// const errorMessage = ref('')
 
  // Handle file selection
- const handleFileChange = (e) => {
-      const files = Array.from(e.target.files);
-      const maxFileSizeMB = 20;
-      const maxTotalSizeMB = 20;
-      const maxFileCount = 10;
+//  const handleFileChange = (e) => {
+//       const files = Array.from(e.target.files);
+//       const maxFileSizeMB = 20;
+//       const maxTotalSizeMB = 20;
+//       const maxFileCount = 10;
 
-      // Check each file's size
-      for (const file of files) {
-        if (file.size / (1024 * 1024) > maxFileSizeMB) {
-          errorMessage.value = `In each file must not be ${maxFileSizeMB} MB`;
-          return;
-        }
-      }
+//       // Check each file's size
+//       for (const file of files) {
+//         if (file.size / (1024 * 1024) > maxFileSizeMB) {
+//           errorMessage.value = `In each file must not be ${maxFileSizeMB} MB`;
+//           return;
+//         }
+//       }
 
-      // Check total file count after adding new files
-      if (selectedFile.value.length + files.length > maxFileCount) {
-        errorMessage.value = `You can not choose files more than ${maxFileCount} ไฟล์ได้`;
-        return;
-      }
+//       // Check total file count after adding new files
+//       if (selectedFile.value.length + files.length > maxFileCount) {
+//         errorMessage.value = `You can not choose files more than ${maxFileCount} ไฟล์ได้`;
+//         return;
+//       }
 
-      // Calculate the total size of all selected files after adding new files
-      const totalSize = selectedFile.value.reduce((acc, file) => acc + file.size, 0) +
-                        files.reduce((acc, file) => acc + file.size, 0);
+//       // Calculate the total size of all selected files after adding new files
+//       const totalSize = selectedFile.value.reduce((acc, file) => acc + file.size, 0) +
+//                         files.reduce((acc, file) => acc + file.size, 0);
 
-      if (totalSize / (1024 * 1024) > maxTotalSizeMB) {
-        errorMessage.value = `Total files size must not be ${maxTotalSizeMB} MB`;
-        return;
-      }
+//       if (totalSize / (1024 * 1024) > maxTotalSizeMB) {
+//         errorMessage.value = `Total files size must not be ${maxTotalSizeMB} MB`;
+//         return;
+//       }
 
-      // Clear any previous error and add files to selectedFile if all checks pass
-      errorMessage.value = '';
-      selectedFile.value = [...selectedFile.value, ...files];
-  };
+//       // Clear any previous error and add files to selectedFile if all checks pass
+//       errorMessage.value = '';
+//       selectedFile.value = [...selectedFile.value, ...files];
+//   };
 
 
+console.log('--------------------------------------------');
 
+const selectedFile = ref([]);
+const errorMessage = ref('');
+const fileInput = ref(null);
+
+const maxFileSizeMB = 20;
+const maxTotalSizeMB = 20;
+const maxFileCount = 10;
+const MAX_FILE_SIZE = maxFileSizeMB * 1024 * 1024; // Convert MB to bytes
+const MAX_TOTAL_SIZE = maxTotalSizeMB * 1024 * 1024; // Convert MB to bytes
+
+// Handle click to open file input
+const handleFileChange2 = () => {
+  if (fileInput.value) {
+    fileInput.value.click();
+  }
+};
+
+// Handle files added via input
+const handleFileInputChange = (e) => {
+  const files = Array.from(e.target.files);
+  processFiles(files);
+};
+
+// Handle files added via drag-and-drop
+const handleDrop = (e) => {
+  const files = Array.from(e.dataTransfer.files);
+  processFiles(files);
+};
+
+// Process and validate files
+const processFiles = (files) => {
+  errorMessage.value = '';
+
+  // Check total file count
+  if (selectedFile.value.length + files.length > maxFileCount) {
+    errorMessage.value = `You can only upload a maximum of ${maxFileCount} files.`;
+    return;
+  }
+
+  // Calculate the current total size of selected files
+  let currentTotalSize = selectedFile.value.reduce((total, file) => total + file.size, 0);
+
+  const validFiles = [];
+  for (const file of files) {
+    // Check individual file size
+    if (file.size > MAX_FILE_SIZE) {
+      errorMessage.value = `File ${file.name} exceeds the maximum size of ${maxFileSizeMB} MB.`;
+      continue;
+    }
+
+    // Check combined total file size
+    if (currentTotalSize + file.size > MAX_TOTAL_SIZE) {
+      errorMessage.value = `Total file size cannot exceed ${maxTotalSizeMB} MB.`;
+      break;
+    }
+
+    validFiles.push(file);
+    currentTotalSize += file.size;
+  }
+
+  selectedFile.value = [...selectedFile.value, ...validFiles];
+};
 
 //submit files attachment
 const submitFile = async () => {
@@ -215,7 +278,8 @@ const dowloadFile = async (fileId) => {
   }
   
 }
-console.log('--------------------------------------------');
+
+
 
 </script>
 <template>
@@ -378,21 +442,20 @@ console.log('--------------------------------------------');
           </div>
 
           <div v-show="isEditMode" class="flex mt-3 gap-3 items-center">
-            <div v-show="isEditMode" class="border-2 border-dashed w-[59rem] h-[10rem] flex gap-3 justify-center items-center rounded-3xl" id="upload-area">
+            <div v-show="isEditMode" class="border-2 border-dashed w-[59rem] h-[10rem] flex gap-3 justify-center items-center rounded-3xl" ref="uploadArea"
+             @dragover.prevent @drop.prevent="handleDrop">
               <div class="w-[18rem] p-3 flex flex-col items-center justify-center">
-                  <div><span class="underline cursor-pointer text-stone-300200 hover:text-blue-400" id="upload-text">Click to upload </span>or drag and drop</div>
-                  <div>Maximum file size 20 MB.</div>
-                  <input type="file" id="file-input" multiple class="hidden">
+                <div><span class="underline cursor-pointer text-stone-300200 hover:text-blue-400" ref="uploadText" @click="handleFileChange2">Click to upload </span>or drag and drop</div>
+                <div>Maximum file size 20 MB.</div>
+                <input type="file" ref="fileInput" @change="handleFileInputChange" multiple class="hidden">
               </div>
+                <div v-show="isEditMode" v-for="(file, index) in selectedFile" :key="index">
+                  <div>{{ file.name }} ({{ (file.size / (1024 * 1024)).toFixed(2) }} MB)</div>
+                </div>
+                <div class="text-red-400">{{  errorMessage }}</div>
             </div>
-                <!-- <input type="file" class="file-input file-input-bordered h-10 w-full max-w-xs" @change="handleFileChange" multiple /> -->
                 <!-- <Button message="Upload" @click="submitFile" /> -->
             </div>
-
-              <div v-show="isEditMode" v-for="(file, index) in selectedFile" :key="index">
-                <div>{{ file.name }} ({{ (file.size / (1024 * 1024)).toFixed(2) }} MB)</div>
-              </div>
-              <div class="text-red-400">{{  errorMessage }}</div>
         </div>
 
 
