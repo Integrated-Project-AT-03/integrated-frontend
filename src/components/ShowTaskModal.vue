@@ -10,6 +10,7 @@ import { useBoardStore } from "./../stores/useBoardStore";
 import { useSettingStore } from "./../stores/useSettingStore";
 import { useTaskStore } from "./../stores/useTaskStore";
 import Button from "./Button.vue";
+import CloudUpload from './CloudUpload.vue'
 import DeleteTaskModal from "./DeleteTaskModal.vue";
 import Loading from "./Loading.vue";
 const boardStore = useBoardStore();
@@ -442,24 +443,27 @@ const dowloadFile = async (fileId) => {
           </div>
 
           <div v-show="isEditMode" class="flex mt-3 gap-3 items-center">
-            <div v-show="isEditMode" class="border-2 border-dashed w-[59rem] h-[10rem] flex gap-3 justify-center items-center rounded-3xl" ref="uploadArea"
+            <div v-show="isEditMode" class="border-2 border-dashed w-[59rem] h-[11rem] flex gap-3 justify-center items-center rounded-3xl" ref="uploadArea"
              @dragover.prevent @drop.prevent="handleDrop">
-              <div class="w-[18rem] p-3 flex flex-col items-center justify-center">
-                <div><span class="underline cursor-pointer text-stone-300200 hover:text-blue-400" ref="uploadText" @click="handleFileChange2">Click to upload </span>or drag and drop</div>
+              <div class="w-[18rem] p-3 flex flex-col items-center justify-center gap-2">
+                <CloudUpload />
+                <div><span class="underline cursor-pointer text-stone-300 hover:text-blue-400" ref="uploadText" @click="handleFileChange2">Click to upload </span>or drag and drop</div>
                 <div>Maximum file size 20 MB.</div>
                 <input type="file" ref="fileInput" @change="handleFileInputChange" multiple class="hidden">
+                <!-- Wait fix -->
+                <!-- <button class="btn px-3 py-1" @click="submitFile">Upload</button> -->
               </div>
                 <div v-show="isEditMode" v-for="(file, index) in selectedFile" :key="index">
                   <div>{{ file.name }} ({{ (file.size / (1024 * 1024)).toFixed(2) }} MB)</div>
                 </div>
                 <div class="text-red-400">{{  errorMessage }}</div>
             </div>
-                <!-- <Button message="Upload" @click="submitFile" /> -->
             </div>
         </div>
 
 
         <div class="m-4 flex justify-end gap-3">
+          <!-- <Button message="Upload" @click="submitFile" /> -->
           <Button
             class="itbkk-button-confirm btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
             v-show="isEditMode"
