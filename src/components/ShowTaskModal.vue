@@ -13,6 +13,7 @@ import Button from "./Button.vue";
 import CloudUpload from './CloudUpload.vue'
 import DeleteTaskModal from "./DeleteTaskModal.vue";
 import Loading from "./Loading.vue";
+import { onUnmounted } from "vue";
 const boardStore = useBoardStore();
 const settingStore = useSettingStore();
 const taskStore = useTaskStore();
@@ -188,9 +189,11 @@ const handleFileInputChange = (e) => {
 
 // Handle files added via drag-and-drop
 const handleDrop = (e) => {
+  e.preventDefault(); // Prevent the default drop action
   const files = Array.from(e.dataTransfer.files);
   processFiles(files);
 };
+
 
 // Process and validate files
 const processFiles = (files) => {
@@ -207,24 +210,55 @@ const processFiles = (files) => {
 
   const validFiles = [];
   for (const file of files) {
-    // Check individual file size
-    if (file.size > MAX_FILE_SIZE) {
-      errorMessage.value = `File ${file.name} exceeds the maximum size of ${maxFileSizeMB} MB.`;
-      continue;
-    }
+      // Check individual file size
+      if (!file || !file.size) continue;
 
-    // Check combined total file size
-    if (currentTotalSize + file.size > MAX_TOTAL_SIZE) {
-      errorMessage.value = `Total file size cannot exceed ${maxTotalSizeMB} MB.`;
-      break;
-    }
+      if (file.size > MAX_FILE_SIZE) {
+        errorMessage.value = `File ${file.name} exceeds the maximum size of ${maxFileSizeMB} MB.`;
+        continue;
+      }
 
-    validFiles.push(file);
-    currentTotalSize += file.size;
-  }
+      // Check combined total file size
+      if (currentTotalSize + file.size > MAX_TOTAL_SIZE) {
+        errorMessage.value = `Total file size cannot exceed ${maxTotalSizeMB} MB.`;
+        break;
+      }
+
+      // Determine thumbnail based on file type
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+      let preview = null;
+      let icon = '';
+
+      if (file.type.startsWith('image/')) {
+        // Generate a thumbnail for image files
+        preview = URL.createObjectURL(file);
+      } else if (fileExtension === 'pdf') {
+        icon = '📄'; // PDF icon
+      } else if (['doc', 'docx'].includes(fileExtension)) {
+        icon = '📝'; // Word icon
+      } else if (['xls', 'xlsx'].includes(fileExtension)) {
+        icon = '📊'; // Excel icon
+      } else if (['ppt', 'pptx'].includes(fileExtension)) {
+        icon = '📈'; // PowerPoint icon
+      } else {
+        icon = '📁'; // Generic file icon
+      }
+
+      // Add file with preview or icon to validFiles
+      validFiles.push({ file, preview, icon, name: file.name });
+      currentTotalSize += file.size;
+    }
 
   selectedFile.value = [...selectedFile.value, ...validFiles];
+  console.log(selectedFile.value[0].file.size);
 };
+
+// Cleanup preview URLs when component is unmounted to release memory
+onUnmounted(() => {
+  selectedFile.value.forEach(({ preview }) => {
+    if (preview) URL.revokeObjectURL(preview);
+  });
+});
 
 //submit files attachment
 const submitFile = async () => {
@@ -246,11 +280,11 @@ const submitFile = async () => {
     console.log(res);
     if(res.httpStatus === 200){
       console.log('File upload seccessful');
-      selectedFile.value = ''
+      selectedFile.value = []
     }
     if(res.httpStatus === 400){
       errorMessage.value = `You can't upload more than 10 files`
-      selectedFile.value = ''
+      selectedFile.value = []
     }
   } catch (error) {
     console.error('File upload failed:', error);
@@ -453,9 +487,20 @@ const dowloadFile = async (fileId) => {
                 <!-- Wait fix -->
                 <!-- <button class="btn px-3 py-1" @click="submitFile">Upload</button> -->
               </div>
-                <div v-show="isEditMode" v-for="(file, index) in selectedFile" :key="index">
+                <!-- Display thumbnails based on file type -->
+                <div class="mt-4 flex flex-wrap gap-3">
+                  <div v-for="file in selectedFile" :key="file.name" class="w-24 h-24 border">
+                    <img v-if="file.preview" :src="file.preview" alt="File thumbnail" class="w-full h-full object-cover rounded">
+                    <span v-else class="text-sm flex items-center justify-center h-full w-full">
+                      {{ file.icon }}
+                    </span>
+                    {{ file?.name }} ({{ (file?.size / (1024 * 1024)).toFixed(2) }} MB)
+                  </div>
+                </div>
+                <!-- <div v-show="isEditMode" v-for="(file, index) in selectedFile" :key="index">
                   <div>{{ file.name }} ({{ (file.size / (1024 * 1024)).toFixed(2) }} MB)</div>
                 </div>
+                <div class="text-red-400">{{  errorMessage }}</div> -->
                 <div class="text-red-400">{{  errorMessage }}</div>
             </div>
             </div>
