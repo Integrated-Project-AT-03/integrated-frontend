@@ -183,7 +183,10 @@ const submitFile = async () => {
     if(res.httpStatus === 200){
       console.log('File upload seccessful');
       selectedFile.value = ''
-
+    }
+    if(res.httpStatus === 400){
+      errorMessage.value = `You can't upload more than 10 files`
+      selectedFile.value = ''
     }
   } catch (error) {
     console.error('File upload failed:', error);
@@ -289,7 +292,7 @@ const dowloadFile = async (fileId) => {
               :disabled="!isEditMode"
               v-model.trim="dataTask.description"
               :placeholder="dataTask.description ?? 'No Description Provided'"
-              class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
+              class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-stone-600 p-4 placeholder:italic placeholder:text-gray-400"
             ></textarea>
             <div v-show="isEditMode" class="flex mt-3 gap-3 items-center">
                 <input type="file" class="file-input file-input-bordered h-10 w-full max-w-xs" @change="handleFileChange" multiple />
@@ -301,9 +304,7 @@ const dowloadFile = async (fileId) => {
               </div>
               <div class="text-red-400">{{  errorMessage }}</div>
 
-              <div v-show="!isEditMode" v-for="taskAttachment in dataTask?.tasksAttachment">
-                <div class="cursor-pointer text-blue-500 hover:text-blue-600 active:text-blue-700 underline w-fit" @click="dowloadFile(taskAttachment.id)">{{ `${taskAttachment.name}.${taskAttachment.type}` }}</div>
-              </div>
+              
           </div>
           <div class="flex flex-col gap-2">
             <div class="flex flex-col gap-2 text-slate-200">
@@ -372,6 +373,18 @@ const dowloadFile = async (fileId) => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div class="w-auto h-auto flex justify-center">
+          <div v-show="!isEditMode && dataTask?.tasksAttachment?.length != 0" class="bg-stone-600 w-[59rem] h-auto flex flex-wrap gap-3 p-4 rounded-3xl">
+            <div v-show="!isEditMode" v-for="taskAttachment in dataTask?.tasksAttachment">
+              <div class="cursor-pointer bg-stone-500 hover:bg-stone-700 hover:opacity-80 p-3 rounded-lg hover:text-blue-500 underline w-fit" @click="dowloadFile(taskAttachment.id)">{{ `${taskAttachment.name}.${taskAttachment.type}` }}</div>
+            </div>
+          </div>
+
+          <div v-show="!isEditMode && dataTask?.tasksAttachment?.length === 0" class="bg-stone-600 w-[59rem] h-[10rem] flex gap-3 justify-center items-center rounded-3xl">
+            <div>No files</div>
           </div>
         </div>
 
