@@ -11,12 +11,14 @@ import { validateToken } from "../services/apiAuth";
 import BoardManagerPage from "../views/BoardManagerPage.vue";
 import LoginPage from "../views/LoginPage.vue";
 import NotAllowPage from "../views/NotAllowPage.vue";
-import TaskManagerPage from "./../views/TaskManagerPage.vue";
-import StatusManagerPage from "./../views/TaskStatusPage.vue";
-import { useBoardStore } from "./../stores/useBoardStore";
-import { getBoardByNanoId } from "./../services/apiBoard";
+import TaskManagerPage from "../views/TaskManagerPage.vue";
+import StatusManagerPage from "../views/TaskStatusPage.vue";
+import InvitePage from "../views/InvitePage.vue"; // เพิ่ม Invite Page
+import { useBoardStore } from "../stores/useBoardStore";
+import { getBoardByNanoId } from "../services/apiBoard";
 import { useToast } from "vue-toastification";
-import CollaboratorManagerPage from "@/views/CollaboratorManagerPage.vue";
+import CollaboratorManagerPage from "../views/CollaboratorManagerPage.vue";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -101,6 +103,11 @@ const router = createRouter({
             },
           ],
         },
+        {
+          path: ":NanoId/invitations", 
+          name: "InvitePage",
+          component: InvitePage,
+        },
       ],
     },
     {
@@ -118,14 +125,28 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const toast = useToast();
   try {
+    const boardStore = useBoardStore();
+
     if (to.matched.some((record) => record.meta.ownerAccess)) {
       const res = await getBoardByNanoId(to.params.oid);
-      const boardStore = useBoardStore();
       boardStore.setCurrentBoard(res.data);
 
       if (["OWNER", "WRITER"].includes(boardStore.getCurrentBoard().access))
         next();
       else {
+        next({ name: "NotAllowPage" });
+      }
+      return;
+    }
+
+    if (to.name === "InvitePage") {
+      // ตรวจสอบสถานะของบอร์ดก่อนเข้าถึงหน้า Invite
+      const res = await getBoardByNanoId(to.params.boardNanoId);
+      boardStore.setCurrentBoard(res.data);
+
+      if (res.data.status === "Pending") {
+        next();
+      } else {
         next({ name: "NotAllowPage" });
       }
       return;
