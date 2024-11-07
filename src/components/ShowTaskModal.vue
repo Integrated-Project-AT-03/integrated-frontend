@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, useId, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Trash from "../assets/icons/Trash.vue";
 import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
@@ -166,7 +166,7 @@ console.log('--------------------------------------------');
 
 const selectedFile = ref([]);
 const errorMessage = ref('');
-const fileInput = ref(null);
+const fileInputId = useId()
 
 const maxFileSizeMB = 20;
 const maxTotalSizeMB = 20;
@@ -174,26 +174,19 @@ const maxFileCount = 10;
 const MAX_FILE_SIZE = maxFileSizeMB * 1024 * 1024; // Convert MB to bytes
 const MAX_TOTAL_SIZE = maxTotalSizeMB * 1024 * 1024; // Convert MB to bytes
 
-// Handle click to open file input
-const handleFileChange2 = () => {
-  if (fileInput.value) {
-    fileInput.value.click();
-  }
-};
-
 // Handle files added via input
 const handleFileInputChange = (e) => {
   const files = Array.from(e.target.files);
+  console.log(files);
   processFiles(files);
-};
+}
 
 // Handle files added via drag-and-drop
 const handleDrop = (e) => {
   e.preventDefault(); // Prevent the default drop action
   const files = Array.from(e.dataTransfer.files);
   processFiles(files);
-};
-
+}
 
 // Process and validate files
 const processFiles = (files) => {
@@ -272,7 +265,7 @@ const submitFile = async () => {
 
   // Append each file individually to the FormData
   selectedFile.value.forEach(file => {
-    formData.append('files', file);
+    formData.append('files', file.file);
   });
 
   try {
@@ -481,9 +474,9 @@ const dowloadFile = async (fileId) => {
              @dragover.prevent @drop.prevent="handleDrop">
               <div class="w-[18rem] p-3 flex flex-col items-center justify-center gap-2">
                 <CloudUpload />
-                <div><span class="underline cursor-pointer text-stone-300 hover:text-blue-400" ref="uploadText" @click="handleFileChange2">Click to upload </span>or drag and drop</div>
+                <label :for="fileInputId"><span class="underline cursor-pointer text-stone-300 hover:text-blue-400" ref="uploadText">Click to upload </span>or drag and drop</label>
                 <div>Maximum file size 20 MB.</div>
-                <input type="file" ref="fileInput" @change="handleFileInputChange" multiple class="hidden">
+                <input :id="fileInputId" type="file" @change="handleFileInputChange" multiple class="hidden">
                 <!-- Wait fix -->
                 <!-- <button class="btn px-3 py-1" @click="submitFile">Upload</button> -->
               </div>
