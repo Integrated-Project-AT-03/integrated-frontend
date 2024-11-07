@@ -24,3 +24,14 @@ export async function downloadFile(nanoId, tasksId, fileId) {
     option,
   );
 }
+
+export async function deleteFile(nanoId, tasksId) {
+  const option = {
+    method: "DELETE",
+    credentials: "include",
+  };
+  return await fetchWithRefresh(
+    `${uri}/v3/boards/${nanoId}/tasks/${tasksId}/attachment`,
+    option,
+  );
+}
