@@ -250,7 +250,6 @@ const processFiles = (files) => {
     }
 
   selectedFile.value = [...selectedFile.value, ...validFiles];
-  console.log(selectedFile.value[0].file.size);
 };
 
 // Cleanup preview URLs when component is unmounted to release memory
@@ -262,6 +261,7 @@ onUnmounted(() => {
 
 //submit files attachment
 const submitFile = async () => {
+
   if (!selectedFile.value) {
     console.log('No file selected');
     return;
@@ -494,7 +494,7 @@ const dowloadFile = async (fileId) => {
                     <span v-else class="text-sm flex items-center justify-center h-full w-full">
                       {{ file.icon }}
                     </span>
-                    {{ file?.name }} ({{ (file?.size / (1024 * 1024)).toFixed(2) }} MB)
+                    <div>{{ file?.name }} ({{ (file?.size / (1024 * 1024)).toFixed(2) }} MB)</div>
                   </div>
                 </div>
                 <!-- <div v-show="isEditMode" v-for="(file, index) in selectedFile" :key="index">
@@ -508,7 +508,7 @@ const dowloadFile = async (fileId) => {
 
 
         <div class="m-4 flex justify-end gap-3">
-          <!-- <Button message="Upload" @click="submitFile" /> -->
+          <Button message="Upload" @click="submitFile" />
           <Button
             class="itbkk-button-confirm btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
             v-show="isEditMode"
