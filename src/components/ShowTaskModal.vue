@@ -72,6 +72,7 @@ const loadTask = async () => {
   }
   dataTask.value = { ...response.data, status: response.data.status.id };
   compareTask.value = { ...response.data, status: response.data.status.id };
+  console.log(dataTask.value);
 };
 
 onMounted(async () => {
@@ -122,44 +123,6 @@ const formattDate = (date) =>
 const handleMessage = (e) => {
   emits("message", e);
 };
-
-// const selectedFile = ref([])
-// const errorMessage = ref('')
-
- // Handle file selection
-//  const handleFileChange = (e) => {
-//       const files = Array.from(e.target.files);
-//       const maxFileSizeMB = 20;
-//       const maxTotalSizeMB = 20;
-//       const maxFileCount = 10;
-
-//       // Check each file's size
-//       for (const file of files) {
-//         if (file.size / (1024 * 1024) > maxFileSizeMB) {
-//           errorMessage.value = `In each file must not be ${maxFileSizeMB} MB`;
-//           return;
-//         }
-//       }
-
-//       // Check total file count after adding new files
-//       if (selectedFile.value.length + files.length > maxFileCount) {
-//         errorMessage.value = `You can not choose files more than ${maxFileCount} ไฟล์ได้`;
-//         return;
-//       }
-
-//       // Calculate the total size of all selected files after adding new files
-//       const totalSize = selectedFile.value.reduce((acc, file) => acc + file.size, 0) +
-//                         files.reduce((acc, file) => acc + file.size, 0);
-
-//       if (totalSize / (1024 * 1024) > maxTotalSizeMB) {
-//         errorMessage.value = `Total files size must not be ${maxTotalSizeMB} MB`;
-//         return;
-//       }
-
-//       // Clear any previous error and add files to selectedFile if all checks pass
-//       errorMessage.value = '';
-//       selectedFile.value = [...selectedFile.value, ...files];
-//   };
 
 
 console.log('--------------------------------------------');
@@ -241,7 +204,6 @@ const processFiles = (files) => {
     }
 
   selectedFile.value = [...selectedFile.value, ...validFiles];
-  console.log(selectedFile.value);
 };
 
 // Cleanup preview URLs when component is unmounted to release memory
@@ -458,11 +420,23 @@ const dowloadFile = async (fileId) => {
         </div>
 
         <div class="w-auto h-auto flex justify-center">
-          <div v-show="!isEditMode && dataTask?.tasksAttachment?.length != 0" class="bg-stone-600 w-[59rem] h-auto flex flex-wrap gap-3 p-4 rounded-3xl">
-            <div v-show="!isEditMode" v-for="taskAttachment in dataTask?.tasksAttachment">
-              <div class="cursor-pointer bg-stone-500 hover:bg-stone-700 hover:opacity-80 p-3 rounded-lg hover:text-blue-500 underline w-fit" @click="dowloadFile(taskAttachment.id)">{{ `${taskAttachment.name}.${taskAttachment.type}` }}</div>
+            <div v-show="!isEditMode && dataTask?.tasksAttachment?.length != 0" 
+            class="bg-stone-600 w-[59rem] h-auto p-4 rounded-3xl overflow-x-auto">
+              <div class="flex gap-3">
+                <div v-show="!isEditMode" v-for="taskAttachment in dataTask?.tasksAttachment">
+                  <div class="cursor-pointer bg-stone-500 hover:bg-stone-700 hover:opacity-80 p-3 h-[10rem] w-[8rem] rounded-lg hover:text-blue-500 underline"
+                  @click="dowloadFile(taskAttachment.id)">{{ `${taskAttachment.name}.${taskAttachment.type}` }}</div>
+                </div>
+              </div>
             </div>
-          </div>
+
+            <!-- <div v-show="!isEditMode && dataTask?.tasksAttachment?.length != 0" class="bg-stone-600 w-[59rem] h-auto flex flex-wrap gap-3 p-4 rounded-3xl">
+              <div v-show="!isEditMode" v-for="taskAttachment in dataTask?.tasksAttachment">
+                <div class="cursor-pointer bg-stone-500 hover:bg-stone-700 hover:opacity-80 p-3 rounded-lg hover:text-blue-500 underline w-fit" 
+                @click="dowloadFile(taskAttachment.id)">{{ `${taskAttachment.name}.${taskAttachment.type} `}}</div>
+              </div>
+            </div> -->
+
 
           <div v-show="!isEditMode && dataTask?.tasksAttachment?.length === 0" class="bg-stone-600 w-[59rem] h-[10rem] flex gap-3 justify-center items-center rounded-3xl">
             <div>No files</div>
