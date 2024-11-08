@@ -445,7 +445,7 @@ const dowloadFile = async (fileId) => {
           <div v-show="isEditMode" class="flex mt-3 gap-3 items-center">
           <div
             v-show="isEditMode"
-            class="overflow-x-auto border-2 border-dashed w-[59rem] h-[20rem] p-2 flex gap-3 justify-center items-center rounded-3xl"
+            class="overflow-x-auto border-2 border-dashed w-[59rem] h-auto p-2 flex gap-3 justify-center items-center rounded-3xl"
             ref="uploadArea"
             @dragover.prevent
             @drop.prevent="handleDrop"
@@ -476,32 +476,35 @@ const dowloadFile = async (fileId) => {
         </div>
 
 
-        <div class="m-4 flex justify-end items-center gap-3">
-          <div class="text-red-400">{{ errorMessage }}</div>
-          <Button message="Upload" @click="submitFile" />
-          <Button
-            class="itbkk-button-confirm btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
-            v-show="isEditMode"
-            @click="handleEditTask()"
-            :disabled="
-              dataTask.title === '' ||
-              validateInput.assignees ||
-              validateInput.description ||
-              validateInput.title ||
-              ((dataTask.assignees ?? '') === (compareTask?.assignees ?? '') &&
-                (dataTask.description ?? '') ===
-                  (compareTask?.description ?? '') &&
-                dataTask?.status === compareTask?.status &&
-                (dataTask.title ?? '') === (compareTask?.title ?? ''))
-            "
-            message="Save"
-            bgcolor=""
-          />
+        <div class="m-4 flex justify-between items-center gap-3">
+          <!-- <Button message="Upload" @click="submitFile" /> -->
+          <div class="text-error ml-12">{{ errorMessage }}</div>
+          <div class="flex flex-row gap-3">
             <Button
-              class="itbkk-button-cancel"
-              message="Close"
-              @click="router.push({ name: 'Task' })"
+              class="itbkk-button-confirm btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
+              v-show="isEditMode"
+              @click="() => {handleEditTask(), submitFile()}"
+              :disabled="
+                dataTask.title === '' ||
+                validateInput.assignees ||
+                validateInput.description ||
+                validateInput.title ||
+                ((dataTask.assignees ?? '') === (compareTask?.assignees ?? '') &&
+                  (dataTask.description ?? '') ===
+                    (compareTask?.description ?? '') &&
+                  dataTask?.status === compareTask?.status &&
+                  (dataTask.title ?? '') === (compareTask?.title ?? '')) &&
+                  selectedFile.length == 0
+              "
+              message="Save"
+              bgcolor=""
             />
+              <Button
+                class="itbkk-button-cancel"
+                message="Close"
+                @click="router.push({ name: 'Task' })"
+              />
+          </div>
         </div>
       </div>
     </div>
