@@ -4,7 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import Trash from "../assets/icons/Trash.vue";
 import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
 import { editTaskById, getTaskById } from "./../services/apiTask";
-import { uploadFiles } from "../services/apiFileAttachment.js";
+import { deleteFile, uploadFiles } from "../services/apiFileAttachment.js";
 import { useBoardStore } from "./../stores/useBoardStore";
 import { useSettingStore } from "./../stores/useSettingStore";
 import { useTaskStore } from "./../stores/useTaskStore";
@@ -14,6 +14,7 @@ import DeleteTaskModal from "./DeleteTaskModal.vue";
 import BoxAttachment from "./BoxAttachment.vue";
 import Loading from "./Loading.vue";
 import { onUnmounted } from "vue";
+import Xmark from "@/assets/icons/Xmark.vue";
 const boardStore = useBoardStore();
 const settingStore = useSettingStore();
 const taskStore = useTaskStore();
@@ -73,11 +74,11 @@ const loadTask = async () => {
   }
   dataTask.value = { ...response.data, status: response.data.status.id };
   compareTask.value = { ...response.data, status: response.data.status.id };
-  console.log(dataTask.value);
 };
 
 onMounted(async () => {
   await loadTask();
+  tempTaskAttachment.value = dataTask.value.tasksAttachment
   statuses.value = (await getStatusesByNanoIdBoard(route.params.oid)).data;
   isLoading.value = false;
 });
@@ -207,8 +208,33 @@ const processFiles = (files) => {
   }
 
   selectedFile.value = [...selectedFile.value, ...validFiles];
+  console.log(selectedFile.value[0].file.size);
   console.log(selectedFile.value);
 };
+
+const tempTaskAttachment = ref()
+
+const filesId = []
+
+const tempDelete = (name) => {
+  selectedFile.value = selectedFile.value.filter(file => file.name != name)
+}
+
+const handleDeleteFile = (id) => {
+  filesId.push(id)
+  console.log(filesId);
+  tempTaskAttachment.value = tempTaskAttachment.value.filter(file => file.id != id)
+}
+
+const deleteFileById = async () => {
+  try {
+    console.log('In try delete');
+    const res = await deleteFile(route.params.oid, route.params.id, filesId.value)
+    console.log(res);
+  } catch (error) {
+    
+  }
+}
 
 // Cleanup preview URLs when component is unmounted to release memory
 onUnmounted(() => {
@@ -409,14 +435,30 @@ const submitFile = async () => {
               </div>
             </div>
           </div>
+          
           <div
             v-show="!isEditMode && dataTask?.tasksAttachment?.length === 0"
             class="flex h-[10rem] w-[59rem] items-center justify-center gap-3 rounded-3xl bg-stone-600 font-bold"
           >
             <div>No files</div>
           </div>
+          
+          <!-- <div>อัปโหลดแล้ว ละกำลังจะลบออก</div> -->
+          <div
+            v-show="isEditMode && dataTask?.tasksAttachment?.length != 0"
+            class="h-auto w-[59rem] overflow-x-auto rounded-3xl bg-stone-600 p-4"
+          >
+            <div class="flex gap-3">
+              <div
+                v-show="isEditMode"
+                v-for="taskAttachment in tempTaskAttachment"
+              >
+                <BoxAttachment :attachment="taskAttachment" @delete-file="handleDeleteFile"/>
+              </div>
+            </div>
+          </div>
 
-          <div v-show="isEditMode" class="mt-3 flex items-center gap-3">
+          <div v-show="isEditMode && dataTask?.taskAttachment?.length === 0" class="mt-3 flex items-center gap-3">
             <div
               class="flex h-auto w-[59rem] items-center justify-center gap-3 overflow-x-auto rounded-3xl border-2 border-dashed p-2"
               ref="uploadArea"
@@ -455,8 +497,11 @@ const submitFile = async () => {
                   class="h-45 w-40 rounded-2xl"
                 >
                   <div
-                    class="flex h-[10rem] w-[8rem] cursor-pointer flex-col justify-between rounded-lg bg-stone-500 p-3 hover:bg-stone-700 hover:text-blue-500 hover:opacity-80"
+                    class="flex h-[10rem] w-[8rem] cursor-pointer flex-col justify-between rounded-lg bg-stone-500 p-3  "
                   >
+                  <div class="flex justify-end z-50">
+                    <button class="delete-btn" @click="tempDelete(file.name)"><Xmark /></button>
+                  </div>
                     <img
                       class="h-[80%] w-[100%] object-cover"
                       v-show="file.preview"
