@@ -7,6 +7,7 @@ export async function getBoards() {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
   };
 
   return await fetchWithRefresh(`${uri}/v3/boards`, options);
@@ -30,6 +31,7 @@ export async function getBoardByNanoId(nanoId) {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
   };
 
   return await fetchWithRefresh(`${uri}/v3/boards/${nanoId}`, options);

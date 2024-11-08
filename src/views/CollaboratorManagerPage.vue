@@ -127,15 +127,32 @@ function revert() {
             </div>
           </td>
           <td class="whitespace-nowrap">
-            <SelectCollabRole
-              @openConfirmModal="onChangeAccessModalOpen"
-              :collab="collab"
+            <EmptyElementSelect
+              @click="
+                ['OWNER'].includes(boardStore.getCurrentBoard().access) &&
+                  onChangeAccessModalOpen({
+                    oid: collab.oid,
+                    name: collab.name,
+                    access: collab.accessRight,
+                  })
+              "
             />
+
+            <select
+              :disabled="
+                !['OWNER'].includes(boardStore.getCurrentBoard().access)
+              "
+              :value="collab.accessRight"
+              class="itbkk-access-right select select-ghost w-full max-w-xs bg-[#444444]"
+            >
+              <option value="READ">Read</option>
+              <option value="WRITE">Write</option>
+            </select>
           </td>
           <td class="whitespace-nowrap px-4 py-2">
             <Button
               :access="['OWNER']"
-              class="itbkk-button-cancel tooltip-left"
+              class="itbkk-button-cancel"
               bgcolor="#444444"
               :action="
                 () => onModalOpen({ oid: collab.oid, name: collab.name })
@@ -155,11 +172,7 @@ function revert() {
     </table>
   </div>
   <RemoveCollabModal :collab="curCollab" @message="handleMessage($event)" />
-  <ChangeAccessModal
-    @revert="revert"
-    :collab="curCollab"
-    @message="handleMessage($event)"
-  />
+  <ChangeAccessModal :collab="curCollab" @message="handleMessage($event)" />
   <AddCollaboratorModal
     v-show="openAddModal"
     @closeModal="openAddModal = false"
