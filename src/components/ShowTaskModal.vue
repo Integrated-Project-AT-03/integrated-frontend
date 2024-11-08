@@ -207,6 +207,7 @@ const processFiles = (files) => {
   }
 
   selectedFile.value = [...selectedFile.value, ...validFiles];
+  console.log(selectedFile.value);
 };
 
 // Cleanup preview URLs when component is unmounted to release memory
@@ -466,7 +467,7 @@ const submitFile = async () => {
                       v-show="!file.preview"
                       class="flex h-[80%] w-[100%] items-center justify-center text-6xl"
                     >
-                      {{ 5 }}
+                      {{ file.icon }}
                     </p>
 
                     <p
