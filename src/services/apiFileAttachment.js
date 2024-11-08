@@ -35,3 +35,21 @@ export async function deleteFile(nanoId, tasksId) {
     option,
   );
 }
+
+export async function showImage(nanoId, taskId, fileId) {
+  const options = {
+    credentials: "include",
+    headers: {
+      Accept: "image/png, image/jpeg, image/jpg", // กำหนดประเภทของไฟล์ที่ต้องการรับ เช่น ไฟล์รูปภาพ
+    },
+  };
+  const result = await fetch(
+    `${uri}/v3/boards/${nanoId}/tasks/${taskId}/attachment/${fileId}`,
+    options,
+  );
+
+  console.log(result);
+
+  const imageBlob = await result.blob();
+  return URL.createObjectURL(imageBlob);
+}
