@@ -487,7 +487,7 @@ const dowloadFile = async (fileId) => {
                     <span v-else class="text-sm flex items-center justify-center h-full w-full">
                       {{ file.icon }}
                     </span>
-                    <div>{{ file?.name }} ({{ (file?.size / (1024 * 1024)).toFixed(2) }} MB)</div>
+                    <div>{{ file.file?.name }} ({{ (file.file?.size / (1024 * 1024)).toFixed(2) }} MB)</div>
                   </div>
                 </div>
                 <!-- <div v-show="isEditMode" v-for="(file, index) in selectedFile" :key="index">
