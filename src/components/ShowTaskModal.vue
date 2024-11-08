@@ -177,7 +177,6 @@ const MAX_TOTAL_SIZE = maxTotalSizeMB * 1024 * 1024; // Convert MB to bytes
 // Handle files added via input
 const handleFileInputChange = (e) => {
   const files = Array.from(e.target.files);
-  console.log(files);
   processFiles(files);
 }
 
@@ -191,7 +190,6 @@ const handleDrop = (e) => {
 // Process and validate files
 const processFiles = (files) => {
   errorMessage.value = '';
-
   // Check total file count
   if (selectedFile.value.length + files.length > maxFileCount) {
     errorMessage.value = `You can only upload a maximum of ${maxFileCount} files.`;
@@ -243,6 +241,7 @@ const processFiles = (files) => {
     }
 
   selectedFile.value = [...selectedFile.value, ...validFiles];
+  console.log(selectedFile.value);
 };
 
 // Cleanup preview URLs when component is unmounted to release memory
@@ -470,37 +469,41 @@ const dowloadFile = async (fileId) => {
           </div>
 
           <div v-show="isEditMode" class="flex mt-3 gap-3 items-center">
-            <div v-show="isEditMode" class="border-2 border-dashed w-[59rem] h-[11rem] flex gap-3 justify-center items-center rounded-3xl" ref="uploadArea"
-             @dragover.prevent @drop.prevent="handleDrop">
-              <div class="w-[18rem] p-3 flex flex-col items-center justify-center gap-2">
-                <CloudUpload />
-                <label :for="fileInputId"><span class="underline cursor-pointer text-stone-300 hover:text-blue-400" ref="uploadText">Click to upload </span>or drag and drop</label>
-                <div>Maximum file size 20 MB.</div>
-                <input :id="fileInputId" type="file" @change="handleFileInputChange" multiple class="hidden">
-                <!-- Wait fix -->
-                <!-- <button class="btn px-3 py-1" @click="submitFile">Upload</button> -->
+          <div
+            v-show="isEditMode"
+            class="overflow-x-auto border-2 border-dashed w-[59rem] h-[20rem] p-2 flex gap-3 justify-center items-center rounded-3xl"
+            ref="uploadArea"
+            @dragover.prevent
+            @drop.prevent="handleDrop"
+          >
+            <div v-show="selectedFile.length === 0" class="w-[18rem] p-3 flex flex-col items-center justify-center gap-2">
+              <CloudUpload />
+              <label :for="fileInputId">
+                <span class="underline cursor-pointer text-stone-300 hover:text-blue-400" ref="uploadText">Click to upload </span>or drag and drop
+              </label>
+              <div>Maximum file size 20 MB.</div>
+              <input :id="fileInputId" type="file" @change="handleFileInputChange" multiple class="hidden">
+            </div>
+            
+            <!-- Display thumbnails based on file type -->
+            <div class="mt-4 flex flex-nowrap gap-3 overflow-x-auto">
+              <div v-for="file in selectedFile" :key="file.name" class="w-40 h-45 rounded-2xl border p-2 flex-shrink-0">
+                <div class="flex flex-col gap-2">
+                  <div class="flex justify-end w-full h-full cursor-pointer">X</div>
+                  <img v-if="file.preview" :src="file.preview" alt="File thumbnail" class="w-36 h-40 object-cover rounded">
+                  <span v-else class="text-sm flex items-center justify-center w-36 h-40">{{ file.icon }}</span>
+                  <div class="text-xs">{{ file.file?.name }} ({{ (file.file?.size / (1024 * 1024)).toFixed(2) }} MB)</div>
+                </div>
               </div>
-                <!-- Display thumbnails based on file type -->
-                <div class="mt-4 flex flex-wrap gap-3">
-                  <div v-for="file in selectedFile" :key="file.name" class="w-24 h-24 border">
-                    <img v-if="file.preview" :src="file.preview" alt="File thumbnail" class="w-full h-full object-cover rounded">
-                    <span v-else class="text-sm flex items-center justify-center h-full w-full">
-                      {{ file.icon }}
-                    </span>
-                    <div>{{ file.file?.name }} ({{ (file.file?.size / (1024 * 1024)).toFixed(2) }} MB)</div>
-                  </div>
-                </div>
-                <!-- <div v-show="isEditMode" v-for="(file, index) in selectedFile" :key="index">
-                  <div>{{ file.name }} ({{ (file.size / (1024 * 1024)).toFixed(2) }} MB)</div>
-                </div>
-                <div class="text-red-400">{{  errorMessage }}</div> -->
-                <div class="text-red-400">{{  errorMessage }}</div>
             </div>
-            </div>
+          </div>
+        </div>
+
         </div>
 
 
-        <div class="m-4 flex justify-end gap-3">
+        <div class="m-4 flex justify-end items-center gap-3">
+          <div class="text-red-400">{{ errorMessage }}</div>
           <Button message="Upload" @click="submitFile" />
           <Button
             class="itbkk-button-confirm btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
