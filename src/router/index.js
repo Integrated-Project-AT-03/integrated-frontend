@@ -13,7 +13,7 @@ import LoginPage from "../views/LoginPage.vue";
 import NotAllowPage from "../views/NotAllowPage.vue";
 import TaskManagerPage from "../views/TaskManagerPage.vue";
 import StatusManagerPage from "../views/TaskStatusPage.vue";
-import InvitePage from "../views/InvitePage.vue"; // เพิ่ม Invite Page
+import InvitePage from "../views/InvitePage.vue"; 
 import { useBoardStore } from "../stores/useBoardStore";
 import { getBoardByNanoId } from "../services/apiBoard";
 import { useToast } from "vue-toastification";
@@ -104,7 +104,7 @@ const router = createRouter({
           ],
         },
         {
-          path: ":NanoId/invitations", 
+          path: ":NanoId/collab/invitations", 
           name: "InvitePage",
           component: InvitePage,
         },
@@ -144,12 +144,15 @@ router.beforeEach(async (to, from, next) => {
       const res = await getBoardByNanoId(to.params.boardNanoId);
       boardStore.setCurrentBoard(res.data);
 
-      if (res.data.status === "Pending") {
-        next();
-      } else {
-        next({ name: "NotAllowPage" });
-      }
+      next();
+
       return;
+      // if (res.data.status === "PENDING") {
+      //   next();
+      // } else {
+      //   next({ name: "NotAllowPage" });
+      // }
+      // return;
     }
 
     if (to.matched.some((record) => record.meta.requiresAuth)) {

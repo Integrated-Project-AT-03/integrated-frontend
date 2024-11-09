@@ -1,20 +1,23 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
 import Button from "@/components/Button.vue";
+import { useRoute, useRouter } from "vue-router";
 import AddCollaboratorModal from "../components/AddCollaboratorModal.vue";
 import RemoveCollabModal from "../components/RemoveCollabModal.vue";
-import ChangeAccessModal from "../components/ChangeAccessModal.vue";
 import { getCollab } from "../services/apiCollab.js";
 import { getBoardByNanoId } from "../services/apiBoard.js";
+import { onMounted } from "vue";
 import { useBoardStore } from "@/stores/useBoardStore";
 import { useCollabStore } from "../stores/useCollabStore.js";
+import { ref } from "vue";
+import EmptyElementSelect from "../components/EmptyElementSelect.vue";
+import ChangeAccessModal from "../components/ChangeAccessModal.vue";
 
 const route = useRoute();
 const router = useRouter();
 const boardStore = useBoardStore();
 const collabStore = useCollabStore();
 const curCollab = ref({ oid: "", name: "", access: "" });
+const emits = defineEmits(["message, loading"]);
 const openAddModal = ref(false);
 
 onMounted(async () => {
@@ -28,98 +31,139 @@ onMounted(async () => {
     return router.push({ name: "NotFoundPage" });
   }
   collabStore.setCollabs(res.data);
+  emits("loading", false);
 });
 
-const handleMessage = (message) => {
-  console.log(message);
+const handleMessage = (e) => {
+  emits("message", e);
 };
 
 function onModalOpen(collab) {
-  curCollab.value = collab;
   document.getElementById("removeCollabModal").showModal();
+  curCollab.value = collab;
 }
 
-function goToInvitePage() {
-  const boardNanoId = route.params.oid;
-  router.push(`/board/${boardNanoId}/collab/invitations`);
+function onChangeAccessModalOpen(collab) {
+  document.getElementById("changeAccessModal").showModal();
+  curCollab.value = collab;
 }
 </script>
 
-
 <template>
-  <div class="collab-management">
-    <h1>Collaboration Management</h1>
-    <div class="flex justify-end mb-4">
-      <!-- ปุ่มเพิ่ม Collaborator -->
+  <div class="flex w-full flex-col gap-3">
+    <div class="flex justify-end">
       <Button
         class="itbkk-collaborato-add"
         bgcolor="#666666"
         message="Add Collaborator"
         :access="['OWNER']"
-        :action="() => (openAddModal.value = true)"
+        :action="() => (openAddModal = true)"
       />
     </div>
-
-    <!-- ตารางแสดงรายชื่อ Collaborators -->
-    <table class="collab-table max-h-[500px] divide-y divide-gray-200 overflow-scroll w-full">
-      <thead>
+    <table class="block max-h-[500px] divide-y divide-gray-200 overflow-scroll">
+      <tbody class="divide-y divide-gray-300 bg-slate-100">
         <tr class="bg-gray-200">
-          <th class="px-6 py-3 text-center text-sm font-bold uppercase">No</th>
-          <th class="px-6 py-3 text-center text-sm font-bold uppercase">Name</th>
-          <th class="px-6 py-3 text-center text-sm font-bold uppercase">Email</th>
-          <th class="px-6 py-3 text-center text-sm font-bold uppercase">Access</th>
-          <th class="px-6 py-3 text-center text-sm font-bold uppercase">Action</th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-center text-sm font-bold uppercase tracking-wider text-base-100"
+          >
+            No
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-center text-sm font-bold uppercase tracking-wider text-base-100"
+          >
+            Name
+          </th>
+          <th
+            scope="col"
+            class="w-full px-6 py-3 text-left text-sm font-bold uppercase tracking-wider text-base-100"
+          >
+            Email
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-center text-sm font-bold uppercase tracking-wider text-base-100"
+          >
+            Access
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-center text-sm font-bold uppercase tracking-wider text-base-100"
+          >
+            Action
+          </th>
         </tr>
-      </thead>
-      <tbody>
         <tr
           v-for="(collab, index) in collabStore.getCollabs()"
           :key="collab.oid"
-          class="hover:bg-slate-200"
+          class="itbkk-item itbkk-button-action hover:bg-slate-200"
         >
-          <td class="px-6 py-4">{{ index + 1 }}</td>
-          <td class="px-6 py-4">{{ collab.name }}</td>
-          <td class="px-6 py-4">{{ collab.email }}</td>
           <td class="px-6 py-4">
+            <div class="text-gray-900">{{ index + 1 }}</div>
+          </td>
+          <td class="whitespace-nowrap px-6 py-4">
+            <div class="itbkk-title text-sm text-gray-900">
+              {{ collab.name }}
+            </div>
+          </td>
+          <td class="w-full whitespace-nowrap px-6 py-4">
+            <div class="itbkk-assignees w- text-sm text-gray-900">
+              {{ collab.email }}
+            </div>
+          </td>
+          <td class="whitespace-nowrap">
+            <EmptyElementSelect
+              @click="
+                ['OWNER'].includes(boardStore.getCurrentBoard().access) &&
+                  onChangeAccessModalOpen({
+                    oid: collab.oid,
+                    name: collab.name,
+                    access: collab.accessRight,
+                  })
+              "
+            />
+
             <select
-              :disabled="!['OWNER'].includes(boardStore.getCurrentBoard().access)"
-              v-model="collab.accessRight"
-              @change="collabStore.updateCollab(collab.oid, collab.accessRight)"
-              class="select w-full bg-gray-100"
+              :disabled="
+                !['OWNER'].includes(boardStore.getCurrentBoard().access)
+              "
+              :value="collab.accessRight"
+              class="itbkk-access-right select select-ghost w-full max-w-xs bg-[#444444]"
             >
               <option value="READ">Read</option>
               <option value="WRITE">Write</option>
             </select>
           </td>
-          <td class="px-4 py-2">
+          <td class="whitespace-nowrap px-4 py-2">
             <Button
               :access="['OWNER']"
-              class="button-cancel"
+              class="itbkk-button-cancel"
               bgcolor="#444444"
-              :action="() => onModalOpen(collab)"
+              :action="
+                () => onModalOpen({ oid: collab.oid, name: collab.name })
+              "
               message="Remove"
             />
           </td>
         </tr>
+        <tr></tr>
       </tbody>
+      <div
+        v-show="collabStore.getCollabs().length === 0"
+        class="m-0 bg-white py-3 text-center font-bold text-gray-600"
+      >
+        No Collaborator
+      </div>
     </table>
-
-    <div
-      v-if="collabStore.getCollabs().length === 0"
-      class="bg-white py-3 text-center font-bold text-gray-600"
-    >
-      No Collaborator
-    </div>
-
-    <!-- ปุ่มไปยัง Invite Page -->
-    <button class="mt-4 bg-blue-500 text-white p-2 rounded" @click="goToInvitePage">
-      Go to Invite Page
-    </button>
-
-    <!-- Modals -->
-    <RemoveCollabModal :collab="curCollab" @message="handleMessage" />
-    <ChangeAccessModal :collab="curCollab" @message="handleMessage" />
-    <AddCollaboratorModal v-show="openAddModal" @closeModal="() => (openAddModal.value = false)" @message="handleMessage" />
   </div>
+  <RemoveCollabModal :collab="curCollab" @message="handleMessage($event)" />
+  <ChangeAccessModal :collab="curCollab" @message="handleMessage($event)" />
+  <AddCollaboratorModal
+    v-show="openAddModal"
+    @closeModal="openAddModal = false"
+    @message="handleMessage($event)"
+  />
 </template>
 
+<style scoped></style>
