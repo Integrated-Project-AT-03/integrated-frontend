@@ -1,12 +1,14 @@
 <script setup>
 import { ref } from "vue";
 import Button from "./Button.vue";
+import Loding from "./Loading.vue";
 import { addCollab } from "../services/apiCollab.js";
 import { useRoute } from "vue-router";
 import { useCollabStore } from "../stores/useCollabStore.js";
 
 const collabStore = useCollabStore();
 const emits = defineEmits(["message", "closeModal"]);
+const isLoading = ref(false);
 const route = useRoute();
 const collabForm = ref({
   email: "",
@@ -15,6 +17,7 @@ const collabForm = ref({
 
 const handleSubmit = async (e) => {
   try {
+    isLoading.value = true;
     const res = await addCollab(collabForm.value, route.params.oid);
     if (res.httpStatus === 200) {
       collabStore.addCollab(res.data); //save line code
@@ -41,23 +44,27 @@ const handleSubmit = async (e) => {
       description: `${error}`,
       status: "error",
     });
+  } finally {
+    isLoading.value = false;
   }
 };
 </script>
 
 <template>
   <!-- <teleport to="body"> -->
-
   <div
     class="itbkk-modal-alert fixed inset-0 z-[999] flex h-screen w-screen items-center justify-center"
   >
+    <Loding class="h-full w-full" :is-loading="isLoading" />
     <div class="absolute inset-0 z-[998] h-full w-full backdrop-blur-sm"></div>
     <div class="z-[1000] flex h-auto w-fit flex-col rounded-2xl bg-neutral p-6">
       <div class="text-2xl font-bold text-slate-300">Add Collaborator</div>
+
       <div class="divider"></div>
       <div class="flex gap-3">
         <div class="flex flex-col gap-2">
           Collaborator e-mail
+
           <input
             type="text"
             maxlength="50"
@@ -104,6 +111,7 @@ const handleSubmit = async (e) => {
       </div>
     </div>
   </div>
+  <!-- </teleport> -->
 </template>
 
 <style scoped></style>
