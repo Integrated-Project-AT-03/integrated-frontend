@@ -2,16 +2,18 @@
 import Button from "@/components/Button.vue";
 import { useRoute, useRouter } from "vue-router";
 import AddCollaboratorModal from "../components/AddCollaboratorModal.vue";
-import RemoveCollabModal from "../components/RemoveCollabModal.vue";
+import CollabModal from "../components/CollabModal.vue";
 import { getCollab } from "../services/apiCollab.js";
 import { getBoardByNanoId } from "../services/apiBoard.js";
 import { onMounted } from "vue";
 import { useBoardStore } from "@/stores/useBoardStore";
 import { useCollabStore } from "../stores/useCollabStore.js";
 import { ref } from "vue";
-import EmptyElementSelect from "../components/EmptyElementSelect.vue";
+// import EmptyElementSelect from "../components/EmptyElementSelect.vue";
 import ChangeAccessModal from "../components/ChangeAccessModal.vue";
 import SelectCollabRole from "@/components/SelectCollabRole.vue";
+import ChangeInviteAccessModal from "@/components/ChangeInviteAccessModal.vue";
+import { deleteCollab, cancleInvite } from "../services/apiCollab.js";
 
 const route = useRoute();
 const router = useRouter();
@@ -39,14 +41,62 @@ const handleMessage = (e) => {
   emits("message", e);
 };
 
-function onModalOpen(collab) {
-  document.getElementById("removeCollabModal").showModal();
+function onModalOpen(idModal, collab) {
+  document.getElementById(idModal).showModal();
   curCollab.value = collab;
 }
 
 function onChangeAccessModalOpen(collab) {
   document.getElementById("changeAccessModal").showModal();
   curCollab.value = collab;
+}
+
+function onChangeInviteAccessModalOpen(collab) {
+  document.getElementById("changeInviteAccessModal").showModal();
+  curCollab.value = collab;
+}
+
+async function removeCollab() {
+  try {
+    const res = await deleteCollab(curCollab.value.oid, route.params.oid);
+    if (res.httpStatus === 200) {
+      collabStore.deleteCollab(curCollab.value.oid);
+      emits("message", {
+        description: `The collaborator has been successfully deleted.`,
+        status: "success",
+      });
+    }
+  } catch (error) {
+    emits("message", {
+      description: `${error}`,
+      status: "error",
+    });
+  }
+}
+
+async function cancelInviteCollab() {
+  try {
+    const res = await cancleInvite(curCollab.value.oid, route.params.oid);
+    if (res.httpStatus === 200) {
+      collabStore.deleteCollab(curCollab.value.oid);
+      emits("message", {
+        description: `The collaborator has been successfully canceled.`,
+        status: "success",
+      });
+    }
+  } catch (error) {
+    emits("message", {
+      description: `${error}`,
+      status: "error",
+    });
+  }
+}
+
+function revert() {
+  collabStore.updateCollab(
+    curCollab.value.oid,
+    curCollab.value.accessRight === "WRITE" ? "READ" : "WRITE",
+  );
 }
 </script>
 
@@ -115,6 +165,12 @@ function onChangeAccessModalOpen(collab) {
           </td>
           <td class="whitespace-nowrap">
             <SelectCollabRole
+              v-if="collab.status === 'ACITVE'"
+              @openConfirmModal="onChangeAccessModalOpen"
+              :collab="collab"
+            />
+            <SelectCollabRole
+              v-else
               @openConfirmModal="onChangeAccessModalOpen"
               :collab="collab"
             />
@@ -126,7 +182,11 @@ function onChangeAccessModalOpen(collab) {
               class="itbkk-button-cancel"
               bgcolor="#444444"
               :action="
-                () => onModalOpen({ oid: collab.oid, name: collab.name })
+                () =>
+                  onModalOpen('removeCollabModal', {
+                    oid: collab.oid,
+                    name: collab.name,
+                  })
               "
               message="Remove"
             />
@@ -137,7 +197,11 @@ function onChangeAccessModalOpen(collab) {
               class="itbkk-button-cancel"
               bgcolor="red"
               :action="
-                () => onModalOpen({ oid: collab.oid, name: collab.name })
+                () =>
+                  onModalOpen('cancelInviteModal', {
+                    oid: collab.oid,
+                    name: collab.name,
+                  })
               "
               message="Cancel"
             />
@@ -153,8 +217,30 @@ function onChangeAccessModalOpen(collab) {
       </div>
     </table>
   </div>
-  <RemoveCollabModal :collab="curCollab" @message="handleMessage($event)" />
+  <CollabModal
+    header="Remove Collaborator"
+    id="removeCollabModal"
+    :handleConfirm="removeCollab"
+    @message="handleMessage($event)"
+  >
+    Do you want to remove "{{ curCollab?.name }}" from the board
+  </CollabModal>
+
+  <CollabModal
+    header="Cancal Invite Collaborator"
+    id="cancelInviteModal"
+    :handleConfirm="cancelInviteCollab"
+    @message="handleMessage($event)"
+  >
+    Do you want to cancel invite "{{ curCollab?.name }}" from the board
+  </CollabModal>
+
   <ChangeAccessModal
+    @revert="revert"
+    :collab="curCollab"
+    @message="handleMessage($event)"
+  />
+  <ChangeInviteAccessModal
     @revert="revert"
     :collab="curCollab"
     @message="handleMessage($event)"

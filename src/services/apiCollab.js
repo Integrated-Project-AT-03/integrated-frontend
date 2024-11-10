@@ -98,7 +98,7 @@ export async function receiveInvite(boardNanoId, action) {
   return await fetchWithRefresh(`${uri}/v3/collabs/receive-invite`, options);
 }
 
-export async function cancleInvite(nanoId, oid) {
+export async function cancleInvite(oid, nanoId) {
   const options = {
     method: "DELETE",
     credentials: "include",

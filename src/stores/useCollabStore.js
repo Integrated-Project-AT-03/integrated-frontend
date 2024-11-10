@@ -7,7 +7,7 @@ export const useCollabStore = defineStore("collabStore", {
 
   actions: {
     setCollabs(collabs) {
-      this.collabs = collabs; 
+      this.collabs = collabs;
     },
     addCollab(collab) {
       this.collabs.push(collab);
@@ -22,10 +22,8 @@ export const useCollabStore = defineStore("collabStore", {
       return this.collabs.findIndex((collab) => collab.oid === oid);
     },
     deleteCollab(id) {
-      const collabIndex = this.findCollabsIndex(id);
-      if (collabIndex !== -1) {
-        this.collabs.splice(collabIndex, 1);
-      }
+      console.log(id);
+      this.collabs = this.collabs.filter((collab) => collab.oid !== id);
     },
     updateCollab(oid, newAccessRight) {
       const collabIndex = this.findCollabsIndex(oid);

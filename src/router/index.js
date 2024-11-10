@@ -13,7 +13,7 @@ import LoginPage from "../views/LoginPage.vue";
 import NotAllowPage from "../views/NotAllowPage.vue";
 import TaskManagerPage from "../views/TaskManagerPage.vue";
 import StatusManagerPage from "../views/TaskStatusPage.vue";
-import InvitePage from "../views/InvitePage.vue"; 
+import InvitePage from "../views/InvitePage.vue";
 import { useBoardStore } from "../stores/useBoardStore";
 import { getBoardByNanoId } from "../services/apiBoard";
 import { useToast } from "vue-toastification";
@@ -104,7 +104,7 @@ const router = createRouter({
           ],
         },
         {
-          path: ":NanoId/collab/invitations", 
+          path: ":NanoId/collab/invitations",
           name: "InvitePage",
           component: InvitePage,
         },
@@ -123,7 +123,6 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  const toast = useToast();
   try {
     const boardStore = useBoardStore();
 
@@ -143,9 +142,7 @@ router.beforeEach(async (to, from, next) => {
       // ตรวจสอบสถานะของบอร์ดก่อนเข้าถึงหน้า Invite
       const res = await getBoardByNanoId(to.params.boardNanoId);
       boardStore.setCurrentBoard(res.data);
-
       next();
-
       return;
       // if (res.data.status === "PENDING") {
       //   next();

@@ -11,7 +11,7 @@ import { useCollabBoardStore } from "../stores/useCollabBoardStore";
 
 import { getCollabBoard, leaveCollabBoard } from "../services/apiCollab";
 import ShareBoard from "../components/ShareBoard.vue";
-import RemoveCollabModal from "../components/RemoveCollabModal.vue";
+// import RemoveCollabModal from "../components/RemoveCollabModal.vue";
 
 const boardStore = useBoardStore();
 const taskStore = useTaskStore();
@@ -20,8 +20,6 @@ const taskStatusStore = useTaskStatusStore();
 const collabBoardStore = useCollabBoardStore();
 
 const collabBoards = ref([]);
-const showLeaveModal = ref(false);
-const curCollab = ref(null);
 const emits = defineEmits(["message", "loading"]);
 emits("loading", false);
 
@@ -63,27 +61,27 @@ const handleClick = (board) => {
 };
 
 // Toggle function
-const toggleBoards = () => {
-  showCollabBoards.value = !showCollabBoards.value;
-};
+// const toggleBoards = () => {
+//   showCollabBoards.value = !showCollabBoards.value;
+// };
 
-// Leave board function
-const leaveBoard = async (boardId) => {
-  try {
-    const response = await leaveCollabBoard(boardId);
-    if (response.httpStatus === 200) {
-      collabBoards.value = collabBoards.value.filter(
-        (board) => board.id !== boardId,
-      );
-      emits("message", "Successfully left the board.");
-    } else {
-      emits("message", "Failed to leave the board.");
-    }
-  } catch (error) {
-    console.error("Error leaving board:", error);
-    emits("message", "Error occurred while leaving the board.");
-  }
-};
+// // Leave board function
+// const leaveBoard = async (boardId) => {
+//   try {
+//     const response = await leaveCollabBoard(boardId);
+//     if (response.httpStatus === 200) {
+//       collabBoards.value = collabBoards.value.filter(
+//         (board) => board.id !== boardId,
+//       );
+//       emits("message", "Successfully left the board.");
+//     } else {
+//       emits("message", "Failed to leave the board.");
+//     }
+//   } catch (error) {
+//     console.error("Error leaving board:", error);
+//     emits("message", "Error occurred while leaving the board.");
+//   }
+// };
 </script>
 
 <template>
@@ -168,11 +166,11 @@ const leaveBoard = async (boardId) => {
   <!-- Collaboration Boards Section -->
   <div v-else class="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
     <ShareBoard />
-    <RemoveCollabModal
+    <!-- <RemoveCollabModal
       v-show="showLeaveModal"
       :collab="curCollab"
       @message="handleMessage($event)"
-    />
+    /> -->
   </div>
 
   <RouterView @message="handleMessage($event)" />
