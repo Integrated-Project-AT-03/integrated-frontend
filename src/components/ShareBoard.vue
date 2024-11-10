@@ -7,6 +7,9 @@ import RemoveCollabBoardModal from "./RemoveCollabBoardModal.vue";
 
 const collabBoardStore = useCollabBoardStore();
 const router = useRouter();
+console.log(collabBoardStore.getCollabsBoard());
+
+
 const curCollab = ref({ oid: "", name: "" });
 
 const emits = defineEmits(["message"]);

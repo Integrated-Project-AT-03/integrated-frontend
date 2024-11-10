@@ -1,15 +1,21 @@
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, useId, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Trash from "../assets/icons/Trash.vue";
+import Upload from '../assets/icons/Upload.vue'
 import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
 import { editTaskById, getTaskById } from "./../services/apiTask";
+import { deleteFile, uploadFiles } from "../services/apiFileAttachment.js";
 import { useBoardStore } from "./../stores/useBoardStore";
 import { useSettingStore } from "./../stores/useSettingStore";
 import { useTaskStore } from "./../stores/useTaskStore";
 import Button from "./Button.vue";
+import CloudUpload from "./CloudUpload.vue";
 import DeleteTaskModal from "./DeleteTaskModal.vue";
+import BoxAttachment from "./BoxAttachment.vue";
 import Loading from "./Loading.vue";
+import { onUnmounted } from "vue";
+import Xmark from "@/assets/icons/Xmark.vue";
 const boardStore = useBoardStore();
 const settingStore = useSettingStore();
 const taskStore = useTaskStore();
@@ -18,6 +24,7 @@ const emits = defineEmits(["message"]);
 const route = useRoute();
 const router = useRouter();
 const isEditMode = ref();
+// const imageSrc = ref();
 const dataTask = ref({
   title: "",
   description: "",
@@ -25,6 +32,7 @@ const dataTask = ref({
   status: {},
   boardNanoId: route.params.oid,
 });
+
 watch(
   () => route.params.mode,
   () => (isEditMode.value = route.params?.mode === "edit"),
@@ -40,7 +48,11 @@ const handleEdit = () => {
     name: `${!isEditMode.value ? "TaskEdit" : "TaskDetail"}`,
     [`${!isEditMode.value ? "params" : "_"}`]: { mode: "edit" },
   });
-  if (isEditMode.value) loadTask();
+  if (isEditMode.value) {
+    loadTask();
+  } else {
+    selectedFile.value = [];
+  }
 };
 
 const validateInput = computed(() => {
@@ -67,6 +79,7 @@ const loadTask = async () => {
 
 onMounted(async () => {
   await loadTask();
+  tempTaskAttachment.value = dataTask.value.tasksAttachment
   statuses.value = (await getStatusesByNanoIdBoard(route.params.oid)).data;
   isLoading.value = false;
 });
@@ -113,8 +126,166 @@ const formattDate = (date) =>
 const handleMessage = (e) => {
   emits("message", e);
 };
+
+console.log("--------------------------------------------");
+
+const selectedFile = ref([]);
+const errorMessage = ref("");
+const fileInputId = useId();
+
+const maxFileSizeMB = 20;
+const maxTotalSizeMB = 20;
+const maxFileCount = 10;
+const MAX_FILE_SIZE = maxFileSizeMB * 1024 * 1024; // Convert MB to bytes
+const MAX_TOTAL_SIZE = maxTotalSizeMB * 1024 * 1024; // Convert MB to bytes
+
+// Handle files added via input
+const handleFileInputChange = (e) => {
+  const files = Array.from(e.target.files);
+  processFiles(files);
+};
+
+// Handle files added via drag-and-drop
+const handleDrop = (e) => {
+  e.preventDefault(); // Prevent the default drop action
+  const files = Array.from(e.dataTransfer.files);
+  processFiles(files);
+};
+
+// Process and validate files
+const processFiles = (files) => {
+  errorMessage.value = "";
+  // Check total file count
+  if (selectedFile.value.length + files.length > maxFileCount) {
+    errorMessage.value = `You can only upload a maximum of ${maxFileCount} files.`;
+    return;
+  }
+
+  // Calculate the current total size of selected files
+  let currentTotalSize = selectedFile.value.reduce(
+    (total, file) => total + file.size,
+    0,
+  );
+
+  const validFiles = [];
+  for (const file of files) {
+    // Check individual file size
+    if (!file || !file.size) continue;
+
+    if (file.size > MAX_FILE_SIZE) {
+      errorMessage.value = `File ${file.name} exceeds the maximum size of ${maxFileSizeMB} MB.`;
+      continue;
+    }
+
+    // Check combined total file size
+    if (currentTotalSize + file.size > MAX_TOTAL_SIZE) {
+      errorMessage.value = `Total file size cannot exceed ${maxTotalSizeMB} MB.`;
+      break;
+    }
+
+    // Determine thumbnail based on file type
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    let preview = null;
+    let icon = "";
+
+    if (file.type.startsWith("image/")) {
+      // Generate a thumbnail for image files
+      preview = URL.createObjectURL(file);
+    } else if (fileExtension === "pdf") {
+      icon = "📄"; // PDF icon
+    } else if (["doc", "docx"].includes(fileExtension)) {
+      icon = "📝"; // Word icon
+    } else if (["xls", "xlsx"].includes(fileExtension)) {
+      icon = "📊"; // Excel icon
+    } else if (["ppt", "pptx"].includes(fileExtension)) {
+      icon = "📈"; // PowerPoint icon
+    } else {
+      icon = "📁"; // Generic file icon
+    }
+
+    // Add file with preview or icon to validFiles
+    validFiles.push({ file, preview, icon, name: file.name });
+    currentTotalSize += file.size;
+  }
+
+  selectedFile.value = [...selectedFile.value, ...validFiles];
+  console.log(selectedFile.value[0].file.size);
+  console.log(selectedFile.value);
+};
+
+const tempTaskAttachment = ref()
+
+const filesId = []
+
+const tempDelete = (name) => {
+  selectedFile.value = selectedFile.value.filter(file => file.name != name)
+}
+
+const handleDeleteFile = (id) => {
+  filesId.push(id)
+  console.log(filesId);
+  tempTaskAttachment.value = tempTaskAttachment.value.filter(file => file.id != id)
+}
+
+const deleteFileById = async () => {
+  try {
+    console.log('In try delete');
+    const res = await deleteFile(route.params.oid, route.params.id, filesId)
+    console.log(res);
+  } catch (error) {
+    console.log(error);
+  }
+  router.push({ name: "Task" });
+}
+
+// Cleanup preview URLs when component is unmounted to release memory
+onUnmounted(() => {
+  selectedFile.value.forEach(({ preview }) => {
+    if (preview) URL.revokeObjectURL(preview);
+  });
+});
+
+//submit files attachment
+const submitFile = async () => {
+  if (!selectedFile.value) {
+    console.log("No file selected");
+    return;
+  }
+
+  // Create FormData to send as the file payload
+  const formData = new FormData();
+
+  // Append each file individually to the FormData
+  selectedFile.value.forEach((file) => {
+    formData.append("files", file.file);
+  });
+
+  try {
+    const res = await uploadFiles(route.params.oid, route.params.id, formData); // Provide
+    console.log(res);
+    if (res.httpStatus === 200) {
+      console.log("File upload seccessful");
+      selectedFile.value = [];
+    }
+    if (res.httpStatus === 400) {
+      errorMessage.value = `You can't upload more than 10 files`;
+      selectedFile.value = [];
+    }
+  } catch (error) {
+    console.error("File upload failed:", error);
+  }
+};
+
+const handleSave = async () => {
+  if (filesId.length != 0) {
+      await deleteFileById();
+    } 
+  if(selectedFile.length != 0){
+    submitFile();
+  }
+  handleEditTask();
+}
 </script>
-onmou
 <template>
   <Teleport to="body">
     <div
@@ -122,7 +293,7 @@ onmou
     >
       <RouterView @message="handleMessage($event)" />
       <div
-        class="relative h-[30rem] w-[65rem] rounded-2xl bg-neutral drop-shadow-2xl"
+        class="relative h-auto w-[65rem] rounded-2xl bg-neutral drop-shadow-2xl"
       >
         <Loading :is-loading="isLoading" />
         <div
@@ -189,7 +360,7 @@ onmou
               :disabled="!isEditMode"
               v-model.trim="dataTask.description"
               :placeholder="dataTask.description ?? 'No Description Provided'"
-              class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
+              class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-stone-600 p-4 placeholder:italic placeholder:text-gray-400"
             ></textarea>
           </div>
           <div class="flex flex-col gap-2">
@@ -219,7 +390,7 @@ onmou
                   {{ status.name }}
                 </option>
               </select>
-              <div>
+              <div class="mt-2">
                 The limit status :
                 <span
                   :class="
@@ -238,7 +409,7 @@ onmou
               </div>
             </div>
             <div
-              class="flex flex-auto flex-col justify-between gap-3 pb-3 text-xs text-slate-200"
+              class="mt-3 flex flex-col justify-between gap-3 pb-3 text-xs text-slate-200"
             >
               <div class="flex gap-2">
                 TimeZone:
@@ -262,30 +433,143 @@ onmou
           </div>
         </div>
 
-        <div class="m-4 flex justify-end gap-3">
-          <Button
-            class="itbkk-button-confirm btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
+        <div class="flex h-auto w-auto justify-center">
+          <div
+            v-show="!isEditMode && dataTask?.tasksAttachment?.length != 0"
+            class="h-auto w-[59rem] overflow-x-auto rounded-3xl bg-stone-600 p-4"
+          >
+            <div class="flex gap-3">
+              <div
+                v-show="!isEditMode"
+                v-for="taskAttachment in dataTask?.tasksAttachment"
+              >
+                <BoxAttachment :attachment="taskAttachment" :isEditMode="isEditMode" />
+              </div>
+            </div>
+          </div>
+          
+          <div
+            v-show="!isEditMode && dataTask?.tasksAttachment?.length == 0"
+            class="flex h-[10rem] w-[59rem] items-center justify-center gap-3 rounded-3xl bg-stone-600 font-bold"
+          >
+            <div>No files</div>
+          </div>
+          
+          <!-- <div>อัปโหลดแล้ว ละกำลังจะลบออก</div> -->
+          <div
             v-show="isEditMode"
-            @click="handleEditTask()"
-            :disabled="
-              dataTask.title === '' ||
-              validateInput.assignees ||
-              validateInput.description ||
-              validateInput.title ||
-              ((dataTask.assignees ?? '') === (compareTask?.assignees ?? '') &&
-                (dataTask.description ?? '') ===
-                  (compareTask?.description ?? '') &&
-                dataTask?.status === compareTask?.status &&
-                (dataTask.title ?? '') === (compareTask?.title ?? ''))
-            "
-            message="Save"
-            bgcolor=""
-          />
-          <Button
-            class="itbkk-button-cancel"
-            message="Close"
-            @click="router.push({ name: 'Task' })"
-          />
+            class="h-[12rem] w-[59rem] border-2 border-dashed overflow-x-auto rounded-3xl bg-stone-600 p-4"
+            @dragover.prevent
+            @drop.prevent="handleDrop"
+          >
+            <div class="flex gap-3">
+              <div
+                v-show="isEditMode"
+                v-for="taskAttachment in tempTaskAttachment"
+              >
+                <BoxAttachment :attachment="taskAttachment" @delete-file="handleDeleteFile" :isEditMode="isEditMode" />           
+              </div>
+              <div
+                  v-for="file in selectedFile"
+                  :key="file.name"
+                  class="h-45 w-40 rounded-2xl"
+                >
+                  <div
+                    class="flex h-[10rem] w-[8rem] cursor-pointer flex-col justify-between rounded-lg bg-stone-500 p-3  "
+                  >
+                  <div class="flex justify-end z-50">
+                    <button class="delete-btn" @click="tempDelete(file.name)"><Xmark /></button>
+                  </div>
+                    <img
+                      class="h-[80%] w-[100%] object-cover"
+                      v-show="file.preview"
+                      :src="file.preview"
+                      alt="File thumbnail"
+                    />
+                    <p
+                      v-show="!file.preview"
+                      class="flex h-[80%] w-[100%] items-center justify-center text-6xl"
+                    >
+                      {{ file.icon }}
+                    </p>
+
+                    <p
+                      class="w-[100%] overflow-hidden text-nowrap text-xs underline"
+                    >
+                      {{ file.file?.name }} ({{
+                        (file.file?.size / (1024 * 1024)).toFixed(2)
+                      }}
+                      MB)
+                    </p>
+                  </div>
+                </div>
+                <div v-show="isEditMode && (selectedFile.length != 0 || tempTaskAttachment?.length != 0)">
+                  <label :for="fileInputId">
+                    <span class="hover:cursor-pointer hover:text-blue-400 absolute right-20"><Upload /></span>
+                  </label>
+                </div>
+                <div
+                v-show="isEditMode && (tempTaskAttachment?.length == 0 && selectedFile.length == 0)"
+                class="flex w-full flex-col items-center justify-center gap-2 p-3"
+              >
+                <CloudUpload />
+                <label :for="fileInputId">
+                  <span
+                    class="cursor-pointer text-stone-300 underline hover:text-blue-400"
+                    ref="uploadText"
+                    >Click to upload </span
+                  >or drag and drop
+                </label>
+                <div>Maximum file size 20 MB.</div>
+                <input
+                  :id="fileInputId"
+                  type="file"
+                  @change="handleFileInputChange"
+                  multiple
+                  class="hidden"
+                />
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="m-4 flex items-center justify-between gap-3">
+          <!-- <Button message="Upload" @click="submitFile" /> -->
+          <div class="ml-12 text-error">{{ errorMessage }}</div>
+          <div class="flex flex-row gap-3">
+            <!-- <Button v-show="isEditMode" message="delete file test" @click="() => deleteFileById()"/> -->
+            <Button
+              class="itbkk-button-confirm btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
+              v-show="isEditMode"
+              @click="
+                () => {
+                  // handleEditTask(), submitFile();
+                  handleSave()
+                }
+              "
+              :disabled="
+                dataTask.title === '' ||
+                validateInput.assignees ||
+                validateInput.description ||
+                validateInput.title ||
+                ((dataTask.assignees ?? '') ===
+                  (compareTask?.assignees ?? '') &&
+                  (dataTask.description ?? '') ===
+                    (compareTask?.description ?? '') &&
+                  dataTask?.status === compareTask?.status &&
+                  (dataTask.title ?? '') === (compareTask?.title ?? '') &&
+                  selectedFile.length == 0) && filesId.length == 0
+              "
+              message="Save"
+              bgcolor=""
+            />
+            <Button
+              class="itbkk-button-cancel"
+              message="Close"
+              @click="router.push({ name: 'Task' })"
+            />
+          </div>
         </div>
       </div>
     </div>

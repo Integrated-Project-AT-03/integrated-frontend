@@ -42,7 +42,7 @@ const access = computed(
     <button
       @click="() => action()"
       :disabled="!access || disabled"
-      class="dis btn min-w-max border-0 p-2 px-2 text-slate-200"
+      class="dis btn min-w-max border-0 py-1 px-4 text-slate-200"
       :style="{ backgroundColor: props.bgcolor }"
     >
       {{ props.message }}

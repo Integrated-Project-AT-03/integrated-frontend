@@ -60,6 +60,8 @@ async function addNewTask(newItem) {
   }
   return router.push({ name: "Task" });
 }
+
+
 </script>
 
 <template>
@@ -141,6 +143,7 @@ async function addNewTask(newItem) {
                   </span>
                 </div>
               </div>
+              
               <div class="mr-4 flex justify-end gap-3">
                 <Button
                   class="itbkk-button-confirm btn-success"
