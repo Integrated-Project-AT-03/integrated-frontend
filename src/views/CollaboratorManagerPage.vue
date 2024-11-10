@@ -97,7 +97,7 @@ function onChangeAccessModalOpen(collab) {
         <tr
           v-for="(collab, index) in collabStore.getCollabs()"
           :key="collab.oid"
-          class="itbkk-item itbkk-button-action hover:bg-slate-200"
+          class="itbkk-item itbkk-button-action"
         >
           <td class="px-6 py-4">
             <div class="text-gray-900">{{ index + 1 }}</div>
@@ -129,7 +129,7 @@ function onChangeAccessModalOpen(collab) {
                 !['OWNER'].includes(boardStore.getCurrentBoard().access)
               "
               :value="collab.accessRight"
-              class="itbkk-access-right select select-ghost w-full max-w-xs bg-[#444444]"
+              class="itbkk-access-right select select-ghost w-full max-w-xs cursor-pointer bg-[#444444]"
             >
               <option value="READ">Read</option>
               <option value="WRITE">Write</option>
@@ -137,6 +137,7 @@ function onChangeAccessModalOpen(collab) {
           </td>
           <td class="whitespace-nowrap px-4 py-2">
             <Button
+              v-if="collab.status === 'ACTIVE'"
               :access="['OWNER']"
               class="itbkk-button-cancel"
               bgcolor="#444444"
@@ -144,6 +145,17 @@ function onChangeAccessModalOpen(collab) {
                 () => onModalOpen({ oid: collab.oid, name: collab.name })
               "
               message="Remove"
+            />
+
+            <Button
+              v-else
+              :access="['OWNER']"
+              class="itbkk-button-cancel"
+              bgcolor="red"
+              :action="
+                () => onModalOpen({ oid: collab.oid, name: collab.name })
+              "
+              message="Cancel"
             />
           </td>
         </tr>

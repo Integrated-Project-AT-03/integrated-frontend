@@ -9,10 +9,7 @@ import { useTaskStore } from "../stores/useTaskStore";
 import { useTaskStatusStore } from "../stores/useTaskStatusStore";
 import { useCollabBoardStore } from "../stores/useCollabBoardStore";
 
-import {
-  getCollabBoard,
-  leaveCollabBoard,
-} from "../services/apiMakeCollabBoard";
+import { getCollabBoard, leaveCollabBoard } from "../services/apiCollab";
 import ShareBoard from "../components/ShareBoard.vue";
 import RemoveCollabModal from "../components/RemoveCollabModal.vue";
 
