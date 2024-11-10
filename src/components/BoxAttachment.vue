@@ -10,7 +10,7 @@ import Xmark from "@/assets/icons/Xmark.vue";
 const imageSrc = ref();
 const route = useRoute();
 const typeImg = ["jpg", "png", "jpge"];
-const { attachment } = defineProps(["attachment"]);
+const { attachment, isEditMode } = defineProps(["attachment", "isEditMode"]);
 onMounted(async () => {
   if (!typeImg.includes(attachment.type)) return;
   imageSrc.value = await showImage(
@@ -67,7 +67,7 @@ const tempDelete = (id) => {
     @click="dowloadFile(attachment.id, $event)"
   >
     <div class="flex justify-end z-50">
-      <button class="delete-btn" @click.stop="tempDelete(attachment.id)"><Xmark /></button>
+      <button v-show="isEditMode" class="delete-btn" @click.stop="tempDelete(attachment.id)"><Xmark /></button>
     </div>
     <img
       v-show="typeImg.includes(attachment.type)"

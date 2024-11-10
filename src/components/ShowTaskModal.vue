@@ -229,11 +229,12 @@ const handleDeleteFile = (id) => {
 const deleteFileById = async () => {
   try {
     console.log('In try delete');
-    const res = await deleteFile(route.params.oid, route.params.id, filesId.value)
+    const res = await deleteFile(route.params.oid, route.params.id, filesId)
     console.log(res);
   } catch (error) {
-    
+    console.log(error);
   }
+  // router.push({ name: "Task" });
 }
 
 // Cleanup preview URLs when component is unmounted to release memory
@@ -431,13 +432,13 @@ const submitFile = async () => {
                 v-show="!isEditMode"
                 v-for="taskAttachment in dataTask?.tasksAttachment"
               >
-                <BoxAttachment :attachment="taskAttachment" />
+                <BoxAttachment :attachment="taskAttachment" :isEditMode="isEditMode" />
               </div>
             </div>
           </div>
           
           <div
-            v-show="!isEditMode && dataTask?.tasksAttachment?.length === 0"
+            v-show="!isEditMode && dataTask?.tasksAttachment?.length == 0"
             class="flex h-[10rem] w-[59rem] items-center justify-center gap-3 rounded-3xl bg-stone-600 font-bold"
           >
             <div>No files</div>
@@ -445,7 +446,7 @@ const submitFile = async () => {
           
           <!-- <div>อัปโหลดแล้ว ละกำลังจะลบออก</div> -->
           <div
-            v-show="isEditMode && dataTask?.tasksAttachment?.length != 0"
+            v-show="isEditMode && (dataTask?.tasksAttachment?.length != 0 && tempTaskAttachment?.length != 0)"
             class="h-auto w-[59rem] overflow-x-auto rounded-3xl bg-stone-600 p-4"
           >
             <div class="flex gap-3">
@@ -453,12 +454,12 @@ const submitFile = async () => {
                 v-show="isEditMode"
                 v-for="taskAttachment in tempTaskAttachment"
               >
-                <BoxAttachment :attachment="taskAttachment" @delete-file="handleDeleteFile"/>
+                <BoxAttachment :attachment="taskAttachment" @delete-file="handleDeleteFile" :isEditMode="isEditMode" />
               </div>
             </div>
           </div>
 
-          <div v-show="isEditMode && dataTask?.taskAttachment?.length === 0" class="mt-3 flex items-center gap-3">
+          <div v-show="isEditMode && (dataTask?.taskAttachment?.length == 0 || tempTaskAttachment?.length == 0)" class="mt-3 flex items-center gap-3">
             <div
               class="flex h-auto w-[59rem] items-center justify-center gap-3 overflow-x-auto rounded-3xl border-2 border-dashed p-2"
               ref="uploadArea"
@@ -466,7 +467,7 @@ const submitFile = async () => {
               @drop.prevent="handleDrop"
             >
               <div
-                v-show="selectedFile.length === 0"
+                v-show="selectedFile.length == 0"
                 class="flex w-full flex-col items-center justify-center gap-2 p-3"
               >
                 <CloudUpload />
@@ -534,12 +535,14 @@ const submitFile = async () => {
           <!-- <Button message="Upload" @click="submitFile" /> -->
           <div class="ml-12 text-error">{{ errorMessage }}</div>
           <div class="flex flex-row gap-3">
+            <Button message="delete file test" @click="() => deleteFileById()"/>
             <Button
               class="itbkk-button-confirm btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
               v-show="isEditMode"
               @click="
                 () => {
                   handleEditTask(), submitFile();
+                  // filesId.length != 0 ? deleteFileById() : handleEditTask(), submitFile();
                 }
               "
               :disabled="
@@ -553,7 +556,7 @@ const submitFile = async () => {
                     (compareTask?.description ?? '') &&
                   dataTask?.status === compareTask?.status &&
                   (dataTask.title ?? '') === (compareTask?.title ?? '') &&
-                  selectedFile.length == 0)
+                  selectedFile.length == 0) && filesId.length == 0
               "
               message="Save"
               bgcolor=""
