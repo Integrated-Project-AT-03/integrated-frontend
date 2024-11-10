@@ -2,7 +2,7 @@
 import { computed, onMounted, ref, useId, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Trash from "../assets/icons/Trash.vue";
-import Upload from '../assets/icons/Upload.vue'
+import Upload from "../assets/icons/Upload.vue";
 import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
 import { editTaskById, getTaskById } from "./../services/apiTask";
 import { deleteFile, uploadFiles } from "../services/apiFileAttachment.js";
@@ -79,7 +79,7 @@ const loadTask = async () => {
 
 onMounted(async () => {
   await loadTask();
-  tempTaskAttachment.value = dataTask.value.tasksAttachment
+  tempTaskAttachment.value = dataTask.value.tasksAttachment;
   statuses.value = (await getStatusesByNanoIdBoard(route.params.oid)).data;
   isLoading.value = false;
 });
@@ -213,30 +213,32 @@ const processFiles = (files) => {
   console.log(selectedFile.value);
 };
 
-const tempTaskAttachment = ref()
+const tempTaskAttachment = ref([]);
 
-const filesId = []
+const filesId = [];
 
 const tempDelete = (name) => {
-  selectedFile.value = selectedFile.value.filter(file => file.name != name)
-}
+  selectedFile.value = selectedFile.value.filter((file) => file.name != name);
+};
 
 const handleDeleteFile = (id) => {
-  filesId.push(id)
+  filesId.push(id);
   console.log(filesId);
-  tempTaskAttachment.value = tempTaskAttachment.value.filter(file => file.id != id)
-}
+  tempTaskAttachment.value = tempTaskAttachment.value.filter(
+    (file) => file.id != id,
+  );
+};
 
 const deleteFileById = async () => {
   try {
-    console.log('In try delete');
-    const res = await deleteFile(route.params.oid, route.params.id, filesId)
+    console.log("In try delete");
+    const res = await deleteFile(route.params.oid, route.params.id, filesId);
     console.log(res);
   } catch (error) {
     console.log(error);
   }
   router.push({ name: "Task" });
-}
+};
 
 // Cleanup preview URLs when component is unmounted to release memory
 onUnmounted(() => {
@@ -278,13 +280,13 @@ const submitFile = async () => {
 
 const handleSave = async () => {
   if (filesId.length != 0) {
-      await deleteFileById();
-    } 
-  if(selectedFile.length != 0){
+    await deleteFileById();
+  }
+  if (selectedFile.length != 0) {
     submitFile();
   }
   handleEditTask();
-}
+};
 </script>
 <template>
   <Teleport to="body">
@@ -443,22 +445,25 @@ const handleSave = async () => {
                 v-show="!isEditMode"
                 v-for="taskAttachment in dataTask?.tasksAttachment"
               >
-                <BoxAttachment :attachment="taskAttachment" :isEditMode="isEditMode" />
+                <BoxAttachment
+                  :attachment="taskAttachment"
+                  :isEditMode="isEditMode"
+                />
               </div>
             </div>
           </div>
-          
+
           <div
             v-show="!isEditMode && dataTask?.tasksAttachment?.length == 0"
             class="flex h-[10rem] w-[59rem] items-center justify-center gap-3 rounded-3xl bg-stone-600 font-bold"
           >
             <div>No files</div>
           </div>
-          
+
           <!-- <div>อัปโหลดแล้ว ละกำลังจะลบออก</div> -->
           <div
             v-show="isEditMode"
-            class="h-[12rem] w-[59rem] border-2 border-dashed overflow-x-auto rounded-3xl bg-stone-600 p-4"
+            class="drop h-[13rem] w-[59rem] overflow-x-auto overflow-y-hidden rounded-3xl bg-stone-600 p-4 pb-5 pr-0"
             @dragover.prevent
             @drop.prevent="handleDrop"
           >
@@ -467,50 +472,75 @@ const handleSave = async () => {
                 v-show="isEditMode"
                 v-for="taskAttachment in tempTaskAttachment"
               >
-                <BoxAttachment :attachment="taskAttachment" @delete-file="handleDeleteFile" :isEditMode="isEditMode" />           
+                <BoxAttachment
+                  :attachment="taskAttachment"
+                  @delete-file="handleDeleteFile"
+                  :isEditMode="isEditMode"
+                />
               </div>
               <div
-                  v-for="file in selectedFile"
-                  :key="file.name"
-                  class="h-45 w-40 rounded-2xl"
+                v-for="file in selectedFile"
+                :key="file.name"
+                class="h-full rounded-2xl"
+              >
+                <div
+                  class="flex h-[10rem] w-[8rem] cursor-pointer flex-col justify-between rounded-lg bg-stone-500 p-3"
                 >
-                  <div
-                    class="flex h-[10rem] w-[8rem] cursor-pointer flex-col justify-between rounded-lg bg-stone-500 p-3  "
+                  <div class="z-50 flex justify-end">
+                    <button class="delete-btn" @click="tempDelete(file.name)">
+                      <Xmark />
+                    </button>
+                  </div>
+                  <img
+                    class="h-[80%] w-full object-cover"
+                    v-show="file.preview"
+                    :src="file.preview"
+                    alt="File thumbnail"
+                  />
+                  <p
+                    v-show="!file.preview"
+                    class="flex h-[80%] w-full items-center justify-center text-6xl"
                   >
-                  <div class="flex justify-end z-50">
-                    <button class="delete-btn" @click="tempDelete(file.name)"><Xmark /></button>
-                  </div>
-                    <img
-                      class="h-[80%] w-[100%] object-cover"
-                      v-show="file.preview"
-                      :src="file.preview"
-                      alt="File thumbnail"
-                    />
-                    <p
-                      v-show="!file.preview"
-                      class="flex h-[80%] w-[100%] items-center justify-center text-6xl"
-                    >
-                      {{ file.icon }}
-                    </p>
+                    {{ file.icon }}
+                  </p>
 
-                    <p
-                      class="w-[100%] overflow-hidden text-nowrap text-xs underline"
-                    >
-                      {{ file.file?.name }} ({{
-                        (file.file?.size / (1024 * 1024)).toFixed(2)
-                      }}
-                      MB)
-                    </p>
-                  </div>
+                  <p
+                    class="w-full overflow-hidden text-nowrap text-xs underline"
+                  >
+                    {{ file.file?.name }} ({{
+                      (file.file?.size / (1024 * 1024)).toFixed(2)
+                    }}
+                    MB)
+                  </p>
                 </div>
-                <div v-show="isEditMode && (selectedFile.length != 0 || tempTaskAttachment?.length != 0)">
+              </div>
+              <label
+                v-show="
+                  tempTaskAttachment?.length + selectedFile?.length !== 10 &&
+                  tempTaskAttachment?.length + selectedFile?.length !== 0
+                "
+                :for="fileInputId"
+                class="flex h-[10rem] min-w-[8rem] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-stone-500 p-3 text-stone-500 transition-colors duration-200 hover:border-gray-300 hover:text-gray-300"
+              >
+                <p class="text-6xl">+</p>
+                <p>
+                  {{ tempTaskAttachment?.length + selectedFile?.length }}/10
+                </p>
+              </label>
+              <div class="opacity-0">e</div>
+
+              <!-- <div v-show="isEditMode && (selectedFile.length != 0 || tempTaskAttachment?.length != 0)">
                   <label :for="fileInputId">
                     <span class="hover:cursor-pointer hover:text-blue-400 absolute right-20"><Upload /></span>
                   </label>
-                </div>
-                <div
-                v-show="isEditMode && (tempTaskAttachment?.length == 0 && selectedFile.length == 0)"
-                class="flex w-full flex-col items-center justify-center gap-2 p-3"
+                </div> -->
+              <div
+                v-show="
+                  isEditMode &&
+                  tempTaskAttachment?.length == 0 &&
+                  selectedFile.length == 0
+                "
+                class="mt-2 flex w-full flex-col items-center justify-center gap-2 p-3"
               >
                 <CloudUpload />
                 <label :for="fileInputId">
@@ -531,7 +561,6 @@ const handleSave = async () => {
               </div>
             </div>
           </div>
-
         </div>
 
         <div class="m-4 flex items-center justify-between gap-3">
@@ -545,7 +574,7 @@ const handleSave = async () => {
               @click="
                 () => {
                   // handleEditTask(), submitFile();
-                  handleSave()
+                  handleSave();
                 }
               "
               :disabled="
@@ -559,7 +588,8 @@ const handleSave = async () => {
                     (compareTask?.description ?? '') &&
                   dataTask?.status === compareTask?.status &&
                   (dataTask.title ?? '') === (compareTask?.title ?? '') &&
-                  selectedFile.length == 0) && filesId.length == 0
+                  selectedFile.length == 0 &&
+                  filesId.length == 0)
               "
               message="Save"
               bgcolor=""
