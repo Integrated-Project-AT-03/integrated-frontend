@@ -11,6 +11,7 @@ import { useCollabStore } from "../stores/useCollabStore.js";
 import { ref } from "vue";
 import EmptyElementSelect from "../components/EmptyElementSelect.vue";
 import ChangeAccessModal from "../components/ChangeAccessModal.vue";
+import SelectCollabRole from "@/components/SelectCollabRole.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -113,27 +114,10 @@ function onChangeAccessModalOpen(collab) {
             </div>
           </td>
           <td class="whitespace-nowrap">
-            <EmptyElementSelect
-              @click="
-                ['OWNER'].includes(boardStore.getCurrentBoard().access) &&
-                  onChangeAccessModalOpen({
-                    oid: collab.oid,
-                    name: collab.name,
-                    access: collab.accessRight,
-                  })
-              "
+            <SelectCollabRole
+              @openConfirmModal="onChangeAccessModalOpen"
+              :collab="collab"
             />
-
-            <select
-              :disabled="
-                !['OWNER'].includes(boardStore.getCurrentBoard().access)
-              "
-              :value="collab.accessRight"
-              class="itbkk-access-right select select-ghost w-full max-w-xs cursor-pointer bg-[#444444]"
-            >
-              <option value="READ">Read</option>
-              <option value="WRITE">Write</option>
-            </select>
           </td>
           <td class="whitespace-nowrap px-4 py-2">
             <Button
@@ -170,7 +154,11 @@ function onChangeAccessModalOpen(collab) {
     </table>
   </div>
   <RemoveCollabModal :collab="curCollab" @message="handleMessage($event)" />
-  <ChangeAccessModal :collab="curCollab" @message="handleMessage($event)" />
+  <ChangeAccessModal
+    @revert="revert"
+    :collab="curCollab"
+    @message="handleMessage($event)"
+  />
   <AddCollaboratorModal
     v-show="openAddModal"
     @closeModal="openAddModal = false"
