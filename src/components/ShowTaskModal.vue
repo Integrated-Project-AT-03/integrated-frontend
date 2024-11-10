@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, useId, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Trash from "../assets/icons/Trash.vue";
+import Upload from '../assets/icons/Upload.vue'
 import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
 import { editTaskById, getTaskById } from "./../services/apiTask";
 import { deleteFile, uploadFiles } from "../services/apiFileAttachment.js";
@@ -275,9 +276,9 @@ const submitFile = async () => {
   }
 };
 
-const handleSave = () => {
+const handleSave = async () => {
   if (filesId.length != 0) {
-      deleteFileById();
+      await deleteFileById();
     } 
   if(selectedFile.length != 0){
     submitFile();
@@ -456,20 +457,82 @@ const handleSave = () => {
           
           <!-- <div>อัปโหลดแล้ว ละกำลังจะลบออก</div> -->
           <div
-            v-show="isEditMode && (dataTask?.tasksAttachment?.length != 0 && tempTaskAttachment?.length != 0)"
-            class="h-auto w-[59rem] overflow-x-auto rounded-3xl bg-stone-600 p-4"
+            v-show="isEditMode"
+            class="h-[12rem] w-[59rem] border-2 border-dashed overflow-x-auto rounded-3xl bg-stone-600 p-4"
+            @dragover.prevent
+            @drop.prevent="handleDrop"
           >
             <div class="flex gap-3">
               <div
                 v-show="isEditMode"
                 v-for="taskAttachment in tempTaskAttachment"
               >
-                <BoxAttachment :attachment="taskAttachment" @delete-file="handleDeleteFile" :isEditMode="isEditMode" />
+                <BoxAttachment :attachment="taskAttachment" @delete-file="handleDeleteFile" :isEditMode="isEditMode" />           
+              </div>
+              <div
+                  v-for="file in selectedFile"
+                  :key="file.name"
+                  class="h-45 w-40 rounded-2xl"
+                >
+                  <div
+                    class="flex h-[10rem] w-[8rem] cursor-pointer flex-col justify-between rounded-lg bg-stone-500 p-3  "
+                  >
+                  <div class="flex justify-end z-50">
+                    <button class="delete-btn" @click="tempDelete(file.name)"><Xmark /></button>
+                  </div>
+                    <img
+                      class="h-[80%] w-[100%] object-cover"
+                      v-show="file.preview"
+                      :src="file.preview"
+                      alt="File thumbnail"
+                    />
+                    <p
+                      v-show="!file.preview"
+                      class="flex h-[80%] w-[100%] items-center justify-center text-6xl"
+                    >
+                      {{ file.icon }}
+                    </p>
+
+                    <p
+                      class="w-[100%] overflow-hidden text-nowrap text-xs underline"
+                    >
+                      {{ file.file?.name }} ({{
+                        (file.file?.size / (1024 * 1024)).toFixed(2)
+                      }}
+                      MB)
+                    </p>
+                  </div>
+                </div>
+                <div v-show="isEditMode && (selectedFile.length != 0 || tempTaskAttachment?.length != 0)">
+                  <label :for="fileInputId">
+                    <span class="hover:cursor-pointer hover:text-blue-400 absolute right-20"><Upload /></span>
+                  </label>
+                </div>
+                <div
+                v-show="isEditMode && (tempTaskAttachment?.length == 0 && selectedFile.length == 0)"
+                class="flex w-full flex-col items-center justify-center gap-2 p-3"
+              >
+                <CloudUpload />
+                <label :for="fileInputId">
+                  <span
+                    class="cursor-pointer text-stone-300 underline hover:text-blue-400"
+                    ref="uploadText"
+                    >Click to upload </span
+                  >or drag and drop
+                </label>
+                <div>Maximum file size 20 MB.</div>
+                <input
+                  :id="fileInputId"
+                  type="file"
+                  @change="handleFileInputChange"
+                  multiple
+                  class="hidden"
+                />
               </div>
             </div>
           </div>
 
-          <div v-show="isEditMode && (dataTask?.taskAttachment?.length == 0 || tempTaskAttachment?.length == 0)" class="mt-3 flex items-center gap-3">
+          <!-- <div v-show="isEditMode && (dataTask?.taskAttachment?.length == 0 || tempTaskAttachment?.length == 0)" class="mt-3 flex items-center gap-3">
             <div
               class="flex h-auto w-[59rem] items-center justify-center gap-3 overflow-x-auto rounded-3xl border-2 border-dashed p-2"
               ref="uploadArea"
@@ -537,8 +600,8 @@ const handleSave = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </div> -->
+          <!-- </div> -->
         </div>
 
         <div class="m-4 flex items-center justify-between gap-3">
