@@ -53,6 +53,21 @@ export async function updateAccessCollab(boardNanoId, oid, access) {
   );
 }
 
+export async function updateAccessInviteCollab(boardNanoId, oid, access) {
+  const options = {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ accessRight: access }),
+  };
+  return await fetchWithRefresh(
+    `${uri}/v3/boards/${boardNanoId}/invite/${oid}`,
+    options,
+  );
+}
+
 export async function getCollabBoard() {
   const options = {
     method: "GET",

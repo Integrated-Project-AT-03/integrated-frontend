@@ -8,13 +8,17 @@ import { getBoardByNanoId } from "../services/apiBoard.js";
 import { onMounted } from "vue";
 import { useBoardStore } from "@/stores/useBoardStore";
 import { useCollabStore } from "../stores/useCollabStore.js";
+import { useUserStore } from "../stores/useUserStore.js";
 import { ref } from "vue";
 // import EmptyElementSelect from "../components/EmptyElementSelect.vue";
 import ChangeAccessModal from "../components/ChangeAccessModal.vue";
 import SelectCollabRole from "@/components/SelectCollabRole.vue";
 import ChangeInviteAccessModal from "@/components/ChangeInviteAccessModal.vue";
 import { deleteCollab, cancleInvite } from "../services/apiCollab.js";
-
+import {
+  updateAccessCollab,
+  updateAccessInviteCollab,
+} from "../services/apiCollab";
 const route = useRoute();
 const router = useRouter();
 const boardStore = useBoardStore();
@@ -22,7 +26,7 @@ const collabStore = useCollabStore();
 const curCollab = ref({ oid: "", name: "", access: "" });
 const emits = defineEmits(["message, loading"]);
 const openAddModal = ref(false);
-
+const UserStore = useUserStore();
 onMounted(async () => {
   const curBoard = (await getBoardByNanoId(route.params.oid)).data;
   boardStore.setCurrentBoard(curBoard);
@@ -46,15 +50,14 @@ function onModalOpen(idModal, collab) {
   curCollab.value = collab;
 }
 
-function onChangeAccessModalOpen(collab) {
-  document.getElementById("changeAccessModal").showModal();
-  curCollab.value = collab;
-}
+// function onChangeAccessModalOpen(collab) {
+//   document.getElementById("changeAccessModal").showModal();
+//   curCollab.value = collab;
+// }
 
-function onChangeInviteAccessModalOpen(collab) {
-  document.getElementById("changeInviteAccessModal").showModal();
-  curCollab.value = collab;
-}
+// function onChangeInviteAccessModalOpen(collab) {
+//   document.getElementById("changeInviteAccessModal").showModal();
+// }
 
 async function removeCollab() {
   try {
@@ -67,6 +70,74 @@ async function removeCollab() {
       });
     }
   } catch (error) {
+    emits("message", {
+      description: `${error}`,
+      status: "error",
+    });
+  }
+}
+
+async function leaveBoard() {
+  try {
+    const res = await deleteCollab(curCollab.value.oid, route.params.oid);
+    if (res.httpStatus === 200) {
+      collabStore.deleteCollab(curCollab.value.oid);
+      emits("message", {
+        description: `You have left the board now.`,
+        status: "success",
+      });
+
+      router.push({ name: "Boards" });
+    }
+  } catch (error) {
+    emits("message", {
+      description: `${error}`,
+      status: "error",
+    });
+  }
+}
+
+async function changeAccessCollab() {
+  try {
+    const res = await updateAccessCollab(
+      route.params.oid,
+      curCollab.value.oid,
+      curCollab.value.accessRight,
+    );
+    console.log(res);
+    if (res.httpStatus === 200) {
+      collabStore.updateCollab(curCollab.value.oid, res.data.accessRight);
+      emits("message", {
+        description: `The collaborator has been successfully updated.`,
+        status: "success",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    emits("message", {
+      description: `${error}`,
+      status: "error",
+    });
+  }
+}
+
+async function changeAccessInviteCollab() {
+  try {
+    const res = await updateAccessInviteCollab(
+      route.params.oid,
+      curCollab.value.oid,
+      curCollab.value.accessRight,
+    );
+    console.log(res);
+    if (res.httpStatus === 200) {
+      collabStore.updateCollab(curCollab.value.oid, res.data.accessRight);
+      emits("message", {
+        description: `The collaborator has been successfully updated.`,
+        status: "success",
+      });
+    }
+  } catch (error) {
+    console.log(error);
     emits("message", {
       description: `${error}`,
       status: "error",
@@ -165,19 +236,39 @@ function revert() {
           </td>
           <td class="whitespace-nowrap">
             <SelectCollabRole
-              v-if="collab.status === 'ACITVE'"
-              @openConfirmModal="onChangeAccessModalOpen"
+              v-if="collab.status === 'ACTIVE'"
+              @openConfirmModal="onModalOpen('changeAccessModal', collab)"
               :collab="collab"
             />
             <SelectCollabRole
               v-else
-              @openConfirmModal="onChangeAccessModalOpen"
+              @openConfirmModal="
+                onModalOpen('changeAccessInviteCollab', collab)
+              "
               :collab="collab"
             />
           </td>
-          <td class="whitespace-nowrap px-4 py-2">
+          <td
+            class="flex items-center justify-center whitespace-nowrap px-4 py-2"
+          >
             <Button
-              v-if="collab.status === 'ACTIVE'"
+              v-if="
+                collab.status === 'ACTIVE' &&
+                collab.oid === UserStore.getUser().oid
+              "
+              class="itbkk-button-cancel"
+              bgcolor="#444444"
+              :action="
+                () =>
+                  onModalOpen('LeaveCollabModal', {
+                    oid: collab.oid,
+                    name: collab.name,
+                  })
+              "
+              message="Leave"
+            />
+            <Button
+              v-else-if="collab.status === 'ACTIVE'"
               :access="['OWNER']"
               class="itbkk-button-cancel"
               bgcolor="#444444"
@@ -218,6 +309,15 @@ function revert() {
     </table>
   </div>
   <CollabModal
+    header="Leave Board"
+    id="LeaveCollabModal"
+    :handleConfirm="leaveBoard"
+    @message="handleMessage($event)"
+  >
+    Do you want to leave {{ boardStore.getCurrentBoard().name }} board?
+  </CollabModal>
+
+  <CollabModal
     header="Remove Collaborator"
     id="removeCollabModal"
     :handleConfirm="removeCollab"
@@ -236,15 +336,34 @@ function revert() {
   </CollabModal>
 
   <ChangeAccessModal
+    header="Change Access Right"
+    idModal="changeAccessModal"
+    @revert="revert"
+    @message="handleMessage($event)"
+    :handleConfirm="changeAccessCollab"
+  >
+    Do you want to change access right of "{{ curCollab?.name }}" to "{{
+      curCollab.accessRight
+    }}"
+  </ChangeAccessModal>
+
+  <ChangeAccessModal
+    header="Change Invite Access Right"
+    idModal="changeAccessInviteCollab"
+    @revert="revert"
+    @message="handleMessage($event)"
+    :handleConfirm="changeAccessInviteCollab"
+  >
+    Do you want to change invite access right of "{{ curCollab?.name }}" to "{{
+      curCollab.accessRight
+    }}"
+  </ChangeAccessModal>
+
+  <!-- <ChangeInviteAccessModal
     @revert="revert"
     :collab="curCollab"
     @message="handleMessage($event)"
-  />
-  <ChangeInviteAccessModal
-    @revert="revert"
-    :collab="curCollab"
-    @message="handleMessage($event)"
-  />
+  /> -->
   <AddCollaboratorModal
     v-show="openAddModal"
     @closeModal="openAddModal = false"
