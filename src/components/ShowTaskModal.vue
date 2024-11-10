@@ -468,6 +468,20 @@ const handleSave = async () => {
             @drop.prevent="handleDrop"
           >
             <div class="flex gap-3">
+              <label
+                v-show="
+                  tempTaskAttachment?.length + selectedFile?.length !== 10 &&
+                  tempTaskAttachment?.length + selectedFile?.length !== 0
+                "
+                :for="fileInputId"
+                class="flex h-[10rem] min-w-[8rem] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-stone-500 p-3 text-stone-500 transition-colors duration-200 hover:border-gray-300 hover:text-gray-300"
+              >
+                <p class="text-6xl">+</p>
+
+                <p>
+                  {{ tempTaskAttachment?.length + selectedFile?.length }}/10
+                </p>
+              </label>
               <div
                 v-show="isEditMode"
                 v-for="taskAttachment in tempTaskAttachment"
@@ -514,19 +528,7 @@ const handleSave = async () => {
                   </p>
                 </div>
               </div>
-              <label
-                v-show="
-                  tempTaskAttachment?.length + selectedFile?.length !== 10 &&
-                  tempTaskAttachment?.length + selectedFile?.length !== 0
-                "
-                :for="fileInputId"
-                class="flex h-[10rem] min-w-[8rem] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-stone-500 p-3 text-stone-500 transition-colors duration-200 hover:border-gray-300 hover:text-gray-300"
-              >
-                <p class="text-6xl">+</p>
-                <p>
-                  {{ tempTaskAttachment?.length + selectedFile?.length }}/10
-                </p>
-              </label>
+
               <div class="opacity-0">e</div>
 
               <!-- <div v-show="isEditMode && (selectedFile.length != 0 || tempTaskAttachment?.length != 0)">
