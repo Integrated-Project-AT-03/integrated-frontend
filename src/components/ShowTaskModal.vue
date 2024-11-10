@@ -234,7 +234,7 @@ const deleteFileById = async () => {
   } catch (error) {
     console.log(error);
   }
-  // router.push({ name: "Task" });
+  router.push({ name: "Task" });
 }
 
 // Cleanup preview URLs when component is unmounted to release memory
@@ -274,6 +274,16 @@ const submitFile = async () => {
     console.error("File upload failed:", error);
   }
 };
+
+const handleSave = () => {
+  if (filesId.length != 0) {
+      deleteFileById();
+    } 
+  if(selectedFile.length != 0){
+    submitFile();
+  }
+  handleEditTask();
+}
 </script>
 <template>
   <Teleport to="body">
@@ -535,14 +545,14 @@ const submitFile = async () => {
           <!-- <Button message="Upload" @click="submitFile" /> -->
           <div class="ml-12 text-error">{{ errorMessage }}</div>
           <div class="flex flex-row gap-3">
-            <Button message="delete file test" @click="() => deleteFileById()"/>
+            <!-- <Button v-show="isEditMode" message="delete file test" @click="() => deleteFileById()"/> -->
             <Button
               class="itbkk-button-confirm btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
               v-show="isEditMode"
               @click="
                 () => {
-                  handleEditTask(), submitFile();
-                  // filesId.length != 0 ? deleteFileById() : handleEditTask(), submitFile();
+                  // handleEditTask(), submitFile();
+                  handleSave()
                 }
               "
               :disabled="

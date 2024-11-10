@@ -26,9 +26,14 @@ export async function downloadFile(nanoId, tasksId, fileId) {
 }
 
 export async function deleteFile(nanoId, taskId, filesId) {
+  console.log(filesId);
+  console.log(JSON.stringify({ filesId }));
   const option = {
     method: "DELETE",
     credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({ filesId }),
   };
   return await fetchWithRefresh(
