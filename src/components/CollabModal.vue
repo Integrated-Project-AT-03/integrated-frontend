@@ -21,8 +21,6 @@ const props = defineProps({
 });
 
 const emits = defineEmits(["message"]);
-const collabStore = useCollabStore();
-const route = useRoute();
 </script>
 
 <template>
