@@ -150,7 +150,7 @@ const maxFileSizeMB = 20;
 const maxTotalSizeMB = 20;
 const maxFileCount = 10;
 const MAX_FILE_SIZE = maxFileSizeMB * 1024 * 1024; // Convert MB to bytes
-const MAX_TOTAL_SIZE = maxTotalSizeMB * 1024 * 1024; // Convert MB to bytes
+// const MAX_TOTAL_SIZE = maxTotalSizeMB * 1024 * 1024; // Convert MB to bytes
 
 // Handle files added via input
 const handleFileInputChange = (e) => {
@@ -186,15 +186,16 @@ const processFiles = (files) => {
     if (!file || !file.size) continue;
 
     if (file.size > MAX_FILE_SIZE) {
-      errorMessage.value = `File ${file.name} exceeds the maximum size of ${maxFileSizeMB} MB.`;
+      errorMessage.value = `Each file cannot be larger than ${maxFileSizeMB} MB. The following files are not added: ${file.name}`;
       continue;
     }
 
-    // Check combined total file size
-    if (currentTotalSize + file.size > MAX_TOTAL_SIZE) {
-      errorMessage.value = `Total file size cannot exceed ${maxTotalSizeMB} MB.`;
-      break;
-    }
+    // ไม่จำเป็นต้องเช็คค่ารวม
+    // // Check combined total file size
+    // if (currentTotalSize + file.size > MAX_TOTAL_SIZE) {
+    //   errorMessage.value = `Total file size cannot exceed ${maxTotalSizeMB} MB.`;
+    //   break;
+    // }
 
     // Determine thumbnail based on file type
     const fileExtension = file.name.split(".").pop().toLowerCase();
@@ -339,7 +340,6 @@ const handleSave = async () => {
 
           <div class="flex items-center gap-4">
             <Button
-              class="tooltip"
               :bgcolor="!isEditMode ? '#A020F0' : '#ef4444'"
               :message="route.params.mode !== 'edit' ? 'Edit mode' : 'Reset'"
               :action="() => handleEdit()"
