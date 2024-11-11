@@ -54,8 +54,6 @@ export async function showImage(nanoId, taskId, fileId) {
     options,
   );
 
-  console.log(result);
-
   const imageBlob = await result.blob();
   return URL.createObjectURL(imageBlob);
 }
