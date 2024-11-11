@@ -124,3 +124,13 @@ export async function cancleInvite(oid, nanoId) {
     options,
   );
 }
+
+export async function getInvite(oid, nanoId) {
+  const options = {
+    credentials: "include",
+  };
+  return await fetchWithRefresh(
+    `${uri}/v3/boards/${nanoId}/invite/${oid}`,
+    options,
+  );
+}

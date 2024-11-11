@@ -9,7 +9,6 @@ const collabBoardStore = useCollabBoardStore();
 const router = useRouter();
 console.log(collabBoardStore.getCollabsBoard());
 
-
 const curCollab = ref({ oid: "", name: "" });
 
 const emits = defineEmits(["message"]);
@@ -64,6 +63,7 @@ onMounted(async () => {
           </span>
           <h3 class="ml-2 text-lg font-bold text-gray-800">
             {{ board.boardName }}
+            {{ board.status === "PENDING" ? "(Pending Invite)" : "" }}
           </h3>
         </div>
         <p class="text-sm text-gray-600">Owner: {{ board.name }}</p>

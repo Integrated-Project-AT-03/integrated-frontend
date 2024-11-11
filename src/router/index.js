@@ -11,6 +11,7 @@ import { validateToken } from "../services/apiAuth";
 import BoardManagerPage from "../views/BoardManagerPage.vue";
 import LoginPage from "../views/LoginPage.vue";
 import NotAllowPage from "../views/NotAllowPage.vue";
+import NotFoundInvitationPage from "../views/NotFoundInvitationPage.vue";
 import TaskManagerPage from "../views/TaskManagerPage.vue";
 import StatusManagerPage from "../views/TaskStatusPage.vue";
 import InvitePage from "../views/InvitePage.vue";
@@ -35,6 +36,7 @@ const router = createRouter({
     {
       path: "/board",
       component: AppPage,
+
       children: [
         {
           path: "",
@@ -104,8 +106,9 @@ const router = createRouter({
           ],
         },
         {
-          path: ":NanoId/collab/invitations",
+          path: ":nanoId/collab/invitations",
           name: "InvitePage",
+          meta: { requiresAuth: true },
           component: InvitePage,
         },
       ],
@@ -119,13 +122,17 @@ const router = createRouter({
       name: "NotFoundPage",
       component: NotFoundPage,
     },
+    {
+      path: "/not-found-invite",
+      name: "NotFoundInvitePage",
+      component: NotFoundInvitationPage,
+    },
   ],
 });
 
 router.beforeEach(async (to, from, next) => {
   try {
     const boardStore = useBoardStore();
-
     if (to.matched.some((record) => record.meta.ownerAccess)) {
       const res = await getBoardByNanoId(to.params.oid);
       boardStore.setCurrentBoard(res.data);
@@ -136,20 +143,6 @@ router.beforeEach(async (to, from, next) => {
         next({ name: "NotAllowPage" });
       }
       return;
-    }
-
-    if (to.name === "InvitePage") {
-      // ตรวจสอบสถานะของบอร์ดก่อนเข้าถึงหน้า Invite
-      const res = await getBoardByNanoId(to.params.boardNanoId);
-      boardStore.setCurrentBoard(res.data);
-      next();
-      return;
-      // if (res.data.status === "PENDING") {
-      //   next();
-      // } else {
-      //   next({ name: "NotAllowPage" });
-      // }
-      // return;
     }
 
     if (to.matched.some((record) => record.meta.requiresAuth)) {

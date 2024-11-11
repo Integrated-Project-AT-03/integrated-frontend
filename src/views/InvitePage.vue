@@ -1,24 +1,29 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getCollabBoard, receiveInvite } from "@/services/apiCollab";
+import { receiveInvite, getInvite } from "@/services/apiCollab";
+import { useUserStore } from "@/stores/useUserStore";
 
-const route = useRoute();
+const {
+  params: { nanoId },
+} = useRoute();
 const router = useRouter();
-const NanoId = ref(route.params.NanoId);
-const inviterName = ref("");
-const boardName = ref("");
-const accessRight = ref("");
+const requestCollab = reactive({
+  inviterName: "",
+  accessRight: "",
+  boardName: "",
+});
+
 const errorMessage = ref("");
 const emits = defineEmits(["message, loading"]);
+const userStore = useUserStore();
 async function acceptInvite() {
   errorMessage.value = "";
   try {
-    const response = await receiveInvite(NanoId.value, "ACCEPT");
+    const response = await receiveInvite(nanoId, "ACCEPT");
     if (response.httpStatus === 200) {
-      router.push(`/board/${NanoId.value}/task`);
+      router.push(`/board/${nanoId}/task`);
     } else {
-      errorMessage.value = "Failed to accept invitation.";
     }
   } catch (error) {
     console.error("Error accepting invitation:", error);
@@ -29,7 +34,7 @@ async function acceptInvite() {
 async function declineInvite() {
   errorMessage.value = "";
   try {
-    const response = await receiveInvite(NanoId.value, "DECLINE");
+    const response = await receiveInvite(nanoId, "DECLINE");
     if (response.httpStatus === 200) {
       router.push(`/board`);
     } else {
@@ -41,30 +46,17 @@ async function declineInvite() {
   }
 }
 
-onMounted(async () => {
-  try {
-    const response = await getCollabBoard();
-    if (response && response.httpStatus === 200 && response.data) {
-      const invitation = response.data.find(
-        (board) => board.boardNanoId === NanoId.value,
-      );
-      if (invitation) {
-        inviterName.value = invitation.name;
-        boardName.value = invitation.boardName;
-        accessRight.value = invitation.accessRight;
-      } else {
-        errorMessage.value = "Invitation not found.";
-      }
-    } else {
-      errorMessage.value = "Failed to load invitation details.";
-    }
-  } catch (error) {
-    console.error("Error loading invitation details:", error);
-    errorMessage.value = "An error occurred while loading invitation details.";
-  } finally {
-    emits("loading", false);
-  }
-});
+watch(async () => {
+  console.log(userStore.getUser().oid);
+  const { httpStatus, data } = await getInvite(userStore.getUser().oid, nanoId);
+  console.log(data);
+  requestCollab.inviterName = data.name;
+  requestCollab.boardName = data.boardName;
+  requestCollab.accessRight = data.accessRight;
+  console.log(httpStatus);
+  if (httpStatus === 404) router.push({ name: "NotFoundInvitePage" });
+  emits("loading", false);
+}, userStore.getUser());
 </script>
 
 <template>
@@ -82,11 +74,18 @@ onMounted(async () => {
         </h1>
 
         <p class="mb-6 text-center text-lg leading-relaxed text-gray-300">
-          <span class="font-semibold text-white">{{ inviterName }}</span> has
-          invited you to collaborate with
-          <span class="font-semibold text-white">{{ accessRight }}</span> access
-          rights on the
-          <span class="font-semibold text-white">{{ boardName }}</span> board.
+          <span class="font-semibold text-white">{{
+            requestCollab.inviterName
+          }}</span>
+          has invited you to collaborate with
+          <span class="font-semibold text-white">{{
+            requestCollab.accessRight
+          }}</span>
+          access rights on the
+          <span class="font-semibold text-white">{{
+            requestCollab.boardName
+          }}</span>
+          board.
         </p>
 
         <div v-if="errorMessage" class="mb-6 text-center text-red-500">

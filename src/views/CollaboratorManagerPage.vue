@@ -193,7 +193,7 @@ function revert() {
           </th>
           <th
             scope="col"
-            class="px-6 py-3 text-center text-sm font-bold uppercase tracking-wider text-base-100"
+            class="px-6 py-3 text-start text-sm font-bold uppercase tracking-wider text-base-100"
           >
             Name
           </th>
@@ -227,6 +227,7 @@ function revert() {
           <td class="whitespace-nowrap px-6 py-4">
             <div class="itbkk-title text-sm text-gray-900">
               {{ collab.name }}
+              {{ collab.status === "PENDING" ? "(Pending Invite)" : "" }}
             </div>
           </td>
           <td class="w-full whitespace-nowrap px-6 py-4">
@@ -354,7 +355,7 @@ function revert() {
     @message="handleMessage($event)"
     :handleConfirm="changeAccessInviteCollab"
   >
-    Do you want to change invite access right of "{{ curCollab?.name }}" to "{{
+    Do you want to change access right of "{{ curCollab?.name }}" to "{{
       curCollab.accessRight
     }}"
   </ChangeAccessModal>
