@@ -86,6 +86,14 @@ onMounted(async () => {
 
 const handleEditTask = async () => {
   isLoading.value = true;
+
+  if(dataTask.value.title === '' && dataTask.value.description === '' && 
+  dataTask.value.description === '', dataTask.value.assignees === '' && 
+  Object.values(dataTask.value.status).length === 0 && dataTask.value.boardNanoId === route.params.oid){
+    return
+  }
+  
+  console.log(dataTask.value);
   const res = await editTaskById(
     route.params.id,
     dataTask.value,
@@ -232,8 +240,16 @@ const deleteFileById = async () => {
     console.log('In try delete');
     const res = await deleteFile(route.params.oid, route.params.id, filesId)
     console.log(res);
+    emits("message", {
+      description: "The file delete successful",
+      status: "success",
+    });
   } catch (error) {
     console.log(error);
+    emits("message", {
+      description: `${error}`,
+      status: "error",
+    });
   }
   router.push({ name: "Task" });
 }
@@ -262,9 +278,7 @@ const submitFile = async () => {
 
   try {
     const res = await uploadFiles(route.params.oid, route.params.id, formData); // Provide
-    console.log(res);
     if (res.httpStatus === 200) {
-      console.log("File upload seccessful");
       selectedFile.value = [];
     }
     if (res.httpStatus === 400) {
