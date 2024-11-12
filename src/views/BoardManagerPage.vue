@@ -85,44 +85,46 @@ const handleClick = (board) => {
 </script>
 
 <template>
-  <div class="mb-3 flex items-center justify-between">
-    <h1
-      class="itbkk-personal-board text-white-800 mb-4 text-center text-2xl font-semibold"
-    >
-      Boards
-    </h1>
-    <div class="flex justify-end">
+  <!-- Toggle Buttons for Personal and Collaboration Boards -->
+  <h1
+    class="itbkk-personal-board text-white-800 mb-4 text-center text-start text-2xl font-semibold"
+  >
+    Boards
+  </h1>
+  <div class="flex justify-between">
+    <div class="mb-4 flex items-center space-x-2">
       <button
-        class="itbkk-button-create btn"
-        @click="$router.push({ name: 'AddBoard' })"
+        class="itbkk-button-create hover:bg-black-500 btn"
+        :class="{
+          'bg-gray-500': !showCollabBoards,
+          'bg-black-400': showCollabBoards,
+        }"
+        @click="showCollabBoards = false"
       >
-        + Create personal board
+        Personal Boards
+      </button>
+      <button
+        class="itbkk-button-create hover:bg-black-500 btn"
+        :class="{
+          'bg-gray-500': showCollabBoards,
+          'bg-black-400': !showCollabBoards,
+        }"
+        @click="showCollabBoards = true"
+      >
+        Collaboration Boards
       </button>
     </div>
-  </div>
 
-  <!-- Toggle Buttons for Personal and Collaboration Boards -->
-  <div class="mb-4 flex items-center space-x-2">
-    <button
-      class="itbkk-button-create hover:bg-black-500 btn"
-      :class="{
-        'bg-gray-500': !showCollabBoards,
-        'bg-black-400': showCollabBoards,
-      }"
-      @click="showCollabBoards = false"
-    >
-      Personal Boards
-    </button>
-    <button
-      class="itbkk-button-create hover:bg-black-500 btn"
-      :class="{
-        'bg-gray-500': showCollabBoards,
-        'bg-black-400': !showCollabBoards,
-      }"
-      @click="showCollabBoards = true"
-    >
-      Collaboration Boards
-    </button>
+    <div class="mb-3 flex items-center justify-between">
+      <div v-show="!showCollabBoards" class="flex justify-end">
+        <button
+          class="itbkk-button-create btn"
+          @click="$router.push({ name: 'AddBoard' })"
+        >
+          + Create personal board
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Personal Boards Section -->
@@ -156,7 +158,7 @@ const handleClick = (board) => {
 
     <div
       v-if="boardStore.getBoards().length === 0"
-      class="flex transform cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 p-5 text-gray-700 shadow-lg transition duration-300 hover:scale-105"
+      class="flex transform items-center justify-center rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 p-5 text-gray-700 shadow-lg transition duration-300"
       style="height: 150px"
     >
       No personal boards available

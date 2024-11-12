@@ -190,6 +190,21 @@ const processFiles = (files) => {
       continue;
     }
 
+    const hasTaskInTemp = tempTaskAttachment.value.find((temp) => {
+      const tempFileName = `${temp.name}${temp.type ? `.${temp.type}` : ""}`;
+      return tempFileName === file.name;
+    });
+
+    const hasTaskInSelect = selectedFile.value.find((seletFile) => {
+      return seletFile.name === file.name;
+    });
+
+    if (hasTaskInSelect || hasTaskInTemp) {
+      errorMessage.value =
+        "File with the same filename cannot be added or updated to the attachments. Please delete the attachment and add again to update the file.";
+      break;
+    }
+
     // ไม่จำเป็นต้องเช็คค่ารวม
     // // Check combined total file size
     // if (currentTotalSize + file.size > MAX_TOTAL_SIZE) {
@@ -590,8 +605,8 @@ const handleSave = async () => {
           <div class="ml-12 text-error">{{ errorMessage }}</div>
           <div class="flex flex-row gap-3">
             <!-- <Button v-show="isEditMode" message="delete file test" @click="() => deleteFileById()"/> -->
-            <Button
-              class="itbkk-button-confirm btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
+            <button
+              class="itbkk-button-confirm btn btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
               v-show="isEditMode"
               @click="
                 () => {
@@ -613,9 +628,9 @@ const handleSave = async () => {
                   selectedFile.length == 0 &&
                   filesId.length == 0)
               "
-              message="Save"
-              bgcolor=""
-            />
+            >
+              Save
+            </button>
             <Button
               class="itbkk-button-cancel"
               message="Close"

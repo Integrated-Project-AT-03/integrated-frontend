@@ -40,7 +40,7 @@ onMounted(async () => {
   <div class="mt-3 flex flex-col gap-6 rounded-lg">
     <div
       v-if="collabBoardStore.getCollabsBoard().length === 0"
-      class="flex transform cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 p-5 text-gray-500 shadow-lg transition duration-300 hover:scale-105"
+      class="flex transform items-center justify-center rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 p-5 text-gray-500 shadow-lg transition duration-300"
       style="height: 150px"
     >
       No collaboration boards available
