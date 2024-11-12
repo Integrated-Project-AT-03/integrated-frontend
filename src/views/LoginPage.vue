@@ -5,11 +5,13 @@ import { login } from "@/services/apiAuth";
 import { useRouter } from "vue-router";
 import Logo from "../components/Logo.vue";
 import { useUserStore } from "../stores/useUserStore";
+import {login as loginWithMicrosoft, logoffPopup} from '../services/aad.js'
 
 const router = useRouter();
 const userStore = useUserStore();
 const user = ref({ userName: "itbkk.olarn", password: "ip23/OLA" });
 const errorMessage = ref();
+const userName = ref()
 
 async function onSubmit() {
   errorMessage.value = "";
@@ -26,6 +28,16 @@ async function onSubmit() {
   } else {
     errorMessage.value = "Username or Password is incorrect";
   }
+}
+
+async function loginMicrosoft(){
+  const res = await loginWithMicrosoft()
+  console.log(res);
+  //Don't for get to show username on nav bar.
+}
+
+async function logout(){
+  await logoffPopup()
 }
 </script>
 
@@ -92,6 +104,8 @@ async function onSubmit() {
           >
             Login
           </button>
+          <button class="btn btn-secondary" @click="loginMicrosoft">Login with microsoft</button>
+          <button class="btn btn-primary" @click="logout">logout</button>
           <div class="flex gap-2">
             <div class="text-[#888888]">Don't have an account?</div>
             <div class="text-[#E2E2E2] hover:underline">Sign up for free</div>
