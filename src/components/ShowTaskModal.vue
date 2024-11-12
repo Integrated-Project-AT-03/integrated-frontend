@@ -573,7 +573,9 @@ const handleSave = async () => {
                 "
                 class="flex w-full flex-col items-center justify-center gap-2 p-3"
               >
-                <CloudUpload />
+                <div class="z-50 p-2">
+                  <CloudUpload />
+                </div>
                 <label :for="fileInputId">
                   <span
                     class="cursor-pointer text-stone-300 underline hover:text-blue-400"
