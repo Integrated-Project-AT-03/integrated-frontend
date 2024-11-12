@@ -491,7 +491,7 @@ const handleSave = async () => {
                   <div
                     class="flex h-[10rem] w-[8rem] cursor-pointer flex-col justify-between rounded-lg bg-stone-500 p-3  "
                   >
-                  <div class="flex justify-end z-50">
+                  <div class="flex w-fit justify-end">
                     <button class="delete-btn" @click="tempDelete(file.name)"><Xmark /></button>
                   </div>
                     <img
@@ -526,7 +526,9 @@ const handleSave = async () => {
                 v-show="isEditMode && (tempTaskAttachment?.length == 0 && selectedFile.length == 0)"
                 class="flex w-full flex-col items-center justify-center gap-2 p-3"
               >
-                <CloudUpload />
+                <div class="p-2 z-50">
+                  <CloudUpload />
+                </div>
                 <label :for="fileInputId">
                   <span
                     class="cursor-pointer text-stone-300 underline hover:text-blue-400"

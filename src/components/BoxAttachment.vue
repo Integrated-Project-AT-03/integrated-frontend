@@ -66,7 +66,7 @@ const tempDelete = (id) => {
     class="flex h-[10rem] w-[8rem] cursor-pointer flex-col justify-between rounded-lg bg-stone-500 p-3 hover:bg-stone-700 hover:text-blue-500 hover:opacity-80"
     @click="dowloadFile(attachment.id, $event)"
   >
-    <div class="flex justify-end z-50">
+    <div class="flex justify-end">
       <button v-show="isEditMode" class="delete-btn" @click.stop="tempDelete(attachment.id)"><Xmark /></button>
     </div>
     <img
