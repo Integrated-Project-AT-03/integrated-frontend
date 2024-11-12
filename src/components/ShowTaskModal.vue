@@ -491,7 +491,7 @@ const handleSave = async () => {
                   <div
                     class="flex h-[10rem] w-[8rem] cursor-pointer flex-col justify-between rounded-lg bg-stone-500 p-3  "
                   >
-                  <div class="flex w-fit justify-end">
+                  <div class="flex justify-end">
                     <button class="delete-btn" @click="tempDelete(file.name)"><Xmark /></button>
                   </div>
                     <img
