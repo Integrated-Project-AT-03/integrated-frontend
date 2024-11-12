@@ -98,40 +98,13 @@ const handleEditTask = async () => {
     return;
   }
 
-  console.log(dataTask.value);
   const res = await editTaskById(
     route.params.id,
     dataTask.value,
     route.params.oid,
   );
   isLoading.value = false;
-  if (res.httpStatus === 200) {
-    taskStore.updateTask(route.params.id, res.data);
-    emits("message", {
-      description: "The task has been updated",
-      status: "success",
-    });
-  } else if (res.status === 404) {
-    emits("message", {
-      description: "The task does not exist",
-      status: "error",
-    });
-    taskStore.deleteTask(route.params.id);
-  } else if (res.status === 400) {
-    return emits("message", {
-      description: `On over limit, provide an appropriate message. The status ${
-        statuses.value.items.find(({ id }) => +id === +dataTask.value.status)
-          .name
-      }  will have too many tasks.  Please make progress and update status of existing tasks first.`,
-      status: "error",
-    });
-  } else {
-    emits("message", {
-      description: `something went wrong, please try again`,
-      status: "error",
-    });
-  }
-  router.push({ name: "Task" });
+  return res;
 };
 
 const formattDate = (date) =>
@@ -235,8 +208,6 @@ const processFiles = (files) => {
   }
 
   selectedFile.value = [...selectedFile.value, ...validFiles];
-  console.log(selectedFile.value[0].file.size);
-  console.log(selectedFile.value);
 };
 
 const tempTaskAttachment = ref([]);
@@ -256,22 +227,12 @@ const handleDeleteFile = (id) => {
 };
 
 const deleteFileById = async () => {
-  try {
-    console.log("In try delete");
-    const res = await deleteFile(route.params.oid, route.params.id, filesId);
-    console.log(res);
-    emits("message", {
-      description: "The file delete successful",
-      status: "success",
-    });
-  } catch (error) {
-    console.log(error);
-    emits("message", {
-      description: `${error}`,
-      status: "error",
-    });
-  }
-  router.push({ name: "Task" });
+  const res = await deleteFile(route.params.oid, route.params.id, filesId);
+  emits("message", {
+    description: "The file delete successful",
+    status: "success",
+  });
+  return res;
 };
 
 // Cleanup preview URLs when component is unmounted to release memory
@@ -296,28 +257,75 @@ const submitFile = async () => {
     formData.append("files", file.file);
   });
 
-  try {
-    const res = await uploadFiles(route.params.oid, route.params.id, formData); // Provide
-    if (res.httpStatus === 200) {
-      selectedFile.value = [];
-    }
-    if (res.httpStatus === 400) {
-      errorMessage.value = `You can't upload more than 10 files`;
-      selectedFile.value = [];
-    }
-  } catch (error) {
-    console.error("File upload failed:", error);
+  const res = await uploadFiles(route.params.oid, route.params.id, formData); // Provide
+  if (res.httpStatus === 200) {
+    selectedFile.value = [];
   }
+  if (res.httpStatus === 400) {
+    errorMessage.value = `You can't upload more than 10 files`;
+    selectedFile.value = [];
+  }
+
+  return res;
 };
 
 const handleSave = async () => {
+  isLoading.value = true;
   if (filesId.length != 0) {
-    await deleteFileById();
+    const resDeleteFile = await deleteFileById();
+    console.log(resDeleteFile);
+    if (resDeleteFile.httpStatus != 200) {
+      emits("message", {
+        description: `Some delete file is wrong, please try again`,
+        status: "error",
+      });
+      isLoading.value = false;
+      return;
+    }
   }
-  if (selectedFile.length != 0) {
-    submitFile();
+  if (selectedFile.value.length != 0) {
+    const resAddFile = await submitFile();
+    console.log(resAddFile);
+    if (resAddFile.httpStatus != 200) {
+      emits("message", {
+        description: `Some add file is wrong, please try again`,
+        status: "error",
+      });
+      isLoading.value = false;
+      return;
+    }
   }
-  handleEditTask();
+
+  const resEditTask = await handleEditTask();
+  isLoading.value = false;
+
+  if (resEditTask.httpStatus === 200) {
+    taskStore.updateTask(route.params.id, resEditTask.data);
+    emits("message", {
+      description: "The task has been updated",
+      status: "success",
+    });
+  } else if (resEditTask.status === 404) {
+    emits("message", {
+      description: "The task does not exist",
+      status: "error",
+    });
+    taskStore.deleteTask(route.params.id);
+  } else if (resEditTask.status === 400) {
+    return emits("message", {
+      description: `On over limit, provide an appropriate message. The status ${
+        statuses.value.items.find(({ id }) => +id === +dataTask.value.status)
+          .name
+      }  will have too many tasks.  Please make progress and update status of existing tasks first.`,
+      status: "error",
+    });
+  } else {
+    emits("message", {
+      description: `something went wrong, please try again`,
+      status: "error",
+    });
+  }
+  router.push({ name: "Task" });
 };
 </script>
 <template>
