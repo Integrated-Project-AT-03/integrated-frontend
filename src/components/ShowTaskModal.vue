@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, useId, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Trash from "../assets/icons/Trash.vue";
 import Upload from "../assets/icons/Upload.vue";
@@ -140,11 +140,8 @@ const handleMessage = (e) => {
   emits("message", e);
 };
 
-console.log("--------------------------------------------");
-
 const selectedFile = ref([]);
 const errorMessage = ref("");
-const fileInputId = useId();
 
 const maxFileSizeMB = 20;
 const maxTotalSizeMB = 20;
@@ -554,7 +551,7 @@ const handleSave = async () => {
                   (selectedFile.length != 0 || tempTaskAttachment?.length != 0)
                 "
               >
-                <label :for="fileInputId">
+                <label for="inputFile">
                   <span
                     :class="
                       selectedFile.length + tempTaskAttachment.length >= 10 &&
@@ -576,7 +573,7 @@ const handleSave = async () => {
                 <div class="z-50 p-2">
                   <CloudUpload />
                 </div>
-                <label :for="fileInputId">
+                <label for="inputFile">
                   <span
                     class="cursor-pointer text-stone-300 underline hover:text-blue-400"
                     ref="uploadText"
@@ -585,7 +582,7 @@ const handleSave = async () => {
                 </label>
                 <div>Maximum file size 20 MB.</div>
                 <input
-                  :id="fileInputId"
+                  id="inputFile"
                   :disabled="
                     selectedFile.length + tempTaskAttachment.length >= 10
                   "
