@@ -104,7 +104,10 @@ async function logout(){
           >
             Login
           </button>
-          <button class="btn btn-secondary" @click="loginMicrosoft">Login with microsoft</button>
+          <button class="btn bg-[#252525]" @click="loginMicrosoft">
+            <img src="../../public/images/microsoft-logo.png" alt="logo-microsoft" width="20" height="20">
+            Login with microsoft
+          </button>
           <button class="btn btn-primary" @click="logout">logout</button>
           <div class="flex gap-2">
             <div class="text-[#888888]">Don't have an account?</div>
