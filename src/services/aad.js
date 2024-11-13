@@ -5,7 +5,7 @@ const msalConfig = {
     clientId: "72bdafa1-de1c-48ae-960b-3581fef27028",
     authority:
       "https://login.microsoftonline.com/79845616-9df0-43e0-8842-e300feb2642a",
-    redirectUri: "http://localhost:8080",
+    redirectUri: "http://localhost:4173",
   },
 };
 
