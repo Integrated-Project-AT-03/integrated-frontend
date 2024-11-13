@@ -105,7 +105,7 @@ async function logout(){
             Login
           </button>
           <button class="btn bg-[#252525]" @click="loginMicrosoft">
-            <img src="../../public/images/microsoft-logo.png" alt="logo-microsoft" width="20" height="20">
+            <img src="/images/microsoft-logo.png" alt="logo-microsoft" width="20" height="20">
             Login with microsoft
           </button>
           <button class="btn btn-primary" @click="logout">logout</button>
