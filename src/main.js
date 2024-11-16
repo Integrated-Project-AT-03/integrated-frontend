@@ -10,7 +10,6 @@ import "vue-toastification/dist/index.css";
 const options = {};
 const pinia = createPinia();
 const app = createApp(App);
-app.use(Toast, options);
 app.use(pinia);
 app.use(router);
 

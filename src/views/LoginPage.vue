@@ -1,17 +1,91 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import Button from "../components/Button.vue";
-import { login } from "@/services/apiAuth";
 import { useRouter } from "vue-router";
 import Logo from "../components/Logo.vue";
 import { useUserStore } from "../stores/useUserStore";
-import {login as loginWithMicrosoft, logoffPopup} from '../services/aad.js'
+import {myMSALObj } from "../utils/msalConfig.js";
 
 const router = useRouter();
 const userStore = useUserStore();
 const user = ref({ userName: "itbkk.olarn", password: "ip23/OLA" });
 const errorMessage = ref();
 const userName = ref()
+//
+// async function loginMSAL() {
+//   try {
+//     // Ensure handleRedirectPromise resolves any pending interactions
+//     const redirectResponse = await myMSALObj.handleRedirectPromise();
+//
+//     if (redirectResponse) {
+//       console.log("Redirect Login Successful:", redirectResponse);
+//     }
+//
+//     if (!myMSALObj) {
+//       throw new Error("MSAL configuration is missing. Please check your credentials.");
+//     }
+//
+//     // Check if user is already logged in
+//     const accounts = myMSALObj.getAllAccounts();
+//     if (accounts.length > 0) {
+//       console.log("User already logged in:", accounts[0]);
+//
+//       // Set user authentication state in your store or application state
+//       userStore.setIsAuthenticated(true);
+//       userStore.setUser(accounts[0]); // Example for setting user in your store
+//       return;
+//     }
+//
+//     // Proceed with login if no interaction is in progress
+//     console.log("No active session found. Redirecting to login...");
+//     await myMSALObj.loginRedirect({
+//       scopes: ["user.read", "openid", "profile"], // Add necessary scopes
+//     });
+//   } catch (err) {
+//     if (err.errorCode === "interaction_in_progress") {
+//       console.warn("Interaction is already in progress. Please wait.");
+//     } else if (err.errorCode === "user_cancelled") {
+//       console.warn("User cancelled the login process.");
+//     } else {
+//       console.error("Login Failed:", err);
+//     }
+//   }
+// }
+//
+//
+// async function logoutMSAL() {
+//   if (!myMSALObj) {
+//     throw new Error("Missing credentials");
+//   }
+//   await myMSALObj.logoutRedirect()
+//   console.log('Logout Success');
+// }
+//
+//  const handleRedirect = async () => {
+//   try {
+//     await myMSALObj.handleRedirectPromise()
+//     userStore.setUser(myMSALObj.getAllAccounts()[0]);
+//     console.log(myMSALObj.getAllAccounts());
+//   }catch (err){
+//     console.log('Redirect Error:', err)
+//   }
+// }
+
+
+
+
+async function initialze(){
+  try{
+    await myMSALObj.initialize();
+  }catch (error) {
+    console.log('initialization error', error);
+  }
+}
+
+// onMounted(async () => {
+//   await initialze()
+//   await handleRedirect()
+// })
 
 async function onSubmit() {
   errorMessage.value = "";
@@ -30,15 +104,13 @@ async function onSubmit() {
   }
 }
 
-async function loginMicrosoft(){
-  const res = await loginWithMicrosoft()
-  console.log(res);
-  //Don't for get to show username on nav bar.
-}
+// async function loginMicrosoft(){
+//   const res = await loginMSAL();
+// }
 
-async function logout(){
-  await logoffPopup()
-}
+// async function logout(){
+//   await logoutMSAL()
+// }
 </script>
 
 <template>

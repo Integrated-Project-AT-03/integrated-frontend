@@ -13,6 +13,7 @@ export const useUserStore = defineStore("userStore", {
       iat: "",
       exp: "",
     },
+    isAuthenticated: false,
   }),
 
   actions: {
@@ -22,7 +23,13 @@ export const useUserStore = defineStore("userStore", {
     getUser() {
       return this.user;
     },
+    setIsAuthenticated(isAuthenticated) {
+      this.isAuthenticated = isAuthenticated;
+    }
   },
+  getters: {
+    isAuthenticated: state => state
+  }
 });
 
 if (import.meta.hot) {
