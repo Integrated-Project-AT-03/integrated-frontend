@@ -5,6 +5,7 @@ import { useRouter } from "vue-router";
 import Logo from "../components/Logo.vue";
 import { useUserStore } from "../stores/useUserStore";
 import {myMSALObj } from "../utils/msalConfig.js";
+import { login } from "@/services/apiAuth.js";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -74,13 +75,13 @@ const userName = ref()
 
 
 
-async function initialze(){
-  try{
-    await myMSALObj.initialize();
-  }catch (error) {
-    console.log('initialization error', error);
-  }
-}
+// async function initialze(){
+//   try{
+//     await myMSALObj.initialize();
+//   }catch (error) {
+//     console.log('initialization error', error);
+//   }
+// }
 
 // onMounted(async () => {
 //   await initialze()
@@ -176,11 +177,11 @@ async function onSubmit() {
           >
             Login
           </button>
-          <button class="btn bg-[#252525]" @click="loginMicrosoft">
+          <button class="btn bg-[#252525]" >
             <img src="/images/microsoft-logo.png" alt="logo-microsoft" width="20" height="20">
             Login with microsoft
           </button>
-          <button class="btn btn-primary" @click="logout">logout</button>
+          <button class="btn btn-primary" >logout</button>
           <div class="flex gap-2">
             <div class="text-[#888888]">Don't have an account?</div>
             <div class="text-[#E2E2E2] hover:underline">Sign up for free</div>
