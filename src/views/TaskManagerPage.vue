@@ -65,6 +65,7 @@ const loadTasks = async () => {
     items.value,
   );
   taskStore.setTasks(res.data);
+  console.log(taskStore.getTasks());
 };
 
 const emits = defineEmits(["message, loading"]);
@@ -276,6 +277,12 @@ const openTask = (index, id) => {
               <SortDesc v-show="sortImage === 3" class="h-5 w-5" />
             </div>
           </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-sm font-bold uppercase tracking-wider text-gray-900"
+          >
+            Numoffiles
+          </th>
         </tr>
         <tr v-show="taskStore.getTasks().length === 0">
           <td
@@ -301,7 +308,7 @@ const openTask = (index, id) => {
           </td>
           <td class="whitespace-nowrap px-6 py-4">
             <div
-              class="itbkk-assignees w- text-sm text-gray-900"
+              class="itbkk-assignees text-sm text-gray-900"
               :class="task?.assignees ?? 'italic'"
             >
               {{ task?.assignees ?? "Unassigned" }}
@@ -313,6 +320,11 @@ const openTask = (index, id) => {
               :status-color="task.statusColorHex"
               :text="task.status"
             />
+          </td>
+          <td class="whitespace-nowrap px-12 py-4">
+            <div class="text-sm text-gray-900">
+              {{ task?.numOfTaskAttachment }} / 10
+            </div>
           </td>
         </tr>
       </tbody>
