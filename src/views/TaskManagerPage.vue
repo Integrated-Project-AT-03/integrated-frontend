@@ -65,7 +65,6 @@ const loadTasks = async () => {
     items.value,
   );
   taskStore.setTasks(res.data);
-  console.log(taskStore.getTasks());
 };
 
 const emits = defineEmits(["message, loading"]);
