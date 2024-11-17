@@ -105,7 +105,6 @@ async function redirectLoginMicrosoft() {
             />
             Login with microsoft
           </button>
-          <button class="btn btn-primary">logout</button>
           <div class="flex gap-2">
             <div class="text-[#888888]">Don't have an account?</div>
             <div class="text-[#E2E2E2] hover:underline">Sign up for free</div>
