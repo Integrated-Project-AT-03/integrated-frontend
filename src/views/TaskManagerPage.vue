@@ -33,15 +33,11 @@ const sortOrder = ref("default");
 const openSearch = ref(false);
 const router = useRouter();
 const route = useRoute();
-// const isToggle = ref(false);
 const isPublic = computed(
   () => boardStore.getCurrentBoard()?.visibility === "PUBLIC",
 );
 const showOwnerButton = ref();
 
-// const handleBool = (e) => {
-//   isPublic = e;
-// };
 
 let timeoutBlur = null;
 defineProps({
@@ -65,6 +61,7 @@ const loadTasks = async () => {
     items.value,
   );
   taskStore.setTasks(res.data);
+  console.log(res.data);
 };
 
 const emits = defineEmits(["message, loading"]);

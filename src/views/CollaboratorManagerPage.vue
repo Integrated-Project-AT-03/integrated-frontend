@@ -10,10 +10,8 @@ import { useBoardStore } from "@/stores/useBoardStore";
 import { useCollabStore } from "../stores/useCollabStore.js";
 import { useUserStore } from "../stores/useUserStore.js";
 import { ref } from "vue";
-// import EmptyElementSelect from "../components/EmptyElementSelect.vue";
 import ChangeAccessModal from "../components/ChangeAccessModal.vue";
 import SelectCollabRole from "@/components/SelectCollabRole.vue";
-import ChangeInviteAccessModal from "@/components/ChangeInviteAccessModal.vue";
 import { deleteCollab, cancleInvite } from "../services/apiCollab.js";
 import {
   updateAccessCollab,

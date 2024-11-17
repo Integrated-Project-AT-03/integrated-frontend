@@ -1,44 +1,4 @@
-import { myMSALObj } from "@/utils/msalConfig.js";
-import { useUserStore } from "@/stores/useUserStore.js";
-
 const uri = import.meta.env.VITE_SERVER_URI;
-
-
-// export async function loginMSAL() {
-//   try {
-//   if(!myMSALObj){
-//     throw new Error("Missing credentials");
-//   }
-//   await myMSALObj.loginRedirect()
-//   userStore.setIsAuthenticated(true);
-//   const loginResponse = await myMSALObj.loginRedirect()
-//     userStore.setIsAuthenticated(true);
-//     console.log('Login Success:', loginResponse);
-// }catch(err) {
-//   console.log('Login Failed:', err);}
-// }
-//
-// export async function logoutMSAL() {
-//   if (!myMSALObj) {
-//     throw new Error("Missing credentials");
-//   }
-//   await myMSALObj.loginRedirect()
-//   console.log('Logout Success');
-// }
-
-// export const handleRedirect = async () => {
-//   try {
-//     await myMSALObj.handleRedirectPromise()
-//     userStore.setIsAuthenticated(myMSALObj.getAllAccounts().length > 0);
-//     userStore.setUser(myMSALObj.getAllAccounts()[0]);
-//
-//   }catch (err){
-//     console.log('Redirect Error:', err)
-//   }
-// }
-
-
-
 export async function login(user) {
   try {
     const res = await fetch(`${uri}/login`, {
@@ -51,6 +11,17 @@ export async function login(user) {
     });
     const data = await res.json();
     return { data, httpStatus: res.status };
+  } catch (error) {
+    console.error(`error: ${error}`);
+  }
+}
+
+export async function loginMicrosoft() {
+  try {
+    const res = await fetch(`${uri}/auth/misl/login`)
+    const link = await res.text()
+    return link
+
   } catch (error) {
     console.error(`error: ${error}`);
   }
