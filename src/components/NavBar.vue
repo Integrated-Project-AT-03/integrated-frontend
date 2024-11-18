@@ -1,17 +1,19 @@
 <script setup>
 import TaskIcon from "./../assets/icons/TaskIcon.vue";
 import Arrow from "./../assets/icons/Arrow.vue";
-import exmpleAccount from "/images/exmpleAcciont.png";
 import BoardSetting from "./BoardSetting.vue";
 import { useUserStore } from "./../stores/useUserStore";
-import { logout as logoutApi } from "./../services/apiAuth";
+import { logout as logoutApi, logoutMicrosoft } from "./../services/apiAuth";
 import { onMounted, onUnmounted, ref } from "vue";
 import router from "@/router";
+import { useBoardStore } from "@/stores/useBoardStore.js";
+
 const selectBarEle = ref();
 const showSelectBar = ref(false);
 const currentMenu = ref("Menu");
 const userStore = useUserStore();
 const emits = defineEmits(["message"]);
+const boardStore = useBoardStore();
 const handleMessage = (e) => {
   emits("message", e);
 };
@@ -28,8 +30,12 @@ function handleMenu(e) {
 }
 
 const logout = async () => {
-  await logoutApi();
-  router.push({ name: "login" });
+  if (userStore.getUser().platform === "MICROSOFT") {
+    document.location.href = await logoutMicrosoft();
+  } else {
+    await logoutApi();
+    router.push({ name: "login" });
+  }
 };
 
 onMounted(() => {
@@ -102,6 +108,7 @@ onUnmounted(() => {
 
       <ul v-show="currentMenu === 'Menu'">
         <button
+          :disabled="boardStore.getCurrentBoard().access !== 'OWNER'"
           v-if="$route.name !== 'Boards'"
           @click="currentMenu = 'Setting Board'"
           class="btn btn-ghost flex w-full justify-between"
@@ -114,7 +121,14 @@ onUnmounted(() => {
           class="btn btn-ghost flex w-full justify-between"
         >
           <p class="itbkk-sign-out">Login Out</p>
-          <i class="pi pi-sign-in text-[1rem] text-error" />
+          <img
+            v-if="userStore.getUser().platform === 'MICROSOFT'"
+            src="/images/microsoft-logo.png"
+            alt="logo-microsoft"
+            width="20"
+            height="20"
+          />
+          <i v-else class="pi pi-sign-in text-[1rem] text-error" />
         </button>
       </ul>
 

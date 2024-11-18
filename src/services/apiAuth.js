@@ -19,8 +19,16 @@ export async function login(user) {
 export async function loginMicrosoft() {
   try {
     const res = await fetch(`${uri}/auth/misl/login`)
-    const link = await res.text()
-    return link
+    return await res.text();
+
+  } catch (error) {
+    console.error(`error: ${error}`);
+  }
+}
+export async function logoutMicrosoft() {
+  try {
+    const res = await fetch(`${uri}/auth/misl/logout`)
+    return await res.text();
 
   } catch (error) {
     console.error(`error: ${error}`);
