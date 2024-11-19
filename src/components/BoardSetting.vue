@@ -8,9 +8,12 @@ import {
 import { useRoute } from "vue-router";
 import Button from "./Button.vue";
 import { useSettingStore } from "./../stores/useSettingStore";
+import { useBoardStore } from "@/stores/useBoardStore.js";
 const settingStore = useSettingStore();
+const boardStore = useBoardStore()
 const route = useRoute();
 const setting = ref({});
+const noAccess = computed(() => (boardStore.getCurrentBoard().access !== 'OWNER' && boardStore.getCurrentBoard().access !== 'WRITE'))
 watch(
   () => {
     setting.value = { ...settingStore.getLimitTask() };
@@ -116,6 +119,7 @@ const saveSetting = async () => {
       <input
         @click="saveSetting"
         type="checkbox"
+        :disabled="noAccess"
         class="itbkk-limit-task toggle"
         v-model="setting.enableLimitsTask"
       />
@@ -125,8 +129,9 @@ const saveSetting = async () => {
       <div>Maximum tasks</div>
       <div class="flex flex-col gap-1">
         <input
+
           @blur="saveSetting"
-          :disabled="!setting.enableLimitsTask"
+          :disabled="!setting.enableLimitsTask || noAccess"
           v-model.number="setting.limitsTask"
           type="text"
           maxlength="2"

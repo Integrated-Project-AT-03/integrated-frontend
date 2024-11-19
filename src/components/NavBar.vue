@@ -21,6 +21,7 @@ const handleMessage = (e) => {
 function clickOutSideMenu(e) {
   if (selectBarEle.value && !selectBarEle.value.contains(e.target)) {
     showSelectBar.value = false;
+    currentMenu.value = 'Menu'
   }
 }
 
@@ -108,7 +109,6 @@ onUnmounted(() => {
 
       <ul v-show="currentMenu === 'Menu'">
         <button
-          :disabled="boardStore.getCurrentBoard().access !== 'OWNER'"
           v-if="$route.name !== 'Boards'"
           @click="currentMenu = 'Setting Board'"
           class="btn btn-ghost flex w-full justify-between"
