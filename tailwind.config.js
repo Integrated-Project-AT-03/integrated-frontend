@@ -7,6 +7,11 @@ export default {
       colors: {
         edit: "#A020F0",
       },
+      screens: {
+        tablet: "640px",
+        labtop: "1024px",
+        desktop: "1280px",
+      },
     },
   },
   daisyui: {
