@@ -13,7 +13,7 @@ const settingStore = useSettingStore();
 const boardStore = useBoardStore()
 const route = useRoute();
 const setting = ref({});
-const noAccess = computed(() => (boardStore.getCurrentBoard().access !== 'OWNER' && boardStore.getCurrentBoard().access !== 'WRITE'))
+const noAccess = computed(() => (boardStore.getCurrentBoard().access !== 'OWNER' && boardStore.getCurrentBoard().access !== 'WRITER'))
 watch(
   () => {
     setting.value = { ...settingStore.getLimitTask() };

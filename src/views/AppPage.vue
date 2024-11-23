@@ -79,7 +79,8 @@ const handleLoading = (loadingStatus) => {
         class="mt-6 flex md:flex-row items-center gap-4 "
         v-show="$route.name !== 'Boards' && $route.name !== 'AddBoard'"
       >
-        <div class="flex items-center">
+        <div class="flex items-center" >
+          <div    class="flex items-center"  v-if="boardStore.getCurrentBoard().access !== 'GUEST'">
           <button
             :disabled="$route.name === 'Boards'"
             @click="$router.push({ name: 'Boards' })"
@@ -89,6 +90,7 @@ const handleLoading = (loadingStatus) => {
             Boards
           </button>
           <ChevronRight />
+          </div>
           <button
             :disabled="$route.name === 'Task'"
             @click="$router.push({ name: 'Task' })"
@@ -96,9 +98,7 @@ const handleLoading = (loadingStatus) => {
           >
             Tasks
           </button>
-        </div>
-        |
-        <div class="flex">
+
           <button
             :disabled="$route.name === 'Status'"
             @click="$router.push({ name: 'Status' })"

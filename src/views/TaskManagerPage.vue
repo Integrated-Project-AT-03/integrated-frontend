@@ -266,8 +266,9 @@ const openTask = (index, id) => {
           </th>
           <th
             scope="col"
-            class="flex flex-row px-6 py-3 text-left text-sm font-bold uppercase tracking-wider text-gray-900"
+            class="flex flex-row px-6 py-3 justify-end flex-auto text-sm font-bold uppercase tracking-wider text-gray-900"
           >
+            <div class="flex">
             <div>Status</div>
             <div
               class="itbkk-status-sort m-auto ml-2 flex cursor-pointer items-center"
@@ -280,11 +281,12 @@ const openTask = (index, id) => {
               <SortAsc v-show="sortImage === 2" class="h-5 w-5" />
               <SortDesc v-show="sortImage === 3" class="h-5 w-5" />
             </div>
+            </div>
           </th>
         </tr>
         <tr v-show="taskStore.getTasks().length === 0">
           <td
-            colspan="4"
+            colspan="5"
             class="m-0 w-screen bg-white py-3 text-center font-bold text-gray-600"
           >
             No Task

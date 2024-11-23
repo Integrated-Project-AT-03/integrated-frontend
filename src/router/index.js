@@ -13,7 +13,7 @@ import LoginPage from "../views/LoginPage.vue";
 import NotAllowPage from "../views/NotAllowPage.vue";
 import NotFoundInvitationPage from "../views/NotFoundInvitationPage.vue";
 import TaskManagerPage from "../views/TaskManagerPage.vue";
-import StatusManagerPage from "../views/TaskStatusPage.vue";
+import StatusManagerPage from "../views/StatusManagerPage.vue";
 import InvitePage from "../views/InvitePage.vue";
 import { useBoardStore } from "../stores/useBoardStore";
 import { getBoardByNanoId } from "../services/apiBoard";

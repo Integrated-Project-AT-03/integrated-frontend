@@ -69,7 +69,7 @@ onUnmounted(() => {
             {{
               userStore
                 ?.getUser()
-                ?.name.split(" ")
+                ?.name?.split(" ")
                 .map((word) => word[0])
                 .join("") || "GT"
             }}
@@ -80,11 +80,19 @@ onUnmounted(() => {
         </p>
       </li>
       <button
+        v-if="boardStore.getCurrentBoard().access === 'GUEST'"
+        @click="() =>$router.push({name:'login'})"
+        class="btn btn-sm my-auto text-white btn-success flex w-[70px] justify-center item-center"
+      >
+        <p class="itbkk-sign-out">Login</p>
+      </button>
+      <button
         @click="handleMenu"
         class="btn btn-ghost flex cursor-pointer items-center justify-center p-0"
       >
         <i class="pi pi-ellipsis-v text-[1rem]" />
       </button>
+
     </ul>
     <div
       ref="selectBarEle"
@@ -111,6 +119,7 @@ onUnmounted(() => {
         <hr class="border-[1px] border-[#333333]" />
       </div>
 
+
       <ul v-show="currentMenu === 'Menu'">
         <button
           v-if="$route.name !== 'Boards'"
@@ -120,11 +129,11 @@ onUnmounted(() => {
           <p>Setting Board</p>
           <i class="pi pi-sliders-v text-[1rem]" />
         </button>
-        <button
+        <button v-if="boardStore.getCurrentBoard().access !== 'GUEST'"
           @click="logout"
           class="btn btn-ghost flex w-full justify-between"
         >
-          <p class="itbkk-sign-out">Login Out</p>
+          <p class="itbkk-sign-out">Logout</p>
           <img
             v-if="userStore.getUser().platform === 'MICROSOFT'"
             src="/images/microsoft-logo.png"
@@ -135,6 +144,8 @@ onUnmounted(() => {
           <i v-else class="pi pi-sign-in text-[1rem] text-error" />
         </button>
       </ul>
+
+
 
       <div v-show="currentMenu === 'Setting Board'">
         <BoardSetting @message="handleMessage($event)" />
