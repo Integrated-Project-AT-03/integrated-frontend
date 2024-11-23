@@ -27,6 +27,7 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: LoginPage,
+      meta: { checkAuth: true },
     },
     {
       path: "/not-allow-page",
@@ -136,7 +137,6 @@ router.beforeEach(async (to, from, next) => {
     if (to.matched.some((record) => record.meta.ownerAccess)) {
       const res = await getBoardByNanoId(to.params.oid);
       boardStore.setCurrentBoard(res.data);
-
       if (["OWNER", "WRITER"].includes(boardStore.getCurrentBoard().access))
         next();
       else {
@@ -144,13 +144,18 @@ router.beforeEach(async (to, from, next) => {
       }
       return;
     }
-
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       const tokenValidationResponse = await validateToken();
       tokenValidationResponse.httpStatus === 200 ? next() : next("/login");
-
       return;
     }
+
+    if (to.matched.some((record) => record.meta.checkAuth)) {
+      const tokenValidationResponse = await validateToken();
+      tokenValidationResponse.httpStatus !== 200 ? next() : next("/board");
+      return;
+    }
+
     next();
   } catch (error) {
     console.error("Error during authentication:", error);

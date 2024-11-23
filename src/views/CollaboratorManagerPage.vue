@@ -48,15 +48,6 @@ function onModalOpen(idModal, collab) {
   curCollab.value = collab;
 }
 
-// function onChangeAccessModalOpen(collab) {
-//   document.getElementById("changeAccessModal").showModal();
-//   curCollab.value = collab;
-// }
-
-// function onChangeInviteAccessModalOpen(collab) {
-//   document.getElementById("changeInviteAccessModal").showModal();
-// }
-
 async function removeCollab() {
   try {
     const res = await deleteCollab(curCollab.value.oid, route.params.oid);

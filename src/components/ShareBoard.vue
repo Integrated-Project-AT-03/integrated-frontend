@@ -73,7 +73,7 @@ onMounted(async () => {
       </div>
 
       <div class="mt-4 flex items-center justify-between">
-        <span
+        <span v-if="board.status === 'ACTIVE'"
           class="cursor-pointer text-sm text-blue-600 underline hover:text-blue-800"
           @click="
             $router.push({ name: 'Task', params: { oid: board.boardNanoId } })

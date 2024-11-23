@@ -49,11 +49,14 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <div class="fixed h-screen top-0 w-screen pointer-events-none  z-[98] drop-shadow-lg backdrop-blur-sm duration-100 transition-opacity "  :class="showSelectBar ? 'opacity-100' : 'opacity-0'">
+
+  </div>
   <nav
     @click="clickOutSideMenu"
-    class="fixed z-[99] flex flex-col h-[90px] w-full justify-center items-center md:flex-row md:h-[80px] md:items-center md:justify-between rounded-md bg-gradient-to-r from-pink-500 to-violet-500 px-5 text-white"
+    class="fixed z-[99] flex flex-col h-[90px] w-full justify-center items-center md:flex-row md:h-[60px] md:items-center md:justify-between rounded-md bg-gradient-to-r from-pink-500 to-violet-500 px-5 text-white"
   >
-    <ul class="flex items-center gap-2 mt-2">
+    <ul class="flex items-center gap-2 ">
       <TaskIcon />
       <li class="font-bold">IT-Bangmod Karban Kanban</li>
     </ul>
@@ -85,8 +88,9 @@ onUnmounted(() => {
     </ul>
     <div
       ref="selectBarEle"
-      v-show="showSelectBar"
-      class="absolute right-0 top-[100%] z-10 flex h-max min-w-[400px] max-w-[15%] flex-col gap-3 rounded-b-[10px] bg-[#444444] p-5 transition-all duration-300"
+
+      class="absolute  right-0 top-[100%] z-10 flex h-screen min-w-[400px] max-w-[15%] flex-col gap-3 rounded-b-[10px] bg-[#444444] p-5 transition-all duration-100"
+      :class="showSelectBar ?  'translate-x-[0%]' : 'translate-x-[100%]'"
     >
       <div class="space-y-2 text-center text-lg">
         <div class="flex items-center justify-between">

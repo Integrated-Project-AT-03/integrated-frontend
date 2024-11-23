@@ -435,19 +435,21 @@ const handleSave = async () => {
               <div class="mt-2">
                 The limit status :
                 <span
+                  class="font-bold"
                   :class="
-                    settingStore.getLimitTask().enableLimitsTask
-                      ? 'text-success'
-                      : 'text-error'
-                  "
+              settingStore.getLimitTask().enableLimitsTask
+                ? 'text-success'
+                : 'text-error'
+            "
                 >
-                  {{
+
+            {{
                     settingStore.getLimitTask().enableLimitsTask
-                      ? "enable"
-                      : "disable"
+                      ? "Enable"
+                      : "Disable"
                   }}
-                  state
-                </span>
+
+          </span>
               </div>
             </div>
             <div

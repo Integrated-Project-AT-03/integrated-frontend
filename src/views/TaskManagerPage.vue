@@ -260,6 +260,12 @@ const openTask = (index, id) => {
           </th>
           <th
             scope="col"
+            class="px-6 py-3 text-center text-sm font-bold  uppercase tracking-wider text-gray-900"
+          >
+            files
+          </th>
+          <th
+            scope="col"
             class="flex flex-row px-6 py-3 text-left text-sm font-bold uppercase tracking-wider text-gray-900"
           >
             <div>Status</div>
@@ -274,12 +280,6 @@ const openTask = (index, id) => {
               <SortAsc v-show="sortImage === 2" class="h-5 w-5" />
               <SortDesc v-show="sortImage === 3" class="h-5 w-5" />
             </div>
-          </th>
-          <th
-            scope="col"
-            class="px-6 py-3 text-left text-sm font-bold uppercase tracking-wider text-gray-900"
-          >
-            Numoffiles
           </th>
         </tr>
         <tr v-show="taskStore.getTasks().length === 0">
@@ -312,6 +312,11 @@ const openTask = (index, id) => {
               {{ task?.assignees ?? "Unassigned" }}
             </div>
           </td>
+          <td class="whitespace-nowrap px-12 py-4">
+            <div class="text-sm text-gray-900">
+              {{ task?.numOfTaskAttachment }} / 10
+            </div>
+          </td>
           <td class="whitespace-nowrap px-6 py-4">
             <StatusModal
               class="itbkk-status text-slate-200"
@@ -319,11 +324,7 @@ const openTask = (index, id) => {
               :text="task.status"
             />
           </td>
-          <td class="whitespace-nowrap px-12 py-4">
-            <div class="text-sm text-gray-900">
-              {{ task?.numOfTaskAttachment }} / 10
-            </div>
-          </td>
+
         </tr>
       </tbody>
     </table>

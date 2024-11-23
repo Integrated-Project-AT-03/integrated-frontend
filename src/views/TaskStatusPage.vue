@@ -64,20 +64,22 @@ const handleMessage = (e) => {
     <div class="flex w-full items-center justify-between">
       <div class="flex flex-col gap-3">
         <div>
-          The limit status :
+          The limit status : {{" "}}
           <span
+            class="font-bold"
             :class="
               settingStore.getLimitTask().enableLimitsTask
                 ? 'text-success'
                 : 'text-error'
             "
           >
+
             {{
               settingStore.getLimitTask().enableLimitsTask
-                ? "enable"
-                : "disable"
+                ? "Enable"
+                : "Disable"
             }}
-            state
+
           </span>
         </div>
       </div>
