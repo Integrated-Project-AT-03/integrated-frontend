@@ -63,7 +63,7 @@ const handleLoading = (loadingStatus) => {
     >
       <div
         v-show="$route.name !== 'Boards' && $route.name !== 'Collab' && $route.name !== 'AddBoard'"
-        class="itbkk-board-name flex justify-center text-3xl font-bold"
+        class="itbkk-board-name flex justify-center text-3xl mt-24 md:mt-16 font-bold"
       >
         {{ boardStore.getCurrentBoard()?.name }}
       </div>

@@ -154,7 +154,7 @@ const openTask = (index, id) => {
 
 <template>
   <div class="itbkk-modal-task flex w-full flex-col gap-2">
-    <div class="flex flex-col gap-3 md:flex-row items-center justify-between">
+    <div class="flex flex-col gap-3 lg:justify-between lg:flex-row lg:items-center">
       <div class="container justify-center flex md:block">
         <div class="flex items-center gap-5 md:gap-2">
           <label class="relative flex flex-col gap-2">
@@ -193,7 +193,7 @@ const openTask = (index, id) => {
           />
         </div>
       </div>
-      <div class="flex flex-col md:flex-row items-center justify-end gap-4">
+      <div class="flex flex-col md:flex-row items-center lg:justify-end gap-4">
         <div class="flex items-center gap-2">
           <div class="flex cursor-pointer gap-5">
             <EmptyElement
