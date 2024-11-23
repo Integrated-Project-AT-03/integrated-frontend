@@ -503,8 +503,7 @@ const handleSave = async () => {
           </div>
           
           <div class="flex flex-col gap-2">
-          <div v-show="isEditMode" class="w-full flex justify-end">{{ selectedFile?.length != 0 && dataTask?.tasksAttachment?.length == 0 ? `${selectedFile?.length} / 10` : '' }}</div>
-          <div v-show="isEditMode" class="w-full flex justify-end">{{ dataTask?.tasksAttachment?.length != 0 ? `${dataTask?.tasksAttachment?.length + selectedFile?.length} / 10` : '' }}</div>
+          <div v-show="isEditMode" class="w-full flex justify-end">{{ selectedFile?.length + tempTaskAttachment.length}} / 10</div>
           <!-- <div>อัปโหลดแล้ว ละกำลังจะลบออก</div> -->
           <div
             v-show="isEditMode"
