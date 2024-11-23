@@ -9,8 +9,28 @@ export default {
       },
       screens: {
         tablet: "640px",
+        "portrait:tablet": {
+          raw: "(min-width: 640px) and (orientation: portrait)",
+        },
+        "landscape:tablet": {
+          raw: "(min-width: 640px) and (orientation: landscape)",
+        },
+
         labtop: "1024px",
+        "portrait:labtop": {
+          raw: "(min-width: 1024px) and (orientation: portrait)",
+        },
+        "landscape:labtop": {
+          raw: "(min-width: 1024px) and (orientation: landscape)",
+        },
+
         desktop: "1280px",
+        "portrait:desktop": {
+          raw: "(min-width: 1280px) and (orientation: portrait)",
+        },
+        "landscape:desktop": {
+          raw: "(min-width: 1280px) and (orientation: landscape)",
+        },
       },
     },
   },
