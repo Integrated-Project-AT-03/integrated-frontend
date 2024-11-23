@@ -51,9 +51,9 @@ onUnmounted(() => {
 <template>
   <nav
     @click="clickOutSideMenu"
-    class="fixed z-[99] flex h-[55px] w-full items-center justify-between rounded-md bg-gradient-to-r from-pink-500 to-violet-500 px-5 text-white"
+    class="fixed z-[99] flex flex-col h-[90px] w-full justify-center items-center md:flex-row md:h-[80px] md:items-center md:justify-between rounded-md bg-gradient-to-r from-pink-500 to-violet-500 px-5 text-white"
   >
-    <ul class="flex items-center gap-2">
+    <ul class="flex items-center gap-2 mt-2">
       <TaskIcon />
       <li class="font-bold">IT-Bangmod Karban Kanban</li>
     </ul>

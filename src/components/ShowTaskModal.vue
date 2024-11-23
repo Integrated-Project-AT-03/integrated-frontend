@@ -75,6 +75,7 @@ const loadTask = async () => {
   }
   dataTask.value = { ...response.data, status: response.data.status.id };
   compareTask.value = { ...response.data, status: response.data.status.id };
+  console.log(dataTask.value);
 };
 
 onMounted(async () => {
@@ -498,7 +499,10 @@ const handleSave = async () => {
           >
             <div>No files</div>
           </div>
-
+          
+          <div class="flex flex-col gap-2">
+          <div v-show="isEditMode" class="w-full flex justify-end">{{ selectedFile?.length != 0 && dataTask?.tasksAttachment?.length == 0 ? `${selectedFile?.length} / 10` : '' }}</div>
+          <div v-show="isEditMode" class="w-full flex justify-end">{{ dataTask?.tasksAttachment?.length != 0 ? `${dataTask?.tasksAttachment?.length + selectedFile?.length} / 10` : '' }}</div>
           <!-- <div>อัปโหลดแล้ว ละกำลังจะลบออก</div> -->
           <div
             v-show="isEditMode"
@@ -602,6 +606,7 @@ const handleSave = async () => {
               </div>
             </div>
           </div>
+        </div>
           <p class="opacity-0">
             {{ selectedFile.length + tempTaskAttachment.length }}
           </p>
