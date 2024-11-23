@@ -76,40 +76,44 @@ const handleLoading = (loadingStatus) => {
       </div>
 
       <div
-        class="mt-6 flex items-center gap-4"
+        class="mt-6 flex md:flex-row items-center gap-4 "
         v-show="$route.name !== 'Boards' && $route.name !== 'AddBoard'"
       >
-        <button
-          :disabled="$route.name === 'Boards'"
-          @click="$router.push({ name: 'Boards' })"
-          class="itbkk-button-home btn btn-ghost btn-sm text-xl font-bold"
-          :class="$route.name === 'Boards' && 'text-primary'"
-        >
-          Boards
-        </button>
-        <ChevronRight />
-        <button
-          :disabled="$route.name === 'Task'"
-          @click="$router.push({ name: 'Task' })"
-          class="itbkk-button-home btn btn-ghost btn-sm text-xl font-bold disabled:text-primary"
-        >
-          Tasks
-        </button>
+        <div class="flex items-center">
+          <button
+            :disabled="$route.name === 'Boards'"
+            @click="$router.push({ name: 'Boards' })"
+            class="itbkk-button-home btn btn-ghost btn-sm md:text-xl font-bold"
+            :class="$route.name === 'Boards' && 'text-primary'"
+          >
+            Boards
+          </button>
+          <ChevronRight />
+          <button
+            :disabled="$route.name === 'Task'"
+            @click="$router.push({ name: 'Task' })"
+            class="itbkk-button-home btn btn-ghost btn-sm md:text-xl font-bold disabled:text-primary"
+          >
+            Tasks
+          </button>
+        </div>
         |
-        <button
-          :disabled="$route.name === 'Status'"
-          @click="$router.push({ name: 'Status' })"
-          class="btn btn-ghost btn-sm text-xl font-bold disabled:text-primary"
-        >
-          Status
-        </button>
-        <button
-          :disabled="$route.name === 'Collab'"
-          @click="$router.push({ name: 'Collab' })"
-          class="btn btn-ghost btn-sm text-xl font-bold disabled:text-primary"
-        >
-          Collaborator
-        </button>
+        <div class="flex">
+          <button
+            :disabled="$route.name === 'Status'"
+            @click="$router.push({ name: 'Status' })"
+            class="btn btn-ghost btn-sm md:text-xl font-bold disabled:text-primary"
+          >
+            Status
+          </button>
+          <button
+            :disabled="$route.name === 'Collab'"
+            @click="$router.push({ name: 'Collab' })"
+            class="btn btn-ghost btn-sm md:text-xl font-bold disabled:text-primary"
+          >
+            Collaborator
+          </button>
+        </div>
       </div>
       <RouterView @message="handleMessage($event)" @loading="handleLoading" />
     </div>

@@ -154,9 +154,9 @@ const openTask = (index, id) => {
 
 <template>
   <div class="itbkk-modal-task flex w-full flex-col gap-2">
-    <div class="flex flex-col gap-3 sm:flex-row items-center justify-between">
-      <div class="container">
-        <div class="flex items-center gap-2">
+    <div class="flex flex-col gap-3 md:flex-row items-center justify-between">
+      <div class="container justify-center flex md:block">
+        <div class="flex items-center gap-5 md:gap-2">
           <label class="relative flex flex-col gap-2">
             <input
               class="itbkk-status-filter w-[200px] sm:w-[300px] rounded-md border p-2 text-gray-900"
@@ -193,47 +193,49 @@ const openTask = (index, id) => {
           />
         </div>
       </div>
-      <div class="flex items-center justify-end gap-4">
-        <div class="flex cursor-pointer gap-3">
-          <EmptyElement
-            onclick="visibilityModal.showModal()"
-            v-show="showOwnerButton"
-          />
-          <div
-            :class="!showOwnerButton && 'tooltip'"
-            data-tip="You need to be board owner to perform this action."
-          >
-            <input
-              type="checkbox"
-              class="itbkk-board-visibility toggle"
-              :checked="isPublic"
-              :disabled="!showOwnerButton"
+      <div class="flex flex-col md:flex-row items-center justify-end gap-4">
+        <div class="flex items-center gap-2">
+          <div class="flex cursor-pointer gap-5">
+            <EmptyElement
+              onclick="visibilityModal.showModal()"
+              v-show="showOwnerButton"
             />
+            <div
+              :class="!showOwnerButton && 'tooltip'"
+              data-tip="You need to be board owner to perform this action."
+            >
+              <input
+                type="checkbox"
+                class="itbkk-board-visibility toggle"
+                :checked="isPublic"
+                :disabled="!showOwnerButton"
+              />
+            </div>
+            <div>{{ isPublic ? "Public" : "Private" }}</div>
           </div>
-          <div>{{ isPublic ? "Public" : "Private" }}</div>
+          <Button
+            class="itbkk-manage-collaborator"
+            bgcolor="#666666"
+            message="Manage collaborator"
+            :action="() => $router.push({ name: 'Collab' })"
+          />
         </div>
 
-        <Button
-          class="itbkk-manage-collaborator"
-          bgcolor="#666666"
-          message="Manage collaborator"
-          :action="() => $router.push({ name: 'Collab' })"
-        />
-
-        <Button
-          class="itbkk-manage-status"
-          bgcolor="#666666"
-          message="Manage Status"
-          :action="() => $router.push({ name: 'Status' })"
-        />
-
-        <Button
-          :access="['WRITER']"
-          class="itbkk-button-add tooltip-left"
-          bgcolor="#06b6d4"
-          message="Add task"
-          :action="() => $router.push({ name: 'AddTask' })"
-        />
+        <div class="flex gap-5">
+          <Button
+            class="itbkk-manage-status"
+            bgcolor="#666666"
+            message="Manage Status"
+            :action="() => $router.push({ name: 'Status' })"
+          />
+          <Button
+            :access="['WRITER']"
+            class="itbkk-button-add tooltip-left"
+            bgcolor="#06b6d4"
+            message="Add task"
+            :action="() => $router.push({ name: 'AddTask' })"
+          />
+        </div>
       </div>
     </div>
     <table class="m-0 block divide-gray-200 overflow-hidden rounded-sm p-0">
