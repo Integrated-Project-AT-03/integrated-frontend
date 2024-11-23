@@ -35,9 +35,11 @@ async function redirectLoginMicrosoft() {
 
 <template>
   <div class="flex h-screen w-full items-center justify-center">
-    <div class="flex overflow-hidden rounded-2xl bg-[#3F3D3C] shadow-xl">
+    <div
+      class="flex h-full w-full flex-col lg:w-auto lg:flex-row lg:items-center lg:justify-center"
+    >
       <div
-        class="flex h-[40rem] w-[35rem] items-center justify-center overflow-hidden rounded-2xl bg-[#3F3D3C]"
+        class="hidden h-[40rem] w-[35rem] items-center justify-center overflow-hidden rounded-2xl bg-[#3F3D3C] lg:flex"
       >
         <div class="h-[37rem] w-[32rem] rounded-2xl bg-[#333333]">
           <div class="flex flex-col p-10">
@@ -49,10 +51,11 @@ async function redirectLoginMicrosoft() {
           </div>
         </div>
       </div>
+
       <div
-        class="flex h-[40rem] w-[35rem] items-center justify-center bg-[#2E2E2E]"
+        class="flex h-full w-full items-center justify-center bg-[#2E2E2E] lg:h-[40rem] lg:w-[35rem]"
       >
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-2 p-4">
           <div
             class="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-3xl font-bold text-transparent"
           >
@@ -70,7 +73,7 @@ async function redirectLoginMicrosoft() {
           <input
             type="text"
             placeholder="Enter your email"
-            class="itbkk-username input input-bordered w-full max-w-xs bg-[#333333] placeholder-[#777777]"
+            class="input input-bordered w-full max-w-xs bg-[#333333] placeholder-[#777777]"
             v-model="user.userName"
             maxlength="50"
           />
@@ -78,20 +81,17 @@ async function redirectLoginMicrosoft() {
           <input
             type="password"
             placeholder="Password"
-            class="itbkk-password input input-bordered w-full max-w-xs bg-[#333333] placeholder-[#777777]"
+            class="input input-bordered w-full max-w-xs bg-[#333333] placeholder-[#777777]"
             v-model="user.password"
             maxlength="14"
           />
-          <div
-            v-show="errorMessage"
-            class="itbkk-message mb-4 text-sm text-red-500"
-          >
+          <div v-show="errorMessage" class="mb-4 text-sm text-red-500">
             {{ errorMessage }}
           </div>
           <div class="mt-2 text-[#888888]">Forgot password?</div>
           <button
             @click="onSubmit"
-            class="itbkk-button-signin btn w-full rounded-lg bg-gradient-to-r from-[#CE50B7] via-[#BF53C5] to-[#EA499A] py-2 font-semibold text-white"
+            class="btn w-full rounded-lg bg-gradient-to-r from-[#CE50B7] via-[#BF53C5] to-[#EA499A] py-2 font-semibold text-white"
             :disabled="user.userName.length === 0 || user.password.length === 0"
           >
             Login
@@ -114,3 +114,11 @@ async function redirectLoginMicrosoft() {
     </div>
   </div>
 </template>
+
+<style scoped>
+@media (max-width: 768px) {
+  .hidden-mobile {
+    display: none;
+  }
+}
+</style>

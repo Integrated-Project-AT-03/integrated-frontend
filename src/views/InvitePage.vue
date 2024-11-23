@@ -54,6 +54,8 @@ watch(async () => {
   requestCollab.boardName = data.boardName;
   requestCollab.accessRight = data.accessRight;
   console.log(httpStatus);
+  console.log(data);
+  
   if (httpStatus === 404) router.push({ name: "NotFoundInvitePage" });
   emits("loading", false);
 }, userStore.getUser());
