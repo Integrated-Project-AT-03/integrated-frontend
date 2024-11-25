@@ -97,7 +97,7 @@ onUnmounted(() => {
     <div
       ref="selectBarEle"
 
-      class="absolute  right-0 top-[100%] z-10 flex h-screen min-w-[400px] max-w-[15%] flex-col gap-3 rounded-b-[10px] bg-[#444444] p-5 transition-all duration-100"
+      class="absolute  right-0 top-[100%] z-10 flex h-screen w-[60%] md:min-w-[400px]  md:max-w-[15%] flex-col gap-3 rounded-b-[10px] bg-[#444444] p-5 transition-all duration-100"
       :class="showSelectBar ?  'translate-x-[0%]' : 'translate-x-[100%]'"
     >
       <div class="space-y-2 text-center text-lg">
