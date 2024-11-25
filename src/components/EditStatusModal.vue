@@ -96,11 +96,11 @@ async function updateStatus() {
     class="fixed right-0 top-0 z-[1000] flex h-screen w-full items-center justify-center backdrop-blur-sm transition-all duration-500"
   >
     <Loading :is-loading="isLoading" />
-    <div class="h-[30rem] w-[65rem] rounded-2xl bg-neutral">
+    <div class="h-[42rem] md:h-[35rem] md:w-[50rem] lg:h-[30rem] lg:w-[65rem] overflow-hidden rounded-2xl bg-neutral">
       <div class="ml-6 mt-4 text-xl">Edit Status</div>
       <div class="divider"></div>
       <div class="itbkk-modal-status flex flex-col items-center gap-4">
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-2 w-[20rem] md:w-[47rem] lg:w-fit">
           <div class="flex gap-4">
             <div>Name</div>
             <div class="text-error">
@@ -108,11 +108,11 @@ async function updateStatus() {
             </div>
           </div>
           <input
-            class="itbkk-status-name h-11 w-[60rem] rounded-2xl border-base-100 bg-secondary p-3"
+            class="itbkk-status-name h-11 lg:w-[60rem] rounded-2xl border-base-100 bg-secondary p-3"
             v-model="data.name"
           />
         </div>
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-2 w-[20rem] md:w-[47rem] lg:w-fit">
           <div class="flex gap-4">
             <div>Description</div>
             <div class="text-error">
@@ -120,13 +120,13 @@ async function updateStatus() {
             </div>
           </div>
           <textarea
-            class="itbkk-status-description h-[6rem] w-[60rem] rounded-2xl border border-base-100 bg-secondary p-4"
+            class="itbkk-status-description h-[6rem] lg:w-[60rem] rounded-2xl border border-base-100 bg-secondary p-4"
             v-model="data.description"
             placeholder="No description is provided."
           ></textarea>
         </div>
       </div>
-      <div class="ml-10 mr-10 mt-6 flex justify-between">
+      <div class="ml-10 mr-10 mt-6 flex flex-col md:flex-row justify-between">
         <div class="flex gap-3">
           <div>TimeZone:</div>
           {{ localZone }}
@@ -163,7 +163,7 @@ async function updateStatus() {
             ></div>
           </div>
         </div>
-        <div class="flex justify-end gap-3">
+        <div class="hidden lg:flex justify-end gap-3">
           <Button
             class="btn-success"
             message="Save"
@@ -181,6 +181,23 @@ async function updateStatus() {
           <Button message="Cancel" @click="router.push({ name: 'Status' })" />
         </div>
       </div>
+        <div class="flex justify-end gap-3 lg:hidden mr-2">
+          <Button
+            class="btn-success"
+            message="Save"
+            @click="updateStatus()"
+            :disabled="
+              data.name === '' ||
+              validateInput.description ||
+              validateInput.name ||
+              ((data.name ?? '') === (compareStatus?.name ?? '') &&
+                (data.description ?? '') ===
+                  (compareStatus?.description ?? '') &&
+                (data.colorId ?? '') === (compareStatus?.colorId ?? ''))
+            "
+          />
+          <Button message="Cancel" @click="router.push({ name: 'Status' })" />
+        </div>
     </div>
   </div>
 </template>
