@@ -57,7 +57,7 @@ async function addNewStatus() {
       class="fixed top-0 z-[1000] flex h-screen w-screen items-center justify-center backdrop-blur-sm transition-all duration-500"
     >
       <div
-        class="relative h-[30rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
+        class="relative h-[38rem] w-[65rem] md:w-[48rem] md:h-[32rem] lg:w-[65rem] lg:h-[30rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
       >
         <br />
         <div class="ml-6 text-xl">Add Status</div>
@@ -74,7 +74,7 @@ async function addNewStatus() {
             <div class="flex justify-center">
               <input
                 v-model="newData.name"
-                class="itbkk-title h-[3rem] w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
+                class="itbkk-title h-[3rem] w-[20rem] md:h-[3rem] md:w-[43rem] lg:h-[3rem] lg:w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
                 placeholder="Please Write Name"
               />
             </div>
@@ -88,7 +88,7 @@ async function addNewStatus() {
             <div class="flex justify-center">
               <textarea
                 v-model="newData.description"
-                class="itbkk-title h-[6rem] w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
+                class="itbkk-title h-[5rem] w-[20rem] md:h-[6rem] md:w-[43rem] lg:h-[6rem] lg:w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
                 placeholder="Please Write Description"
               ></textarea>
             </div>
@@ -114,7 +114,7 @@ async function addNewStatus() {
                   ></div>
                 </div>
               </div>
-              <div class="flex justify-end gap-3">
+              <div class="justify-end gap-3 hidden lg:flex">
                 <button
                   class="itbkk-button-comfirm btn btn-success w-16 hover:border-base-100 hover:bg-base-100"
                   :disabled="
@@ -134,6 +134,25 @@ async function addNewStatus() {
                 </button>
               </div>
             </div>
+            <div class="justify-end gap-3 flex md:mt-4 lg:hidden mr-2">
+                <button
+                  class="itbkk-button-comfirm btn btn-success w-16 hover:border-base-100 hover:bg-base-100"
+                  :disabled="
+                    newData.name === '' ||
+                    validateInput.description ||
+                    validateInput.name
+                  "
+                  @click="addNewStatus"
+                >
+                  Save
+                </button>
+                <button
+                  class="itbkk-button-cancle btn text-white"
+                  @click="router.push({ name: 'Status' })"
+                >
+                  Cancel
+                </button>
+              </div>
           </div>
 
           <Loading :is-loading="isLoading" />
