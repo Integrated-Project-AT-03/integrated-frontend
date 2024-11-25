@@ -13,6 +13,7 @@ const settingStore = useSettingStore();
 const boardStore = useBoardStore()
 const route = useRoute();
 const setting = ref({});
+let isInitialSetting = true;
 const noAccess = computed(() => (boardStore.getCurrentBoard().access !== 'OWNER' && boardStore.getCurrentBoard().access !== 'WRITER'))
 watch(
   () => {
@@ -25,33 +26,39 @@ watch(
 const compareSetting = ref({ ...setting.value });
 const statusesOverLimts = ref([]);
 watch(
-  () => setting.value.enable,
+  () => setting.value.enableLimitsTask,
   () => {
-    if (!setting.value.enable)
-      setting.value.limitsTask = compareSetting.value.limitsTask;
+   if(isInitialSetting) isInitialSetting = false;
+   else saveSetting();
   },
 );
+
+
 const validation = computed(() => {
   return {
     limitTasks:
-      setting.value.limitsTask < 10 ||
+      setting.value.limitsTask < 1 ||
       setting.value.limitsTask > 30 ||
       typeof setting.value.limitsTask !== "number",
   };
 });
 const emits = defineEmits(["message"]);
 const saveSetting = async () => {
-  if (setting.value.limitsTask < 10) {
-    setting.value.limitsTask = 10;
+  if (setting.value.limitsTask < 1) {
+    setting.value.limitsTask = 1;
   }
+  if (setting.value.limitsTask > 30) {
+    setting.value.limitsTask = 30;
+  }
+  console.log(setting.value.enableLimitsTask);
   const res = await editSettingByNanoIdBoard(route.params.oid, {
-    enableLimitsTask: !setting.value.enableLimitsTask,
+    enableLimitsTask: setting.value.enableLimitsTask,
     limitsTask: setting.value.limitsTask,
   });
+  console.log(res.data,setting.value.enableLimitsTask);
 
   if (res.httpStatus === 200) {
     settingStore.setLimitTask(res.data);
-
     compareSetting.value = { ...setting.value };
     if (setting.value.enableLimitsTask) {
       const statuses = (await getStatusesByNanoIdBoard(route.params.oid)).data;
@@ -107,7 +114,7 @@ const saveSetting = async () => {
   </dialog>
 
   <div
-    class="itbkk-modal-setting flex h-auto w-fit flex-col gap-4 rounded-lg bg-base-100 p-5"
+    class="itbkk-modal-setting flex h-auto w-full flex-col gap-4 rounded-lg bg-base-100 p-5 lg:w-fit"
   >
     <div class="flex flex-col text-slate-300">
       <div>
@@ -117,7 +124,6 @@ const saveSetting = async () => {
     </div>
     <div class="flex gap-4">
       <input
-        @click="saveSetting"
         type="checkbox"
         :disabled="noAccess"
         class="itbkk-limit-task toggle"
@@ -129,16 +135,15 @@ const saveSetting = async () => {
       <div>Maximum tasks</div>
       <div class="flex flex-col gap-1">
         <input
-
           @blur="saveSetting"
           :disabled="!setting.enableLimitsTask || noAccess"
           v-model.number="setting.limitsTask"
           type="text"
           maxlength="2"
-          class="itbkk-max-task input input-md input-bordered w-[15rem] max-w-xs"
+          class="itbkk-max-task input input-md input-bordered w-full max-w-xs"
         />
         <p class="text-xs text-error" v-show="validation.limitTasks">
-          the value must between 10 to 30
+          the value must between 1 to 30
         </p>
       </div>
     </div>

@@ -54,11 +54,12 @@ onUnmounted(() => {
   </div>
   <nav
     @click="clickOutSideMenu"
-    class="fixed z-[99] flex flex-col h-[90px] w-full justify-center items-center md:flex-row md:h-[60px] md:items-center md:justify-between rounded-md bg-gradient-to-r from-pink-500 to-violet-500 px-5 text-white"
+    class="fixed z-[99] flex justify-between h-[60px] w-full sm:justify-center items-center md:flex-row md:h-[60px] md:items-center md:justify-between rounded-md bg-gradient-to-r from-pink-500 to-violet-500 px-5 text-white"
   >
     <ul class="flex items-center gap-2 ">
       <TaskIcon />
-      <li class="font-bold">IT-Bangmod Karban Kanban</li>
+      <li class="font-bold hidden sm:block">IT-Bangmod Karban Kanban</li>
+      <li class="font-bold  sm:hidden">IT-BKK</li>
     </ul>
     <ul class="item-center flex gap-2">
       <li class="flex items-center gap-3">
@@ -76,7 +77,7 @@ onUnmounted(() => {
           </p>
         </div>
         <p class="itbkk-fullname text-sm">
-          Welcome | {{ userStore?.getUser()?.name || "GUEST" }}
+         <span class="hidden sm:inline-block">Welcome | </span>  {{ userStore?.getUser()?.name || "GUEST" }}
         </p>
       </li>
       <button
@@ -97,7 +98,7 @@ onUnmounted(() => {
     <div
       ref="selectBarEle"
 
-      class="absolute  right-0 top-[100%] z-10 flex h-screen w-[60%] md:min-w-[400px]  md:max-w-[15%] flex-col gap-3 rounded-b-[10px] bg-[#444444] p-5 transition-all duration-100"
+      class="absolute  right-0 top-[100%] z-10 flex h-screen w-[100%] md:min-w-[400px]  md:max-w-[15%] flex-col gap-3 rounded-b-[10px] bg-[#444444] p-5 transition-all duration-100"
       :class="showSelectBar ?  'translate-x-[0%]' : 'translate-x-[100%]'"
     >
       <div class="space-y-2 text-center text-lg">

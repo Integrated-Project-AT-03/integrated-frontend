@@ -151,12 +151,33 @@ const openTask = (index, id) => {
 
 <template>
   <div class="itbkk-modal-task flex w-full flex-col gap-2">
-    <div class="flex flex-col gap-3 lg:justify-between lg:flex-row lg:items-center">
+    <div class="flex flex-col    gap-3 lg:justify-between lg:flex-row lg:items-center">
+      <div class="flex gap-2 lg:hidden">
+      <div class=" px-2 lg:flex cursor-pointer gap-5">
+        <EmptyElement
+          onclick="visibilityModal.showModal()"
+          v-show="showOwnerButton"
+        />
+        <div
+
+          :class="!showOwnerButton && 'tooltip'"
+          data-tip="You need to be board owner to perform this action."
+        >
+          <input
+            type="checkbox"
+            class="itbkk-board-visibility toggle"
+            :checked="isPublic"
+            :disabled="!showOwnerButton"
+          />
+        </div>
+      </div>
+        <div>{{ isPublic ? "Public" : "Private" }}</div>
+      </div>
       <div class="container justify-center flex md:block">
-        <div class="flex items-center gap-5 md:gap-2">
-          <label class="relative flex flex-col gap-2">
+        <div class="flex w-full px-2 lg:w-max lg:px-0 items-center gap-2 md:gap-2">
+          <label class="relative flex-auto lg:w-max flex flex-col gap-2">
             <input
-              class="itbkk-status-filter w-[200px] sm:w-[300px] rounded-md border p-2 text-gray-900"
+              class="itbkk-status-filter w-full  lg:w-[200px] flex-auto sm:w-[300px] rounded-md border p-2 text-gray-900"
               type="text"
               v-model="newItem"
               @keyup.enter="addItem"
@@ -171,7 +192,7 @@ const openTask = (index, id) => {
               <button
                 v-for="status in searchStatus"
                 :key="status.id"
-                class="itbkk-status-choice h-[30px] px-3 text-start text-black hover:bg-slate-300"
+                class="itbkk-status-choice h-[30px] px-3 text-start w-full  text-black hover:bg-slate-300"
                 @click="handleSelect(status.name)"
               >
                 {{
@@ -183,21 +204,22 @@ const openTask = (index, id) => {
             </div>
           </label>
           <Button
-            class="itbkk-filter-clear"
+            class="itbkk-filter-clear w-max"
             message="Clear All"
             @click="clearAll"
             bgcolor="#ef4444"
           />
         </div>
       </div>
-      <div class="flex flex-col md:flex-row items-center lg:justify-end gap-4">
-        <div class="flex items-center gap-2">
-          <div class="flex cursor-pointer gap-5">
+      <div class="flex flex-col md:flex-row items-center lg:justify-end gap-2 lg:gap-4">
+        <div class="flex px-2 lg:px-0 flex-col lg:flex-row w-full  items-center gap-2">
+          <div class=" hidden lg:flex cursor-pointer gap-5">
             <EmptyElement
               onclick="visibilityModal.showModal()"
               v-show="showOwnerButton"
             />
             <div
+
               :class="!showOwnerButton && 'tooltip'"
               data-tip="You need to be board owner to perform this action."
             >
@@ -211,23 +233,23 @@ const openTask = (index, id) => {
             <div>{{ isPublic ? "Public" : "Private" }}</div>
           </div>
           <Button
-            class="itbkk-manage-collaborator"
+            class="itbkk-manage-collaborator w-full "
             bgcolor="#666666"
             message="Manage collaborator"
             :action="() => $router.push({ name: 'Collab' })"
           />
         </div>
 
-        <div class="flex gap-5">
+        <div class="flex items-center px-2 lg:px-0 lg:items-start w-full lg:w-max  flex-col lg:flex-row gap-2 lg:gap-5">
           <Button
-            class="itbkk-manage-status"
+            class="itbkk-manage-status w-full lg:w-max"
             bgcolor="#666666"
             message="Manage Status"
             :action="() => $router.push({ name: 'Status' })"
           />
           <Button
             :access="['WRITER']"
-            class="itbkk-button-add tooltip-left"
+            class="itbkk-button-add tooltip-left w-full lg:w-max"
             bgcolor="#06b6d4"
             message="Add task"
             :action="() => $router.push({ name: 'AddTask' })"
@@ -235,7 +257,7 @@ const openTask = (index, id) => {
         </div>
       </div>
     </div>
-    <table class="m-0 block divide-gray-200 overflow-hidden rounded-sm p-0">
+    <table class="m-0 block divide-gray-200 overflow-hidden lg:px-0 px-2 rounded-sm p-0">
       <tbody
         class="block max-h-[500px] w-full divide-y divide-gray-300 overflow-y-scroll bg-slate-100"
       >

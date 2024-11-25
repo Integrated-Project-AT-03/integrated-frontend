@@ -11,12 +11,14 @@ import { useCollabBoardStore } from "../stores/useCollabBoardStore";
 
 import { getCollabBoard, leaveCollabBoard } from "../services/apiCollab";
 import ShareBoard from "../components/ShareBoard.vue";
+import { useSettingStore } from "@/stores/useSettingStore.js";
 
 const boardStore = useBoardStore();
 const taskStore = useTaskStore();
 const userStore = useUserStore();
 const taskStatusStore = useTaskStatusStore();
 const collabBoardStore = useCollabBoardStore();
+const settingBoard = useSettingStore()
 
 const collabBoards = ref([]);
 const emits = defineEmits(["message", "loading"]);
@@ -27,7 +29,6 @@ const showCollabBoards = ref(false);
 
 const toggleBoards = (isCollab) => {
   showCollabBoards.value = isCollab;
-  console.log("showCollabBoards:", showCollabBoards.value);
 };
 
 const handleMessage = (e) => {
@@ -50,6 +51,7 @@ onMounted(async () => {
   taskStatusStore.setStatuses([]);
   collabBoardStore.setCollabsBoard([]);
   boardStore.setCurrentBoard({});
+
 
   try {
     const res = await getCollabBoard();
