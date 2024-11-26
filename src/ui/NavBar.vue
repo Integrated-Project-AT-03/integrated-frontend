@@ -1,7 +1,7 @@
 <script setup>
 import TaskIcon from "./../assets/icons/TaskIcon.vue";
 import Arrow from "./../assets/icons/Arrow.vue";
-import BoardSetting from "./BoardSetting.vue";
+import BoardSetting from "../feature/board/BoardSetting.vue";
 import { useUserStore } from "./../stores/useUserStore";
 import { logout as logoutApi, logoutMicrosoft } from "./../services/apiAuth";
 import { onMounted, onUnmounted, ref } from "vue";

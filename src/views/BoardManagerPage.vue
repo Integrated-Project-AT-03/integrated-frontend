@@ -1,5 +1,5 @@
 <script setup>
-import Button from "@/components/Button.vue";
+import Button from "@/ui/Button.vue";
 import { watchEffect, ref, onMounted } from "vue";
 import router from "@/router";
 import { getBoards } from "../services/apiBoard";
@@ -10,7 +10,7 @@ import { useTaskStatusStore } from "../stores/useTaskStatusStore";
 import { useCollabBoardStore } from "../stores/useCollabBoardStore";
 
 import { getCollabBoard, leaveCollabBoard } from "../services/apiCollab";
-import ShareBoard from "../components/ShareBoard.vue";
+import ShareBoard from "@/feature/board/ShareBoard.vue";
 import { useSettingStore } from "@/stores/useSettingStore.js";
 
 const boardStore = useBoardStore();
@@ -76,11 +76,11 @@ const handleClick = (board) => {
     <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
       <div class="flex flex-col sm:flex-row items-center w-full sm:w-auto space-y-2 sm:space-y-0 sm:space-x-2">
         <button class="itbkk-button-create btn w-full sm:w-auto text-center"
-          :class="{ 'bg-gray-500': !showCollabBoards, 'bg-black-400': showCollabBoards }" @click="toggleBoards(false)">
+          :class="{ 'bg-black-400 ': !showCollabBoards, 'bg-gray-500': showCollabBoards }" @click="toggleBoards(false)">
           Personal Boards
         </button>
         <button class="itbkk-button-create btn w-full sm:w-auto text-center"
-          :class="{ 'bg-gray-500': showCollabBoards, 'bg-black-400': !showCollabBoards }" @click="toggleBoards(true)">
+          :class="{ 'bg-black-400': showCollabBoards, 'bg-gray-500': !showCollabBoards }" @click="toggleBoards(true)">
           Collaboration Boards
         </button>
       </div>

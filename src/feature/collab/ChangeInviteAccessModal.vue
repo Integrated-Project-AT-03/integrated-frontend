@@ -1,8 +1,8 @@
 <script setup>
 import { useRoute } from "vue-router";
-import Button from "./Button.vue";
-import { updateAccessCollab } from "../services/apiCollab";
-import { useCollabStore } from "../stores/useCollabStore";
+import Button from "../../ui/Button.vue";
+import { updateAccessCollab } from "../../services/apiCollab.js";
+import { useCollabStore } from "../../stores/useCollabStore.js";
 import { ref } from "vue";
 
 const collabStore = useCollabStore();

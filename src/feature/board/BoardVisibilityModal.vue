@@ -1,9 +1,9 @@
 <script setup>
-import Button from "../components/Button.vue";
-import { updateVisibility } from "../services/apiVisibility";
+import Button from "@/ui/Button.vue";
+import { updateVisibility } from "../../services/apiVisibility.js";
 import { useRoute } from "vue-router";
-import { useSettingStore } from "../stores/useSettingStore";
-import { useBoardStore } from "../stores/useBoardStore";
+import { useSettingStore } from "../../stores/useSettingStore.js";
+import { useBoardStore } from "../../stores/useBoardStore.js";
 
 const boardStore = useBoardStore();
 const route = useRoute();

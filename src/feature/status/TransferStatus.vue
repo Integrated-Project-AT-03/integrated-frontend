@@ -1,13 +1,13 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import Button from "./Button.vue";
-import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
-import { useTaskStore } from "./../stores/useTaskStore";
+import Button from "../../ui/Button.vue";
+import { useTaskStatusStore } from "../../stores/useTaskStatusStore.js";
+import { useTaskStore } from "../../stores/useTaskStore.js";
 import { useRoute } from "vue-router";
 import {
   transferTasksToNewStatus,
   getStatusesByNanoIdBoard,
-} from "../services/apiStatus";
+} from "../../services/apiStatus.js";
 
 const taskStore = useTaskStore();
 const statusStore = useTaskStatusStore();

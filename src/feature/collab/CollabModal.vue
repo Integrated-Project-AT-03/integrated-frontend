@@ -1,13 +1,13 @@
 <script setup>
-import { useRoute } from "vue-router";
-import Button from "./Button.vue";
-import { updateAccessCollab } from "../services/apiCollab";
-import { useCollabStore } from "../stores/useCollabStore";
-import { ref } from "vue";
+import Button from "../../ui/Button.vue";
 
-const emits = defineEmits(["message", "revert"]);
+import { useRoute } from "vue-router";
+import { useCollabStore } from "../../stores/useCollabStore.js";
 
 const props = defineProps({
+  collab: {
+    type: Object,
+  },
   idModal: {
     type: String,
   },
@@ -16,35 +16,36 @@ const props = defineProps({
   },
   header: {
     type: String,
+    default: "header",
   },
 });
+
+const emits = defineEmits(["message"]);
 </script>
 
 <template>
   <dialog :id="idModal" class="modal">
     <div
-      class="itbkk-modal-alert flex h-auto w-[35rem] flex-col rounded-lg bg-neutral p-6"
+      class="itbkk-modal-alert flex h-auto w-[34rem] flex-col rounded-lg bg-neutral p-6"
     >
       <div class="text-2xl font-bold text-slate-300">{{ header }}</div>
       <div class="divider"></div>
       <div class="itbkk-message text-slate-300">
-        <slot> add content </slot>
+        <slot> <p>add taxt here</p> </slot>
       </div>
       <div class="divider"></div>
       <div class="mt-4 flex justify-end gap-3">
         <form method="dialog">
-          <Button
-            class="itbkk-button-confirm btn-success"
+          <button
+            class="itbkk-button-confirm btn btn-success"
             message="Confirm"
             @click="handleConfirm"
-          />
+          >
+            Confirm
+          </button>
         </form>
         <form method="dialog">
-          <Button
-            :action="() => $emit('revert')"
-            class="itbkk-button-cancel text-slate-200"
-            message="Cancel"
-          />
+          <button class="itbkk-button-cancel btn text-slate-200">Cancel</button>
         </form>
       </div>
     </div>

@@ -2,7 +2,7 @@
 import {
   downloadFile as downloadFileAPI,
   showImage,
-} from "../services/apiFileAttachment.js";
+} from "../../services/apiFileAttachment.js";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import Xmark from "@/assets/icons/Xmark.vue";

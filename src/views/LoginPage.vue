@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
-import Button from "../components/Button.vue";
+import Button from "@/ui/Button.vue";
 import { useRouter } from "vue-router";
-import Logo from "../components/Logo.vue";
+import Logo from "@/ui/Logo.vue";
 import { useUserStore } from "../stores/useUserStore";
 import { login, loginMicrosoft } from "@/services/apiAuth.js";
 

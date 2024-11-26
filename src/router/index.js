@@ -1,11 +1,11 @@
-import AddStatusModal from "@/components/AddStatusModal.vue";
-import AddTaskModal from "@/components/AddTaskModal.vue";
-import EditStatusModal from "@/components/EditStatusModal.vue";
-import EmptyModal from "@/components/EmptyModal.vue";
-import ShowTaskModal from "@/components/ShowTaskModal.vue";
+import AddStatusModal from "@/feature/status/AddStatusModal.vue";
+import AddTaskModal from "@/feature/task/AddTaskModal.vue";
+import EditStatusModal from "@/feature/status/EditStatusModal.vue";
+import EmptyModal from "@/ui/EmptyModal.vue";
+import ShowTaskModal from "@/feature/task/ShowTaskModal.vue";
 import AppPage from "@/views/AppPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
-import CreateBoardModal from "../components/CreateBoardModal.vue";
+import CreateBoardModal from "@/feature/board/CreateBoardModal.vue";
 import NotFoundPage from "../views/NotFoundPage.vue";
 import { validateToken } from "../services/apiAuth";
 import BoardManagerPage from "../views/BoardManagerPage.vue";

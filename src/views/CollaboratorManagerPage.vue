@@ -1,8 +1,8 @@
 <script setup>
-import Button from "@/components/Button.vue";
+import Button from "@/ui/Button.vue";
 import { useRoute, useRouter } from "vue-router";
-import AddCollaboratorModal from "../components/AddCollaboratorModal.vue";
-import CollabModal from "../components/CollabModal.vue";
+import AddCollaboratorModal from "@/feature/collab/AddCollaboratorModal.vue";
+import CollabModal from "@/feature/collab/CollabModal.vue";
 import { getCollab } from "../services/apiCollab.js";
 import { getBoardByNanoId } from "../services/apiBoard.js";
 import { onMounted } from "vue";
@@ -10,8 +10,8 @@ import { useBoardStore } from "@/stores/useBoardStore";
 import { useCollabStore } from "../stores/useCollabStore.js";
 import { useUserStore } from "../stores/useUserStore.js";
 import { ref } from "vue";
-import ChangeAccessModal from "../components/ChangeAccessModal.vue";
-import SelectCollabRole from "@/components/SelectCollabRole.vue";
+import ChangeAccessModal from "@/feature/collab/ChangeAccessModal.vue";
+import SelectCollabRole from "@/feature/collab/SelectCollabRole.vue";
 import { deleteCollab, cancleInvite } from "../services/apiCollab.js";
 import {
   updateAccessCollab,

@@ -1,13 +1,13 @@
 <script setup>
 import { computed, ref, watch } from "vue";
-import { getStatusesByNanoIdBoard } from "./../services/apiStatus";
+import { getStatusesByNanoIdBoard } from "../../services/apiStatus.js";
 import {
   editSettingByNanoIdBoard,
   getSettingByNanoIdBoard,
-} from "./../services/apiSetting";
+} from "../../services/apiSetting.js";
 import { useRoute } from "vue-router";
-import Button from "./Button.vue";
-import { useSettingStore } from "./../stores/useSettingStore";
+import Button from "../../ui/Button.vue";
+import { useSettingStore } from "../../stores/useSettingStore.js";
 import { useBoardStore } from "@/stores/useBoardStore.js";
 const settingStore = useSettingStore();
 const boardStore = useBoardStore()

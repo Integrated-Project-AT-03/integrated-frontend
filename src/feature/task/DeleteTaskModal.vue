@@ -1,8 +1,8 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import { deleteTaskById } from "../services/apiTask";
-import Button from "./Button.vue";
-import { useTaskStore } from "./../stores/useTaskStore";
+import { deleteTaskById } from "../../services/apiTask.js";
+import Button from "../../ui/Button.vue";
+import { useTaskStore } from "../../stores/useTaskStore.js";
 const taskStore = useTaskStore();
 const router = useRouter();
 const route = useRoute();

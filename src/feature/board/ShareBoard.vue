@@ -1,9 +1,9 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { getCollabBoard } from "../services/apiCollab";
-import { useCollabBoardStore } from "../stores/useCollabBoardStore";
-import RemoveCollabBoardModal from "./RemoveCollabBoardModal.vue";
+import { getCollabBoard } from "../../services/apiCollab.js";
+import { useCollabBoardStore } from "../../stores/useCollabBoardStore.js";
+import RemoveCollabBoardModal from "../collab/RemoveCollabBoardModal.vue";
 
 const collabBoardStore = useCollabBoardStore();
 const router = useRouter();

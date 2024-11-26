@@ -1,10 +1,10 @@
 <script setup>
 import { ref } from "vue";
-import Button from "./Button.vue";
-import { addCollab } from "../services/apiCollab.js";
+import Button from "../../ui/Button.vue";
+import { addCollab } from "../../services/apiCollab.js";
 import { useRoute } from "vue-router";
-import { useCollabStore } from "../stores/useCollabStore.js";
-import Loading from "@/components/Loading.vue";
+import { useCollabStore } from "../../stores/useCollabStore.js";
+import Loading from "@/ui/Loading.vue";
 
 const collabStore = useCollabStore();
 const emits = defineEmits(["message", "closeModal"]);

@@ -1,11 +1,11 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import Alert from "./../components/Alert.vue";
-import Navbar from "../components/NavBar.vue";
+import Alert from "@/ui/Alert.vue";
+import Navbar from "@/ui/NavBar.vue";
 import ChevronRight from "../assets/icons/ChevronRight.vue";
 import { useBoardStore } from "../stores/useBoardStore.js";
 import { getUserInfo } from "../services/apiAuth";
-import Loading from "@/components/Loading.vue";
+import Loading from "@/ui/Loading.vue";
 
 const message = ref("");
 const status = ref();

@@ -1,9 +1,9 @@
 <script setup>
 import { ref } from "vue";
 import { createBoard } from "@/services/apiBoard.js";
-import { useUserStore } from "@/stores/useUserStore";
-import router from "@/router";
-import { useBoardStore } from "../stores/useBoardStore.js";
+import { useUserStore } from "@/stores/useUserStore.js";
+import router from "@/router/index.js";
+import { useBoardStore } from "../../stores/useBoardStore.js";
 
 const boardStore = useBoardStore();
 const userStore = useUserStore();

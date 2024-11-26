@@ -1,7 +1,7 @@
 <script setup>
-import { deleteCollab } from "@/services/apiCollab";
+import { deleteCollab } from "@/services/apiCollab.js";
 import { useRoute } from "vue-router";
-import { useCollabBoardStore } from "../stores/useCollabBoardStore";
+import { useCollabBoardStore } from "../../stores/useCollabBoardStore.js";
 
 const props = defineProps({
   collab: {

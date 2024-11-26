@@ -1,5 +1,5 @@
 <script setup>
-import { useBoardStore } from "@/stores/useBoardStore";
+import { useBoardStore } from "@/stores/useBoardStore.js";
 const boardStore = useBoardStore();
 const { collab } = defineProps(["collab"]);
 const emits = defineEmits(["openConfirmModal"]);

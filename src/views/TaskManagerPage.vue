@@ -1,11 +1,11 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 
-import Button from "@/components/Button.vue";
-import StatusModal from "@/components/StatusModal.vue";
+import Button from "@/ui/Button.vue";
+import StatusModal from "@/feature/status/StatusModal.vue";
 import { useRoute, useRouter } from "vue-router";
-import BoardVisibilityModal from "../components/BoardVisibilityModal.vue";
-import EmptyElement from "../components/EmptyElement.vue";
+import BoardVisibilityModal from "@/feature/board/BoardVisibilityModal.vue";
+import EmptyElement from "@/ui/EmptyElement.vue";
 import { getBoardByNanoId } from "../services/apiBoard.js";
 import { getTasksByNanoidBoard } from "../services/apiTask";
 import { useUserStore } from "../stores/useUserStore";

@@ -1,13 +1,13 @@
 <script setup>
 import { onMounted, ref, computed, defineEmits } from "vue";
 
-import TransferStatus from "../components/TransferStatus.vue";
+import TransferStatus from "@/feature/status/TransferStatus.vue";
 import { getSettingByNanoIdBoard } from "../services/apiSetting";
 import { getStatusesByNanoIdBoard } from "../services/apiStatus";
 import { getTasksByNanoidBoard } from "../services/apiTask";
-import DeleteStatusModal from "./../components/DeleteStatusModal.vue";
-import Button from "../components/Button.vue";
-import StatusModal from "@/components/StatusModal.vue";
+import DeleteStatusModal from "@/feature/status/DeleteStatusModal.vue";
+import Button from "@/ui/Button.vue";
+import StatusModal from "@/feature/status/StatusModal.vue";
 import { useSettingStore } from "./../stores/useSettingStore";
 import { useRoute, useRouter } from "vue-router";
 import { useTaskStatusStore } from "./../stores/useTaskStatusStore";

@@ -1,11 +1,11 @@
 <script setup>
 import { useRouter, useRoute } from "vue-router";
-import { addStatus } from "../services/apiStatus";
+import { addStatus } from "../../services/apiStatus.js";
 import { computed, ref } from "vue";
-import colorStore from "./../stores/ColorsStore";
-import Loading from "./Loading.vue";
-import Button from "./Button.vue";
-import { useTaskStatusStore } from "./../stores/useTaskStatusStore";
+import colorStore from "../../stores/ColorsStore.js";
+import Loading from "../../ui/Loading.vue";
+import Button from "../../ui/Button.vue";
+import { useTaskStatusStore } from "../../stores/useTaskStatusStore.js";
 const statusStore = useTaskStatusStore();
 const emits = defineEmits(["message"]);
 const route = useRoute();
