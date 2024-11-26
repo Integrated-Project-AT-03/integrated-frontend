@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from "vue";
-import Button from "./Button.vue";
 import { createBoard } from "@/services/apiBoard.js";
 import { useUserStore } from "@/stores/useUserStore";
 import router from "@/router";
@@ -16,7 +15,7 @@ const emits = defineEmits(["message"]);
 
 async function onSubmit() {
   if (!newBoard.value.name) {
-    errorMessage.value = "Did not enter a empty.";
+    errorMessage.value = "Please enter a board name.";
     return;
   }
   const res = await createBoard(newBoard.value);
@@ -39,20 +38,22 @@ async function onSubmit() {
 <template>
   <Teleport to="body">
     <div
-      class="itbkk-modal-new fixed right-0 top-0 z-[1000] flex h-screen w-screen flex-col items-center justify-center rounded-lg backdrop-blur-sm transition-all duration-500"
+      class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/30 backdrop-blur-sm"
     >
-      <div class="flex h-max w-[27rem] flex-col rounded-md bg-neutral p-6">
+      <div
+        class="w-full max-w-[90%] sm:max-w-[27rem] flex flex-col rounded-md bg-neutral p-6"
+      >
         <div class="text-2xl font-bold text-slate-300">New Board</div>
         <div class="divider"></div>
-        <div class="itbkk-message flex flex-col gap-2 text-slate-300">
-          <div class="">Name</div>
+        <div class="flex flex-col gap-2 text-slate-300">
+          <div>Name</div>
           <div>
             <input
               v-model="newBoard.name"
               maxlength="120"
               type="text"
               placeholder="Your board name"
-              class="itbkk-board-name input input-bordered h-11 w-full bg-secondary"
+              class="input input-bordered h-11 w-full bg-secondary text-white placeholder-slate-400"
             />
           </div>
           <div class="text-error">
@@ -63,8 +64,7 @@ async function onSubmit() {
         <div class="mt-4 flex justify-end gap-3">
           <form method="dialog">
             <button
-              class="itbkk-button-ok btn btn-success text-slate-200"
-              message="Save"
+              class="itbkk-button-ok btn btn-success text-slate-200 hover:bg-green-600"
               @click="onSubmit"
               :disabled="newBoard.name.length === 0"
             >
@@ -85,4 +85,27 @@ async function onSubmit() {
   </Teleport>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+@media (max-width: 640px) {
+  input {
+    font-size: 0.875rem;
+    padding: 0.5rem;
+  }
+  button {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  input {
+    font-size: 1rem;
+    padding: 0.75rem;
+  }
+  button {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+  }
+}
+</style>
