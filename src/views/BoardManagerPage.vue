@@ -68,11 +68,10 @@ const handleClick = (board) => {
 </script>
 
 <template>
-  <div class="p-4">
-    <h1 class="itbkk-personal-board text-white-800 mb-4 text-center text-2xl font-semibold">
+  <div class="pt-16 p-4">
+    <h1 class="text-white mb-4 text-center text-2xl font-semibold sm:text-center">
       Boards
     </h1>
-
 
     <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
       <div class="flex flex-col sm:flex-row items-center w-full sm:w-auto space-y-2 sm:space-y-0 sm:space-x-2">
@@ -130,12 +129,12 @@ const handleClick = (board) => {
 </template>
 
 <style scoped>
-@media (max-width: 640px) {
-  .itbkk-button-create {
-    font-size: 0.875rem;
-    padding: 0.5rem 1rem;
-  }
+.pt-16 {
+  padding-top: 4rem;
 
+}
+
+@media (max-width: 640px) {
   h1 {
     font-size: 1.5rem;
   }
