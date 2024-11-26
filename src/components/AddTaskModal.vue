@@ -128,19 +128,21 @@ async function addNewTask(newItem) {
                 <div>
                   The limit status :
                   <span
+                    class="font-bold"
                     :class="
-                      settingStore.getLimitTask()?.enableLimitsTask
-                        ? 'text-success'
-                        : 'text-error'
-                    "
+              settingStore.getLimitTask().enableLimitsTask
+                ? 'text-success'
+                : 'text-error'
+            "
                   >
-                    {{
-                      settingStore.getLimitTask()?.enableLimitsTask
-                        ? "enable"
-                        : "disable"
+
+            {{
+                      settingStore.getLimitTask().enableLimitsTask
+                        ? "Enable"
+                        : "Disable"
                     }}
-                    state
-                  </span>
+
+          </span>
                 </div>
               </div>
               

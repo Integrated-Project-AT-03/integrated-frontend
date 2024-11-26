@@ -276,7 +276,6 @@ const handleSave = async () => {
     }
   }
   if (selectedFile.value.length !== 0) {
-    console.log("what");
     const resAddFile = await submitFile();
     if (resAddFile.httpStatus !== 200) {
       emits("message", {
@@ -471,7 +470,7 @@ const handleSave = async () => {
 
         <div class="flex h-auto w-auto justify-center">
           <div
-            v-show="!isEditMode && dataTask?.tasksAttachment?.length != 0"
+            v-show="!isEditMode && dataTask?.tasksAttachment?.length !== 0"
             class="h-auto w-[59rem] overflow-x-auto rounded-3xl bg-stone-600 p-4"
           >
             <div class="flex gap-3">
@@ -488,7 +487,7 @@ const handleSave = async () => {
           </div>
 
           <div
-            v-show="!isEditMode && dataTask?.tasksAttachment?.length == 0"
+            v-show="!isEditMode && dataTask?.tasksAttachment?.length === 0"
             class="flex h-[10rem] w-[59rem] items-center justify-center gap-3 rounded-3xl bg-stone-600 font-bold"
           >
             <div>No files</div>
@@ -553,7 +552,7 @@ const handleSave = async () => {
               <div
                 v-show="
                   isEditMode &&
-                  (selectedFile.length != 0 || tempTaskAttachment?.length != 0)
+                  (selectedFile.length !== 0 || tempTaskAttachment?.length !== 0)
                 "
               >
                 <label for="inputFile">
@@ -630,8 +629,8 @@ const handleSave = async () => {
                     (compareTask?.description ?? '') &&
                   dataTask?.status === compareTask?.status &&
                   (dataTask.title ?? '') === (compareTask?.title ?? '') &&
-                  selectedFile.length == 0 &&
-                  filesId.length == 0)
+                  selectedFile.length === 0 &&
+                  filesId.length === 0)
               "
             >
               Save
