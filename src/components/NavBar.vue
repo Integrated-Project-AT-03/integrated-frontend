@@ -81,7 +81,7 @@ onUnmounted(() => {
         </p>
       </li>
       <button
-        v-if="boardStore.getCurrentBoard().access === 'GUEST'"
+        v-if="!userStore?.getUser()?.oid"
         @click="() =>$router.push({name:'login'})"
         class="btn btn-sm my-auto text-white btn-success flex w-[70px] justify-center item-center"
       >
@@ -130,7 +130,7 @@ onUnmounted(() => {
           <p>Setting Board</p>
           <i class="pi pi-sliders-v text-[1rem]" />
         </button>
-        <button v-if="boardStore.getCurrentBoard().access !== 'GUEST'"
+        <button   v-if="userStore?.getUser()?.oid"
           @click="logout"
           class="btn btn-ghost flex w-full justify-between"
         >

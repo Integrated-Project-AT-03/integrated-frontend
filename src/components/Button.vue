@@ -26,7 +26,7 @@ const props = defineProps({
 const access = computed(
   () =>
     boardStore.getCurrentBoard()?.access === "OWNER" ||
-    props.access.includes(boardStore.getCurrentBoard()?.access),
+    props.access.includes(boardStore.getCurrentBoard().access),
 );
 </script>
 
