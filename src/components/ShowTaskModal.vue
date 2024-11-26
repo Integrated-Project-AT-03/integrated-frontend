@@ -24,7 +24,6 @@ const emits = defineEmits(["message"]);
 const route = useRoute();
 const router = useRouter();
 const isEditMode = ref();
-// const imageSrc = ref();
 const dataTask = ref({
   title: "",
   description: "",
@@ -118,10 +117,9 @@ const selectedFile = ref([]);
 const errorMessage = ref("");
 
 const maxFileSizeMB = 20;
-const maxTotalSizeMB = 20;
+
 const maxFileCount = 10;
-const MAX_FILE_SIZE = maxFileSizeMB * 1024 * 1024; // Convert MB to bytes
-// const MAX_TOTAL_SIZE = maxTotalSizeMB * 1024 * 1024; // Convert MB to bytes
+const MAX_FILE_SIZE = maxFileSizeMB * 1024 * 1024;
 
 // Handle files added via input
 const handleFileInputChange = (e) => {
@@ -176,12 +174,6 @@ const processFiles = (files) => {
       break;
     }
 
-    // ไม่จำเป็นต้องเช็คค่ารวม
-    // // Check combined total file size
-    // if (currentTotalSize + file.size > MAX_TOTAL_SIZE) {
-    //   errorMessage.value = `Total file size cannot exceed ${maxTotalSizeMB} MB.`;
-    //   break;
-    // }
 
     // Determine thumbnail based on file type
     const fileExtension = file.name.split(".").pop().toLowerCase();
@@ -272,10 +264,9 @@ const submitFile = async () => {
 
 const handleSave = async () => {
   isLoading.value = true;
-  if (filesId.length != 0) {
+  if (filesId.length !== 0) {
     const resDeleteFile = await deleteFileById();
-    console.log(resDeleteFile);
-    if (resDeleteFile.httpStatus != 200) {
+    if (resDeleteFile.httpStatus !== 200) {
       emits("message", {
         description: `Some delete file is wrong, please try again`,
         status: "error",
@@ -284,10 +275,10 @@ const handleSave = async () => {
       return;
     }
   }
-  if (selectedFile.value.length != 0) {
+  if (selectedFile.value.length !== 0) {
+    console.log("what");
     const resAddFile = await submitFile();
-    console.log(resAddFile);
-    if (resAddFile.httpStatus != 200) {
+    if (resAddFile.httpStatus !== 200) {
       emits("message", {
         description: `Some add file is wrong, please try again`,
         status: "error",
@@ -306,21 +297,22 @@ const handleSave = async () => {
       description: "The task has been updated",
       status: "success",
     });
-  } else if (resEditTask.status === 404) {
+  } else if (resEditTask.httpStatus === 404) {
     emits("message", {
       description: "The task does not exist",
       status: "error",
     });
     taskStore.deleteTask(route.params.id);
-  } else if (resEditTask.status === 400) {
+  } else if (resEditTask.httpStatus === 400) {
     return emits("message", {
       description: `On over limit, provide an appropriate message. The status ${
-        statuses.value.items.find(({ id }) => +id === +dataTask.value.status)
+        statuses.value.find(({ id }) => +id === +dataTask.value.status)
           .name
       }  will have too many tasks.  Please make progress and update status of existing tasks first.`,
       status: "error",
     });
   } else {
+    console.log(resEditTask.httpStatus);
     emits("message", {
       description: `something went wrong, please try again`,
       status: "error",

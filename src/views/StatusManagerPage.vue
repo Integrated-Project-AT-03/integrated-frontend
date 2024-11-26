@@ -27,6 +27,8 @@ const access = computed(() =>
   ["WRITER", "OWNER"].includes(boardStore.getCurrentBoard()?.access),
 );
 
+
+
 const numTask = computed(() =>
   taskStore.getTasks().reduce((accu, cur) => {
     if (accu.has(cur.status)) accu.set(cur.status, accu.get(cur.status) + 1);
@@ -34,6 +36,18 @@ const numTask = computed(() =>
     return accu;
   }, new Map()),
 );
+
+
+const statusColorTasks = (name,numTasks) => {
+  if(!settingStore.getLimitTask().enableLimitsTask || name === 'Done' ||
+    name === 'No Status' ) return 'text-black'
+
+  if(numTasks >= settingStore.getLimitTask().limitsTask) return "text-error"
+
+  if(numTasks > settingStore.getLimitTask().limitsTask *0.7) return "text-yellow-500"
+
+  return "text-black"
+}
 
 onMounted(async function () {
   emits("loading", true);
@@ -162,19 +176,15 @@ const handleMessage = (e) => {
           <td class="itbkk-title whitespace-nowrap px-6 py-4">
             <div
               class="text-center text-sm"
-              :class="
-                !settingStore.getLimitTask().enableLimitsTask ||
-                name === 'Done' ||
-                name === 'No Status' ||
-                numTask.get(name) ||
-                0 < settingStore.getLimitTask().limitsTask * 0.7
-                  ? 'text-black'
-                  : numTask.get(name) ||
-                      0 >= settingStore.getLimitTask().limitsTask
-                    ? 'text-error'
-                    : 'text-yellow-500'
-              "
+        :class="statusColorTasks(name,numTask.get(name))"
+
+
+
             >
+
+
+
+
               {{ numTask.get(name) || 0
               }}{{
                 settingStore.getLimitTask().enableLimitsTask &&

@@ -47,7 +47,7 @@ async function addNewTask(newItem) {
       status: "success",
     });
     taskStore.addTask(res.data);
-  } else if (res.status === 400) {
+  } else if (res.httpStatus === 400) {
     emits("message", {
       description: `The status ${newItem.status.name}  will have too many tasks.  Please make progress and update status of existing tasks first.`,
       status: "error",

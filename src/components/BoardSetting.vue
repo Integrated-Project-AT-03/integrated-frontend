@@ -50,21 +50,20 @@ const saveSetting = async () => {
   if (setting.value.limitsTask > 30) {
     setting.value.limitsTask = 30;
   }
-  console.log(setting.value.enableLimitsTask);
   const res = await editSettingByNanoIdBoard(route.params.oid, {
     enableLimitsTask: setting.value.enableLimitsTask,
     limitsTask: setting.value.limitsTask,
   });
-  console.log(res.data,setting.value.enableLimitsTask);
 
   if (res.httpStatus === 200) {
     settingStore.setLimitTask(res.data);
     compareSetting.value = { ...setting.value };
     if (setting.value.enableLimitsTask) {
       const statuses = (await getStatusesByNanoIdBoard(route.params.oid)).data;
+      console.log(statuses);
       statusesOverLimts.value = statuses.filter(
         ({ numOfTask, name }) =>
-          numOfTask > setting.value.limitsTask &&
+          numOfTask >= setting.value.limitsTask &&
           name !== "Done" &&
           name !== "No Status",
       );
