@@ -89,7 +89,7 @@ async function addNewTask(newItem) {
               class="itbkk-title h-11 w-[20rem] md:w-[45rem] ml-6 mr-6 md:ml-8 md:mr-8 lg:w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
             />
           </div>
-          <div class="flex flex-col items-center md:flex-row md:justify-around">
+          <div class="flex flex-col items-center md:items-start md:flex-row md:justify-around">
             <div class="flex flex-col gap-3">
               <div class="flex gap-4">
                 <div>Description</div>
