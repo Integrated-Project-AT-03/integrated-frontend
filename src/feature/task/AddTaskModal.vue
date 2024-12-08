@@ -70,7 +70,7 @@ async function addNewTask(newItem) {
       class="fixed top-0 z-[1000] flex h-screen w-full items-center justify-center backdrop-blur-sm transition-all duration-500"
     >
       <div
-        class="relative h-[30rem] w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
+        class="relative h-[43rem] md:h-[30rem] lg:h-[30rem] lg:w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
       >
         <div class="mt-4 flex items-center justify-between px-5">
           <div class="text-xl font-bold">New Task</div>
@@ -86,10 +86,10 @@ async function addNewTask(newItem) {
           <div class="flex justify-center">
             <input
               v-model="taskForm.title"
-              class="itbkk-title h-11 w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
+              class="itbkk-title h-11 w-[20rem] md:w-[45rem] ml-6 mr-6 md:ml-8 md:mr-8 lg:w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
             />
           </div>
-          <div class="flex justify-around">
+          <div class="flex flex-col items-center md:flex-row md:justify-around">
             <div class="flex flex-col gap-3">
               <div class="flex gap-4">
                 <div>Description</div>
@@ -99,7 +99,7 @@ async function addNewTask(newItem) {
               </div>
               <textarea
                 v-model="taskForm.description"
-                class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
+                class="itbkk-description w-[20rem] h-[10rem] lg:h-[16em] lg:w-[35rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
               ></textarea>
             </div>
             <div class="flex flex-col justify-between gap-3">
@@ -146,7 +146,7 @@ async function addNewTask(newItem) {
                 </div>
               </div>
               
-              <div class="mr-4 flex justify-end gap-3">
+              <div class="mr-4 flex justify-end gap-3 mt-3">
                 <Button
                   class="itbkk-button-confirm btn-success"
                   message="Save"
