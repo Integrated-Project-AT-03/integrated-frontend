@@ -92,7 +92,7 @@ const handleEditTask = async () => {
     (dataTask.value.title === "" &&
       dataTask.value.description === "" &&
       dataTask.value.description === "",
-    dataTask.value.assignees === "" &&
+      dataTask.value.assignees === "" &&
       Object.values(dataTask.value.status).length === 0 &&
       dataTask.value.boardNanoId === route.params.oid)
   ) {
@@ -314,10 +314,9 @@ const handleSave = async () => {
     taskStore.deleteTask(route.params.id);
   } else if (resEditTask.status === 400) {
     return emits("message", {
-      description: `On over limit, provide an appropriate message. The status ${
-        statuses.value.items.find(({ id }) => +id === +dataTask.value.status)
-          .name
-      }  will have too many tasks.  Please make progress and update status of existing tasks first.`,
+      description: `On over limit, provide an appropriate message. The status ${statuses.value.items.find(({ id }) => +id === +dataTask.value.status)
+        .name
+        }  will have too many tasks.  Please make progress and update status of existing tasks first.`,
       status: "error",
     });
   } else {
@@ -336,297 +335,222 @@ const handleSave = async () => {
     >
       <RouterView @message="handleMessage($event)" />
       <div
-        class="relative h-auto w-[65rem] rounded-2xl bg-neutral drop-shadow-2xl"
+        class="relative h-auto w-[90%] max-w-[60rem] rounded-2xl bg-neutral drop-shadow-2xl p-5"
       >
         <Loading :is-loading="isLoading" />
+        <!-- Title and Action Buttons -->
         <div
-          class="ml-6 mt-2 flex items-center justify-between pr-5 pt-2 text-xl font-bold text-slate-200"
+          class="flex flex-wrap items-center justify-between gap-4 text-xl font-bold text-slate-200"
         >
-          <div class="flex flex-col items-center gap-2">
-            <div class="text-sm text-error">
-              {{ validateInput.title ? "Max 100 characters" : "" }}
-            </div>
-            <input
-              :disabled="!isEditMode"
-              class="itbkk-title w-[50rem]"
-              :class="
-                isEditMode
-                  ? 'h-11 w-[40rem] rounded-2xl border-base-100 bg-secondary p-2'
-                  : 'bg-neutral hover:border-neutral'
-              "
-              type="text"
-              v-model.trim="dataTask.title"
-            />
-          </div>
-
-          <div class="flex items-center gap-4">
+          <input
+            :disabled="!isEditMode"
+            class="itbkk-title w-full md:w-auto rounded-lg border border-base-100 p-2 bg-secondary flex-1"
+            type="text"
+            v-model.trim="dataTask.title"
+            placeholder="Enter task title"
+          />
+          <div class="flex gap-4">
             <Button
               :bgcolor="!isEditMode ? '#A020F0' : '#ef4444'"
               :message="route.params.mode !== 'edit' ? 'Edit mode' : 'Reset'"
               :action="() => handleEdit()"
               :access="['WRITER']"
             />
-
-            <div
-              data-tip="You need to be board owner or has write access to perform this action."
-              :class="
+            <button
+              :disabled="
                 !['WRITER', 'OWNER'].includes(
                   boardStore.getCurrentBoard()?.access,
-                ) && 'tooltip'
+                )
               "
+              class="btn btn-ghost btn-xs h-max w-max p-2 text-error"
             >
-              <button
-                :disabled="
-                  !['WRITER', 'OWNER'].includes(
-                    boardStore.getCurrentBoard()?.access,
-                  )
-                "
-                onclick="deletetask.showModal()"
-                class="btn btn-ghost btn-xs h-max w-max p-2 text-error"
-              >
-                <Trash />
-              </button>
-            </div>
+              <Trash />
+            </button>
           </div>
         </div>
-        <div class="divider m-1"></div>
-        <div class="m-4 flex justify-around">
-          <div class="flex flex-col gap-2 text-slate-200">
-            <div class="flex gap-4">
-              <div>Description</div>
-              <div class="text-sm text-error">
-                {{ validateInput.description ? "(Max 500 characters)" : "" }}
-              </div>
-            </div>
-            <textarea
-              :disabled="!isEditMode"
-              v-model.trim="dataTask.description"
-              :placeholder="dataTask.description ?? 'No Description Provided'"
-              class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-stone-600 p-4 placeholder:italic placeholder:text-gray-400"
-            ></textarea>
+
+        <div class="divider my-4"></div>
+
+        <!-- Form Content -->
+        <div class="flex flex-wrap gap-4">
+          <!-- Left Column -->
+          <div class="flex-1">
+            <label class="block text-slate-200">
+              <span>Description</span>
+              <textarea
+                :disabled="!isEditMode"
+                v-model.trim="dataTask.description"
+                class="itbkk-description h-[12em] w-full rounded-lg border p-4 bg-stone-600 placeholder:text-gray-400"
+                placeholder="Task description"
+              ></textarea>
+            </label>
           </div>
-          <div class="flex flex-col gap-2">
-            <div class="flex flex-col gap-2 text-slate-200">
-              <div class="flex gap-4">
-                <div>Assignees</div>
-                <div class="text-sm text-error">
-                  {{ validateInput.assignees ? "(Max 30 characters" : "" }}
-                </div>
-              </div>
+
+          <!-- Right Column -->
+          <div class="flex-1 space-y-4">
+            <!-- Assignees -->
+            <label class="block text-slate-200">
+              <span>Assignees</span>
               <input
                 :disabled="!isEditMode"
-                :placeholder="dataTask.assignees ?? 'Unassigned'"
                 v-model.trim="dataTask.assignees"
-                class="itbkk-assignees input w-[20rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
+                class="itbkk-assignees w-full rounded-lg border p-2 bg-secondary placeholder:text-gray-400"
+                placeholder="Assign to a user"
               />
-            </div>
+            </label>
 
-            <div class="flex flex-col gap-2 text-slate-200">
-              <div>Status</div>
+            <!-- Status -->
+            <label class="block text-slate-200">
+              <span>Status</span>
               <select
                 :disabled="!isEditMode"
                 v-model="dataTask.status"
-                class="itbkk-status select w-full max-w-xs bg-base-100"
+                class="itbkk-status w-full rounded-lg border p-2 bg-base-100"
               >
                 <option v-for="status in statuses" :value="status.id">
                   {{ status.name }}
                 </option>
               </select>
-              <div class="mt-2">
-                The limit status :
-                <span
-                  class="font-bold"
-                  :class="
-              settingStore.getLimitTask().enableLimitsTask
-                ? 'text-success'
-                : 'text-error'
-            "
-                >
+            </label>
 
-            {{
-                    settingStore.getLimitTask().enableLimitsTask
-                      ? "Enable"
-                      : "Disable"
-                  }}
-
-          </span>
-              </div>
-            </div>
-            <div
-              class="mt-3 flex flex-col justify-between gap-3 pb-3 text-xs text-slate-200"
-            >
-              <div class="flex gap-2">
-                TimeZone:
-                <div class="itbkk-timezone">
-                  {{ localZone }}
-                </div>
-              </div>
-              <div class="flex gap-2">
-                Created On:
-                <div class="itbkk-created-on">
-                  {{ formattDate(dataTask.createdOn) }}
-                </div>
-              </div>
-              <div class="flex gap-2">
-                Updated On:
-                <div class="itbkk-updated-on">
-                  {{ formattDate(dataTask.updatedOn) }}
-                </div>
-              </div>
+            <!-- Metadata -->
+            <div class="text-xs text-slate-200 space-y-1">
+              <div>TimeZone: {{ localZone }}</div>
+              <div>Created On: {{ formattDate(dataTask.createdOn) }}</div>
+              <div>Updated On: {{ formattDate(dataTask.updatedOn) }}</div>
             </div>
           </div>
         </div>
 
-        <div class="flex h-auto w-auto justify-center">
+        <div class="divider my-4"></div>
+
+        <!-- File Upload and View Mode -->
+        <div class="flex flex-col gap-2 w-full">
+          <!-- View Mode -->
           <div
-            v-show="!isEditMode && dataTask?.tasksAttachment?.length != 0"
-            class="h-auto w-[59rem] overflow-x-auto rounded-3xl bg-stone-600 p-4"
+            v-if="!isEditMode"
+            class="h-[12rem] w-full rounded-3xl bg-stone-600 relative border-dashed border-2 border-gray-500 flex items-center justify-center"
           >
-            <div class="flex gap-3">
-              <div
-                v-show="!isEditMode"
+            <div v-if="dataTask?.tasksAttachment?.length === 0" class="text-gray-400 font-bold">
+              No files
+            </div>
+            <div
+              v-else
+              class="flex w-full overflow-x-auto gap-3 p-2"
+            >
+              <!-- Display Attached Files -->
+              <BoxAttachment
                 v-for="taskAttachment in dataTask?.tasksAttachment"
-              >
-                <BoxAttachment
-                  :attachment="taskAttachment"
-                  :isEditMode="isEditMode"
-                />
-              </div>
+                :key="taskAttachment.id"
+                :attachment="taskAttachment"
+                :isEditMode="false"
+              />
             </div>
           </div>
 
+          <!-- Edit Mode -->
           <div
-            v-show="!isEditMode && dataTask?.tasksAttachment?.length == 0"
-            class="flex h-[10rem] w-[59rem] items-center justify-center gap-3 rounded-3xl bg-stone-600 font-bold"
-          >
-            <div>No files</div>
-          </div>
-          
-          <div class="flex flex-col gap-2">
-          <div v-show="isEditMode" class="w-full flex justify-end">{{ selectedFile?.length + tempTaskAttachment.length}} / 10</div>
-          <!-- <div>อัปโหลดแล้ว ละกำลังจะลบออก</div> -->
-          <div
-            v-show="isEditMode"
-            class="h-[12rem] w-[59rem] overflow-x-auto overflow-y-hidden rounded-3xl border-2 border-dashed bg-stone-600 p-4"
+            v-else
+            class="h-[12rem] w-full rounded-3xl bg-stone-600 relative border-dashed border-2 border-gray-500"
             @dragover.prevent
             @drop.prevent="handleDrop"
           >
-            <div class="flex gap-3">
-              <div
-                v-show="isEditMode"
-                v-for="taskAttachment in tempTaskAttachment"
+            <!-- Upload Button -->
+            <label
+              for="inputFile"
+              v-show="selectedFile.length + tempTaskAttachment.length > 0"
+              class="absolute top-2 right-2 cursor-pointer text-stone-300 hover:text-blue-400"
+            >
+              <Upload />
+              <input
+                id="inputFile"
+                type="file"
+                multiple
+                @change="handleFileInputChange"
+                class="hidden"
+                :disabled="selectedFile.length + tempTaskAttachment.length >= 10"
+              />
+            </label>
+
+            <!-- Click to Upload -->
+            <div
+              v-if="selectedFile.length + tempTaskAttachment.length === 0"
+              class="flex flex-col items-center justify-center h-full"
+            >
+              <CloudUpload />
+              <label
+                for="inputFile"
+                class="cursor-pointer text-stone-300 underline hover:text-blue-400"
               >
-                <BoxAttachment
-                  :attachment="taskAttachment"
-                  @delete-file="handleDeleteFile"
-                  :isEditMode="isEditMode"
-                />
-              </div>
+                Click to upload
+              </label>
+              <div>Maximum file size 20 MB.</div>
+              <input
+                id="inputFile"
+                type="file"
+                multiple
+                @change="handleFileInputChange"
+                class="hidden"
+                :disabled="selectedFile.length + tempTaskAttachment.length >= 10"
+              />
+            </div>
+
+            <!-- Uploaded Files -->
+            <div
+              v-else
+              class="flex w-full overflow-x-auto gap-3 p-2"
+            >
+              <!-- Temp Attachments -->
+              <BoxAttachment
+                v-for="taskAttachment in tempTaskAttachment"
+                :key="taskAttachment.id"
+                :attachment="taskAttachment"
+                @delete-file="handleDeleteFile"
+                :isEditMode="true"
+              />
+
+              <!-- Selected Files -->
               <div
                 v-for="file in selectedFile"
                 :key="file.name"
-                class="h-45 w-[8rem] rounded-2xl"
+                class="h-[8rem] w-[7rem] flex-shrink-0 rounded-2xl bg-stone-500 p-2"
               >
-                <div
-                  class="flex h-[10rem] w-[8rem] cursor-pointer flex-col justify-between rounded-lg bg-stone-500 p-3"
-                >
-                  <div class="z-50 flex justify-end">
-                    <button class="delete-btn" @click="tempDelete(file.name)">
-                      <Xmark />
-                    </button>
-                  </div>
+                <div class="relative">
+                  <button
+                    class="absolute top-0 right-0 p-1 text-white bg-red-500 rounded-full"
+                    @click="tempDelete(file.name)"
+                  >
+                    <Xmark />
+                  </button>
                   <img
-                    class="h-[80%] w-[100%] object-cover"
-                    v-show="file.preview"
+                    v-if="file.preview"
                     :src="file.preview"
-                    alt="File thumbnail"
+                    class="h-[70%] w-full object-cover rounded-lg"
+                    alt="File preview"
                   />
                   <p
-                    v-show="!file.preview"
-                    class="flex h-[80%] w-[100%] items-center justify-center text-6xl"
+                    v-else
+                    class="flex h-[70%] w-full items-center justify-center text-6xl"
                   >
                     {{ file.icon }}
                   </p>
-
-                  <p
-                    class="w-[100%] overflow-hidden text-nowrap text-xs underline"
-                  >
-                    {{ file.file?.name }} ({{
-                      (file.file?.size / (1024 * 1024)).toFixed(2)
-                    }}
-                    MB)
-                  </p>
                 </div>
-              </div>
-              <div
-                v-show="
-                  isEditMode &&
-                  (selectedFile.length != 0 || tempTaskAttachment?.length != 0)
-                "
-              >
-                <label for="inputFile">
-                  <span
-                    :class="
-                      selectedFile.length + tempTaskAttachment.length >= 10 &&
-                      'opacity-10'
-                    "
-                    class="absolute right-20 hover:cursor-pointer hover:text-blue-400"
-                    ><Upload
-                  /></span>
-                </label>
-              </div>
-              <div
-                v-show="
-                  isEditMode &&
-                  tempTaskAttachment?.length == 0 &&
-                  selectedFile.length == 0
-                "
-                class="flex w-full flex-col items-center justify-center gap-2 p-3"
-              >
-                <div class="z-50 p-2">
-                  <CloudUpload />
-                </div>
-                <label for="inputFile">
-                  <span
-                    class="cursor-pointer text-stone-300 underline hover:text-blue-400"
-                    ref="uploadText"
-                    >Click to upload </span
-                  >or drag and drop
-                </label>
-                <div>Maximum file size 20 MB.</div>
-                <input
-                  id="inputFile"
-                  :disabled="
-                    selectedFile.length + tempTaskAttachment.length >= 10
-                  "
-                  type="file"
-                  @change="handleFileInputChange"
-                  multiple
-                  class="hidden"
-                />
+                <p class="truncate text-xs text-center mt-1">
+                  {{ file.file?.name }} ({{ (file.file?.size / (1024 * 1024)).toFixed(2) }} MB)
+                </p>
               </div>
             </div>
           </div>
         </div>
-          <p class="opacity-0">
-            {{ selectedFile.length + tempTaskAttachment.length }}
-          </p>
-        </div>
 
+        <!-- Footer Buttons -->
         <div class="m-4 flex items-center justify-between gap-3">
-          <!-- <Button message="Upload" @click="submitFile" /> -->
           <div class="ml-12 text-error">{{ errorMessage }}</div>
           <div class="flex flex-row gap-3">
-            <!-- <Button v-show="isEditMode" message="delete file test" @click="() => deleteFileById()"/> -->
             <button
               class="itbkk-button-confirm btn btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
               v-show="isEditMode"
-              @click="
-                () => {
-                  // handleEditTask(), submitFile();
-                  handleSave();
-                }
-              "
+              @click="handleSave"
               :disabled="
                 dataTask.title === '' ||
                 validateInput.assignees ||
@@ -635,7 +559,7 @@ const handleSave = async () => {
                 ((dataTask.assignees ?? '') ===
                   (compareTask?.assignees ?? '') &&
                   (dataTask.description ?? '') ===
-                    (compareTask?.description ?? '') &&
+                  (compareTask?.description ?? '') &&
                   dataTask?.status === compareTask?.status &&
                   (dataTask.title ?? '') === (compareTask?.title ?? '') &&
                   selectedFile.length == 0 &&
@@ -656,6 +580,3 @@ const handleSave = async () => {
     <DeleteTaskModal :index-value="indexValue" @message="handleMessage" />
   </Teleport>
 </template>
-
-<style scoped></style>
-../lib/fetch.js
