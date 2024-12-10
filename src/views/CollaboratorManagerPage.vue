@@ -117,7 +117,6 @@ async function changeAccessInviteCollab() {
       curCollab.value.oid,
       curCollab.value.accessRight,
     );
-    console.log(res);
     if (res.httpStatus === 200) {
       collabStore.updateCollab(curCollab.value.oid, res.data.accessRight);
       emits("message", {
@@ -162,7 +161,7 @@ function revert() {
 
 <template>
   <div class="flex w-full flex-col gap-3">
-    <div class="flex justify-end">
+    <div class="flex px-2 lg:px-0 justify-end">
       <Button
         class="itbkk-collaborato-add"
         bgcolor="#666666"
@@ -171,7 +170,7 @@ function revert() {
         :action="() => (openAddModal = true)"
       />
     </div>
-    <table class="block max-h-[500px] divide-y divide-gray-200 overflow-scroll">
+    <table class="px-2 lg:px-0 w-[99%] lg:w-full  block max-h-[500px] divide-y divide-gray-200 overflow-scroll">
       <tbody class="divide-y divide-gray-300 bg-slate-100">
         <tr class="bg-gray-200">
           <th
@@ -208,7 +207,7 @@ function revert() {
         <tr
           v-for="(collab, index) in collabStore.getCollabs()"
           :key="collab.oid"
-          class="itbkk-item itbkk-button-action"
+          class="itbkk-item itbkk-button-action w-full h-full"
         >
           <td class="px-6 py-4">
             <div class="text-gray-900">{{ index + 1 }}</div>
@@ -239,15 +238,15 @@ function revert() {
             />
           </td>
           <td
-            class="flex items-center justify-center whitespace-nowrap px-4 py-2"
+            class="flex items-center justify-center  px-6 py-4  "
           >
             <Button
               v-if="
                 collab.status === 'ACTIVE' &&
                 collab.oid === UserStore.getUser().oid
               "
-              class="itbkk-button-cancel"
-              bgcolor="#444444"
+              class="itbkk-button-remove"
+              bgcolor="red"
               :action="
                 () =>
                   onModalOpen('LeaveCollabModal', {
@@ -261,7 +260,7 @@ function revert() {
               v-else-if="collab.status === 'ACTIVE'"
               :access="['OWNER']"
               class="itbkk-button-cancel"
-              bgcolor="#444444"
+              bgcolor="red"
               :action="
                 () =>
                   onModalOpen('removeCollabModal', {

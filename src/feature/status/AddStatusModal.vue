@@ -57,7 +57,7 @@ async function addNewStatus() {
       class="fixed top-0 z-[1000] flex h-screen w-screen items-center justify-center backdrop-blur-sm transition-all duration-500"
     >
       <div
-        class="relative h-[38rem] w-[65rem] md:w-[48rem] md:h-[32rem] lg:w-[65rem] lg:h-[30rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
+        class="relative h-max pb-5 w-[90%] md:w-[48rem] md:h-[32rem] lg:w-[65rem] lg:h-[30rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
       >
         <br />
         <div class="ml-6 text-xl">Add Status</div>
@@ -66,7 +66,7 @@ async function addNewStatus() {
 
           <div class="flex flex-col gap-3">
             <div class="flex gap-4">
-              <div class="itbkk-status-name ml-12">Name</div>
+              <div class="itbkk-status-name ml-3 lg:ml-12">Name</div>
               <div class="text-error">
                 {{ validateInput.name ? "(Max 50 characters)" : "" }}
               </div>
@@ -80,7 +80,7 @@ async function addNewStatus() {
             </div>
 
             <div class="flex gap-4">
-              <div class="itbkk-status-description ml-12">Description</div>
+              <div class="itbkk-status-description ml-3 lg:ml-12">Description</div>
               <div class="text-error">
                 {{ validateInput.description ? "(Max 200 characters)" : "" }}
               </div>
@@ -136,7 +136,7 @@ async function addNewStatus() {
             </div>
             <div class="justify-end gap-3 flex md:mt-4 lg:hidden mr-2">
                 <button
-                  class="itbkk-button-comfirm btn btn-success w-16 hover:border-base-100 hover:bg-base-100"
+                  class="itbkk-button-comfirm btn btn-sm lg:btn-md btn-success w-16 hover:border-base-100 hover:bg-base-100"
                   :disabled="
                     newData.name === '' ||
                     validateInput.description ||
@@ -147,7 +147,7 @@ async function addNewStatus() {
                   Save
                 </button>
                 <button
-                  class="itbkk-button-cancle btn text-white"
+                  class="itbkk-button-cancle btn-sm lg:btn-md btn text-white"
                   @click="router.push({ name: 'Status' })"
                 >
                   Cancel

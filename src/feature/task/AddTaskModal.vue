@@ -70,7 +70,7 @@ async function addNewTask(newItem) {
       class="fixed top-0 z-[1000] flex h-screen w-full items-center justify-center backdrop-blur-sm transition-all duration-500"
     >
       <div
-        class="relative h-[43rem] md:h-[30rem] lg:h-[30rem] lg:w-[65rem] overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
+        class="relative w-[90%] pb-5 lg:pb-0  h-[90%] md:h-[30rem] lg:h-[30rem] lg:w-[65rem] overflow-y-scroll lg:overflow-hidden rounded-2xl bg-neutral drop-shadow-2xl"
       >
         <div class="mt-4 flex items-center justify-between px-5">
           <div class="text-xl font-bold">New Task</div>
@@ -78,7 +78,7 @@ async function addNewTask(newItem) {
         <div class="divider m-1"></div>
         <div class="flex flex-col gap-3">
           <div class="flex gap-4">
-            <div class="ml-9">Title</div>
+            <div class="ml-3">Title</div>
             <div class="text-error">
               {{ validateInput.title ? "(Max 100 characters)" : "" }}
             </div>
@@ -86,7 +86,7 @@ async function addNewTask(newItem) {
           <div class="flex justify-center">
             <input
               v-model="taskForm.title"
-              class="itbkk-title h-11 w-[20rem] md:w-[45rem] ml-6 mr-6 md:ml-8 md:mr-8 lg:w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
+              class="itbkk-title h-11 w-[20rem] md:w-[45rem] ml-3 mr-6 md:ml-8 md:mr-8 lg:w-[60rem] rounded-2xl border-base-100 bg-secondary p-2"
             />
           </div>
           <div class="flex flex-col items-center md:items-start md:flex-row md:justify-around">

@@ -14,11 +14,11 @@ const props = defineProps({
 <template>
   <div
     :role="status"
-    class="alert fixed bottom-2 right-2 z-[10000] grid w-fit place-items-center"
+    class="alert flex fixed bottom-2 right-2 z-[10000]  w-fit"
     :class="status === 'success' ? 'alert-success' : 'alert-error'"
   >
     <CorrectIcon v-show="status === 'success'" />
     <ErrorIcon v-show="status === 'error'" />
-    <span class="tbkk-message">{{ message }}</span>
+    <span class="tbkk-message text-xs lg:text-sm">{{ message }}</span>
   </div>
 </template>
