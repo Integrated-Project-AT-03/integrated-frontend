@@ -181,7 +181,7 @@ async function updateStatus() {
           <Button message="Cancel" @click="router.push({ name: 'Status' })" />
         </div>
       </div>
-        <div class="flex justify-end gap-3 lg:hidden mr-2">
+        <div class="flex justify-end gap-3 lg:hidden m-2 md:mr-2">
           <Button
             class="btn-success"
             message="Save"
