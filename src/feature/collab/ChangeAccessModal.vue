@@ -23,7 +23,7 @@ const props = defineProps({
 <template>
   <dialog :id="idModal" class="modal">
     <div
-      class="itbkk-modal-alert flex h-auto w-[35rem] flex-col rounded-lg bg-neutral p-6"
+      class="itbkk-modal-alert flex h-auto w-[90%] lg:w-[35rem]  flex-col rounded-lg bg-neutral p-6"
     >
       <div class="text-2xl font-bold text-slate-300">{{ header }}</div>
       <div class="divider"></div>
