@@ -287,11 +287,11 @@ function revert() {
             />
           </td>
         </tr>
-        <tr></tr>
+
       </tbody>
       <div
         v-show="collabStore.getCollabs().length === 0"
-        class="m-0 bg-white py-3 text-center font-bold text-gray-600"
+        class=" bg-white py-3 w-[474.91px]  lg:w-full  text-center font-bold text-gray-600"
       >
         No Collaborator
       </div>
