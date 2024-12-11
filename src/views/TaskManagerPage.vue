@@ -177,7 +177,7 @@ const openTask = (index, id) => {
         <div class="flex w-full px-2 lg:w-max lg:px-0 items-center gap-2 md:gap-2">
           <label class="relative flex-auto lg:w-max flex flex-col gap-2">
             <input
-              class="itbkk-status-filter w-full  lg:w-[200px] flex-auto sm:w-[300px] rounded-md border p-2 text-gray-900"
+              class="itbkk-status-filter w-full  lg:w-[200px] flex-auto  rounded-md border p-2 text-gray-900"
               type="text"
               v-model="newItem"
               @keyup.enter="addItem"
@@ -211,9 +211,9 @@ const openTask = (index, id) => {
           />
         </div>
       </div>
-      <div class="flex flex-col md:flex-row items-center lg:justify-end gap-2 lg:gap-4">
-        <div class="flex px-2 lg:px-0 flex-col lg:flex-row w-full  items-center gap-2">
-          <div class=" hidden lg:flex cursor-pointer gap-5">
+      <div class="flex flex-col lg:flex-row items-start lg:items-center  lg:justify-end gap-2 lg:gap-4">
+        <div class="flex px-2 lg:px-0 flex-col lg:flex-row w-full justify-center items-center gap-2">
+          <div class=" hidden lg:flex justify-center cursor-pointer gap-5"> 
             <EmptyElement
               onclick="visibilityModal.showModal()"
               v-show="showOwnerButton"

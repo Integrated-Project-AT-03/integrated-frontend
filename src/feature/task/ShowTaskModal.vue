@@ -174,7 +174,6 @@ const processFiles = (files) => {
       break;
     }
 
-
     // Determine thumbnail based on file type
     const fileExtension = file.name.split(".").pop().toLowerCase();
     let preview = null;
@@ -305,13 +304,11 @@ const handleSave = async () => {
   } else if (resEditTask.httpStatus === 400) {
     return emits("message", {
       description: `On over limit, provide an appropriate message. The status ${
-        statuses.value.find(({ id }) => +id === +dataTask.value.status)
-          .name
+        statuses.value.find(({ id }) => +id === +dataTask.value.status).name
       }  will have too many tasks.  Please make progress and update status of existing tasks first.`,
       status: "error",
     });
   } else {
-    console.log(resEditTask.httpStatus);
     emits("message", {
       description: `something went wrong, please try again`,
       status: "error",
@@ -327,22 +324,22 @@ const handleSave = async () => {
     >
       <RouterView @message="handleMessage($event)" />
       <div
-        class="relative h-auto w-[65rem] rounded-2xl bg-neutral drop-shadow-2xl"
+        class="relative h-[95%] w-[90%] overflow-y-scroll rounded-2xl bg-neutral drop-shadow-2xl lg:h-auto lg:w-[65rem] lg:overflow-hidden"
       >
         <Loading :is-loading="isLoading" />
         <div
-          class="ml-6 mt-2 flex items-center justify-between pr-5 pt-2 text-xl font-bold text-slate-200"
+          class="ml-6 mt-2  flex items-center justify-between gap-3 pr-5 pt-2 font-bold text-slate-200"
         >
-          <div class="flex flex-col items-center gap-2">
-            <div class="text-sm text-error">
+          <div class="flex w-full flex-col items-center gap-2">
+            <div class="hidden text-sm text-error lg:block">
               {{ validateInput.title ? "Max 100 characters" : "" }}
             </div>
             <input
               :disabled="!isEditMode"
-              class="itbkk-title w-[50rem]"
+              class="itbkk-title w-full h-[80%] text-sm lg:h-full lg:w-full lg:text-xl"
               :class="
                 isEditMode
-                  ? 'h-11 w-[40rem] rounded-2xl border-base-100 bg-secondary p-2'
+                  ? 'h-11 rounded-2xl border-base-100 bg-secondary p-2'
                   : 'bg-neutral hover:border-neutral'
               "
               type="text"
@@ -350,7 +347,7 @@ const handleSave = async () => {
             />
           </div>
 
-          <div class="flex items-center gap-4">
+          <div class="flex h-full items-center gap-1 lg:gap-4">
             <Button
               :bgcolor="!isEditMode ? '#A020F0' : '#ef4444'"
               :message="route.params.mode !== 'edit' ? 'Edit mode' : 'Reset'"
@@ -381,7 +378,9 @@ const handleSave = async () => {
           </div>
         </div>
         <div class="divider m-1"></div>
-        <div class="m-4 flex justify-around">
+        <div
+          class="m-4 flex flex-col justify-around gap-2 lg:flex-row lg:gap-0"
+        >
           <div class="flex flex-col gap-2 text-slate-200">
             <div class="flex gap-4">
               <div>Description</div>
@@ -393,7 +392,7 @@ const handleSave = async () => {
               :disabled="!isEditMode"
               v-model.trim="dataTask.description"
               :placeholder="dataTask.description ?? 'No Description Provided'"
-              class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-stone-600 p-4 placeholder:italic placeholder:text-gray-400"
+              class="itbkk-description h-[16em] w-full rounded-2xl border border-base-100 bg-stone-600 p-4 placeholder:italic placeholder:text-gray-400 lg:w-[35rem]"
             ></textarea>
           </div>
           <div class="flex flex-col gap-2">
@@ -408,7 +407,7 @@ const handleSave = async () => {
                 :disabled="!isEditMode"
                 :placeholder="dataTask.assignees ?? 'Unassigned'"
                 v-model.trim="dataTask.assignees"
-                class="itbkk-assignees input w-[20rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
+                class="itbkk-assignees input w-full rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400 lg:w-[20rem]"
               />
             </div>
 
@@ -428,19 +427,17 @@ const handleSave = async () => {
                 <span
                   class="font-bold"
                   :class="
-              settingStore.getLimitTask().enableLimitsTask
-                ? 'text-success'
-                : 'text-error'
-            "
+                    settingStore.getLimitTask().enableLimitsTask
+                      ? 'text-success'
+                      : 'text-error'
+                  "
                 >
-
-            {{
+                  {{
                     settingStore.getLimitTask().enableLimitsTask
                       ? "Enable"
                       : "Disable"
                   }}
-
-          </span>
+                </span>
               </div>
             </div>
             <div
@@ -468,10 +465,10 @@ const handleSave = async () => {
           </div>
         </div>
 
-        <div class="flex h-auto w-auto justify-center">
+        <div class="flex h-auto w-full justify-center">
           <div
             v-show="!isEditMode && dataTask?.tasksAttachment?.length !== 0"
-            class="h-auto w-[59rem] overflow-x-auto rounded-3xl bg-stone-600 p-4"
+            class="h-auto w-full  lg:w-[59rem] overflow-x-auto rounded-3xl bg-stone-600 p-4"
           >
             <div class="flex gap-3">
               <div
@@ -488,129 +485,133 @@ const handleSave = async () => {
 
           <div
             v-show="!isEditMode && dataTask?.tasksAttachment?.length === 0"
-            class="flex h-[10rem] w-[59rem] items-center justify-center gap-3 rounded-3xl bg-stone-600 font-bold"
+            class="flex h-[10rem] mx-auto w-[95%]  items-center justify-center  rounded-3xl bg-stone-600 font-bold"
           >
             <div>No files</div>
           </div>
-          
-          <div class="flex flex-col gap-2">
-          <div v-show="isEditMode" class="w-full flex justify-end">{{ selectedFile?.length + tempTaskAttachment.length}} / 10</div>
-          <!-- <div>อัปโหลดแล้ว ละกำลังจะลบออก</div> -->
-          <div
-            v-show="isEditMode"
-            class="h-[12rem] w-[59rem] overflow-x-auto overflow-y-hidden rounded-3xl border-2 border-dashed bg-stone-600 p-4"
-            @dragover.prevent
-            @drop.prevent="handleDrop"
-          >
-            <div class="flex gap-3">
-              <div
-                v-show="isEditMode"
-                v-for="taskAttachment in tempTaskAttachment"
-              >
-                <BoxAttachment
-                  :attachment="taskAttachment"
-                  @delete-file="handleDeleteFile"
-                  :isEditMode="isEditMode"
-                />
-              </div>
-              <div
-                v-for="file in selectedFile"
-                :key="file.name"
-                class="h-45 w-[8rem] rounded-2xl"
-              >
-                <div
-                  class="flex h-[10rem] w-[8rem] cursor-pointer flex-col justify-between rounded-lg bg-stone-500 p-3"
-                >
-                  <div class="z-50 flex justify-end">
-                    <button class="delete-btn" @click="tempDelete(file.name)">
-                      <Xmark />
-                    </button>
-                  </div>
-                  <img
-                    class="h-[80%] w-[100%] object-cover"
-                    v-show="file.preview"
-                    :src="file.preview"
-                    alt="File thumbnail"
-                  />
-                  <p
-                    v-show="!file.preview"
-                    class="flex h-[80%] w-[100%] items-center justify-center text-6xl"
-                  >
-                    {{ file.icon }}
-                  </p>
 
-                  <p
-                    class="w-[100%] overflow-hidden text-nowrap text-xs underline"
+          <div v-show="isEditMode" class="flex flex-col w-[95%] gap-2">
+            <div  class="flex w-full justify-end">
+              {{ selectedFile?.length + tempTaskAttachment.length }} / 10
+            </div>
+            <!-- <div>อัปโหลดแล้ว ละกำลังจะลบออก</div> -->
+            <div
+              v-show="isEditMode"
+              class="h-[12rem] min-w-full lg:w-[59rem] overflow-x-auto overflow-y-hidden rounded-3xl border-2 border-dashed bg-stone-600 p-4"
+              @dragover.prevent
+              @drop.prevent="handleDrop"
+            >
+              <div class="flex gap-3">
+                <div
+                  v-show="isEditMode"
+                  v-for="taskAttachment in tempTaskAttachment"
+                >
+                  <BoxAttachment
+                    :attachment="taskAttachment"
+                    @delete-file="handleDeleteFile"
+                    :isEditMode="isEditMode"
+                  />
+                </div>
+                <div
+                  v-for="file in selectedFile"
+                  :key="file.name"
+                  class="h-45 w-[8rem] rounded-2xl"
+                >
+                  <div
+                    class="flex h-[10rem] w-[8rem] cursor-pointer flex-col justify-between rounded-lg bg-stone-500 p-3"
                   >
-                    {{ file.file?.name }} ({{
-                      (file.file?.size / (1024 * 1024)).toFixed(2)
-                    }}
-                    MB)
-                  </p>
+                    <div class="z-50 flex justify-end">
+                      <button class="delete-btn" @click="tempDelete(file.name)">
+                        <Xmark />
+                      </button>
+                    </div>
+                    <img
+                      class="h-[80%] w-[100%] object-cover"
+                      v-show="file.preview"
+                      :src="file.preview"
+                      alt="File thumbnail"
+                    />
+                    <p
+                      v-show="!file.preview"
+                      class="flex h-[80%] w-[100%] items-center justify-center text-6xl"
+                    >
+                      {{ file.icon }}
+                    </p>
+
+                    <p
+                      class="w-[100%] overflow-hidden text-nowrap text-xs underline"
+                    >
+                      {{ file.file?.name }} ({{
+                        (file.file?.size / (1024 * 1024)).toFixed(2)
+                      }}
+                      MB)
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div
-                v-show="
-                  isEditMode &&
-                  (selectedFile.length !== 0 || tempTaskAttachment?.length !== 0)
-                "
-              >
-                <label for="inputFile">
-                  <span
-                    :class="
-                      selectedFile.length + tempTaskAttachment.length >= 10 &&
-                      'opacity-10'
-                    "
-                    class="absolute right-20 hover:cursor-pointer hover:text-blue-400"
-                    ><Upload
-                  /></span>
-                </label>
-              </div>
-              <div
-                v-show="
-                  isEditMode &&
-                  tempTaskAttachment?.length == 0 &&
-                  selectedFile.length == 0
-                "
-                class="flex w-full flex-col items-center justify-center gap-2 p-3"
-              >
-                <div class="z-50 p-2">
-                  <CloudUpload />
-                </div>
-                <label for="inputFile">
-                  <span
-                    class="cursor-pointer text-stone-300 underline hover:text-blue-400"
-                    ref="uploadText"
-                    >Click to upload </span
-                  >or drag and drop
-                </label>
-                <div>Maximum file size 20 MB.</div>
-                <input
-                  id="inputFile"
-                  :disabled="
-                    selectedFile.length + tempTaskAttachment.length >= 10
+                <div
+                  v-show="
+                    isEditMode &&
+                    (selectedFile.length !== 0 ||
+                      tempTaskAttachment?.length !== 0)
                   "
-                  type="file"
-                  @change="handleFileInputChange"
-                  multiple
-                  class="hidden"
-                />
+                >
+                  <label for="inputFile">
+                    <span
+                      :class="
+                        selectedFile.length + tempTaskAttachment.length >= 10 &&
+                        'opacity-10'
+                      "
+                      class="absolute right-5 hover:cursor-pointer hover:text-blue-400"
+                      ><Upload
+                    /></span>
+                  </label>
+                </div>
+                <div
+                  v-show="
+                    isEditMode &&
+                    tempTaskAttachment?.length == 0 &&
+                    selectedFile.length == 0
+                  "
+                  class="flex w-full flex-col items-center justify-center gap-2 p-3"
+                >
+                  <div class="z-50 p-2">
+                    <CloudUpload />
+                  </div>
+                  <label for="inputFile">
+                    <span
+                      class="cursor-pointer text-stone-300 underline hover:text-blue-400"
+                      ref="uploadText"
+                      >Click to upload </span
+                    >or drag and drop
+                  </label>
+                  <div>Maximum file size 20 MB.</div>
+                  <input
+                    id="inputFile"
+                    :disabled="
+                      selectedFile.length + tempTaskAttachment.length >= 10
+                    "
+                    type="file"
+                    @change="handleFileInputChange"
+                    multiple
+                    class="hidden"
+                  />
+                </div>
               </div>
             </div>
+            <div class="block text-xs ml-1 mt-1 lg:hidden text-error">{{ errorMessage }}</div>
           </div>
-        </div>
-          <p class="opacity-0">
-            {{ selectedFile.length + tempTaskAttachment.length }}
-          </p>
+<!--          <p class="opacity-0">-->
+<!--            {{ selectedFile.length + tempTaskAttachment.length }}-->
+<!--          </p>-->
         </div>
 
         <div class="m-4 flex items-center justify-between gap-3">
           <!-- <Button message="Upload" @click="submitFile" /> -->
-          <div class="ml-12 text-error">{{ errorMessage }}</div>
+          <div class="ml-12 hidden lg:block text-error">{{ errorMessage }}</div>
           <div class="flex flex-row gap-3">
             <!-- <Button v-show="isEditMode" message="delete file test" @click="() => deleteFileById()"/> -->
             <button
-              class="itbkk-button-confirm btn btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
+              class="itbkk-button-confirm btn btn-sm lg:btn-md btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
               v-show="isEditMode"
               @click="
                 () => {

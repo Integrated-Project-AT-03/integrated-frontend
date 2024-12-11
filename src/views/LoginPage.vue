@@ -53,12 +53,12 @@ onBeforeUnmount(() => {
 
       <div v-if="!isMobile"
         class="flex h-[40rem] w-[35rem] items-center justify-center overflow-hidden rounded-2xl bg-[#3F3D3C]">
-        <div class="h-[37rem] w-[32rem] rounded-2xl bg-[#333333]">
+        <div class="h-[37rem] md:w-[24rem] lg:w-[32rem] rounded-2xl bg-[#333333]">
           <div class="flex flex-col p-10">
             <div class="text-3xl font-bold">Plan Track Achieve</div>
             <div class="ml-6 text-2xl font-bold">-One Task at a Time.</div>
           </div>
-          <div class="mr-3 flex justify-end">
+          <div class="md:pl-8 lg:mr-3 lg:p-0 flex justify-end">
             <Logo />
           </div>
         </div>

@@ -19,7 +19,7 @@ const handleConfirm = async () => {
 <template>
   <dialog id="visibilityModal" class="modal">
     <div
-      class="itbkk-modal-alert flex h-auto w-[34rem] flex-col rounded-lg bg-neutral p-6"
+      class="itbkk-modal-alert flex h-auto w-[90%] lg:w-[34rem] flex-col rounded-lg bg-neutral p-6"
     >
       <div class="text-2xl font-bold text-slate-300">
         Board visibility changed!

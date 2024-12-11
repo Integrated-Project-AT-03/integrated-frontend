@@ -96,7 +96,7 @@ async function updateStatus() {
     class="fixed right-0 top-0 z-[1000] flex h-screen w-full items-center justify-center backdrop-blur-sm transition-all duration-500"
   >
     <Loading :is-loading="isLoading" />
-    <div class="h-[42rem] md:h-[35rem] md:w-[50rem] lg:h-[30rem] lg:w-[65rem] overflow-hidden rounded-2xl bg-neutral">
+    <div class="h-[90%] w-[90%] overflow-y-scroll pb-5 lg:pb-0 md:h-[35rem] md:w-[50rem] lg:h-[30rem] lg:w-[65rem] lg:overflow-hidden rounded-2xl bg-neutral">
       <div class="ml-6 mt-4 text-xl">Edit Status</div>
       <div class="divider"></div>
       <div class="itbkk-modal-status flex flex-col items-center gap-4">
@@ -146,7 +146,7 @@ async function updateStatus() {
       </div>
       <div class="divider"></div>
       <div class="flex w-full items-center justify-between px-10">
-        <div class="color-picker-container flex flex-wrap items-center gap-6">
+        <div class="color-picker-container mb-3 lg:mb-0 flex flex-wrap items-center gap-6">
           <div>Color Tag :</div>
           <div
             v-for="color in colorStore.getColors()"
@@ -181,7 +181,7 @@ async function updateStatus() {
           <Button message="Cancel" @click="router.push({ name: 'Status' })" />
         </div>
       </div>
-        <div class="flex justify-end gap-3 lg:hidden mr-2">
+        <div class="flex justify-end gap-3 lg:hidden m-2 md:mr-2">
           <Button
             class="btn-success"
             message="Save"

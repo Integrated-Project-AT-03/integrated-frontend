@@ -75,7 +75,7 @@ const handleMessage = (e) => {
 <template>
   <div class="flex w-full flex-col gap-2">
     <!-- :class="$route.fullPath.split('/').length > 3 ? 'blur-sm' : ''" -->
-    <div class="flex w-full items-center justify-between">
+    <div class="flex px-2 lg:px-0 w-full items-center justify-between">
       <div class="flex flex-col gap-3">
         <div>
           The limit status : {{" "}}
@@ -108,7 +108,7 @@ const handleMessage = (e) => {
       </div>
     </div>
 
-    <table class="block max-h-[500px] divide-y divide-gray-200 overflow-scroll">
+    <table class=" px-2 lg:px-0 block max-h-[500px] divide-y divide-gray-200 w-[98%] lg:w-full overflow-scroll ">
       <tbody class="divide-y divide-gray-300 bg-slate-100">
         <tr class="bg-gray-200">
           <th
@@ -219,7 +219,7 @@ const handleMessage = (e) => {
               >
                 <button
                   :disabled="!access"
-                  class="itbkk-button-delete btn btn-error tooltip-left p-1 text-white disabled:bg-error"
+                  class="itbkk-button-delete btn btn-sm lg:btn-md btn-error tooltip-left p-1 text-white disabled:bg-error"
                   @click="() => (sourceStatus = { name, id, index })"
                   onclick="deleteModal.showModal()"
                 >

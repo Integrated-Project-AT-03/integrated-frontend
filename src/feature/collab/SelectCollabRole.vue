@@ -24,7 +24,7 @@ const emits = defineEmits(["openConfirmModal"]);
             accessRight: target.value,
           })
       "
-      class="itbkk-access-right select select-ghost w-full max-w-xs bg-[#444444]"
+      class="itbkk-access-right select select-sm lg:select-md select-ghost w-full max-w-xs bg-[#444444]"
     >
       <option value="READ">Read</option>
       <option value="WRITE">Write</option>
