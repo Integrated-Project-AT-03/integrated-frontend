@@ -30,7 +30,7 @@ async function onSubmit() {
 }
 
 async function redirectLoginMicrosoft() {
-  window.location.href = await loginMicrosoft();
+  loginMicrosoft();
 }
 
 

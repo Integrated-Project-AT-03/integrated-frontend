@@ -32,7 +32,7 @@ function handleMenu(e) {
 
 const logout = async () => {
   if (userStore.getUser().platform === "MICROSOFT") {
-    document.location.href = await logoutMicrosoft();
+    logoutMicrosoft();
   } else {
     await logoutApi();
     router.push({ name: "login" });

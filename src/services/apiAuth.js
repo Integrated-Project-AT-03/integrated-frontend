@@ -17,22 +17,11 @@ export async function login(user) {
 }
 
 export async function loginMicrosoft() {
-  try {
-    const res = await fetch(`${uri}/auth/misl/login`)
-    return await res.text();
-
-  } catch (error) {
-    console.error(`error: ${error}`);
-  }
+  document.location.href = `${uri}/auth/misl/login`
 }
-export async function logoutMicrosoft() {
-  try {
-    const res = await fetch(`${uri}/auth/misl/logout`)
-    return await res.text();
 
-  } catch (error) {
-    console.error(`error: ${error}`);
-  }
+export async function logoutMicrosoft() {
+    document.location.href = `${uri}/auth/misl/logout`
 }
 
 export async function logout() {
@@ -119,4 +108,5 @@ export async function fetchWithRefresh(url, options) {
     console.error(`error: ${error.message}`);
     return { error: error.message };
   }
+
 }
