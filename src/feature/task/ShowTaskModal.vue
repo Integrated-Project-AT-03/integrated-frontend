@@ -91,7 +91,7 @@ const handleEditTask = async () => {
     (dataTask.value.title === "" &&
       dataTask.value.description === "" &&
       dataTask.value.description === "",
-    dataTask.value.assignees === "" &&
+      dataTask.value.assignees === "" &&
       Object.values(dataTask.value.status).length === 0 &&
       dataTask.value.boardNanoId === route.params.oid)
   ) {
@@ -304,10 +304,9 @@ const handleSave = async () => {
     taskStore.deleteTask(route.params.id);
   } else if (resEditTask.httpStatus === 400) {
     return emits("message", {
-      description: `On over limit, provide an appropriate message. The status ${
-        statuses.value.find(({ id }) => +id === +dataTask.value.status)
-          .name
-      }  will have too many tasks.  Please make progress and update status of existing tasks first.`,
+      description: `On over limit, provide an appropriate message. The status ${statuses.value.find(({ id }) => +id === +dataTask.value.status)
+        .name
+        }  will have too many tasks.  Please make progress and update status of existing tasks first.`,
       status: "error",
     });
   } else {
@@ -323,79 +322,70 @@ const handleSave = async () => {
 <template>
   <Teleport to="body">
     <div
-      class="fixed top-0 z-[1000] flex h-screen w-full items-center justify-center backdrop-blur-sm transition-all duration-500"
-    >
+      class="fixed top-0 z-[1000] flex h-screen w-full items-center justify-center backdrop-blur-sm transition-all duration-500">
       <RouterView @message="handleMessage($event)" />
       <div
-        class="relative h-auto w-[65rem] rounded-2xl bg-neutral drop-shadow-2xl"
-      >
+        class="relative h-max w-[95%] max-w-[22rem] sm:max-w-[60rem] rounded-2xl bg-neutral drop-shadow-2xl p-5 overflow-y-auto">
         <Loading :is-loading="isLoading" />
-        <div
-          class="ml-6 mt-2 flex items-center justify-between pr-5 pt-2 text-xl font-bold text-slate-200"
-        >
-          <div class="flex flex-col items-center gap-2">
-            <div class="text-sm text-error">
-              {{ validateInput.title ? "Max 100 characters" : "" }}
+
+
+        <!-- Title Section -->
+        <div class="ml-1 mt-2 flex items-center justify-between pr-5 pt-2 text-lg sm:text-xl font-bold text-slate-200">
+          <div class="flex items-center justify-between w-full gap-2 sm:gap-4">
+            <!-- Task Title -->
+            <div class="flex flex-col items-center gap-2 flex-1">
+              <div class="text-sm text-error">
+                {{ validateInput.title ? "Max 100 characters" : "" }}
+              </div>
+              <input :disabled="!isEditMode" class="itbkk-title w-full " :class="isEditMode
+                ? 'h-10 w-full rounded-2xl border-base-100 bg-secondary p-2'
+                : 'bg-neutral hover:border-neutral'" type="text" v-model.trim="dataTask.title" />
             </div>
-            <input
-              :disabled="!isEditMode"
-              class="itbkk-title w-[50rem]"
-              :class="
-                isEditMode
-                  ? 'h-11 w-[40rem] rounded-2xl border-base-100 bg-secondary p-2'
-                  : 'bg-neutral hover:border-neutral'
-              "
-              type="text"
-              v-model.trim="dataTask.title"
-            />
-          </div>
 
-          <div class="flex items-center gap-4">
-            <Button
-              :bgcolor="!isEditMode ? '#A020F0' : '#ef4444'"
-              :message="route.params.mode !== 'edit' ? 'Edit mode' : 'Reset'"
-              :action="() => handleEdit()"
-              :access="['WRITER']"
-            />
+            <!-- Buttons -->
+            <div class="flex items-center gap-2 sm:gap-4">
+              <Button :bgcolor="!isEditMode ? '#A020F0' : '#ef4444'"
+                :message="route.params.mode !== 'edit' ? 'Edit mode' : 'Reset'" :action="() => handleEdit()"
+                :access="['WRITER']" />
 
-            <div
-              data-tip="You need to be board owner or has write access to perform this action."
-              :class="
-                !['WRITER', 'OWNER'].includes(
-                  boardStore.getCurrentBoard()?.access,
-                ) && 'tooltip'
-              "
-            >
-              <button
-                :disabled="
-                  !['WRITER', 'OWNER'].includes(
-                    boardStore.getCurrentBoard()?.access,
-                  )
-                "
+            </div>
+
+
+
+            <div data-tip="You need to be board owner or has write access to perform this action."
+              :class="!['WRITER', 'OWNER'].includes(boardStore.getCurrentBoard()?.access) && 'tooltip'">
+              <button :disabled="!['WRITER', 'OWNER'].includes(boardStore.getCurrentBoard()?.access)"
                 onclick="deletetask.showModal()"
-                class="btn btn-ghost btn-xs h-max w-max p-2 text-error"
-              >
+                class="btn btn-ghost btn-xs sm:btn-sm h-max w-max p-1 sm:p-2 text-error">
                 <Trash />
               </button>
             </div>
           </div>
         </div>
-        <div class="divider m-1"></div>
-        <div class="m-4 flex justify-around">
-          <div class="flex flex-col gap-2 text-slate-200">
-            <div class="flex gap-4">
-              <div>Description</div>
-              <div class="text-sm text-error">
-                {{ validateInput.description ? "(Max 500 characters)" : "" }}
+
+        <div class="divider my-4"></div>
+
+
+
+
+        <div class="m-4 flex flex-wrap justify-between gap-4">
+          <!-- Description Section -->
+          <div class="flex-1 min-w-[100%] sm:min-w-[50%]">
+            <label class="block text-slate-200">
+              <div class="flex justify-between">
+                <span>Description</span>
+                <span class="text-sm text-error">
+                  {{ validateInput.description ? "(Max 500 characters)" : "" }}
+                </span>
               </div>
-            </div>
-            <textarea
-              :disabled="!isEditMode"
-              v-model.trim="dataTask.description"
-              :placeholder="dataTask.description ?? 'No Description Provided'"
-              class="itbkk-description h-[16em] w-[35rem] rounded-2xl border border-base-100 bg-stone-600 p-4 placeholder:italic placeholder:text-gray-400"
-            ></textarea>
+              <textarea :disabled="!isEditMode" v-model.trim="dataTask.description"
+                :placeholder="dataTask.description ?? 'No Description Provided'"
+                class="itbkk-description w-full h-[8em] sm:h-[12em] rounded-2xl border border-base-100 bg-stone-600 p-4 placeholder:italic placeholder:text-gray-400 resize-none"></textarea>
+            </label>
           </div>
+
+
+          <!-- Right Column -->
           <div class="flex flex-col gap-2">
             <div class="flex flex-col gap-2 text-slate-200">
               <div class="flex gap-4">
@@ -404,48 +394,36 @@ const handleSave = async () => {
                   {{ validateInput.assignees ? "(Max 30 characters" : "" }}
                 </div>
               </div>
-              <input
-                :disabled="!isEditMode"
-                :placeholder="dataTask.assignees ?? 'Unassigned'"
+              <input :disabled="!isEditMode" :placeholder="dataTask.assignees ?? 'Unassigned'"
                 v-model.trim="dataTask.assignees"
-                class="itbkk-assignees input w-[20rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400"
-              />
+                class="itbkk-assignees input w-[18rem] rounded-2xl border border-base-100 bg-secondary p-4 placeholder:italic placeholder:text-gray-400" />
             </div>
 
             <div class="flex flex-col gap-2 text-slate-200">
               <div>Status</div>
-              <select
-                :disabled="!isEditMode"
-                v-model="dataTask.status"
-                class="itbkk-status select w-full max-w-xs bg-base-100"
-              >
+              <select :disabled="!isEditMode" v-model="dataTask.status"
+                class="itbkk-status select w-full max-w-xs bg-base-100">
                 <option v-for="status in statuses" :value="status.id">
                   {{ status.name }}
                 </option>
               </select>
               <div class="mt-2">
                 The limit status :
-                <span
-                  class="font-bold"
-                  :class="
-              settingStore.getLimitTask().enableLimitsTask
-                ? 'text-success'
-                : 'text-error'
-            "
-                >
+                <span class="font-bold" :class="settingStore.getLimitTask().enableLimitsTask
+                  ? 'text-success'
+                  : 'text-error'  
+                  ">
 
-            {{
+                  {{
                     settingStore.getLimitTask().enableLimitsTask
                       ? "Enable"
                       : "Disable"
                   }}
 
-          </span>
+                </span>
               </div>
             </div>
-            <div
-              class="mt-3 flex flex-col justify-between gap-3 pb-3 text-xs text-slate-200"
-            >
+            <div class="mt-3 flex flex-col justify-between gap-3 pb-3 text-xs text-slate-200">
               <div class="flex gap-2">
                 TimeZone:
                 <div class="itbkk-timezone">
@@ -467,141 +445,72 @@ const handleSave = async () => {
             </div>
           </div>
         </div>
+        <div class="divider my-4"></div>
 
-        <div class="flex h-auto w-auto justify-center">
-          <div
-            v-show="!isEditMode && dataTask?.tasksAttachment?.length !== 0"
-            class="h-auto w-[59rem] overflow-x-auto rounded-3xl bg-stone-600 p-4"
-          >
-            <div class="flex gap-3">
-              <div
-                v-show="!isEditMode"
-                v-for="taskAttachment in dataTask?.tasksAttachment"
-              >
-                <BoxAttachment
-                  :attachment="taskAttachment"
-                  :isEditMode="isEditMode"
-                />
-              </div>
+        <!-- File Upload Section -->
+        <div class="flex flex-col gap-2 w-full">
+          <div v-if="!isEditMode"
+            class="h-[10rem] sm:h-[12rem] w-full rounded-3xl bg-stone-600 relative flex items-center justify-center">
+            <div v-if="dataTask?.tasksAttachment?.length === 0" class="text-gray-400 font-bold">
+              No files
+            </div>
+            <div v-else class="flex w-full overflow-x-auto gap-3 p-2">
+              <BoxAttachment v-for="taskAttachment in dataTask?.tasksAttachment" :key="taskAttachment.id"
+                :attachment="taskAttachment" :isEditMode="false" />
             </div>
           </div>
 
-          <div
-            v-show="!isEditMode && dataTask?.tasksAttachment?.length === 0"
-            class="flex h-[10rem] w-[59rem] items-center justify-center gap-3 rounded-3xl bg-stone-600 font-bold"
-          >
-            <div>No files</div>
-          </div>
-          
-          <div class="flex flex-col gap-2">
-          <div v-show="isEditMode" class="w-full flex justify-end">{{ selectedFile?.length + tempTaskAttachment.length}} / 10</div>
-          <!-- <div>อัปโหลดแล้ว ละกำลังจะลบออก</div> -->
-          <div
-            v-show="isEditMode"
-            class="h-[12rem] w-[59rem] overflow-x-auto overflow-y-hidden rounded-3xl border-2 border-dashed bg-stone-600 p-4"
-            @dragover.prevent
-            @drop.prevent="handleDrop"
-          >
-            <div class="flex gap-3">
-              <div
-                v-show="isEditMode"
-                v-for="taskAttachment in tempTaskAttachment"
-              >
-                <BoxAttachment
-                  :attachment="taskAttachment"
-                  @delete-file="handleDeleteFile"
-                  :isEditMode="isEditMode"
-                />
-              </div>
-              <div
-                v-for="file in selectedFile"
-                :key="file.name"
-                class="h-45 w-[8rem] rounded-2xl"
-              >
-                <div
-                  class="flex h-[10rem] w-[8rem] cursor-pointer flex-col justify-between rounded-lg bg-stone-500 p-3"
-                >
-                  <div class="z-50 flex justify-end">
-                    <button class="delete-btn" @click="tempDelete(file.name)">
-                      <Xmark />
-                    </button>
-                  </div>
-                  <img
-                    class="h-[80%] w-[100%] object-cover"
-                    v-show="file.preview"
-                    :src="file.preview"
-                    alt="File thumbnail"
-                  />
-                  <p
-                    v-show="!file.preview"
-                    class="flex h-[80%] w-[100%] items-center justify-center text-6xl"
-                  >
+          <div v-else
+            class="h-[10rem] sm:h-[12rem] w-full rounded-3xl bg-stone-600 relative border-dashed border-2 border-gray-500"
+            @dragover.prevent @drop.prevent="handleDrop">
+            <div class="absolute top-[-1.5rem] right-2 text-sm text-gray-300">
+              {{ selectedFile.length + tempTaskAttachment.length }} / 10
+            </div>
+            <label for="inputFile" v-show="selectedFile.length + tempTaskAttachment.length > 0"
+              class="absolute top-2 right-2 cursor-pointer text-stone-300 hover:text-blue-400">
+              <Upload />
+              <input id="inputFile" type="file" multiple @change="handleFileInputChange" class="hidden"
+                :disabled="selectedFile.length + tempTaskAttachment.length >= 10" />
+            </label>
+
+            <div v-if="selectedFile.length + tempTaskAttachment.length === 0"
+              class="flex flex-col items-center justify-center h-full">
+              <CloudUpload />
+              <label class="text-stone-300">
+                <span for="inputFile" class="cursor-pointer underline hover:text-blue-400">Click to upload</span>
+                <span> or drag and drop</span>
+                <input id="inputFile" type="file" multiple @change="handleFileInputChange" class="hidden"
+                  :disabled="selectedFile.length + tempTaskAttachment.length >= 10" />
+              </label>
+
+              <div>Maximum file size 20 MB.</div>
+              <input id="inputFile" type="file" multiple @change="handleFileInputChange" class="hidden"
+                :disabled="selectedFile.length + tempTaskAttachment.length >= 10" />
+            </div>
+
+            <div v-else class="flex w-full overflow-x-auto gap-3 p-2">
+              <BoxAttachment v-for="taskAttachment in tempTaskAttachment" :key="taskAttachment.id"
+                :attachment="taskAttachment" @delete-file="handleDeleteFile" :isEditMode="true" />
+
+              <div v-for="file in selectedFile" :key="file.name"
+                class="h-[8rem] w-[7rem] flex-shrink-0 rounded-2xl bg-stone-500 p-2">
+                <div class="relative">
+                  <button class="absolute top-0 right-0 p-1 text-white bg-red-500 rounded-full"
+                    @click="tempDelete(file.name)">
+                    <Xmark />
+                  </button>
+                  <img v-if="file.preview" :src="file.preview" class="h-[70%] w-full object-cover rounded-lg"
+                    alt="File preview" />
+                  <p v-else class="flex h-[70%] w-full items-center justify-center text-6xl">
                     {{ file.icon }}
                   </p>
-
-                  <p
-                    class="w-[100%] overflow-hidden text-nowrap text-xs underline"
-                  >
-                    {{ file.file?.name }} ({{
-                      (file.file?.size / (1024 * 1024)).toFixed(2)
-                    }}
-                    MB)
-                  </p>
                 </div>
-              </div>
-              <div
-                v-show="
-                  isEditMode &&
-                  (selectedFile.length !== 0 || tempTaskAttachment?.length !== 0)
-                "
-              >
-                <label for="inputFile">
-                  <span
-                    :class="
-                      selectedFile.length + tempTaskAttachment.length >= 10 &&
-                      'opacity-10'
-                    "
-                    class="absolute right-20 hover:cursor-pointer hover:text-blue-400"
-                    ><Upload
-                  /></span>
-                </label>
-              </div>
-              <div
-                v-show="
-                  isEditMode &&
-                  tempTaskAttachment?.length == 0 &&
-                  selectedFile.length == 0
-                "
-                class="flex w-full flex-col items-center justify-center gap-2 p-3"
-              >
-                <div class="z-50 p-2">
-                  <CloudUpload />
-                </div>
-                <label for="inputFile">
-                  <span
-                    class="cursor-pointer text-stone-300 underline hover:text-blue-400"
-                    ref="uploadText"
-                    >Click to upload </span
-                  >or drag and drop
-                </label>
-                <div>Maximum file size 20 MB.</div>
-                <input
-                  id="inputFile"
-                  :disabled="
-                    selectedFile.length + tempTaskAttachment.length >= 10
-                  "
-                  type="file"
-                  @change="handleFileInputChange"
-                  multiple
-                  class="hidden"
-                />
+                <p class="truncate text-xs text-center mt-1">
+                  {{ file.file?.name }} ({{ (file.file?.size / (1024 * 1024)).toFixed(2) }} MB)
+                </p>
               </div>
             </div>
           </div>
-        </div>
-          <p class="opacity-0">
-            {{ selectedFile.length + tempTaskAttachment.length }}
-          </p>
         </div>
 
         <div class="m-4 flex items-center justify-between gap-3">
@@ -611,35 +520,26 @@ const handleSave = async () => {
             <!-- <Button v-show="isEditMode" message="delete file test" @click="() => deleteFileById()"/> -->
             <button
               class="itbkk-button-confirm btn btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
-              v-show="isEditMode"
-              @click="
-                () => {
-                  // handleEditTask(), submitFile();
-                  handleSave();
-                }
-              "
-              :disabled="
-                dataTask.title === '' ||
-                validateInput.assignees ||
-                validateInput.description ||
-                validateInput.title ||
-                ((dataTask.assignees ?? '') ===
-                  (compareTask?.assignees ?? '') &&
-                  (dataTask.description ?? '') ===
+              v-show="isEditMode" @click="() => {
+                // handleEditTask(), submitFile();
+                handleSave();
+              }
+                " :disabled="dataTask.title === '' ||
+                  validateInput.assignees ||
+                  validateInput.description ||
+                  validateInput.title ||
+                  ((dataTask.assignees ?? '') ===
+                    (compareTask?.assignees ?? '') &&
+                    (dataTask.description ?? '') ===
                     (compareTask?.description ?? '') &&
-                  dataTask?.status === compareTask?.status &&
-                  (dataTask.title ?? '') === (compareTask?.title ?? '') &&
-                  selectedFile.length === 0 &&
-                  filesId.length === 0)
-              "
-            >
+                    dataTask?.status === compareTask?.status &&
+                    (dataTask.title ?? '') === (compareTask?.title ?? '') &&
+                    selectedFile.length === 0 &&
+                    filesId.length === 0)
+                  ">
               Save
             </button>
-            <Button
-              class="itbkk-button-cancel"
-              message="Close"
-              @click="router.push({ name: 'Task' })"
-            />
+            <Button class="itbkk-button-cancel" message="Close" @click="router.push({ name: 'Task' })" />
           </div>
         </div>
       </div>
@@ -647,6 +547,3 @@ const handleSave = async () => {
     <DeleteTaskModal :index-value="indexValue" @message="handleMessage" />
   </Teleport>
 </template>
-
-<style scoped></style>
-../lib/fetch.js
