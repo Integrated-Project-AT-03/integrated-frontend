@@ -80,7 +80,7 @@ export async function fetchWithRefresh(url, options) {
       credentials: "include",
     });
 
-    if (res.status === 401) {
+    if (res.status === 401 || res.status === 403) {
       const refreshResponse = await refreshToken();
 
       if (refreshResponse.httpStatus === 200) {

@@ -44,6 +44,7 @@ const access = computed(
       class="dis btn-sm hover:opacity-80 lg:btn-md btn w-full lg:w-max border-0 md:py-1 md:px-4 text-slate-200"
       :style="{ backgroundColor: props.bgcolor }"
     >
+
       <div class="md:text-sm">{{ props.message }}</div>
     </button>
   </div>
