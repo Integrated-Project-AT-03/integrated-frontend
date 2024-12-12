@@ -604,9 +604,9 @@ const handleSave = async () => {
 
         <div class="m-4 flex items-center justify-between gap-3">
           <div class="ml-12 hidden lg:block text-error">{{ errorMessage }}</div>
-          <div class="flex flex-row gap-3">
+          <div class="flex w-full justify-end flex-row gap-3">
             <button
-              class="itbkk-button-confirm btn btn-sm lg:btn-md btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
+              class="itbkk-button-confirm btn btn-sm lg:btn-md  btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
               v-show="isEditMode"
               @click="
                 () => {

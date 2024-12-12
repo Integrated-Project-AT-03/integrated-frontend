@@ -71,7 +71,7 @@ const handleSubmit = async (e) => {
             v-model.trim="collabForm.email"
             placeholder="Type here"
 
-            class="itbkk-collaborator-email input input-bordered w-full lg:w-[25rem] bg-neutral"
+            class="itbkk-collaborator-email input input-bordered w-full lg:w-[22rem] bg-neutral"
           />
         </div>
         <div class="flex flex-col gap-2">
