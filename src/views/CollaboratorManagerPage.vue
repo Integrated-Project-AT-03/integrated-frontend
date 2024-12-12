@@ -163,8 +163,8 @@ function revert() {
     <div class="flex px-2 lg:px-0 justify-end">
       <Button
         class="itbkk-collaborato-add"
-        bgcolor="#666666"
-        message="Add Collaborator"
+        bgcolor="var(--fallback-su,oklch(var(--su)/var(--tw-bg-opacity)))"
+        message="+ Add Collaborator"
         :access="['OWNER']"
         :action="() => (openAddModal = true)"
       />

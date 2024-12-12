@@ -75,18 +75,22 @@ const handleClick = (board) => {
 
     <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
       <div class="flex flex-col sm:flex-row items-center w-full sm:w-auto space-y-2 sm:space-y-0 sm:space-x-2">
-        <button class="itbkk-button-create btn w-full sm:w-auto text-center"
-          :class="{ 'bg-black-400 ': !showCollabBoards, 'bg-gray-500': showCollabBoards }" @click="toggleBoards(false)">
+        <button class="itbkk-button-create disabled:bg-blue-500 disabled:text-white  hover:bg-blue-400 btn w-full sm:w-auto text-center"
+                :disabled="!showCollabBoards"
+          :class="{ 'bg-blue-500 ': !showCollabBoards, 'bg-gray-500': showCollabBoards }" @click="toggleBoards(false)">
           Personal Boards
         </button>
-        <button class="itbkk-button-create btn w-full sm:w-auto text-center"
-          :class="{ 'bg-black-400': showCollabBoards, 'bg-gray-500': !showCollabBoards }" @click="toggleBoards(true)">
+        <button class="itbkk-button-create disabled:text-white disabled:bg-blue-500 hover:bg-blue-400 btn w-full sm:w-auto  text-center"
+
+                :disabled="showCollabBoards"
+          :class="{ 'bg-blue-500 ': showCollabBoards, 'bg-gray-500 ': !showCollabBoards }" @click="toggleBoards(true)">
           Collaboration Boards
         </button>
       </div>
 
       <div v-show="!showCollabBoards" class="flex justify-end w-full sm:w-auto">
-        <button class="itbkk-button-create btn w-full sm:w-auto" @click="$router.push({ name: 'AddBoard' })">
+
+        <button class="itbkk-button-create hover:bg-green-500 bg-success btn w-full text-white sm:w-auto" @click="$router.push({ name: 'AddBoard' })">
           + Create personal board
         </button>
       </div>

@@ -250,8 +250,8 @@ const openTask = (index, id) => {
           <Button
             :access="['WRITER']"
             class="itbkk-button-add tooltip-left w-full lg:w-max"
-            bgcolor="#06b6d4"
-            message="Add task"
+            bgcolor="var(--fallback-su,oklch(var(--su)/var(--tw-bg-opacity)))"
+            message="+ Add task"
             :action="() => $router.push({ name: 'AddTask' })"
           />
         </div>

@@ -100,8 +100,8 @@ const handleMessage = (e) => {
         <Button
           :access="['OWNER', 'WRITER']"
           class="itbkk-button-add tooltip-left"
-          bgcolor="#06b6d4"
-          message="Add Status"
+          message="+ Add Status"
+          bgcolor="var(--fallback-su,oklch(var(--su)/var(--tw-bg-opacity)))"
           :action="() => $router.push({ name: 'AddStatus' })"
         />
       </div>
