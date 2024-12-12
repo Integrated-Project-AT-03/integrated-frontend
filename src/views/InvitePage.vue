@@ -47,15 +47,11 @@ async function declineInvite() {
 }
 
 watch(async () => {
-  console.log(userStore.getUser().oid);
   const { httpStatus, data } = await getInvite(userStore.getUser().oid, nanoId);
-  console.log(data);
   requestCollab.inviterName = data.name;
   requestCollab.boardName = data.boardName;
   requestCollab.accessRight = data.accessRight;
-  console.log(httpStatus);
-  console.log(data);
-  
+
   if (httpStatus === 404) router.push({ name: "NotFoundInvitePage" });
   emits("loading", false);
 }, userStore.getUser());

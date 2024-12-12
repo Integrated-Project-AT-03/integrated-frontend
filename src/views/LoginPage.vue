@@ -8,7 +8,7 @@ import { login, loginMicrosoft } from "@/services/apiAuth.js";
 
 const router = useRouter();
 const userStore = useUserStore();
-const user = ref({ userName: "itbkk.olarn", password: "ip23/OLA" });
+const user = ref({ userName: "", password: "" });
 const errorMessage = ref();
 const isMobile = ref(window.innerWidth <= 768);
 
@@ -63,7 +63,6 @@ onBeforeUnmount(() => {
           </div>
         </div>
       </div>
-
 
       <div class="flex h-[40rem] w-[35rem] items-center justify-center bg-[#2E2E2E]">
         <div class="flex flex-col gap-2">

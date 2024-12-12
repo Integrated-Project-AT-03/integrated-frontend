@@ -93,7 +93,6 @@ async function changeAccessCollab() {
       curCollab.value.oid,
       curCollab.value.accessRight,
     );
-    console.log(res);
     if (res.httpStatus === 200) {
       collabStore.updateCollab(curCollab.value.oid, res.data.accessRight);
       emits("message", {
@@ -287,14 +286,15 @@ function revert() {
             />
           </td>
         </tr>
-
+        <tr  v-show="collabStore.getCollabs().length === 0">
+          <td
+            colspan="5"
+            class="m-0 w-screen bg-white py-3 text-center font-bold text-gray-600"
+          >
+            No Collaborator
+          </td>
+        </tr>
       </tbody>
-      <div
-        v-show="collabStore.getCollabs().length === 0"
-        class=" bg-white py-3 w-[474.91px]  lg:w-full  text-center font-bold text-gray-600"
-      >
-        No Collaborator
-      </div>
     </table>
   </div>
   <CollabModal
