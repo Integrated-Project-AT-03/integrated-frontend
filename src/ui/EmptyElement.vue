@@ -3,7 +3,7 @@
 </script>
  
 <template>
-<div class="w-12 h-6 absolute z-50 rounded-2xl">
+<div class="w-full h-6 absolute z-50 rounded-2xl">
 </div>
 </template>
  

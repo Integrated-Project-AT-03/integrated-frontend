@@ -213,7 +213,7 @@ const openTask = (index, id) => {
       </div>
       <div class="flex flex-col lg:flex-row items-start lg:items-center  lg:justify-end gap-2 lg:gap-4">
         <div class="flex px-2 lg:px-0 flex-col lg:flex-row w-full justify-center items-center gap-2">
-          <div class=" hidden lg:flex justify-center cursor-pointer gap-5"> 
+          <div class=" hidden relative lg:flex  justify-center cursor-pointer gap-5">
             <EmptyElement
               onclick="visibilityModal.showModal()"
               v-show="showOwnerButton"
