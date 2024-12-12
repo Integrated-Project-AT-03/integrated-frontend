@@ -51,7 +51,6 @@ const handleSubmit = async (e) => {
 </script>
 
 <template>
-  <!-- <teleport to="body"> -->
   <div
     class="itbkk-modal-alert fixed inset-0 z-[999] flex h-screen w-screen items-center justify-center"
   >
@@ -113,7 +112,6 @@ const handleSubmit = async (e) => {
       </div>
     </div>
   </div>
-  <!-- </teleport> -->
 </template>
 
 <style scoped></style>

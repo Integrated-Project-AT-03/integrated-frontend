@@ -22,11 +22,7 @@ export const useCollabBoardStore = defineStore("collabBoardStore", {
       }
     },
   },
-//   getters: {
-//     collabsBoards: (state) => {
-//         return state.collabsBoard
-//     }
-//   }
+
 });
 
 if (import.meta.hot) {

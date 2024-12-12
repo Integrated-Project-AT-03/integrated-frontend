@@ -30,9 +30,6 @@ const handleDeleteCollab = async () => {
   }
 };
 
-// const handleConfirm = () => {
-//   handleDeleteCollab(props.boardName, route.params.oid, collabStore, emits);
-// };
 </script>
 
 <template>

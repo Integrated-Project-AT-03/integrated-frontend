@@ -14,7 +14,6 @@ const props = defineProps({
     type: Array,
     default: ["GUEST", "READER", "WRITER"],
   },
-  // ถ้าไม่มีการใส่ access แปลว่าทุกคนมีสิทธิ์กดปุ่มนี้
   action: {
     type: Function,
     default: () => {},

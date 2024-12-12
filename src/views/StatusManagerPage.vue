@@ -74,7 +74,6 @@ const handleMessage = (e) => {
 
 <template>
   <div class="flex w-full flex-col gap-2">
-    <!-- :class="$route.fullPath.split('/').length > 3 ? 'blur-sm' : ''" -->
     <div class="flex px-2 lg:px-0 w-full items-center justify-between">
       <div class="flex flex-col gap-3">
         <div>

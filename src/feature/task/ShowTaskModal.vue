@@ -600,16 +600,12 @@ const handleSave = async () => {
             </div>
             <div class="block text-xs ml-1 mt-1 lg:hidden text-error">{{ errorMessage }}</div>
           </div>
-<!--          <p class="opacity-0">-->
-<!--            {{ selectedFile.length + tempTaskAttachment.length }}-->
-<!--          </p>-->
+
         </div>
 
         <div class="m-4 flex items-center justify-between gap-3">
-          <!-- <Button message="Upload" @click="submitFile" /> -->
           <div class="ml-12 hidden lg:block text-error">{{ errorMessage }}</div>
           <div class="flex flex-row gap-3">
-            <!-- <Button v-show="isEditMode" message="delete file test" @click="() => deleteFileById()"/> -->
             <button
               class="itbkk-button-confirm btn btn-sm lg:btn-md btn-success w-16 drop-shadow-lg hover:border-base-100 hover:bg-base-100"
               v-show="isEditMode"
